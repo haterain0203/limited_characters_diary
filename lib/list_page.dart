@@ -20,7 +20,6 @@ class ListPage extends HookConsumerWidget {
           children: [
             TextButton(
               onPressed: () {
-                //TODO 月を変更する処理
                 ref.read(selectedDateProvider.notifier).update(
                       (state) => DateTime(
                         selectedDate.year,
@@ -36,7 +35,6 @@ class ListPage extends HookConsumerWidget {
             Text('${selectedDate.year}年${selectedDate.month}月'),
             TextButton(
               onPressed: () {
-                //TODO 月を変更する処理
                 ref.read(selectedDateProvider.notifier).update(
                       (state) => DateTime(
                         selectedDate.year,
