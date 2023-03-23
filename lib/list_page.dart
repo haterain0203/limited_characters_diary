@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limited_characters_diary/setting_page.dart';
 
 class ListPage extends StatelessWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -36,7 +37,12 @@ class ListPage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              //TODO
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const SettingPage(),
+                ),
+              );
             },
             icon: const Icon(Icons.settings),
           ),
