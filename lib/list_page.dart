@@ -52,6 +52,7 @@ class ListPage extends StatelessWidget {
         itemCount: 30,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
+            dense: true,
             //TODO 本日はハイライト
             leading: Text(
               //TODO 日付と曜日が入ります
