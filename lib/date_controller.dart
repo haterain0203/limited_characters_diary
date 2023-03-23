@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final todayProvider = Provider<DateTime>((ref) => DateTime.now());
@@ -34,7 +35,15 @@ class DateController {
     return daysInMonth;
   }
 
-  void changeDateStrColor(int day) {
-    final selectedDate = DateTime(day);
+  Color choiceDayStrColor(int day) {
+    final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
+    final dayOfWeekInt = selectedDay.weekday;
+    if (dayOfWeekInt == DateTime.saturday) {
+      return Colors.blue;
+    }
+    if (dayOfWeekInt == DateTime.sunday) {
+      return Colors.red;
+    }
+    return Colors.black;
   }
 }

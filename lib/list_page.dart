@@ -73,14 +73,14 @@ class ListPage extends HookConsumerWidget {
         itemBuilder: (BuildContext context, int index) {
           final day = index + 1;
           final dayOfWeekStr = dateController.searchDayOfWeek(day);
+          final dayStrColor = dateController.choiceDayStrColor(day);
           return ListTile(
             dense: true,
             //TODO 本日はハイライト
             leading: Text(
-              //TODO 日付と曜日が入ります
               //TODO 土日祝日は色を変える
               '$day（$dayOfWeekStr）',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: dayStrColor),
             ),
             title: const Text(
               //TODO 日記の内容を表示
