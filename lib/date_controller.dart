@@ -8,3 +8,14 @@ final dayOfWeekProvider = Provider<String>((ref) {
   final dayOfWeekStr = '日月火水木金土'[dayOfWeekInt];
   return dayOfWeekStr;
 });
+
+//当月の日数を返す
+final daysInMonthProvider = Provider<int>((ref) {
+  final today = ref.watch(todayProvider);
+  //https://note.com/hatchoutschool/n/ne95862d50623
+  final daysInMonth = DateTime(
+    today.year,
+    today.month + 1,
+  ).add(const Duration(days: -1)).day;
+  return daysInMonth;
+});
