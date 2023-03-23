@@ -42,7 +42,12 @@ class ListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
+      body: ListView.separated(
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            height: 0.5,
+          );
+        },
         //TODO 固定値
         itemCount: 30,
         itemBuilder: (BuildContext context, int index) {
