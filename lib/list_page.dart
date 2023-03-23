@@ -79,7 +79,7 @@ class ListPage extends HookConsumerWidget {
             leading: Text(
               //TODO 日付と曜日が入ります
               //TODO 土日祝日は色を変える
-              day.toString() + dayOfWeekStr,
+              '$day（$dayOfWeekStr）',
             ),
             title: const Text(
               //TODO 日記の内容を表示
