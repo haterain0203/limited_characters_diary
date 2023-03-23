@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
+import 'date_controller.dart';
+
 class ListPage extends HookConsumerWidget {
   const ListPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final today = ref.watch(todayProvider);
+    final dayOfWeek = ref.watch(dayOfWeekProvider);
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox(),
@@ -22,8 +26,7 @@ class ListPage extends HookConsumerWidget {
                 color: Colors.white,
               ),
             ),
-            //TODO 固定値
-            const Text('2023年3月'),
+            Text('${today.year}年${today.month}月'),
             TextButton(
               onPressed: () {
                 //TODO 月を変更する処理
