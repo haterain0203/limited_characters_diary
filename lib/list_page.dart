@@ -10,7 +10,6 @@ class ListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDate = ref.watch(selectedDateProvider);
-    final dayOfWeek = ref.watch(dayOfWeekProvider);
     final daysInMonth = ref.watch(daysInMonthProvider);
     return Scaffold(
       appBar: AppBar(
@@ -73,13 +72,14 @@ class ListPage extends HookConsumerWidget {
         itemCount: daysInMonth,
         itemBuilder: (BuildContext context, int index) {
           final day = index + 1;
+          final dayOfWeekStr = ref.watch(dayOfWeekProvider(day));
           return ListTile(
             dense: true,
             //TODO 本日はハイライト
             leading: Text(
               //TODO 日付と曜日が入ります
               //TODO 土日祝日は色を変える
-              day.toString(),
+              day.toString() + dayOfWeekStr,
             ),
             title: const Text(
               //TODO 日記の内容を表示

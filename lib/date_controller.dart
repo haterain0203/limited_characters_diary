@@ -8,10 +8,12 @@ final selectedDateProvider = StateProvider<DateTime>((ref) {
   return selectedDate;
 });
 
-final dayOfWeekProvider = Provider<String>((ref) {
-  final today = ref.watch(todayProvider);
-  final dayOfWeekInt = today.weekday;
-  final dayOfWeekStr = '日月火水木金土'[dayOfWeekInt];
+//TODO ここはProviderである必要ないのでは？
+final dayOfWeekProvider = Provider.family.autoDispose<String, int>((ref, day) {
+  final selectedDate = ref.watch(selectedDateProvider);
+  final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
+  final dayOfWeekInt = selectedDay.weekday;
+  final dayOfWeekStr = '月火水木金土日'[dayOfWeekInt - 1];
   return dayOfWeekStr;
 });
 
