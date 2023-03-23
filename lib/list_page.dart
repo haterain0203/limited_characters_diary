@@ -9,7 +9,7 @@ class ListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final today = ref.watch(todayProvider);
+    final selectedDate = ref.watch(selectedDateProvider);
     final dayOfWeek = ref.watch(dayOfWeekProvider);
     final daysInMonth = ref.watch(daysInMonthProvider);
     return Scaffold(
@@ -21,16 +21,28 @@ class ListPage extends HookConsumerWidget {
             TextButton(
               onPressed: () {
                 //TODO 月を変更する処理
+                ref.read(selectedDateProvider.notifier).update(
+                      (state) => DateTime(
+                        selectedDate.year,
+                        selectedDate.month - 1,
+                      ),
+                    );
               },
               child: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
               ),
             ),
-            Text('${today.year}年${today.month}月'),
+            Text('${selectedDate.year}年${selectedDate.month}月'),
             TextButton(
               onPressed: () {
                 //TODO 月を変更する処理
+                ref.read(selectedDateProvider.notifier).update(
+                      (state) => DateTime(
+                        selectedDate.year,
+                        selectedDate.month + 1,
+                      ),
+                    );
               },
               child: const Icon(
                 Icons.arrow_forward_ios,

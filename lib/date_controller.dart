@@ -2,6 +2,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final todayProvider = Provider<DateTime>((ref) => DateTime.now());
 
+final selectedDateProvider = StateProvider<DateTime>((ref) {
+  final today = ref.watch(todayProvider);
+  final selectedDate = DateTime(today.year, today.month, today.day);
+  return selectedDate;
+});
+
 final dayOfWeekProvider = Provider<String>((ref) {
   final today = ref.watch(todayProvider);
   final dayOfWeekInt = today.weekday;
