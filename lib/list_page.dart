@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
-class ListPage extends StatelessWidget {
+class ListPage extends HookConsumerWidget {
   const ListPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox(),
