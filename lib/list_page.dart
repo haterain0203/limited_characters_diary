@@ -11,7 +11,6 @@ class ListPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dateController = ref.watch(dateControllerProvider);
     final selectedDate = ref.watch(selectedDateProvider);
-    final daysInMonth = ref.watch(daysInMonthProvider);
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox(),
@@ -70,7 +69,7 @@ class ListPage extends HookConsumerWidget {
           );
         },
         //TODO 固定値
-        itemCount: daysInMonth,
+        itemCount: dateController.daysInMonth(),
         itemBuilder: (BuildContext context, int index) {
           final day = index + 1;
           final dayOfWeekStr = dateController.searchDayOfWeek(day);
