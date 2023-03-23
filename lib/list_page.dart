@@ -42,7 +42,24 @@ class ListPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(),
+      body: ListView.builder(
+        //TODO 固定値
+        itemCount: 30,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            //TODO 本日はハイライト
+            leading: Text(
+              //TODO 日付と曜日が入ります
+              //TODO 土日祝日は色を変える
+              index.toString(),
+            ),
+            title: const Text(
+              //TODO 日記の内容を表示
+              '日記が入ります',
+            ),
+          );
+        },
+      ),
     );
   }
 }
