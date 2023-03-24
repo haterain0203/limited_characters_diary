@@ -39,6 +39,7 @@ class DateController {
   }
 
   Color choiceDayStrColor(int day) {
+    //TODO 重複しているためリファクタリングしたい
     final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
     if (jpHolidayMap.containsKey(selectedDay)) {
       return Colors.red;
@@ -54,11 +55,13 @@ class DateController {
   }
 
   bool isToday(int day) {
+    //TODO 重複しているためリファクタリングしたい
     final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
     return selectedDay.isAtSameMomentAs(today);
   }
 
   String? getHolidayName(int day) {
+    //TODO 重複しているためリファクタリングしたい
     final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
     if (jpHolidayMap.containsKey(selectedDay)) {
       return jpHolidayMap[selectedDay];
