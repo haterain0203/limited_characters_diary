@@ -76,9 +76,40 @@ class ListPage extends HookConsumerWidget {
               //TODO 日記の内容を表示
               holidayName ?? '---',
             ),
+            onTap: () {
+              _showEditDialog(context);
+            },
           );
         },
       ),
+    );
+  }
+
+  void _showEditDialog(BuildContext context) {
+    showDialog<AlertDialog>(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          content: TextField(
+            keyboardType: TextInputType.text,
+            maxLength: 16,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('キャンセル'),
+            ),
+            TextButton(
+              onPressed: () {
+                //TODO add or edit処理
+              },
+              child: Text('保存'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
