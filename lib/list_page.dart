@@ -10,7 +10,6 @@ class ListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dateController = ref.watch(dateControllerProvider);
-    final selectedDate = ref.watch(selectedDateProvider);
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox(),
@@ -24,7 +23,9 @@ class ListPage extends HookConsumerWidget {
                 color: Colors.white,
               ),
             ),
-            Text('${selectedDate.year}年${selectedDate.month}月'),
+            Text(
+              '${dateController.selectedDate.year}年${dateController.selectedDate.month}月',
+            ),
             TextButton(
               onPressed: dateController.nextMonth,
               child: const Icon(
