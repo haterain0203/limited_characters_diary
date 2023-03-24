@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
-class ListPage extends StatelessWidget {
+import 'date_controller.dart';
+
+class ListPage extends HookConsumerWidget {
   const ListPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dateController = ref.watch(dateControllerProvider);
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox(),
@@ -13,20 +17,17 @@ class ListPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: () {
-                //TODO 月を変更する処理
-              },
+              onPressed: dateController.previousMonth,
               child: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
               ),
             ),
-            //TODO 固定値
-            const Text('2023年3月'),
+            Text(
+              '${dateController.selectedDate.year}年${dateController.selectedDate.month}月',
+            ),
             TextButton(
-              onPressed: () {
-                //TODO 月を変更する処理
-              },
+              onPressed: dateController.nextMonth,
               child: const Icon(
                 Icons.arrow_forward_ios,
                 color: Colors.white,
@@ -55,19 +56,25 @@ class ListPage extends StatelessWidget {
           );
         },
         //TODO 固定値
-        itemCount: 30,
+        itemCount: dateController.daysInMonth(),
         itemBuilder: (BuildContext context, int index) {
+          final day = index + 1;
+          final dayOfWeekStr = dateController.searchDayOfWeek(day);
+          final dayStrColor = dateController.choiceDayStrColor(day);
+          final holidayName = dateController.getHolidayName(day);
           return ListTile(
+            //本日はハイライト
+            tileColor: dateController.isToday(day)
+                ? Colors.amberAccent.shade100
+                : null,
             dense: true,
-            //TODO 本日はハイライト
             leading: Text(
-              //TODO 日付と曜日が入ります
-              //TODO 土日祝日は色を変える
-              index.toString(),
+              '$day（$dayOfWeekStr）',
+              style: TextStyle(color: dayStrColor),
             ),
-            title: const Text(
+            title: Text(
               //TODO 日記の内容を表示
-              '日記が入ります',
+              holidayName ?? '---',
             ),
           );
         },
