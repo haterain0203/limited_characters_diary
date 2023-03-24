@@ -38,17 +38,18 @@ class DateController {
     return daysInMonth;
   }
 
+  //土日祝日の場合なら色を、それ以外なら黒を返す
   Color choiceDayStrColor(int day) {
     //TODO 重複しているためリファクタリングしたい
     final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
-    if (jpHolidayMap.containsKey(selectedDay)) {
-      return Colors.red;
-    }
     final dayOfWeekInt = selectedDay.weekday;
     if (dayOfWeekInt == DateTime.saturday) {
       return Colors.blue;
     }
     if (dayOfWeekInt == DateTime.sunday) {
+      return Colors.red;
+    }
+    if (jpHolidayMap.containsKey(selectedDay)) {
       return Colors.red;
     }
     return Colors.black;
