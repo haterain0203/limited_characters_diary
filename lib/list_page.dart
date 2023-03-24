@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:isar/isar.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
 import 'date/date_controller.dart';
 
 class ListPage extends HookConsumerWidget {
   const ListPage({
-    required this.isar,
     super.key,
   });
 
-  final Isar isar;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dateController = ref.watch(dateControllerProvider);
