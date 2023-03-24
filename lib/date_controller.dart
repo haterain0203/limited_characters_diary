@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final todayProvider = Provider<DateTime>((ref) => DateTime.now());
+final todayProvider = Provider<DateTime>((ref) {
+  final now = DateTime.now();
+  return DateTime(now.year, now.month, now.day);
+});
 
 final selectedDateProvider = StateProvider<DateTime>((ref) {
   final today = ref.watch(todayProvider);
@@ -45,5 +48,10 @@ class DateController {
       return Colors.red;
     }
     return Colors.black;
+  }
+
+  bool isToday(int day) {
+    final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
+    return selectedDay.isAtSameMomentAs(today);
   }
 }

@@ -75,8 +75,11 @@ class ListPage extends HookConsumerWidget {
           final dayOfWeekStr = dateController.searchDayOfWeek(day);
           final dayStrColor = dateController.choiceDayStrColor(day);
           return ListTile(
+            //本日はハイライト
+            tileColor: dateController.isToday(day)
+                ? Colors.amberAccent.shade100
+                : null,
             dense: true,
-            //TODO 本日はハイライト
             leading: Text(
               //TODO 土日祝日は色を変える
               '$day（$dayOfWeekStr）',
