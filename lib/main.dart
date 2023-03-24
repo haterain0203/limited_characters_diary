@@ -24,11 +24,14 @@ Future<void> main() async {
     ],
     directory: path,
   );
+
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (_) => const ProviderScope(
-        child: MyApp(),
+      builder: (_) => ProviderScope(
+        child: MyApp(
+          isar: isar,
+        ),
       ),
     ),
   );
