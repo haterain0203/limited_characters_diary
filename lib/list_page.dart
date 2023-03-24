@@ -18,14 +18,7 @@ class ListPage extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextButton(
-              onPressed: () {
-                ref.read(selectedDateProvider.notifier).update(
-                      (state) => DateTime(
-                        selectedDate.year,
-                        selectedDate.month - 1,
-                      ),
-                    );
-              },
+              onPressed: dateController.previousMonth,
               child: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
@@ -33,14 +26,7 @@ class ListPage extends HookConsumerWidget {
             ),
             Text('${selectedDate.year}年${selectedDate.month}月'),
             TextButton(
-              onPressed: () {
-                ref.read(selectedDateProvider.notifier).update(
-                      (state) => DateTime(
-                        selectedDate.year,
-                        selectedDate.month + 1,
-                      ),
-                    );
-              },
+              onPressed: dateController.nextMonth,
               child: const Icon(
                 Icons.arrow_forward_ios,
                 color: Colors.white,

@@ -21,6 +21,24 @@ class DateController {
   DateTime get today => ref.watch(todayProvider);
   DateTime get selectedDate => ref.watch(selectedDateProvider);
 
+  void nextMonth() {
+    ref.read(selectedDateProvider.notifier).update((state) {
+      return DateTime(
+        selectedDate.year,
+        selectedDate.month + 1,
+      );
+    });
+  }
+
+  void previousMonth() {
+    ref.read(selectedDateProvider.notifier).update((state) {
+      return DateTime(
+        selectedDate.year,
+        selectedDate.month - 1,
+      );
+    });
+  }
+
   String searchDayOfWeek(int day) {
     final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
     final dayOfWeekInt = selectedDay.weekday;
