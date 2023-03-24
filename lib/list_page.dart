@@ -81,7 +81,6 @@ class ListPage extends HookConsumerWidget {
                 : null,
             dense: true,
             leading: Text(
-              //TODO 土日祝日は色を変える
               '$day（$dayOfWeekStr）',
               style: TextStyle(color: dayStrColor),
             ),
