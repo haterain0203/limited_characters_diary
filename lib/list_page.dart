@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
-import 'date_controller.dart';
+import 'date/date_controller.dart';
 
 class ListPage extends HookConsumerWidget {
   const ListPage({super.key});
