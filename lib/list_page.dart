@@ -74,6 +74,7 @@ class ListPage extends HookConsumerWidget {
           final day = index + 1;
           final dayOfWeekStr = dateController.searchDayOfWeek(day);
           final dayStrColor = dateController.choiceDayStrColor(day);
+          final holidayName = dateController.getHolidayName(day);
           return ListTile(
             //本日はハイライト
             tileColor: dateController.isToday(day)
@@ -84,9 +85,9 @@ class ListPage extends HookConsumerWidget {
               '$day（$dayOfWeekStr）',
               style: TextStyle(color: dayStrColor),
             ),
-            title: const Text(
+            title: Text(
               //TODO 日記の内容を表示
-              '日記が入ります',
+              holidayName ?? '---',
             ),
           );
         },

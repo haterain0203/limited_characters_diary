@@ -58,6 +58,14 @@ class DateController {
     return selectedDay.isAtSameMomentAs(today);
   }
 
+  String? getHolidayName(int day) {
+    final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
+    if (jpHolidayMap.containsKey(selectedDay)) {
+      return jpHolidayMap[selectedDay];
+    }
+    return null;
+  }
+
   //2029年までの日本の祝日 20230324時点
   //以下のデータを加工
   //https://github.com/holiday-jp/holiday_jp/blob/master/holidays.yml
