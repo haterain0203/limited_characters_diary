@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/input_diary_dialog.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
 import 'date/date_controller.dart';
@@ -91,26 +92,7 @@ class ListPage extends HookConsumerWidget {
     showDialog<AlertDialog>(
       context: context,
       builder: (_) {
-        return AlertDialog(
-          content: TextField(
-            keyboardType: TextInputType.text,
-            maxLength: 16,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('キャンセル'),
-            ),
-            TextButton(
-              onPressed: () {
-                //TODO add or edit処理
-              },
-              child: Text('保存'),
-            ),
-          ],
-        );
+        return const InputDiaryDialog();
       },
     );
   }
