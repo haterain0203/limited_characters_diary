@@ -28,6 +28,9 @@ class _InputDiaryDialogState extends State<InputDiaryDialog> {
       content: TextField(
         keyboardType: TextInputType.text,
         maxLength: 16,
+        onSubmitted: (String text) {
+          diaryInputController.text = text;
+        },
       ),
       actions: [
         TextButton(
