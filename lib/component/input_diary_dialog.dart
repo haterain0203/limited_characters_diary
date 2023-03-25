@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/diary/diary_controller.dart';
 
 class InputDiaryDialog extends StatefulWidget {
   const InputDiaryDialog({super.key});
@@ -39,11 +41,17 @@ class _InputDiaryDialogState extends State<InputDiaryDialog> {
           },
           child: Text('キャンセル'),
         ),
-        TextButton(
-          onPressed: () {
-            //TODO add or edit処理
-          },
-          child: Text('保存'),
+        HookConsumer(
+          builder: (context, ref, child) => TextButton(
+            onPressed: () {
+              //TODO add or edit処理
+              ref.read(diaryControllerProvider).addDiary(
+                    content: diaryInputController.text,
+                    selectedDate: DateTime(2023, 3, 26),
+                  );
+            },
+            child: Text('保存'),
+          ),
         ),
       ],
     );
