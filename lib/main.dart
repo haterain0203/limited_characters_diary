@@ -28,10 +28,8 @@ Future<void> main() async {
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (_) => ProviderScope(
-        child: MyApp(
-          isar: isar,
-        ),
+      builder: (_) => const ProviderScope(
+        child: MyApp(),
       ),
     ),
   );

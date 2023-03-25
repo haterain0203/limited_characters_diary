@@ -1,29 +1,11 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:isar/isar.dart';
-import 'package:limited_characters_diary/diary/diary_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import 'list_page.dart';
 
-class MyApp extends StatefulHookConsumerWidget {
-  const MyApp({
-    required this.isar,
-    super.key,
-  });
-
-  final Isar isar;
-  @override
-  MyAppState createState() => MyAppState();
-}
-
-class MyAppState extends ConsumerState<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    ref.read(isarProvider.notifier).state = widget.isar;
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
