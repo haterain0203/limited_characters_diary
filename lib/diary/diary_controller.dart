@@ -3,15 +3,14 @@ import 'package:isar/isar.dart';
 import 'package:limited_characters_diary/diary/collection/diary.dart';
 import 'package:limited_characters_diary/diary/diary_repository.dart';
 
+final isarProvider = Provider<Isar>((ref) => throw UnimplementedError());
+
 final diaryRepoProvider = Provider<DiaryRepository>(
   (ref) {
     final isar = ref.watch(isarProvider);
-    //TODO
-    return DiaryRepository(isar!);
+    return DiaryRepository(isar);
   },
 );
-
-final isarProvider = StateProvider<Isar?>((ref) => null);
 
 final diaryFutureProvider = FutureProvider<List<Diary>>((ref) async {
   final diaryRepo = ref.watch(diaryRepoProvider);
