@@ -8,6 +8,20 @@ class InputDiaryDialog extends StatefulWidget {
 }
 
 class _InputDiaryDialogState extends State<InputDiaryDialog> {
+  TextEditingController diaryInputController = TextEditingController();
+
+  @override
+  void initState() {
+    diaryInputController.text = '';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    diaryInputController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
