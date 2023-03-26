@@ -3,14 +3,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/date/date_controller.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
 
-class InputDiaryDialog extends StatefulWidget {
+class InputDiaryDialog extends StatefulHookConsumerWidget {
   const InputDiaryDialog({super.key});
 
   @override
-  State<InputDiaryDialog> createState() => _InputDiaryDialogState();
+  ConsumerState<InputDiaryDialog> createState() => _InputDiaryDialogState();
 }
 
-class _InputDiaryDialogState extends State<InputDiaryDialog> {
+class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
   TextEditingController diaryInputController = TextEditingController();
 
   @override
@@ -27,7 +27,11 @@ class _InputDiaryDialogState extends State<InputDiaryDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedDate = ref.watch(selectedDateProvider);
     return AlertDialog(
+      title: Text(
+        '${selectedDate.year}年${selectedDate.month}月${selectedDate.day}日',
+      ),
       content: TextField(
         keyboardType: TextInputType.text,
         maxLength: 16,
@@ -42,20 +46,15 @@ class _InputDiaryDialogState extends State<InputDiaryDialog> {
           },
           child: Text('キャンセル'),
         ),
-        HookConsumer(
-          builder: (context, ref, child) {
-            final selectedDate = ref.watch(selectedDateProvider);
-            return TextButton(
-              onPressed: () {
-                //TODO add or edit処理
-                ref.read(diaryControllerProvider).addDiary(
-                      content: diaryInputController.text,
-                      selectedDate: selectedDate,
-                    );
-              },
-              child: Text('保存'),
-            );
+        TextButton(
+          onPressed: () {
+            //TODO add or edit処理
+            ref.read(diaryControllerProvider).addDiary(
+                  content: diaryInputController.text,
+                  selectedDate: selectedDate,
+                );
           },
+          child: Text('保存'),
         ),
       ],
     );
