@@ -94,16 +94,18 @@ class ListPage extends HookConsumerWidget {
               //TODO 固定値
               itemCount: dateController.daysInMonth(),
               itemBuilder: (BuildContext context, int index) {
-                final day = index + 1;
+                final indexDate = DateTime(
+                  dateController.selectedDate.year,
+                  dateController.selectedDate.month,
+                  index + 1,
+                );
+                final day = indexDate.day;
+                //TODO firstWhereOrNull使いたい
                 final filteredDiary = data
                     .where((element) => element.diaryDate.day == day)
                     .toList();
                 final diary =
                     filteredDiary.isNotEmpty ? filteredDiary[0] : null;
-                // final diary = data.firstWhere(
-                //   (element) => element.diaryDate.day == day,
-                //   orElse: () => null,
-                // );
                 final dayOfWeekStr = dateController.searchDayOfWeek(day);
                 final dayStrColor = dateController.choiceDayStrColor(day);
                 final holidayName = dateController.getHolidayName(day);
