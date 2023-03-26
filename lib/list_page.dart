@@ -123,8 +123,9 @@ class ListPage extends HookConsumerWidget {
                     // //TODO 日記の内容を表示
                     // holidayName ?? '---',
                   ),
-                  onTap: () {
-                    _showEditDialog(context);
+                  onTap: () async {
+                    ref.read(selectedDateProvider.notifier).state = indexDate;
+                    await _showEditDialog(context);
                   },
                 );
               },
@@ -133,8 +134,8 @@ class ListPage extends HookConsumerWidget {
         });
   }
 
-  void _showEditDialog(BuildContext context) {
-    showDialog<AlertDialog>(
+  Future<void> _showEditDialog(BuildContext context) async {
+    await showDialog<AlertDialog>(
       context: context,
       builder: (_) {
         return const InputDiaryDialog();
