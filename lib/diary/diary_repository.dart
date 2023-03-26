@@ -11,13 +11,20 @@ class DiaryRepository {
   final Isar isar;
 
   /// 日記を取得する
-  Future<List<Diary>> findDiaryList() async {
+  Future<List<Diary>> findDiaryList(DateTime selectedDate) async {
     if (!isar.isOpen) {
       return [];
     }
 
     // 更新日時の降順で全件返す
-    final diaryList = await isar.diarys.where().sortByDiaryDate().findAll();
+    final diaryList = await isar.diarys
+        .where()
+        .diaryDateBetween(
+          DateTime(selectedDate.year, selectedDate.month, 1),
+          DateTime(selectedDate.year, selectedDate.month + 1, 0),
+        )
+        .sortByDiaryDate()
+        .findAll();
 
     return diaryList;
   }
