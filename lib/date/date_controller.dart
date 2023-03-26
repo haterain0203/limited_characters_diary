@@ -6,6 +6,15 @@ final todayProvider = Provider<DateTime>((ref) {
   return DateTime(now.year, now.month, now.day);
 });
 
+final selectedMonthProvider = StateProvider<DateTime>((ref) {
+  final today = ref.watch(todayProvider);
+  final selectedMonth = DateTime(
+    today.year,
+    today.month,
+  );
+  return selectedMonth;
+});
+
 final selectedDateProvider = StateProvider<DateTime>((ref) {
   final today = ref.watch(todayProvider);
   final selectedDate = DateTime(today.year, today.month, today.day);
@@ -20,28 +29,28 @@ class DateController {
 
   DateTime get today => ref.watch(todayProvider);
   DateTime get selectedDate => ref.watch(selectedDateProvider);
+  DateTime get selectedMonth => ref.watch(selectedMonthProvider);
 
   void nextMonth() {
-    ref.read(selectedDateProvider.notifier).update((state) {
+    ref.read(selectedMonthProvider.notifier).update((state) {
       return DateTime(
-        selectedDate.year,
-        selectedDate.month + 1,
+        selectedMonth.year,
+        selectedMonth.month + 1,
       );
     });
   }
 
   void previousMonth() {
-    ref.read(selectedDateProvider.notifier).update((state) {
+    ref.read(selectedMonthProvider.notifier).update((state) {
       return DateTime(
-        selectedDate.year,
-        selectedDate.month - 1,
+        selectedMonth.year,
+        selectedMonth.month - 1,
       );
     });
   }
 
-  String searchDayOfWeek(int day) {
-    final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
-    final dayOfWeekInt = selectedDay.weekday;
+  String searchDayOfWeek(DateTime indexDate) {
+    final dayOfWeekInt = indexDate.weekday;
     final dayOfWeekStr = '月火水木金土日'[dayOfWeekInt - 1];
     return dayOfWeekStr;
   }
@@ -50,40 +59,37 @@ class DateController {
   int daysInMonth() {
     //https://note.com/hatchoutschool/n/ne95862d50623
     final daysInMonth = DateTime(
-      selectedDate.year,
-      selectedDate.month + 1,
+      selectedMonth.year,
+      selectedMonth.month + 1,
     ).add(const Duration(days: -1)).day;
     return daysInMonth;
   }
 
   //土日祝日の場合なら色を、それ以外なら黒を返す
-  Color choiceDayStrColor(int day) {
+  Color choiceDayStrColor(DateTime indexDate) {
     //TODO 重複しているためリファクタリングしたい
-    final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
-    final dayOfWeekInt = selectedDay.weekday;
+    final dayOfWeekInt = indexDate.weekday;
     if (dayOfWeekInt == DateTime.saturday) {
       return Colors.blue;
     }
     if (dayOfWeekInt == DateTime.sunday) {
       return Colors.red;
     }
-    if (jpHolidayMap.containsKey(selectedDay)) {
+    if (jpHolidayMap.containsKey(indexDate)) {
       return Colors.red;
     }
     return Colors.black;
   }
 
-  bool isToday(int day) {
+  bool isToday(DateTime indexDate) {
     //TODO 重複しているためリファクタリングしたい
-    final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
-    return selectedDay.isAtSameMomentAs(today);
+    return indexDate.isAtSameMomentAs(today);
   }
 
-  String? getHolidayName(int day) {
+  String? getHolidayName(DateTime indexDate) {
     //TODO 重複しているためリファクタリングしたい
-    final selectedDay = DateTime(selectedDate.year, selectedDate.month, day);
-    if (jpHolidayMap.containsKey(selectedDay)) {
-      return jpHolidayMap[selectedDay];
+    if (jpHolidayMap.containsKey(indexDate)) {
+      return jpHolidayMap[indexDate];
     }
     return null;
   }

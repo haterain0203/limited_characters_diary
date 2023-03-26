@@ -11,7 +11,7 @@ class DiaryRepository {
   final Isar isar;
 
   /// 日記を取得する
-  Future<List<Diary>> findDiaryList(DateTime selectedDate) async {
+  Future<List<Diary>> findDiaryList(DateTime selectedMonth) async {
     if (!isar.isOpen) {
       return [];
     }
@@ -20,8 +20,8 @@ class DiaryRepository {
     final diaryList = await isar.diarys
         .where()
         .diaryDateBetween(
-          DateTime(selectedDate.year, selectedDate.month, 1),
-          DateTime(selectedDate.year, selectedDate.month + 1, 0),
+          selectedMonth,
+          DateTime(selectedMonth.year, selectedMonth.month + 1, 0),
         )
         .sortByDiaryDate()
         .findAll();

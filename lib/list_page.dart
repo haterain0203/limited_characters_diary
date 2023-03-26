@@ -60,7 +60,7 @@ class ListPage extends HookConsumerWidget {
                     ),
                   ),
                   Text(
-                    '${dateController.selectedDate.year}年${dateController.selectedDate.month}月',
+                    '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
                   ),
                   TextButton(
                     onPressed: dateController.nextMonth,
@@ -95,28 +95,27 @@ class ListPage extends HookConsumerWidget {
               itemCount: dateController.daysInMonth(),
               itemBuilder: (BuildContext context, int index) {
                 final indexDate = DateTime(
-                  dateController.selectedDate.year,
-                  dateController.selectedDate.month,
+                  dateController.selectedMonth.year,
+                  dateController.selectedMonth.month,
                   index + 1,
                 );
-                final day = indexDate.day;
                 //TODO firstWhereOrNull使いたい
                 final filteredDiary = data
-                    .where((element) => element.diaryDate.day == day)
+                    .where((element) => element.diaryDate == indexDate)
                     .toList();
                 final diary =
                     filteredDiary.isNotEmpty ? filteredDiary[0] : null;
-                final dayOfWeekStr = dateController.searchDayOfWeek(day);
-                final dayStrColor = dateController.choiceDayStrColor(day);
-                final holidayName = dateController.getHolidayName(day);
+                final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
+                final dayStrColor = dateController.choiceDayStrColor(indexDate);
+                final holidayName = dateController.getHolidayName(indexDate);
                 return ListTile(
                   //本日はハイライト
-                  tileColor: dateController.isToday(day)
+                  tileColor: dateController.isToday(indexDate)
                       ? Colors.amberAccent.shade100
                       : null,
                   dense: true,
                   leading: Text(
-                    '$day（$dayOfWeekStr）',
+                    '${indexDate.day}（$dayOfWeekStr）',
                     style: TextStyle(color: dayStrColor),
                   ),
                   title: Text(

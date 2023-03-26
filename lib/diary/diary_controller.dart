@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
+import 'package:limited_characters_diary/date/date_controller.dart';
 import 'package:limited_characters_diary/diary/collection/diary.dart';
 import 'package:limited_characters_diary/diary/diary_repository.dart';
 
@@ -14,7 +15,8 @@ final diaryRepoProvider = Provider<DiaryRepository>(
 
 final diaryFutureProvider = FutureProvider<List<Diary>>((ref) async {
   final diaryRepo = ref.watch(diaryRepoProvider);
-  final diaryList = await diaryRepo.findDiaryList();
+  final selectedMonth = ref.watch(selectedMonthProvider);
+  final diaryList = await diaryRepo.findDiaryList(selectedMonth);
   return diaryList;
 });
 
