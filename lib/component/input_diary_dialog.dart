@@ -55,6 +55,14 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
         ),
         TextButton(
           onPressed: () {
+            if (diaryInputController.text.isEmpty) {
+              _showAlertDialog(context, '文字が入力されていません');
+              return;
+            }
+            if (widget.diary?.content == diaryInputController.text) {
+              _showAlertDialog(context, '内容が変更されていません');
+              return;
+            }
             if (widget.diary == null) {
               ref.read(diaryControllerProvider).addDiary(
                     content: diaryInputController.text,
@@ -74,6 +82,26 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
           child: const Text('登録'),
         ),
       ],
+    );
+  }
+
+  void _showAlertDialog(BuildContext context, String errorMessage) {
+    showDialog<AlertDialog>(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('エラー'),
+          content: Text(errorMessage),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('閉じる'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
