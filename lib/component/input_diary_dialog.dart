@@ -21,7 +21,7 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
 
   @override
   void initState() {
-    diaryInputController.text = '';
+    diaryInputController.text = widget.diary?.content ?? '';
     super.initState();
   }
 
@@ -39,6 +39,7 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
         '${selectedDate.year}年${selectedDate.month}月${selectedDate.day}日',
       ),
       content: TextField(
+        controller: diaryInputController,
         keyboardType: TextInputType.text,
         maxLength: 16,
         onSubmitted: (String text) {
