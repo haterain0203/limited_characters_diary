@@ -60,7 +60,6 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                     selectedDate: selectedDate,
                   );
             } else {
-              //TODO updateが入ります
               ref.read(diaryControllerProvider).updateDiary(
                     diary: widget.diary!,
                     content: diaryInputController.text,
