@@ -17,122 +17,122 @@ class ListPage extends HookConsumerWidget {
     final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryFutureProvider);
     return diaryList.when(
-        loading: () => const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
+      loading: () => const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      error: (error, stack) {
+        return Scaffold(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  error.toString(),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-        error: (error, stack) {
-          return Scaffold(
-            body: Column(
+              const SizedBox(
+                height: 16,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  ref.invalidate(diaryFutureProvider);
+                },
+                child: const Text('再読み込み'),
+              )
+            ],
+          ),
+        );
+      },
+      data: (data) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: const SizedBox(),
+            title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                  child: Text(
-                    error.toString(),
-                    textAlign: TextAlign.center,
+                TextButton(
+                  onPressed: dateController.previousMonth,
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
+                Text(
+                  '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    ref.invalidate(diaryFutureProvider);
-                  },
-                  child: const Text('再読み込み'),
-                )
+                TextButton(
+                  onPressed: dateController.nextMonth,
+                  child: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
-          );
-        },
-        data: (data) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: const SizedBox(),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: dateController.previousMonth,
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) => const SettingPage(),
                     ),
-                  ),
-                  Text(
-                    '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
-                  ),
-                  TextButton(
-                    onPressed: dateController.nextMonth,
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+                  );
+                },
+                icon: const Icon(Icons.settings),
               ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) => const SettingPage(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.settings),
+            ],
+          ),
+          body: ListView.separated(
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider(
+                height: 0.5,
+              );
+            },
+            //TODO 固定値
+            itemCount: dateController.daysInMonth(),
+            itemBuilder: (BuildContext context, int index) {
+              final indexDate = DateTime(
+                dateController.selectedMonth.year,
+                dateController.selectedMonth.month,
+                index + 1,
+              );
+              //TODO firstWhereOrNull使いたい
+              final filteredDiary = data
+                  .where((element) => element.diaryDate == indexDate)
+                  .toList();
+              final diary = filteredDiary.isNotEmpty ? filteredDiary[0] : null;
+              final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
+              final dayStrColor = dateController.choiceDayStrColor(indexDate);
+              final holidayName = dateController.getHolidayName(indexDate);
+              return ListTile(
+                //本日はハイライト
+                tileColor: dateController.isToday(indexDate)
+                    ? Colors.amberAccent.shade100
+                    : null,
+                dense: true,
+                leading: Text(
+                  '${indexDate.day}（$dayOfWeekStr）',
+                  style: TextStyle(color: dayStrColor),
                 ),
-              ],
-            ),
-            body: ListView.separated(
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider(
-                  height: 0.5,
-                );
-              },
-              //TODO 固定値
-              itemCount: dateController.daysInMonth(),
-              itemBuilder: (BuildContext context, int index) {
-                final indexDate = DateTime(
-                  dateController.selectedMonth.year,
-                  dateController.selectedMonth.month,
-                  index + 1,
-                );
-                //TODO firstWhereOrNull使いたい
-                final filteredDiary = data
-                    .where((element) => element.diaryDate == indexDate)
-                    .toList();
-                final diary =
-                    filteredDiary.isNotEmpty ? filteredDiary[0] : null;
-                final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
-                final dayStrColor = dateController.choiceDayStrColor(indexDate);
-                final holidayName = dateController.getHolidayName(indexDate);
-                return ListTile(
-                  //本日はハイライト
-                  tileColor: dateController.isToday(indexDate)
-                      ? Colors.amberAccent.shade100
-                      : null,
-                  dense: true,
-                  leading: Text(
-                    '${indexDate.day}（$dayOfWeekStr）',
-                    style: TextStyle(color: dayStrColor),
-                  ),
-                  title: Text(
-                    diary?.content ?? '',
-                    // //TODO 日記の内容を表示
-                    // holidayName ?? '---',
-                  ),
-                  onTap: () async {
-                    ref.read(selectedDateProvider.notifier).state = indexDate;
-                    await _showEditDialog(context, diary);
-                  },
-                );
-              },
-            ),
-          );
-        });
+                title: Text(
+                  diary?.content ?? '',
+                  // //TODO 日記の内容を表示
+                  // holidayName ?? '---',
+                ),
+                onTap: () async {
+                  ref.read(selectedDateProvider.notifier).state = indexDate;
+                  await _showEditDialog(context, diary);
+                },
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _showEditDialog(BuildContext context, Diary? diary) async {

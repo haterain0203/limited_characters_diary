@@ -50,7 +50,7 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text('キャンセル'),
+          child: const Text('キャンセル'),
         ),
         TextButton(
           onPressed: () {
@@ -66,7 +66,7 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                   );
             }
           },
-          child: Text('保存'),
+          child: const Text('保存'),
         ),
       ],
     );

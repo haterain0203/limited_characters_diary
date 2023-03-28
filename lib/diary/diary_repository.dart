@@ -30,8 +30,10 @@ class DiaryRepository {
   }
 
   /// 日記を追加する
-  Future<void> addDiary(
-      {required String content, required DateTime selectedDate}) {
+  Future<void> addDiary({
+    required String content,
+    required DateTime selectedDate,
+  }) {
     if (!isar.isOpen) {
       return Future<void>(() {});
     }
