@@ -71,7 +71,7 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
               //TODO AwesomeDialogとか表示したい
             }
           },
-          child: const Text('保存'),
+          child: const Text('登録'),
         ),
       ],
     );
