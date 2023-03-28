@@ -34,4 +34,13 @@ class DiaryController {
     await diaryRepo.addDiary(content: content, selectedDate: selectedDate);
     ref.invalidate(diaryFutureProvider);
   }
+
+  Future<void> updateDiary({
+    required Diary diary,
+    required String content,
+  }) async {
+    final diaryRepo = ref.watch(diaryRepoProvider);
+    await diaryRepo.updateDiary(diary: diary, content: content);
+    ref.invalidate(diaryFutureProvider);
+  }
 }

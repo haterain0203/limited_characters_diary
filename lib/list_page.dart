@@ -5,6 +5,7 @@ import 'package:limited_characters_diary/diary/diary_controller.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
 import 'date/date_controller.dart';
+import 'diary/collection/diary.dart';
 
 class ListPage extends HookConsumerWidget {
   const ListPage({
@@ -125,7 +126,7 @@ class ListPage extends HookConsumerWidget {
                   ),
                   onTap: () async {
                     ref.read(selectedDateProvider.notifier).state = indexDate;
-                    await _showEditDialog(context);
+                    await _showEditDialog(context, diary);
                   },
                 );
               },
@@ -134,11 +135,11 @@ class ListPage extends HookConsumerWidget {
         });
   }
 
-  Future<void> _showEditDialog(BuildContext context) async {
+  Future<void> _showEditDialog(BuildContext context, Diary? diary) async {
     await showDialog<AlertDialog>(
       context: context,
       builder: (_) {
-        return const InputDiaryDialog();
+        return InputDiaryDialog(diary: diary);
       },
     );
   }

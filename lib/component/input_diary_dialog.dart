@@ -3,9 +3,15 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/date/date_controller.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
 
-class InputDiaryDialog extends StatefulHookConsumerWidget {
-  const InputDiaryDialog({super.key});
+import '../diary/collection/diary.dart';
 
+class InputDiaryDialog extends StatefulHookConsumerWidget {
+  const InputDiaryDialog({
+    this.diary,
+    super.key,
+  });
+
+  final Diary? diary;
   @override
   ConsumerState<InputDiaryDialog> createState() => _InputDiaryDialogState();
 }
@@ -48,11 +54,18 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
         ),
         TextButton(
           onPressed: () {
-            //TODO add or edit処理
-            ref.read(diaryControllerProvider).addDiary(
-                  content: diaryInputController.text,
-                  selectedDate: selectedDate,
-                );
+            if (widget.diary == null) {
+              ref.read(diaryControllerProvider).addDiary(
+                    content: diaryInputController.text,
+                    selectedDate: selectedDate,
+                  );
+            } else {
+              //TODO updateが入ります
+              ref.read(diaryControllerProvider).updateDiary(
+                    diary: widget.diary!,
+                    content: diaryInputController.text,
+                  );
+            }
           },
           child: Text('保存'),
         ),
