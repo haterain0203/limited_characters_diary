@@ -74,16 +74,13 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                     content: diaryInputController.text,
                     selectedDate: selectedDate,
                   );
-              Navigator.pop(context);
-
-              //TODO AwesomeDialogとか表示したい
+              _showCompleteDialog(context);
             } else {
               ref.read(diaryControllerProvider).updateDiary(
                     diary: widget.diary!,
                     content: diaryInputController.text,
                   );
-              Navigator.pop(context);
-              //TODO AwesomeDialogとか表示したい
+              _showCompleteDialog(context);
             }
           },
           child: const Text('登録'),
@@ -99,6 +96,20 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
       title: errorMessage,
       btnCancelText: '閉じる',
       btnCancelOnPress: () {},
+    ).show();
+  }
+
+  void _showCompleteDialog(
+    BuildContext context,
+  ) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      title: '登録完了！',
+      btnOkText: '閉じる',
+      btnOkOnPress: () {
+        Navigator.pop(context);
+      },
     ).show();
   }
 }
