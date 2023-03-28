@@ -48,6 +48,7 @@ dependencies:
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
   path_provider: ^2.0.14
+  awesome_dialog: ^3.0.2
 
 dev_dependencies:
   flutter_test:
