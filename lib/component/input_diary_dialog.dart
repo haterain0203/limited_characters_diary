@@ -59,11 +59,15 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                     content: diaryInputController.text,
                     selectedDate: selectedDate,
                   );
+              Navigator.pop(context);
+              //TODO AwesomeDialogとか表示したい
             } else {
               ref.read(diaryControllerProvider).updateDiary(
                     diary: widget.diary!,
                     content: diaryInputController.text,
                   );
+              Navigator.pop(context);
+              //TODO AwesomeDialogとか表示したい
             }
           },
           child: const Text('保存'),
