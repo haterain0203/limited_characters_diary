@@ -36,6 +36,11 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
   Widget build(BuildContext context) {
     final selectedDate = ref.watch(selectedDateProvider);
     return AlertDialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+      ),
       title: Text(
         '${selectedDate.year}年${selectedDate.month}月${selectedDate.day}日',
       ),
@@ -70,6 +75,7 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                     selectedDate: selectedDate,
                   );
               Navigator.pop(context);
+
               //TODO AwesomeDialogとか表示したい
             } else {
               ref.read(diaryControllerProvider).updateDiary(
