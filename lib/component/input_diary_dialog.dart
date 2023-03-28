@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/date/date_controller.dart';
@@ -56,11 +57,11 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
         TextButton(
           onPressed: () {
             if (diaryInputController.text.isEmpty) {
-              _showAlertDialog(context, '文字が入力されていません');
+              _showErrorDialog(context, '文字が入力されていません');
               return;
             }
             if (widget.diary?.content == diaryInputController.text) {
-              _showAlertDialog(context, '内容が変更されていません');
+              _showErrorDialog(context, '内容が変更されていません');
               return;
             }
             if (widget.diary == null) {
@@ -85,23 +86,13 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
     );
   }
 
-  void _showAlertDialog(BuildContext context, String errorMessage) {
-    showDialog<AlertDialog>(
+  void _showErrorDialog(BuildContext context, String errorMessage) {
+    AwesomeDialog(
       context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text('エラー'),
-          content: Text(errorMessage),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('閉じる'),
-            ),
-          ],
-        );
-      },
-    );
+      dialogType: DialogType.error,
+      title: errorMessage,
+      btnCancelText: '閉じる',
+      btnCancelOnPress: () {},
+    ).show();
   }
 }
