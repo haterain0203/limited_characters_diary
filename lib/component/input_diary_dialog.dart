@@ -91,7 +91,10 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
     );
   }
 
-  void _showErrorDialog(BuildContext context, String errorMessage) {
+  void _showErrorDialog(
+    BuildContext context,
+    String errorMessage,
+  ) {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.error,
