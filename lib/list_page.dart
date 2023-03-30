@@ -128,9 +128,15 @@ class ListPage extends HookConsumerWidget {
                   ref.read(selectedDateProvider.notifier).state = indexDate;
                   await _showEditDialog(context, diary);
                 },
-                onLongPress: () {
-                  _showConfirmDeleteDialog(context: context, ref: ref);
-                },
+                onLongPress: diary == null
+                    ? null
+                    : () {
+                        _showConfirmDeleteDialog(
+                          context: context,
+                          ref: ref,
+                          diary: diary,
+                        );
+                      },
               );
             },
           ),
@@ -151,6 +157,7 @@ class ListPage extends HookConsumerWidget {
   void _showConfirmDeleteDialog({
     required BuildContext context,
     required WidgetRef ref,
+    required Diary diary,
   }) {
     AwesomeDialog(
       //TODO ボタンカラー再検討
@@ -161,7 +168,7 @@ class ListPage extends HookConsumerWidget {
       btnCancelOnPress: () {},
       btnOkText: '削除',
       btnOkOnPress: () {
-        //TODO 削除処理
+        ref.read(diaryControllerProvider).deleteDiary(diary: diary);
       },
     ).show();
   }

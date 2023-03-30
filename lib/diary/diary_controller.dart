@@ -43,4 +43,12 @@ class DiaryController {
     await diaryRepo.updateDiary(diary: diary, content: content);
     ref.invalidate(diaryFutureProvider);
   }
+
+  Future<void> deleteDiary({
+    required Diary diary,
+  }) async {
+    final diaryRepo = ref.watch(diaryRepoProvider);
+    await diaryRepo.deleteDiary(diary: diary);
+    ref.invalidate(diaryFutureProvider);
+  }
 }

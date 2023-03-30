@@ -68,12 +68,12 @@ class DiaryRepository {
   }
 
   /// 日記を削除する
-  Future<bool> deleteDiary(Diary diary) async {
+  Future<void> deleteDiary({required Diary diary}) async {
     if (!isar.isOpen) {
-      return false;
+      return Future<void>(() {});
     }
 
-    return isar.writeTxn(() async {
+    await isar.writeTxn(() async {
       return isar.diarys.delete(diary.id);
     });
   }
