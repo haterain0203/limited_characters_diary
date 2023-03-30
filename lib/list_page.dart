@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/input_diary_dialog.dart';
@@ -127,6 +128,9 @@ class ListPage extends HookConsumerWidget {
                   ref.read(selectedDateProvider.notifier).state = indexDate;
                   await _showEditDialog(context, diary);
                 },
+                onLongPress: () {
+                  _showConfirmDeleteDialog(context: context, ref: ref);
+                },
               );
             },
           ),
@@ -142,5 +146,23 @@ class ListPage extends HookConsumerWidget {
         return InputDiaryDialog(diary: diary);
       },
     );
+  }
+
+  void _showConfirmDeleteDialog({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    AwesomeDialog(
+      //TODO ボタンカラー再検討
+      context: context,
+      dialogType: DialogType.question,
+      title: '削除しますか？',
+      btnCancelText: 'キャンセル',
+      btnCancelOnPress: () {},
+      btnOkText: '削除',
+      btnOkOnPress: () {
+        //TODO 削除処理
+      },
+    ).show();
   }
 }
