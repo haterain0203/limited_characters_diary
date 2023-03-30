@@ -121,7 +121,6 @@ class ListPage extends HookConsumerWidget {
                 ),
                 title: Text(
                   diary?.content ?? '',
-                  // //TODO 日記の内容を表示
                   // holidayName ?? '---',
                 ),
                 onTap: () async {
