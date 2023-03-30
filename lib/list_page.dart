@@ -121,6 +121,7 @@ class ListPage extends HookConsumerWidget {
                 ),
                 title: Text(
                   diary?.content ?? '',
+                  //TODO 未使用の祝日名表示関連の削除
                   // holidayName ?? '---',
                 ),
                 onTap: () async {
