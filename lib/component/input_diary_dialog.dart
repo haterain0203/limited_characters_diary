@@ -74,12 +74,14 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                     content: diaryInputController.text,
                     selectedDate: selectedDate,
                   );
+              diaryInputController.clear();
               _showCompleteDialog(context);
             } else {
               ref.read(diaryControllerProvider).updateDiary(
                     diary: widget.diary!,
                     content: diaryInputController.text,
                   );
+              diaryInputController.clear();
               _showCompleteDialog(context);
             }
           },
