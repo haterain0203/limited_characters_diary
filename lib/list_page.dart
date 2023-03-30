@@ -93,7 +93,6 @@ class ListPage extends HookConsumerWidget {
                 height: 0.5,
               );
             },
-            //TODO 固定値
             itemCount: dateController.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
               final indexDate = DateTime(
@@ -108,7 +107,6 @@ class ListPage extends HookConsumerWidget {
               final diary = filteredDiary.isNotEmpty ? filteredDiary[0] : null;
               final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
               final dayStrColor = dateController.choiceDayStrColor(indexDate);
-              final holidayName = dateController.getHolidayName(indexDate);
               return ListTile(
                 //本日はハイライト
                 tileColor: dateController.isToday(indexDate)
@@ -121,8 +119,6 @@ class ListPage extends HookConsumerWidget {
                 ),
                 title: Text(
                   diary?.content ?? '',
-                  //TODO 未使用の祝日名表示関連の削除
-                  // holidayName ?? '---',
                 ),
                 onTap: () async {
                   ref.read(selectedDateProvider.notifier).state = indexDate;
