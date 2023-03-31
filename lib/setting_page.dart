@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limited_characters_diary/local_notification/local_notification_setting_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatelessWidget {
@@ -21,6 +22,12 @@ class SettingPage extends StatelessWidget {
                 title: const Text('通知設定'),
                 onPressed: (BuildContext context) {
                   //TODO 通知設定
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<LocalNotificationSettingPage>(
+                      builder: (_) => const LocalNotificationSettingPage(),
+                    ),
+                  );
                 },
               ),
             ],
