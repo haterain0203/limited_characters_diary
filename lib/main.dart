@@ -1,6 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
@@ -11,6 +12,23 @@ import 'my_app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+  const initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+  const initializationSettingsDarwin = DarwinInitializationSettings(
+    requestSoundPermission: false,
+    requestBadgePermission: false,
+    requestAlertPermission: false,
+  );
+  const initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsDarwin,
+  );
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+  );
 
   //https: //zenn.dev/flutteruniv_dev/articles/20220607-061331-flutter-isar?redirected=1#isar-%E3%82%A4%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%B3%E3%82%B9%E3%82%92%E7%94%9F%E6%88%90%E3%81%99%E3%82%8B
   var path = '';
