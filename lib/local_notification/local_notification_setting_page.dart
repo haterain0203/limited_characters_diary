@@ -13,6 +13,17 @@ class LocalNotificationSettingPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           //TODO 時間設定
+          TextButton(
+            onPressed: () async {
+              await showTimePicker(
+                context: context,
+                //TODO 固定値
+                initialTime: TimeOfDay(hour: 21, minute: 00),
+              );
+            },
+            //TODO 固定値
+            child: Text('21:00'),
+          ),
           ElevatedButton(
             child: const Text('設定'),
             onPressed: () {
