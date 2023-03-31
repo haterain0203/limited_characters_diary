@@ -1,37 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class LocalNotificationSettingPage extends StatelessWidget {
   const LocalNotificationSettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    //TODO 表示項目少ないので、ページではなくダイアログでもいいかも
     return Scaffold(
       appBar: AppBar(
         title: const Text('通知設定'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          //TODO 時間設定
-          TextButton(
-            onPressed: () async {
-              await showTimePicker(
-                context: context,
-                //TODO 固定値
-                initialTime: TimeOfDay(hour: 21, minute: 00),
-              );
-            },
-            //TODO 固定値
-            child: Text('21:00'),
-          ),
-          ElevatedButton(
-            child: const Text('設定'),
-            onPressed: () {
-              //TODO 通知パーミッション確認
-              //TODO 通知スケジュール設定
-            },
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('設定時間に毎日通知、継続をサポートします'),
+            //TODO 時間設定
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30),
+              child: TextButton(
+                onPressed: () async {
+                  await showTimePicker(
+                    context: context,
+                    //TODO 固定値
+                    initialTime: const TimeOfDay(hour: 21, minute: 00),
+                  );
+                },
+                child: Text(
+                  //TODO 固定値
+                  '21:00',
+                  style: TextStyle(
+                    fontSize: 48.sp,
+                  ),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              child: const Text('登録'),
+              onPressed: () {
+                //TODO 通知パーミッション確認
+                //TODO 通知スケジュール設定
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
