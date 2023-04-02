@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/local_notification/local_notification_controller.dart';
 import 'package:sizer/sizer.dart';
 
-class LocalNotificationSettingPage extends StatelessWidget {
+class LocalNotificationSettingPage extends HookConsumerWidget {
   const LocalNotificationSettingPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //TODO 表示項目少ないので、ページではなくダイアログでもいいかも
     return Scaffold(
       appBar: AppBar(
@@ -41,6 +43,9 @@ class LocalNotificationSettingPage extends StatelessWidget {
               onPressed: () {
                 //TODO 通知パーミッション確認
                 //TODO 通知スケジュール設定
+                ref
+                    .read(localNotificationControllerProvider)
+                    .scheduledNotification();
               },
             ),
           ],
