@@ -6,13 +6,44 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotificationRepository {
-  LocalNotificationRepository({
-    required this.flutterLocalNotificationsPlugin,
-  });
+  LocalNotificationRepository() {
+    _init();
+  }
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
-  Future<void> requestPermissions() async {
+  Future<void> _init() async {
+    await _initialSetting();
+    await _setTimeZone();
+  }
+
+  Future<void> _initialSetting() async {
+// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    const initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+    const initializationSettingsDarwin = DarwinInitializationSettings(
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+    );
+    const initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+    );
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+  }
+
+  Future<void> _setTimeZone() async {
+    tz.initializeTimeZones();
+    final timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+    print(timeZoneName);
+    tz.setLocalLocation(tz.getLocation(timeZoneName));
+  }
+
+  Future<void> _requestPermissions() async {
     if (Platform.isIOS) {
       await flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -26,18 +57,13 @@ class LocalNotificationRepository {
   }
 
   Future<void> scheduledNotification() async {
-    await requestPermissions();
-    //TODO 起動時1回でいいはずなので記載箇所を要検討
-    tz.initializeTimeZones();
-    final timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    print(timeZoneName);
-    tz.setLocalLocation(tz.getLocation(timeZoneName));
+    await _requestPermissions();
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
         'scheduled title',
         'scheduled body',
         // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-        tz.TZDateTime(tz.local, 2023, 4, 2, 8, 56),
+        tz.TZDateTime(tz.local, 2023, 4, 2, 16, 02),
         const NotificationDetails(
           android: AndroidNotificationDetails(
             'your channel id',
@@ -49,7 +75,6 @@ class LocalNotificationRepository {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dateAndTime);
-    print(tz.TZDateTime.now(tz.local));
     print('scheduled');
   }
 }

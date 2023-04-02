@@ -1,22 +1,12 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_repository.dart';
-
-final flutterLocalNotificationsPluginProvider =
-    Provider<FlutterLocalNotificationsPlugin>(
-  (ref) => throw UnimplementedError(),
-);
 
 final localNotificationControllerProvider = Provider(
   (ref) => LocalNotificationController(ref: ref),
 );
 
 final localNotificationRepoProvider = Provider((ref) {
-  final flutterLocalNotificationsPlugin =
-      ref.watch(flutterLocalNotificationsPluginProvider);
-  return LocalNotificationRepository(
-    flutterLocalNotificationsPlugin: flutterLocalNotificationsPlugin,
-  );
+  return LocalNotificationRepository();
 });
 
 class LocalNotificationController {
