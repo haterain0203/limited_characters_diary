@@ -25,6 +25,14 @@ class LocalNotificationSettingPage extends HookConsumerWidget {
                   final setTime = await showTimePicker(
                     context: context,
                     initialTime: const TimeOfDay(hour: 21, minute: 00),
+                    builder: (context, child) {
+                      return MediaQuery(
+                        data: MediaQuery.of(context).copyWith(
+                          alwaysUse24HourFormat: true,
+                        ),
+                        child: child!,
+                      );
+                    },
                   );
                   if (setTime == null) {
                     return;
