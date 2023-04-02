@@ -18,20 +18,26 @@ class LocalNotificationSettingPage extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('設定時間に毎日通知、継続をサポートします'),
-            //TODO 時間設定
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: TextButton(
                 onPressed: () async {
-                  await showTimePicker(
+                  final setTime = await showTimePicker(
                     context: context,
-                    //TODO 固定値
                     initialTime: const TimeOfDay(hour: 21, minute: 00),
                   );
+                  if (setTime == null) {
+                    return;
+                  }
+                  ref
+                      .read(localNotificationControllerProvider)
+                      .setNotificationTime(setTime);
                 },
                 child: Text(
-                  //TODO 固定値
-                  '21:00',
+                  ref
+                      .watch(localNotificationControllerProvider)
+                      .notificationTime
+                      .format(context),
                   style: TextStyle(
                     fontSize: 48.sp,
                   ),
@@ -41,8 +47,6 @@ class LocalNotificationSettingPage extends HookConsumerWidget {
             ElevatedButton(
               child: const Text('登録'),
               onPressed: () {
-                //TODO 通知パーミッション確認
-                //TODO 通知スケジュール設定
                 ref
                     .read(localNotificationControllerProvider)
                     .scheduledNotification();
