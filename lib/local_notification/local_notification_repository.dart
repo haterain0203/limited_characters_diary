@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -56,14 +57,22 @@ class LocalNotificationRepository {
     }
   }
 
-  Future<void> scheduledNotification() async {
+  Future<void> scheduledNotification(
+      {required TimeOfDay notificationTime}) async {
     await _requestPermissions();
+    final now = DateTime.now();
+    final dateTimeNotificationTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      notificationTime.hour,
+      notificationTime.minute,
+    );
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
         'scheduled title',
         'scheduled body',
-        // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-        tz.TZDateTime(tz.local, 2023, 4, 2, 16, 02),
+        tz.TZDateTime.from(dateTimeNotificationTime, tz.local),
         const NotificationDetails(
           android: AndroidNotificationDetails(
             'your channel id',
