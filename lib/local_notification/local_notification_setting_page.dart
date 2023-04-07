@@ -8,59 +8,92 @@ class LocalNotificationSettingPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final notificationTimeFromLocalDB =
+        ref.watch(localNotificationTimeFutureProvider);
     //TODO 表示項目少ないので、ページではなくダイアログでもいいかも
     return Scaffold(
       appBar: AppBar(
         title: const Text('通知設定'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('設定時間に毎日通知、継続をサポートします'),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30),
-              child: TextButton(
-                onPressed: () async {
-                  final setTime = await showTimePicker(
-                    context: context,
-                    initialTime: const TimeOfDay(hour: 21, minute: 00),
-                    builder: (context, child) {
-                      return MediaQuery(
-                        data: MediaQuery.of(context).copyWith(
-                          alwaysUse24HourFormat: true,
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  if (setTime == null) {
-                    return;
-                  }
-                  ref
-                      .read(localNotificationControllerProvider)
-                      .setNotificationTime(setTime);
-                },
-                child: Text(
-                  ref
-                      .watch(localNotificationControllerProvider)
-                      .notificationTime
-                      .format(context),
-                  style: TextStyle(
-                    fontSize: 48.sp,
+      body: notificationTimeFromLocalDB.when(
+        loading: () => const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        error: (error, stack) {
+          return Scaffold(
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    error.toString(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.invalidate(localNotificationTimeFutureProvider);
+                  },
+                  child: const Text('再読み込み'),
+                )
+              ],
+            ),
+          );
+        },
+        data: (data) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('設定時間に毎日通知、継続をサポートします'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: TextButton(
+                  onPressed: () async {
+                    final setTime = await showTimePicker(
+                      context: context,
+                      initialTime: const TimeOfDay(hour: 21, minute: 00),
+                      builder: (context, child) {
+                        return MediaQuery(
+                          data: MediaQuery.of(context).copyWith(
+                            alwaysUse24HourFormat: true,
+                          ),
+                          child: child!,
+                        );
+                      },
+                    );
+                    if (setTime == null) {
+                      return;
+                    }
+                    ref
+                        .read(localNotificationControllerProvider)
+                        .setNotificationTime(setTime);
+                  },
+                  child: Text(
+                    ref
+                        .watch(localNotificationControllerProvider)
+                        .notificationTime
+                        .format(context),
+                    style: TextStyle(
+                      fontSize: 48.sp,
+                    ),
                   ),
                 ),
               ),
-            ),
-            ElevatedButton(
-              child: const Text('登録'),
-              onPressed: () {
-                ref
-                    .read(localNotificationControllerProvider)
-                    .scheduledNotification();
-              },
-            ),
-          ],
+              ElevatedButton(
+                child: const Text('登録'),
+                onPressed: () {
+                  ref
+                      .read(localNotificationControllerProvider)
+                      .scheduledNotification();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
