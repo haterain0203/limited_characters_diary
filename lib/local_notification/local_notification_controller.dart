@@ -30,6 +30,7 @@ final localNotificationTimeFutureProvider = FutureProvider((ref) async {
   }
   final notificationTimeDateTime = DateTime.parse(notificationTimeStr);
   final notificationTime = TimeOfDay.fromDateTime(notificationTimeDateTime);
+  ref.read(localNotificationSetTimeProvider.notifier).state = notificationTime;
   return notificationTime;
 });
 
