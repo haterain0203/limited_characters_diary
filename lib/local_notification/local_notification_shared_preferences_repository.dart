@@ -7,7 +7,7 @@ class LocalNotificationSharedPreferencesRepository {
   Future<void> saveNotificationTime(
       SharedPreferences prefs, TimeOfDay notificationTime) async {
     final notificationTimeStr = notificationTime.toString();
-    // prefs.setString('notification_time', notificationTimeStr);
+    await prefs.setString(notificationTimeStrKey, notificationTimeStr);
   }
 
   Future<void> fetchNotificationTime(SharedPreferences prefs) async {
