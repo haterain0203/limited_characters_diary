@@ -20,10 +20,17 @@ final localNotificationSharedRepoProvider = Provider(
   (ref) => LocalNotificationSharedPreferencesRepository(),
 );
 
-// SharedPreferencesにアクセスし、記録された通知時間を取得する
+// SharedPreferencesにアクセスし、記録された通知時間の文字列を取得
+// TimeOfDayに直して返す
 final localNotificationTimeFutureProvider = FutureProvider((ref) async {
   final repo = ref.read(localNotificationSharedRepoProvider);
-  await repo.fetchNotificationTime();
+  final notificationTimeStr = await repo.fetchNotificationTimeStr();
+  if (notificationTimeStr == null) {
+    return null;
+  }
+  final notificationTimeDateTime = DateTime.parse(notificationTimeStr);
+  final notificationTime = TimeOfDay.fromDateTime(notificationTimeDateTime);
+  return notificationTime;
 });
 
 class LocalNotificationController {
@@ -41,5 +48,11 @@ class LocalNotificationController {
     ref
         .read(localNotificationSetTimeProvider.notifier)
         .update((state) => setTime);
+  }
+
+  Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
+    final repo = ref.read(localNotificationSharedRepoProvider);
+    await repo.saveNotificationTime(notificationTime);
+    ref.invalidate(localNotificationTimeFutureProvider);
   }
 }

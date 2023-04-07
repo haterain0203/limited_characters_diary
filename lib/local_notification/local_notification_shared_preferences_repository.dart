@@ -10,8 +10,8 @@ class LocalNotificationSharedPreferencesRepository {
     await prefs.setString(notificationTimeStrKey, notificationTimeStr);
   }
 
-  Future<void> fetchNotificationTime() async {
+  Future<String?> fetchNotificationTimeStr() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.getString(notificationTimeStrKey);
+    return prefs.getString(notificationTimeStrKey);
   }
 }
