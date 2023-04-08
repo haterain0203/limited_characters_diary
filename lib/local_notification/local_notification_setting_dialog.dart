@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/stadium_border_button.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_controller.dart';
 import 'package:sizer/sizer.dart';
@@ -99,6 +100,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                 ),
               ),
             ),
+            StadiumBorderButton(),
           ],
         ),
       ),

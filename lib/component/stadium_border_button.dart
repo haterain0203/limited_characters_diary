@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class StadiumBorderButton extends StatelessWidget {
   const StadiumBorderButton({
     this.onPressed,
-    required this.title,
+    this.title,
     super.key,
   });
 
   final VoidCallback? onPressed;
-  final String title;
+  final String? title;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -17,7 +17,7 @@ class StadiumBorderButton extends StatelessWidget {
             Navigator.pop(context);
           },
       style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
-      child: Text(title),
+      child: Text(title ?? '閉じる'),
     );
   }
 }
