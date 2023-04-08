@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
@@ -81,6 +82,9 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                       .read(localNotificationControllerProvider)
                       .saveNotificationTime(setTime);
                   ref.invalidate(localNotificationTimeFutureProvider);
+                  if (context.mounted) {
+                    await _showSetCompleteDialog(context, setTime.to24hours());
+                  }
                 },
                 child: Text(
                   data?.to24hours() ?? '-- : --',
@@ -94,5 +98,18 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showSetCompleteDialog(
+      BuildContext context, String setTime) async {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      title: '$setTimeに通知を設定しました',
+      btnOkText: '閉じる',
+      btnOkOnPress: () {
+        Navigator.pop(context);
+      },
+    ).show();
   }
 }
