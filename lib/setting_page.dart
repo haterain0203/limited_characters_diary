@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatelessWidget {
@@ -20,7 +21,7 @@ class SettingPage extends StatelessWidget {
                 leading: const Icon(Icons.notification_add),
                 title: const Text('通知設定'),
                 onPressed: (BuildContext context) {
-                  //TODO 通知設定
+                  _showSetNotificationDialog(context);
                 },
               ),
             ],
@@ -44,6 +45,15 @@ class SettingPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showSetNotificationDialog(BuildContext context) {
+    showDialog<LocalNotificationSettingDialog>(
+      context: context,
+      builder: (_) {
+        return const LocalNotificationSettingDialog();
+      },
     );
   }
 }

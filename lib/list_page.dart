@@ -1,8 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/component/input_diary_dialog.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
+import 'package:limited_characters_diary/diary/input_diary_dialog.dart';
+import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
 import 'date/date_controller.dart';
@@ -50,7 +51,12 @@ class ListPage extends HookConsumerWidget {
       data: (data) {
         return Scaffold(
           appBar: AppBar(
-            leading: const SizedBox(),
+            leading: IconButton(
+              onPressed: () {
+                _showSetNotificationDialog(context);
+              },
+              icon: const Icon(Icons.add_alert),
+            ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -167,5 +173,14 @@ class ListPage extends HookConsumerWidget {
         ref.read(diaryControllerProvider).deleteDiary(diary: diary);
       },
     ).show();
+  }
+
+  void _showSetNotificationDialog(BuildContext context) {
+    showDialog<LocalNotificationSettingDialog>(
+      context: context,
+      builder: (_) {
+        return const LocalNotificationSettingDialog();
+      },
+    );
   }
 }

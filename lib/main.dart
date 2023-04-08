@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:limited_characters_diary/diary/diary_controller.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'diary/collection/diary.dart';
+import 'diary/diary_controller.dart';
 import 'my_app.dart';
 
 Future<void> main() async {
@@ -31,7 +31,9 @@ Future<void> main() async {
       enabled: !kReleaseMode,
       builder: (_) => ProviderScope(
         //参考 https://github.com/tomamoi/todo_app/blob/main/lib/main.dart
-        overrides: [isarProvider.overrideWithValue(isar)],
+        overrides: [
+          isarProvider.overrideWithValue(isar),
+        ],
         child: const MyApp(),
       ),
     ),
