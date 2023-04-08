@@ -13,7 +13,6 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notificationTimeFromLocalDB =
         ref.watch(localNotificationTimeFutureProvider);
-    //TODO 表示項目少ないので、ページではなくダイアログでもいいかも
     return notificationTimeFromLocalDB.when(
       loading: () => const Scaffold(
         body: Center(
