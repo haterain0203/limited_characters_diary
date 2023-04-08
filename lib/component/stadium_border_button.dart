@@ -12,7 +12,10 @@ class StadiumBorderButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: onPressed ??
+          () {
+            Navigator.pop(context);
+          },
       style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
       child: Text(title),
     );
