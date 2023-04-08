@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/input_diary_dialog.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
+import 'package:limited_characters_diary/local_notification/local_notification_setting_page.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
 import 'date/date_controller.dart';
@@ -50,7 +51,17 @@ class ListPage extends HookConsumerWidget {
       data: (data) {
         return Scaffold(
           appBar: AppBar(
-            leading: const SizedBox(),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (_) => const LocalNotificationSettingPage(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add_alert),
+            ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
