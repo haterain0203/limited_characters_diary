@@ -128,7 +128,6 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
     await ref
         .read(localNotificationControllerProvider)
         .saveNotificationTime(setTime);
-    ref.invalidate(localNotificationTimeFutureProvider);
     if (context.mounted) {
       await _showSetCompleteDialog(context, setTime.to24hours());
     }

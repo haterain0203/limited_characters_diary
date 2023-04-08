@@ -17,7 +17,8 @@ final localNotificationSharedRepoProvider = Provider(
 
 // SharedPreferencesにアクセスし、記録された通知時間の文字列を取得
 // TimeOfDayに直して返す
-final localNotificationTimeFutureProvider = FutureProvider((ref) async {
+final localNotificationTimeFutureProvider =
+    FutureProvider.autoDispose((ref) async {
   final repo = ref.read(localNotificationSharedRepoProvider);
   final notificationTimeStr = await repo.fetchNotificationTimeStr();
   if (notificationTimeStr == null) {
