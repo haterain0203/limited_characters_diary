@@ -84,7 +84,8 @@ class LocalNotificationRepository {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.dateAndTime,
+      //同じ時間に毎日通知
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 }
