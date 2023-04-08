@@ -53,12 +53,7 @@ class ListPage extends HookConsumerWidget {
           appBar: AppBar(
             leading: IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<dynamic>(
-                    builder: (_) => const LocalNotificationSettingPage(),
-                  ),
-                );
+                _showSetNotificationDialog(context);
               },
               icon: const Icon(Icons.add_alert),
             ),
@@ -178,5 +173,13 @@ class ListPage extends HookConsumerWidget {
         ref.read(diaryControllerProvider).deleteDiary(diary: diary);
       },
     ).show();
+  }
+
+  void _showSetNotificationDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return LocalNotificationSettingPage();
+        });
   }
 }

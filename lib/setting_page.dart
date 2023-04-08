@@ -21,13 +21,7 @@ class SettingPage extends StatelessWidget {
                 leading: const Icon(Icons.notification_add),
                 title: const Text('通知設定'),
                 onPressed: (BuildContext context) {
-                  //TODO 通知設定
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<LocalNotificationSettingPage>(
-                      builder: (_) => const LocalNotificationSettingPage(),
-                    ),
-                  );
+                  _showSetNotificationDialog(context);
                 },
               ),
             ],
@@ -51,6 +45,15 @@ class SettingPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showSetNotificationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return LocalNotificationSettingPage();
+      },
     );
   }
 }
