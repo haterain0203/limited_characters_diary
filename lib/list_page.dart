@@ -176,10 +176,11 @@ class ListPage extends HookConsumerWidget {
   }
 
   void _showSetNotificationDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (_) {
-          return LocalNotificationSettingPage();
-        });
+    showDialog<LocalNotificationSettingPage>(
+      context: context,
+      builder: (_) {
+        return const LocalNotificationSettingPage();
+      },
+    );
   }
 }

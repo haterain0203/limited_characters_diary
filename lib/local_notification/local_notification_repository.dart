@@ -57,8 +57,9 @@ class LocalNotificationRepository {
     }
   }
 
-  Future<void> scheduledNotification(
-      {required TimeOfDay notificationTime}) async {
+  Future<void> scheduledNotification({
+    required TimeOfDay notificationTime,
+  }) async {
     await _requestPermissions();
     final now = DateTime.now();
     final dateTimeNotificationTime = DateTime(
@@ -69,21 +70,22 @@ class LocalNotificationRepository {
       notificationTime.minute,
     );
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        0,
-        'scheduled title',
-        'scheduled body',
-        tz.TZDateTime.from(dateTimeNotificationTime, tz.local),
-        const NotificationDetails(
-          android: AndroidNotificationDetails(
-            'your channel id',
-            'your channel name',
-            channelDescription: 'your channel description',
-          ),
+      0,
+      'scheduled title',
+      'scheduled body',
+      tz.TZDateTime.from(dateTimeNotificationTime, tz.local),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
         ),
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.dateAndTime);
+      ),
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.dateAndTime,
+    );
     print('scheduled');
   }
 }

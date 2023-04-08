@@ -49,10 +49,10 @@ class SettingPage extends StatelessWidget {
   }
 
   void _showSetNotificationDialog(BuildContext context) {
-    showDialog(
+    showDialog<LocalNotificationSettingPage>(
       context: context,
       builder: (_) {
-        return LocalNotificationSettingPage();
+        return const LocalNotificationSettingPage();
       },
     );
   }
