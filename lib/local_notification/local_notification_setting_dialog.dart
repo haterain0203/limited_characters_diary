@@ -4,8 +4,8 @@ import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_controller.dart';
 import 'package:sizer/sizer.dart';
 
-class LocalNotificationSettingPage extends HookConsumerWidget {
-  const LocalNotificationSettingPage({super.key});
+class LocalNotificationSettingDialog extends HookConsumerWidget {
+  const LocalNotificationSettingDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

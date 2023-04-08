@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/input_diary_dialog.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
-import 'package:limited_characters_diary/local_notification/local_notification_setting_page.dart';
+import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
 import 'date/date_controller.dart';
@@ -176,10 +176,10 @@ class ListPage extends HookConsumerWidget {
   }
 
   void _showSetNotificationDialog(BuildContext context) {
-    showDialog<LocalNotificationSettingPage>(
+    showDialog<LocalNotificationSettingDialog>(
       context: context,
       builder: (_) {
-        return const LocalNotificationSettingPage();
+        return const LocalNotificationSettingDialog();
       },
     );
   }

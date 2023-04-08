@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:limited_characters_diary/local_notification/local_notification_setting_page.dart';
+import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingPage extends StatelessWidget {
@@ -49,10 +49,10 @@ class SettingPage extends StatelessWidget {
   }
 
   void _showSetNotificationDialog(BuildContext context) {
-    showDialog<LocalNotificationSettingPage>(
+    showDialog<LocalNotificationSettingDialog>(
       context: context,
       builder: (_) {
-        return const LocalNotificationSettingPage();
+        return const LocalNotificationSettingDialog();
       },
     );
   }
