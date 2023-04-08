@@ -60,40 +60,11 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30),
               child: TextButton(
-                onPressed: () async {
-                  final setTime = await showTimePicker(
-                    context: context,
-                    initialTime: data ?? const TimeOfDay(hour: 21, minute: 00),
-                    builder: (context, child) {
-                      return MediaQuery(
-                        data: MediaQuery.of(context).copyWith(
-                          alwaysUse24HourFormat: true,
-                        ),
-                        child: child!,
-                      );
-                    },
-                  );
-                  //入力がなければ早期リターン
-                  if (setTime == null) {
-                    return;
-                  }
-                  //DBに保存されている値と入力された値が同じ場合も早期リターン
-                  if (setTime == data) {
-                    return;
-                  }
-                  //通知設定
-                  await ref
-                      .read(localNotificationControllerProvider)
-                      .scheduledNotification(setTime);
-                  //設定された時間をSharedPreferencesに保存
-                  await ref
-                      .read(localNotificationControllerProvider)
-                      .saveNotificationTime(setTime);
-                  ref.invalidate(localNotificationTimeFutureProvider);
-                  if (context.mounted) {
-                    await _showSetCompleteDialog(context, setTime.to24hours());
-                  }
-                },
+                onPressed: () async => _setNotification(
+                  context,
+                  data,
+                  ref,
+                ),
                 child: Text(
                   data?.to24hours() ?? '-- : --',
                   style: TextStyle(
@@ -122,5 +93,44 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
         Navigator.pop(context);
       },
     ).show();
+  }
+
+  Future<void> _setNotification(
+    BuildContext context,
+    TimeOfDay? data,
+    WidgetRef ref,
+  ) async {
+    final setTime = await showTimePicker(
+      context: context,
+      initialTime: data ?? const TimeOfDay(hour: 21, minute: 00),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: true,
+          ),
+          child: child!,
+        );
+      },
+    );
+    //入力がなければ早期リターン
+    if (setTime == null) {
+      return;
+    }
+    //DBに保存されている値と入力された値が同じ場合も早期リターン
+    if (setTime == data) {
+      return;
+    }
+    //通知設定
+    await ref
+        .read(localNotificationControllerProvider)
+        .scheduledNotification(setTime);
+    //設定された時間をSharedPreferencesに保存
+    await ref
+        .read(localNotificationControllerProvider)
+        .saveNotificationTime(setTime);
+    ref.invalidate(localNotificationTimeFutureProvider);
+    if (context.mounted) {
+      await _showSetCompleteDialog(context, setTime.to24hours());
+    }
   }
 }
