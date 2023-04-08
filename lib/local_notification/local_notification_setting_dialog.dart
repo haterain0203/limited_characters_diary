@@ -100,7 +100,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                 ),
               ),
             ),
-            StadiumBorderButton(),
+            const StadiumBorderButton(),
           ],
         ),
       ),
