@@ -41,7 +41,6 @@ class LocalNotificationRepository {
   Future<void> _setTimeZone() async {
     tz.initializeTimeZones();
     final timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
-    print(timeZoneName);
     tz.setLocalLocation(tz.getLocation(timeZoneName));
   }
 
@@ -87,6 +86,5 @@ class LocalNotificationRepository {
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dateAndTime,
     );
-    print('scheduled');
   }
 }
