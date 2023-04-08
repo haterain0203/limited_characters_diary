@@ -72,7 +72,12 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                       );
                     },
                   );
+                  //入力がなければ早期リターン
                   if (setTime == null) {
+                    return;
+                  }
+                  //DBに保存されている値と入力された値が同じ場合も早期リターン
+                  if (setTime == data) {
                     return;
                   }
                   await ref
@@ -101,7 +106,9 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
   }
 
   Future<void> _showSetCompleteDialog(
-      BuildContext context, String setTime) async {
+    BuildContext context,
+    String setTime,
+  ) async {
     await AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
