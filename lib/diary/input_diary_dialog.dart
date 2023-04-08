@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/date/date_controller.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
 
-import '../diary/collection/diary.dart';
+import 'collection/diary.dart';
 
 class InputDiaryDialog extends StatefulHookConsumerWidget {
   const InputDiaryDialog({

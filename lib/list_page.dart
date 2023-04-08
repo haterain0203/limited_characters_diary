@@ -1,8 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/component/input_diary_dialog.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
+import 'package:limited_characters_diary/diary/input_diary_dialog.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
