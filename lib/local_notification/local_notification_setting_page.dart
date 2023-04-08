@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_controller.dart';
 import 'package:sizer/sizer.dart';
 
@@ -79,7 +80,7 @@ class LocalNotificationSettingPage extends HookConsumerWidget {
                     ref.invalidate(localNotificationTimeFutureProvider);
                   },
                   child: Text(
-                    data?.format(context) ?? '-- : --',
+                    data?.to24hours() ?? '-- : --',
                     style: TextStyle(
                       fontSize: 48.sp,
                     ),
