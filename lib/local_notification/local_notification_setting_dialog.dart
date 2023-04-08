@@ -81,9 +81,11 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                   if (setTime == data) {
                     return;
                   }
+                  //通知設定
                   await ref
                       .read(localNotificationControllerProvider)
                       .scheduledNotification(setTime);
+                  //設定された時間をSharedPreferencesに保存
                   await ref
                       .read(localNotificationControllerProvider)
                       .saveNotificationTime(setTime);
