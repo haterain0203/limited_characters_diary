@@ -56,7 +56,8 @@ class LocalNotificationSettingPage extends HookConsumerWidget {
                   onPressed: () async {
                     final setTime = await showTimePicker(
                       context: context,
-                      initialTime: const TimeOfDay(hour: 21, minute: 00),
+                      initialTime:
+                          data ?? const TimeOfDay(hour: 21, minute: 00),
                       builder: (context, child) {
                         return MediaQuery(
                           data: MediaQuery.of(context).copyWith(
@@ -69,28 +70,21 @@ class LocalNotificationSettingPage extends HookConsumerWidget {
                     if (setTime == null) {
                       return;
                     }
-                    ref
+                    await ref
                         .read(localNotificationControllerProvider)
-                        .setNotificationTime(setTime);
+                        .scheduledNotification(setTime);
+                    await ref
+                        .read(localNotificationControllerProvider)
+                        .saveNotificationTime(setTime);
+                    ref.invalidate(localNotificationTimeFutureProvider);
                   },
                   child: Text(
-                    ref
-                        .watch(localNotificationControllerProvider)
-                        .notificationTime
-                        .format(context),
+                    data?.format(context) ?? '-- : --',
                     style: TextStyle(
                       fontSize: 48.sp,
                     ),
                   ),
                 ),
-              ),
-              ElevatedButton(
-                child: const Text('登録'),
-                onPressed: () {
-                  ref
-                      .read(localNotificationControllerProvider)
-                      .scheduledNotification();
-                },
               ),
             ],
           ),

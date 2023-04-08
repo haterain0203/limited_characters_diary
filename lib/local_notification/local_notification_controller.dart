@@ -11,11 +11,6 @@ final localNotificationRepoProvider = Provider((ref) {
   return LocalNotificationRepository();
 });
 
-// 通知時間の管理
-// 初期値は21:00
-final localNotificationSetTimeProvider =
-    StateProvider<TimeOfDay>((ref) => const TimeOfDay(hour: 21, minute: 00));
-
 final localNotificationSharedRepoProvider = Provider(
   (ref) => LocalNotificationSharedPreferencesRepository(),
 );
@@ -30,7 +25,6 @@ final localNotificationTimeFutureProvider = FutureProvider((ref) async {
   }
   final notificationTimeDateTime = DateTime.parse(notificationTimeStr);
   final notificationTime = TimeOfDay.fromDateTime(notificationTimeDateTime);
-  ref.read(localNotificationSetTimeProvider.notifier).state = notificationTime;
   return notificationTime;
 });
 
@@ -38,22 +32,14 @@ class LocalNotificationController {
   LocalNotificationController({required this.ref});
 
   final ProviderRef<dynamic> ref;
-  TimeOfDay get notificationTime => ref.watch(localNotificationSetTimeProvider);
 
-  Future<void> scheduledNotification() async {
+  Future<void> scheduledNotification(TimeOfDay setTime) async {
     final repo = ref.watch(localNotificationRepoProvider);
-    await repo.scheduledNotification(notificationTime: notificationTime);
-  }
-
-  void setNotificationTime(TimeOfDay setTime) {
-    ref
-        .read(localNotificationSetTimeProvider.notifier)
-        .update((state) => setTime);
+    await repo.scheduledNotification(notificationTime: setTime);
   }
 
   Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
     final repo = ref.read(localNotificationSharedRepoProvider);
     await repo.saveNotificationTime(notificationTime);
-    ref.invalidate(localNotificationTimeFutureProvider);
   }
 }
