@@ -6,6 +6,7 @@ import 'package:limited_characters_diary/diary/input_diary_dialog.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:limited_characters_diary/setting_page.dart';
 
+import 'constant.dart';
 import 'date/date_controller.dart';
 import 'diary/collection/diary.dart';
 
@@ -116,7 +117,7 @@ class ListPage extends HookConsumerWidget {
               return ListTile(
                 //本日はハイライト
                 tileColor: dateController.isToday(indexDate)
-                    ? Colors.amberAccent.shade100
+                    ? Constant.accentColor
                     : null,
                 dense: true,
                 leading: Text(

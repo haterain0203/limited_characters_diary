@@ -1,5 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:limited_characters_diary/constant.dart';
 import 'package:sizer/sizer.dart';
 
 import 'list_page.dart';
@@ -17,7 +18,15 @@ class MyApp extends StatelessWidget {
           builder: DevicePreview.appBuilder,
           title: 'limited_characters_diary',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Constant.colorSwatch,
+            appBarTheme: const AppBarTheme(
+              foregroundColor: Colors.white,
+            ),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+              ),
+            ),
           ),
           home: const ListPage(),
         );
