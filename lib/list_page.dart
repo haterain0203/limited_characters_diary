@@ -19,132 +19,130 @@ class ListPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryFutureProvider);
-    return diaryList.when(
-      loading: () => const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            _showSetNotificationDialog(context);
+          },
+          icon: const Icon(Icons.add_alert),
         ),
-      ),
-      error: (error, stack) {
-        return Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  error.toString(),
-                  textAlign: TextAlign.center,
-                ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: dateController.previousMonth,
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  ref.invalidate(diaryFutureProvider);
-                },
-                child: const Text('再読み込み'),
-              )
-            ],
-          ),
-        );
-      },
-      data: (data) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              onPressed: () {
-                _showSetNotificationDialog(context);
-              },
-              icon: const Icon(Icons.add_alert),
             ),
-            title: Row(
+            Text(
+              '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
+            ),
+            TextButton(
+              onPressed: dateController.nextMonth,
+              child: const Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (_) => const SettingPage(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings),
+          ),
+        ],
+      ),
+      body: diaryList.when(
+        loading: () => const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        error: (error, stack) {
+          return Scaffold(
+            body: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
-                  onPressed: dateController.previousMonth,
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.white,
+                Center(
+                  child: Text(
+                    error.toString(),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                Text(
-                  '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
+                const SizedBox(
+                  height: 16,
                 ),
-                TextButton(
-                  onPressed: dateController.nextMonth,
-                  child: const Icon(
-                    Icons.arrow_forward_ios,
-                    color: Colors.white,
-                  ),
-                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.invalidate(diaryFutureProvider);
+                  },
+                  child: const Text('再読み込み'),
+                )
               ],
             ),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (_) => const SettingPage(),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.settings),
+          );
+        },
+        data: (data) => ListView.separated(
+          separatorBuilder: (BuildContext context, int index) {
+            return const Divider(
+              height: 0.5,
+            );
+          },
+          itemCount: dateController.daysInMonth(),
+          itemBuilder: (BuildContext context, int index) {
+            final indexDate = DateTime(
+              dateController.selectedMonth.year,
+              dateController.selectedMonth.month,
+              index + 1,
+            );
+            //TODO firstWhereOrNull使いたい
+            final filteredDiary = data
+                .where((element) => element.diaryDate == indexDate)
+                .toList();
+            final diary = filteredDiary.isNotEmpty ? filteredDiary[0] : null;
+            final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
+            final dayStrColor = dateController.choiceDayStrColor(indexDate);
+            return ListTile(
+              //本日はハイライト
+              tileColor: dateController.isToday(indexDate)
+                  ? Constant.accentColor
+                  : null,
+              dense: true,
+              leading: Text(
+                '${indexDate.day}（$dayOfWeekStr）',
+                style: TextStyle(color: dayStrColor),
               ),
-            ],
-          ),
-          body: ListView.separated(
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider(
-                height: 0.5,
-              );
-            },
-            itemCount: dateController.daysInMonth(),
-            itemBuilder: (BuildContext context, int index) {
-              final indexDate = DateTime(
-                dateController.selectedMonth.year,
-                dateController.selectedMonth.month,
-                index + 1,
-              );
-              //TODO firstWhereOrNull使いたい
-              final filteredDiary = data
-                  .where((element) => element.diaryDate == indexDate)
-                  .toList();
-              final diary = filteredDiary.isNotEmpty ? filteredDiary[0] : null;
-              final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
-              final dayStrColor = dateController.choiceDayStrColor(indexDate);
-              return ListTile(
-                //本日はハイライト
-                tileColor: dateController.isToday(indexDate)
-                    ? Constant.accentColor
-                    : null,
-                dense: true,
-                leading: Text(
-                  '${indexDate.day}（$dayOfWeekStr）',
-                  style: TextStyle(color: dayStrColor),
-                ),
-                title: Text(
-                  diary?.content ?? '',
-                ),
-                onTap: () async {
-                  ref.read(selectedDateProvider.notifier).state = indexDate;
-                  await _showEditDialog(context, diary);
-                },
-                onLongPress: diary == null
-                    ? null
-                    : () {
-                        _showConfirmDeleteDialog(
-                          context: context,
-                          ref: ref,
-                          diary: diary,
-                        );
-                      },
-              );
-            },
-          ),
-        );
-      },
+              title: Text(
+                diary?.content ?? '',
+              ),
+              onTap: () async {
+                ref.read(selectedDateProvider.notifier).state = indexDate;
+                await _showEditDialog(context, diary);
+              },
+              onLongPress: diary == null
+                  ? null
+                  : () {
+                      _showConfirmDeleteDialog(
+                        context: context,
+                        ref: ref,
+                        diary: diary,
+                      );
+                    },
+            );
+          },
+        ),
+      ),
     );
   }
 
