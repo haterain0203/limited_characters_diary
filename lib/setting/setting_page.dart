@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/app_info/app_info_providers.dart';
 import 'package:limited_characters_diary/constant.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
@@ -49,7 +51,22 @@ class SettingPage extends StatelessWidget {
               SettingsTile(
                 leading: const Icon(Icons.info),
                 title: const Text('アプリバージョン'),
-                //TODO アプリバージョン表示
+                trailing: HookConsumer(
+                  builder: (context, ref, child) {
+                    final appInfo = ref.watch(appInfoProvider);
+                    return appInfo.when(
+                      loading: () => const Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                      error: (error, stack) {
+                        return const Text('エラーが発生しました');
+                      },
+                      data: (data) => Text(data.version),
+                    );
+                  },
+                ),
               ),
             ],
           ),
