@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:limited_characters_diary/constant.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -36,10 +37,10 @@ class SettingPage extends StatelessWidget {
                 onPressed: (BuildContext context) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
+                    MaterialPageRoute<dynamic>(
                       builder: (_) => const WebViewPage(
                         title: '問い合わせ',
-                        url: 'https://yahoo.co.jp',
+                        url: Constant.googleFormUrl,
                       ),
                     ),
                   );
