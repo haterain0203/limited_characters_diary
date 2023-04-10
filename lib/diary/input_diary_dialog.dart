@@ -4,7 +4,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant.dart';
 import 'package:limited_characters_diary/date/date_controller.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
+import 'package:sizer/sizer.dart';
 
+import '../component/stadium_border_button.dart';
 import 'collection/diary.dart';
 
 class InputDiaryDialog extends StatefulHookConsumerWidget {
@@ -53,40 +55,56 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
           diaryInputController.text = text;
         },
       ),
+      actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('キャンセル'),
-        ),
-        TextButton(
-          onPressed: () {
-            if (diaryInputController.text.isEmpty) {
-              _showErrorDialog(context, '文字が入力されていません');
-              return;
-            }
-            if (widget.diary?.content == diaryInputController.text) {
-              _showErrorDialog(context, '内容が変更されていません');
-              return;
-            }
-            if (widget.diary == null) {
-              ref.read(diaryControllerProvider).addDiary(
-                    content: diaryInputController.text,
-                    selectedDate: selectedDate,
-                  );
-              diaryInputController.clear();
-              _showCompleteDialog(context);
-            } else {
-              ref.read(diaryControllerProvider).updateDiary(
-                    diary: widget.diary!,
-                    content: diaryInputController.text,
-                  );
-              diaryInputController.clear();
-              _showCompleteDialog(context);
-            }
-          },
-          child: const Text('登録'),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(10.sp),
+                child: StadiumBorderButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  title: 'キャンセル',
+                  backgroundColor: Colors.grey,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.sp),
+                child: StadiumBorderButton(
+                  onPressed: () {
+                    if (diaryInputController.text.isEmpty) {
+                      _showErrorDialog(context, '文字が入力されていません');
+                      return;
+                    }
+                    if (widget.diary?.content == diaryInputController.text) {
+                      _showErrorDialog(context, '内容が変更されていません');
+                      return;
+                    }
+                    if (widget.diary == null) {
+                      ref.read(diaryControllerProvider).addDiary(
+                            content: diaryInputController.text,
+                            selectedDate: selectedDate,
+                          );
+                      diaryInputController.clear();
+                      _showCompleteDialog(context);
+                    } else {
+                      ref.read(diaryControllerProvider).updateDiary(
+                            diary: widget.diary!,
+                            content: diaryInputController.text,
+                          );
+                      diaryInputController.clear();
+                      _showCompleteDialog(context);
+                    }
+                  },
+                  title: '登録',
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

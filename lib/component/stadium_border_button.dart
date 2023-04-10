@@ -4,11 +4,13 @@ class StadiumBorderButton extends StatelessWidget {
   const StadiumBorderButton({
     this.onPressed,
     this.title,
+    this.backgroundColor,
     super.key,
   });
 
   final VoidCallback? onPressed;
   final String? title;
+  final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -16,7 +18,10 @@ class StadiumBorderButton extends StatelessWidget {
           () {
             Navigator.pop(context);
           },
-      style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
+      style: ElevatedButton.styleFrom(
+        shape: const StadiumBorder(),
+        backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
+      ),
       child: Text(title ?? '閉じる'),
     );
   }
