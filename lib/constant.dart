@@ -19,4 +19,7 @@ class Constant {
   static const int _colorSwatchPrimaryValue = 0xFF6AB5E6;
 
   static const accentColor = Color(0xFFF5E07E);
+
+  static const googleFormUrl =
+      'https://docs.google.com/forms/d/e/1FAIpQLSd0PX7sqCV1MU6BW740N9TVnyn-NblQWBlureYeuFfFZI7LhQ/viewform?usp=sf_link';
 }
