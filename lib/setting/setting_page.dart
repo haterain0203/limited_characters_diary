@@ -50,15 +50,31 @@ class SettingPage extends StatelessWidget {
               ),
               SettingsTile(
                 leading: const Icon(Icons.info),
+                title: const Text('アプリ名'),
+                trailing: HookConsumer(
+                  builder: (context, ref, child) {
+                    final appInfo = ref.watch(appInfoProvider);
+                    return appInfo.when(
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      error: (error, stack) {
+                        return const Text('エラーが発生しました');
+                      },
+                      data: (data) => Text(data.appName),
+                    );
+                  },
+                ),
+              ),
+              SettingsTile(
+                leading: const Icon(Icons.info),
                 title: const Text('アプリバージョン'),
                 trailing: HookConsumer(
                   builder: (context, ref, child) {
                     final appInfo = ref.watch(appInfoProvider);
                     return appInfo.when(
-                      loading: () => const Scaffold(
-                        body: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
                       ),
                       error: (error, stack) {
                         return const Text('エラーが発生しました');
