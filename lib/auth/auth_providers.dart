@@ -17,9 +17,8 @@ final authRepoProvider = Provider(
 
 final userStateProvider = StreamProvider<User>(
   (ref) {
-    final auth = ref.read(authInstanceProvider);
     final repo = ref.read(authRepoProvider);
-    return auth.authStateChanges().map((User? user) {
+    return repo.authStateChanges().map((User? user) {
       if (user == null) {
         print('userがnullです。匿名認証します');
         repo.signInAnonymously();
