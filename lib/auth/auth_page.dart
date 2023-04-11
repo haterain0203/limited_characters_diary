@@ -13,9 +13,17 @@ class AuthPage extends HookConsumerWidget {
     final userState = ref.watch(userStateProvider);
 
     return userState.when(
-      error: (e, s) => Text(e.toString()),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
+      error: (e, s) => Scaffold(
+        body: Center(
+          child: Text(
+            e.toString(),
+          ),
+        ),
+      ),
+      loading: () => const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
       data: (data) {
         if (data == null) {
