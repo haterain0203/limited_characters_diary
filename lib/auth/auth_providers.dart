@@ -8,12 +8,21 @@ final authInstanceProvider = Provider((ref) => FirebaseAuth.instance);
 
 final firestoreInstanceProvider = Provider((ref) => FirebaseFirestore.instance);
 
-final authRepoProvider = Provider((ref) => AuthRepository());
+final authRepoProvider = Provider(
+  (ref) => AuthRepository(
+    auth: ref.read(authInstanceProvider),
+    firestore: ref.read(firestoreInstanceProvider),
+  ),
+);
+
+final userStateProvider = StreamProvider(
+  (ref) {
+    return ref.watch(authRepoProvider).authStateChanges();
+  },
+);
 
 final authControllerProvider = Provider(
   (ref) => AuthController(
     repo: ref.read(authRepoProvider),
-    auth: ref.read(authInstanceProvider),
-    firestore: ref.read(firestoreInstanceProvider),
   ),
 );

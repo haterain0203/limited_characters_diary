@@ -3,10 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthRepository {
-  Future<void> signInAnonymously(
-    FirebaseAuth auth,
-    FirebaseFirestore firestore,
-  ) async {
+  AuthRepository({
+    required this.auth,
+    required this.firestore,
+  });
+
+  final FirebaseAuth auth;
+  final FirebaseFirestore firestore;
+
+  Stream<User?> authStateChanges() => auth.authStateChanges();
+
+  Future<void> signInAnonymously() async {
     final currentUser = auth.currentUser;
     if (currentUser == null) {
       try {
@@ -29,6 +36,10 @@ class AuthRepository {
         throw _convertToErrorMessageFromErrorCode(e.code);
       }
     }
+  }
+
+  Future<void> signOut() async {
+    await auth.signOut();
   }
 
   String _convertToErrorMessageFromErrorCode(String errorCode) {
