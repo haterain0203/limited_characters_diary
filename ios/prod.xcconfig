@@ -1,0 +1,4 @@
+FLUTTER_FLAVOR=prod
+PRODUCT_BUNDLE_IDENTIFIER=com.futtaro.limitedCharactersDiary
+DISPLAY_NAME=16文字日記
+FLUTTER_TARGET=lib/main.dart
