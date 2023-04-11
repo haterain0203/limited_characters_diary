@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.futtaro.limited_characters_diary">
    <application
-       ndroid:label="${appName}"
-       android:name="${applicationName}"
+        android:label="${appName}"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
