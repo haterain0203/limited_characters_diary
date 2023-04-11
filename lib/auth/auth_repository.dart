@@ -14,33 +14,31 @@ class AuthRepository {
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
   Future<void> signInAnonymously() async {
-    final currentUser = auth.currentUser;
-    if (currentUser == null) {
-      try {
-        // 匿名認証
-        final userCredential = await auth.signInAnonymously();
+    try {
+      // 匿名認証
+      final userCredential = await auth.signInAnonymously();
 
-        // firestoreにUserを登録する
-        final user = userCredential.user;
-        if (user != null) {
-          final uid = user.uid;
-          await firestore.collection('users').doc(uid).set(
-            {
-              'id': uid,
-              'createdAt': DateTime.now(),
-            },
-          );
-        }
-      } on FirebaseAuthException catch (e) {
-        debugPrint(e.toString());
-        throw _convertToErrorMessageFromErrorCode(e.code);
+      // firestoreにUserを登録する
+      final user = userCredential.user;
+      if (user != null) {
+        final uid = user.uid;
+        //TODO Userクラス作成
+        await firestore.collection('users').doc(uid).set(
+          {
+            'id': uid,
+            'createdAt': DateTime.now(),
+          },
+        );
       }
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.toString());
+      throw _convertToErrorMessageFromErrorCode(e.code);
     }
   }
 
-  Future<void> signOut() async {
-    await auth.signOut();
-  }
+  // Future<void> signOut() async {
+  //   await auth.signOut();
+  // }
 
   String _convertToErrorMessageFromErrorCode(String errorCode) {
     switch (errorCode) {

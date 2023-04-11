@@ -6,11 +6,5 @@ class AuthController {
   });
   final AuthRepository repo;
 
-  Future<void> signInAnonymously() {
-    return repo.signInAnonymously();
-  }
-
-  Future<void> signOut() {
-    return repo.signOut();
-  }
+  //TODO サインアウト
 }
