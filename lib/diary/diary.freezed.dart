@@ -21,8 +21,11 @@ Diary _$DiaryFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Diary {
   String get content => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   DateTime get diaryDate => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,9 +40,9 @@ abstract class $DiaryCopyWith<$Res> {
   @useResult
   $Res call(
       {String content,
-      DateTime diaryDate,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @DateTimeConverter() DateTime diaryDate,
+      @DateTimeConverter() DateTime createdAt,
+      @DateTimeConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -89,9 +92,9 @@ abstract class _$$_DiaryCopyWith<$Res> implements $DiaryCopyWith<$Res> {
   @useResult
   $Res call(
       {String content,
-      DateTime diaryDate,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @DateTimeConverter() DateTime diaryDate,
+      @DateTimeConverter() DateTime createdAt,
+      @DateTimeConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -134,9 +137,9 @@ class __$$_DiaryCopyWithImpl<$Res> extends _$DiaryCopyWithImpl<$Res, _$_Diary>
 class _$_Diary implements _Diary {
   const _$_Diary(
       {required this.content,
-      required this.diaryDate,
-      required this.createdAt,
-      required this.updatedAt})
+      @DateTimeConverter() required this.diaryDate,
+      @DateTimeConverter() required this.createdAt,
+      @DateTimeConverter() required this.updatedAt})
       : assert(content.length > 16, '日記の本文が16文字以上になっています');
 
   factory _$_Diary.fromJson(Map<String, dynamic> json) =>
@@ -145,10 +148,13 @@ class _$_Diary implements _Diary {
   @override
   final String content;
   @override
+  @DateTimeConverter()
   final DateTime diaryDate;
   @override
+  @DateTimeConverter()
   final DateTime createdAt;
   @override
+  @DateTimeConverter()
   final DateTime updatedAt;
 
   @override
@@ -192,19 +198,22 @@ class _$_Diary implements _Diary {
 abstract class _Diary implements Diary {
   const factory _Diary(
       {required final String content,
-      required final DateTime diaryDate,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_Diary;
+      @DateTimeConverter() required final DateTime diaryDate,
+      @DateTimeConverter() required final DateTime createdAt,
+      @DateTimeConverter() required final DateTime updatedAt}) = _$_Diary;
 
   factory _Diary.fromJson(Map<String, dynamic> json) = _$_Diary.fromJson;
 
   @override
   String get content;
   @override
+  @DateTimeConverter()
   DateTime get diaryDate;
   @override
+  @DateTimeConverter()
   DateTime get createdAt;
   @override
+  @DateTimeConverter()
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)

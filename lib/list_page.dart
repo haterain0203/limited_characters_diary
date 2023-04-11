@@ -2,13 +2,12 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/diary/diary_controller.dart';
-import 'package:limited_characters_diary/diary/input_diary_dialog.dart';
 import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
 import 'package:limited_characters_diary/setting/setting_page.dart';
 
 import 'constant.dart';
 import 'date/date_controller.dart';
-import 'diary/collection/diary.dart';
+import 'diary/diary.dart';
 
 class ListPage extends HookConsumerWidget {
   const ListPage({
@@ -18,7 +17,7 @@ class ListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dateController = ref.watch(dateControllerProvider);
-    final diaryList = ref.watch(diaryFutureProvider);
+    final diaryList = ref.watch(diaryStreamProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -80,15 +79,6 @@ class ListPage extends HookConsumerWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    ref.invalidate(diaryFutureProvider);
-                  },
-                  child: const Text('再読み込み'),
-                )
               ],
             ),
           );
@@ -107,8 +97,12 @@ class ListPage extends HookConsumerWidget {
               index + 1,
             );
             //TODO firstWhereOrNull使いたい
+            //TODO element.dirayDate = indexDateに修正したい
             final filteredDiary = data
-                .where((element) => element.diaryDate == indexDate)
+                .where((element) =>
+                    element.diaryDate.year == indexDate.year &&
+                    element.diaryDate.month == indexDate.month &&
+                    element.diaryDate.day == indexDate.day)
                 .toList();
             final diary = filteredDiary.isNotEmpty ? filteredDiary[0] : null;
             final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
@@ -150,7 +144,9 @@ class ListPage extends HookConsumerWidget {
     await showDialog<AlertDialog>(
       context: context,
       builder: (_) {
-        return InputDiaryDialog(diary: diary);
+        //TODO
+        // return InputDiaryDialog(diary: diary);
+        return Container();
       },
     );
   }
@@ -169,7 +165,8 @@ class ListPage extends HookConsumerWidget {
       btnCancelOnPress: () {},
       btnOkText: '削除',
       btnOkOnPress: () {
-        ref.read(diaryControllerProvider).deleteDiary(diary: diary);
+        //TODO
+        // ref.read(diaryControllerProvider).deleteDiary(diary: diary);
       },
     ).show();
   }
