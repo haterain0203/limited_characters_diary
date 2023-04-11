@@ -33,7 +33,7 @@ class MyApp extends HookConsumerWidget {
           ),
           home: user.when(
             data: (data) {
-              print(data?.uid);
+              print(data.uid);
               return const ListPage();
             },
             error: (error, stack) => Scaffold(
