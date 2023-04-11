@@ -6,5 +6,9 @@ class AuthController {
   });
   final AuthRepository repo;
 
-  //TODO サインアウト
+  Future<void> signInAnonymously() async {
+    await repo.signInAnonymously();
+  }
+
+//TODO サインアウト
 }

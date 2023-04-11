@@ -15,17 +15,10 @@ final authRepoProvider = Provider(
   ),
 );
 
-final userStateProvider = StreamProvider<User>(
+final userStateProvider = StreamProvider<User?>(
   (ref) {
     final repo = ref.read(authRepoProvider);
-    return repo.authStateChanges().map((User? user) {
-      if (user == null) {
-        print('userがnullです。匿名認証します');
-        repo.signInAnonymously();
-        print('signIn!');
-      }
-      return user!;
-    });
+    return repo.authStateChanges();
   },
 );
 
