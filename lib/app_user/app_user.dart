@@ -3,15 +3,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../tool/DateTimeConverter.dart';
 
-part 'user.freezed.dart';
-part 'user.g.dart';
+part 'app_user.freezed.dart';
+part 'app_user.g.dart';
 
 @freezed
-class User with _$User {
-  const factory User({
+class AppUser with _$AppUser {
+  const factory AppUser({
     required String uid,
     @DateTimeConverter() required DateTime createdAt,
-  }) = _User;
+  }) = _AppUser;
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory AppUser.fromJson(Map<String, dynamic> json) =>
+      _$AppUserFromJson(json);
 }

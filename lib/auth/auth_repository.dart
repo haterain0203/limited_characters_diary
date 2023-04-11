@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:limited_characters_diary/user/user.dart' as app_user;
 
 class AuthRepository {
   AuthRepository({
@@ -23,12 +24,10 @@ class AuthRepository {
       if (user != null) {
         final uid = user.uid;
         //TODO Userクラス作成
-        await firestore.collection('users').doc(uid).set(
-          {
-            'id': uid,
-            'createdAt': DateTime.now(),
-          },
-        );
+        await firestore.collection('users').withConverter<>(
+              fromFirestore: (snapshot, _) => User.fromJson(),
+              toFirestore: toFirestore,
+            );
       }
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
