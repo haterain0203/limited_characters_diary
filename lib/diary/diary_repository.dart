@@ -6,7 +6,7 @@ class DiaryRepository {
   DiaryRepository({required this.fireStore});
   final FirebaseFirestore fireStore;
 
-  Stream<List<Diary>> listenDiaryList() {
+  Stream<List<Diary>> subscribedDiaryList() {
     final diaryRef = fireStore.collection('diaryList').withConverter<Diary>(
           fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
           toFirestore: (diary, _) => diary.toJson(),
