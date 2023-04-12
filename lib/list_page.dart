@@ -164,8 +164,7 @@ class ListPage extends HookConsumerWidget {
       btnCancelOnPress: () {},
       btnOkText: '削除',
       btnOkOnPress: () {
-        //TODO
-        // ref.read(diaryControllerProvider).deleteDiary(diary: diary);
+        ref.read(diaryControllerProvider).deleteDiary(diary: diary);
       },
     ).show();
   }

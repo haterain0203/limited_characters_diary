@@ -76,6 +76,11 @@ class DiaryController {
     await repo.updateDiary(diary: diary, content: content);
   }
 
+  Future<void> deleteDiary({required Diary diary}) async {
+    final repo = ref.watch(diaryRepoProvider);
+    await repo.deleteDiary(diary: diary);
+  }
+
   // Future<void> addDiary({
   //   required String content,
   //   required DateTime selectedDate,

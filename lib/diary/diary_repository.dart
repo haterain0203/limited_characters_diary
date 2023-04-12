@@ -45,6 +45,10 @@ class DiaryRepository {
     });
   }
 
+  Future<void> deleteDiary({required Diary diary}) async {
+    await diaryRef.doc(diary.id).delete();
+  }
+
   // DiaryRepository(this.isar);
   //
   // /// Isarインスタンス
