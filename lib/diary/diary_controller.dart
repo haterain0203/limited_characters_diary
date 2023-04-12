@@ -61,11 +61,19 @@ class DiaryController {
     required String content,
     required DateTime selectedDate,
   }) async {
-    final repo = ref.read(diaryRepoProvider);
+    final repo = ref.watch(diaryRepoProvider);
     await repo.addDiary(
       content: content,
       selectedDate: selectedDate,
     );
+  }
+
+  Future<void> updateDiary({
+    required Diary diary,
+    required String content,
+  }) async {
+    final repo = ref.watch(diaryRepoProvider);
+    await repo.updateDiary(diary: diary, content: content);
   }
 
   // Future<void> addDiary({

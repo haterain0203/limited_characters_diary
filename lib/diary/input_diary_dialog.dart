@@ -92,12 +92,12 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                       diaryInputController.clear();
                       _showCompleteDialog(context);
                     } else {
-                      // ref.read(diaryControllerProvider).updateDiary(
-                      //       diary: widget.diary!,
-                      //       content: diaryInputController.text,
-                      //     );
-                      // diaryInputController.clear();
-                      // _showCompleteDialog(context);
+                      ref.read(diaryControllerProvider).updateDiary(
+                            diary: widget.diary!,
+                            content: diaryInputController.text,
+                          );
+                      diaryInputController.clear();
+                      _showCompleteDialog(context);
                     }
                   },
                   title: '登録',

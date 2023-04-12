@@ -32,13 +32,18 @@ class DiaryRepository {
       createdAt: now,
       updatedAt: now,
     );
-    await diaryRef.add(diary);
+    await diaryRef.doc(id).set(diary);
   }
 
   Future<void> updateDiary({
     required Diary diary,
     required String content,
-  }) async {}
+  }) async {
+    await diaryRef.doc(diary.id).update({
+      'content': content,
+      'updatedAt': DateTime.now(),
+    });
+  }
 
   // DiaryRepository(this.isar);
   //
