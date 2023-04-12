@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
 import 'diary.dart';
 
@@ -22,8 +23,7 @@ class DiaryRepository {
     required String content,
     required DateTime selectedDate,
   }) async {
-    //TODO
-    // final id = ;
+    final id = const Uuid().v4();
     final now = DateTime.now();
     final diary = Diary(
       id: id,
