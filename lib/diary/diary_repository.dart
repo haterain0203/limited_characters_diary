@@ -9,14 +9,6 @@ class DiaryRepository {
   final CollectionReference<Diary> diaryRef;
 
   Stream<List<Diary>> subscribedDiaryList() {
-    // final diaryRef = fireStore
-    //     .collection('users')
-    //     .doc(uid)
-    //     .collection('diaryList')
-    //     .withConverter<Diary>(
-    //       fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
-    //       toFirestore: (diary, _) => diary.toJson(),
-    //     );
     final snapshots = diaryRef.snapshots();
     final diaryList = snapshots.map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -27,15 +19,6 @@ class DiaryRepository {
   }
 
   Future<void> addDiary(Diary diary) async {
-    // final diaryRef = fireStore
-    //     .collection('users')
-    //     .doc(uid)
-    //     .collection('diaryList')
-    //     .withConverter<Diary>(
-    //       fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
-    //       toFirestore: (diary, _) => diary.toJson(),
-    //     );
-
     await diaryRef.add(diary);
   }
 
