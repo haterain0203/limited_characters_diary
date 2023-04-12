@@ -7,6 +7,7 @@ part of 'diary.dart';
 // **************************************************************************
 
 _$_Diary _$$_DiaryFromJson(Map<String, dynamic> json) => _$_Diary(
+      id: json['id'] as String,
       content: json['content'] as String,
       diaryDate:
           const DateTimeConverter().fromJson(json['diaryDate'] as Timestamp),
@@ -17,6 +18,7 @@ _$_Diary _$$_DiaryFromJson(Map<String, dynamic> json) => _$_Diary(
     );
 
 Map<String, dynamic> _$$_DiaryToJson(_$_Diary instance) => <String, dynamic>{
+      'id': instance.id,
       'content': instance.content,
       'diaryDate': const DateTimeConverter().toJson(instance.diaryDate),
       'createdAt': const DateTimeConverter().toJson(instance.createdAt),

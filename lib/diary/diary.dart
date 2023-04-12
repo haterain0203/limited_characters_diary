@@ -11,6 +11,7 @@ class Diary with _$Diary {
   //TODO これだと思った通りに動作しない。書き方が間違っている可能性。
   // @Assert('content.length > 16', '日記の本文が16文字以上になっています')
   const factory Diary({
+    required String id,
     required String content,
     @DateTimeConverter() required DateTime diaryDate,
     @DateTimeConverter() required DateTime createdAt,
