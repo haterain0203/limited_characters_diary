@@ -3,19 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'diary.dart';
 
 class DiaryRepository {
-  DiaryRepository({required this.fireStore, this.uid});
+  DiaryRepository({required this.fireStore, this.uid, required this.diaryRef});
   final FirebaseFirestore fireStore;
   final String? uid;
+  final CollectionReference<Diary> diaryRef;
 
   Stream<List<Diary>> subscribedDiaryList() {
-    final diaryRef = fireStore
-        .collection('users')
-        .doc(uid)
-        .collection('diaryList')
-        .withConverter<Diary>(
-          fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
-          toFirestore: (diary, _) => diary.toJson(),
-        );
+    // final diaryRef = fireStore
+    //     .collection('users')
+    //     .doc(uid)
+    //     .collection('diaryList')
+    //     .withConverter<Diary>(
+    //       fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
+    //       toFirestore: (diary, _) => diary.toJson(),
+    //     );
     final snapshots = diaryRef.snapshots();
     final diaryList = snapshots.map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -23,6 +24,19 @@ class DiaryRepository {
       }).toList();
     });
     return diaryList;
+  }
+
+  Future<void> addDiary(Diary diary) async {
+    // final diaryRef = fireStore
+    //     .collection('users')
+    //     .doc(uid)
+    //     .collection('diaryList')
+    //     .withConverter<Diary>(
+    //       fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
+    //       toFirestore: (diary, _) => diary.toJson(),
+    //     );
+
+    await diaryRef.add(diary);
   }
 
   // DiaryRepository(this.isar);
