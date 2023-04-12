@@ -18,7 +18,20 @@ class DiaryRepository {
     return diaryList;
   }
 
-  Future<void> addDiary({required Diary diary}) async {
+  Future<void> addDiary({
+    required String content,
+    required DateTime selectedDate,
+  }) async {
+    //TODO
+    // final id = ;
+    final now = DateTime.now();
+    final diary = Diary(
+      id: id,
+      content: content,
+      diaryDate: selectedDate,
+      createdAt: now,
+      updatedAt: now,
+    );
     await diaryRef.add(diary);
   }
 

@@ -57,9 +57,12 @@ class DiaryController {
   DiaryController({required this.ref});
   final ProviderRef<dynamic> ref;
 
-  Future<void> addDiary(Diary diary) async {
+  Future<void> addDiary({
+    required String content,
+    required DateTime selectedDate,
+  }) async {
     final repo = ref.read(diaryRepoProvider);
-    await repo.addDiary(diary);
+    await repo.addDiary();
   }
 
   // Future<void> addDiary({
