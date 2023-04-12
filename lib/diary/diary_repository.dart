@@ -3,11 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'diary.dart';
 
 class DiaryRepository {
-  DiaryRepository({required this.fireStore});
+  DiaryRepository({required this.fireStore, this.uid});
   final FirebaseFirestore fireStore;
+  final String? uid;
 
   Stream<List<Diary>> subscribedDiaryList() {
-    final diaryRef = fireStore.collection('diaryList').withConverter<Diary>(
+    final diaryRef = fireStore
+        .collection('users')
+        .doc(uid)
+        .collection('diaryList')
+        .withConverter<Diary>(
           fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
           toFirestore: (diary, _) => diary.toJson(),
         );

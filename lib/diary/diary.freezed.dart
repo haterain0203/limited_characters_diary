@@ -139,8 +139,7 @@ class _$_Diary implements _Diary {
       {required this.content,
       @DateTimeConverter() required this.diaryDate,
       @DateTimeConverter() required this.createdAt,
-      @DateTimeConverter() required this.updatedAt})
-      : assert(content.length > 16, '日記の本文が16文字以上になっています');
+      @DateTimeConverter() required this.updatedAt});
 
   factory _$_Diary.fromJson(Map<String, dynamic> json) =>
       _$$_DiaryFromJson(json);

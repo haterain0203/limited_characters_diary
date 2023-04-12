@@ -28,6 +28,11 @@ class AuthPage extends HookConsumerWidget {
       data: (data) {
         if (data == null) {
           ref.read(authControllerProvider).signInAnonymously();
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         }
         return const ListPage();
       },

@@ -4,13 +4,20 @@ import 'package:limited_characters_diary/diary/diary_repository.dart';
 
 import 'diary.dart';
 
+final uidProvider = Provider(
+  (ref) => ref.read(authInstanceProvider).currentUser?.uid,
+);
+
 final diaryRepoProvider = Provider(
-    (ref) => DiaryRepository(fireStore: ref.read(firestoreInstanceProvider)));
+  (ref) => DiaryRepository(
+    fireStore: ref.read(firestoreInstanceProvider),
+    uid: ref.read(uidProvider),
+  ),
+);
 
 final diaryStreamProvider = StreamProvider<List<Diary>>((ref) {
-  final fireStore = ref.read(firestoreInstanceProvider);
   final repo = ref.read(diaryRepoProvider);
-  final diaryList = repo.listenDiaryList();
+  final diaryList = repo.subscribedDiaryList();
   return diaryList;
 });
 // // final isarProvider = Provider<Isar>((ref) => throw UnimplementedError());
