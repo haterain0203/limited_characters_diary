@@ -8,6 +8,7 @@ import 'package:limited_characters_diary/setting/setting_page.dart';
 import 'constant.dart';
 import 'date/date_controller.dart';
 import 'diary/diary.dart';
+import 'diary/input_diary_dialog.dart';
 
 class ListPage extends HookConsumerWidget {
   const ListPage({
@@ -144,9 +145,7 @@ class ListPage extends HookConsumerWidget {
     await showDialog<AlertDialog>(
       context: context,
       builder: (_) {
-        //TODO
-        // return InputDiaryDialog(diary: diary);
-        return Container();
+        return InputDiaryDialog(diary: diary);
       },
     );
   }
