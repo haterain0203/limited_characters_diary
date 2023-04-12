@@ -18,9 +18,14 @@ class DiaryRepository {
     return diaryList;
   }
 
-  Future<void> addDiary(Diary diary) async {
+  Future<void> addDiary({required Diary diary}) async {
     await diaryRef.add(diary);
   }
+
+  Future<void> updateDiary({
+    required Diary diary,
+    required String content,
+  }) async {}
 
   // DiaryRepository(this.isar);
   //
