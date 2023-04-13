@@ -10,7 +10,6 @@ final uidProvider = Provider(
 
 final diaryRepoProvider = Provider(
   (ref) => DiaryRepository(
-    fireStore: ref.watch(firestoreInstanceProvider),
     diaryRef: ref.watch(diaryRefProvider),
   ),
 );
