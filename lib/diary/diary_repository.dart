@@ -4,10 +4,9 @@ import 'package:uuid/uuid.dart';
 import 'diary.dart';
 
 class DiaryRepository {
-  DiaryRepository({required this.fireStore, this.uid, required this.diaryRef});
+  DiaryRepository({required this.fireStore, required this.diaryRef});
 
   final FirebaseFirestore fireStore;
-  final String? uid;
   final CollectionReference<Diary> diaryRef;
 
   Stream<List<Diary>> subscribedDiaryList() {
