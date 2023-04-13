@@ -29,12 +29,18 @@ final diaryRefProvider = Provider((ref) {
   return diaryRef;
 });
 
-final diaryStreamProvider = StreamProvider<List<Diary>>((ref) {
+final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   final repo = ref.watch(diaryRepoProvider);
   final selectedMonthDate = ref.watch(selectedMonthDateProvider);
   final diaryList =
       repo.subscribedDiaryList(selectedMonthDate: selectedMonthDate);
   return diaryList;
+});
+
+final diaryCountProvider = FutureProvider.autoDispose<String?>((ref) async {
+  final repo = ref.watch(diaryRepoProvider);
+  final count = await repo.getDiaryCount();
+  return count.toString();
 });
 
 final diaryControllerProvider = Provider((ref) => DiaryController(ref: ref));
