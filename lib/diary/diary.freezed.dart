@@ -20,9 +20,13 @@ Diary _$DiaryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Diary {
+  String get id => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   DateTime get diaryDate => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @DateTimeConverter()
   DateTime get updatedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -36,10 +40,11 @@ abstract class $DiaryCopyWith<$Res> {
       _$DiaryCopyWithImpl<$Res, Diary>;
   @useResult
   $Res call(
-      {String content,
-      DateTime diaryDate,
-      DateTime createdAt,
-      DateTime updatedAt});
+      {String id,
+      String content,
+      @DateTimeConverter() DateTime diaryDate,
+      @DateTimeConverter() DateTime createdAt,
+      @DateTimeConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -55,12 +60,17 @@ class _$DiaryCopyWithImpl<$Res, $Val extends Diary>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? content = null,
     Object? diaryDate = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -88,10 +98,11 @@ abstract class _$$_DiaryCopyWith<$Res> implements $DiaryCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String content,
-      DateTime diaryDate,
-      DateTime createdAt,
-      DateTime updatedAt});
+      {String id,
+      String content,
+      @DateTimeConverter() DateTime diaryDate,
+      @DateTimeConverter() DateTime createdAt,
+      @DateTimeConverter() DateTime updatedAt});
 }
 
 /// @nodoc
@@ -103,12 +114,17 @@ class __$$_DiaryCopyWithImpl<$Res> extends _$DiaryCopyWithImpl<$Res, _$_Diary>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? content = null,
     Object? diaryDate = null,
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
     return _then(_$_Diary(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -133,27 +149,32 @@ class __$$_DiaryCopyWithImpl<$Res> extends _$DiaryCopyWithImpl<$Res, _$_Diary>
 @JsonSerializable()
 class _$_Diary implements _Diary {
   const _$_Diary(
-      {required this.content,
-      required this.diaryDate,
-      required this.createdAt,
-      required this.updatedAt})
-      : assert(content.length > 16, '日記の本文が16文字以上になっています');
+      {required this.id,
+      required this.content,
+      @DateTimeConverter() required this.diaryDate,
+      @DateTimeConverter() required this.createdAt,
+      @DateTimeConverter() required this.updatedAt});
 
   factory _$_Diary.fromJson(Map<String, dynamic> json) =>
       _$$_DiaryFromJson(json);
 
   @override
+  final String id;
+  @override
   final String content;
   @override
+  @DateTimeConverter()
   final DateTime diaryDate;
   @override
+  @DateTimeConverter()
   final DateTime createdAt;
   @override
+  @DateTimeConverter()
   final DateTime updatedAt;
 
   @override
   String toString() {
-    return 'Diary(content: $content, diaryDate: $diaryDate, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'Diary(id: $id, content: $content, diaryDate: $diaryDate, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -161,6 +182,7 @@ class _$_Diary implements _Diary {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Diary &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.diaryDate, diaryDate) ||
                 other.diaryDate == diaryDate) &&
@@ -173,7 +195,7 @@ class _$_Diary implements _Diary {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, content, diaryDate, createdAt, updatedAt);
+      Object.hash(runtimeType, id, content, diaryDate, createdAt, updatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -191,20 +213,26 @@ class _$_Diary implements _Diary {
 
 abstract class _Diary implements Diary {
   const factory _Diary(
-      {required final String content,
-      required final DateTime diaryDate,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$_Diary;
+      {required final String id,
+      required final String content,
+      @DateTimeConverter() required final DateTime diaryDate,
+      @DateTimeConverter() required final DateTime createdAt,
+      @DateTimeConverter() required final DateTime updatedAt}) = _$_Diary;
 
   factory _Diary.fromJson(Map<String, dynamic> json) = _$_Diary.fromJson;
 
   @override
+  String get id;
+  @override
   String get content;
   @override
+  @DateTimeConverter()
   DateTime get diaryDate;
   @override
+  @DateTimeConverter()
   DateTime get createdAt;
   @override
+  @DateTimeConverter()
   DateTime get updatedAt;
   @override
   @JsonKey(ignore: true)

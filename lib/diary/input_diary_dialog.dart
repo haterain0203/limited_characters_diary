@@ -7,7 +7,7 @@ import 'package:limited_characters_diary/diary/diary_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../component/stadium_border_button.dart';
-import 'collection/diary.dart';
+import 'diary.dart';
 
 class InputDiaryDialog extends StatefulHookConsumerWidget {
   const InputDiaryDialog({

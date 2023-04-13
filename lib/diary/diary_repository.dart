@@ -1,80 +1,57 @@
-import 'package:isar/isar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 
-import 'collection/diary.dart';
+import 'diary.dart';
 
-// 参考URL
-// https://zenn.dev/flutteruniv_dev/articles/20220607-061331-flutter-isar?redirected=1#%E3%83%A1%E3%83%A2%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B
 class DiaryRepository {
-  DiaryRepository(this.isar);
+  DiaryRepository({required this.diaryRef});
 
-  /// Isarインスタンス
-  final Isar isar;
+  final CollectionReference<Diary> diaryRef;
 
-  /// 日記を取得する
-  Future<List<Diary>> findDiaryList(DateTime selectedMonth) async {
-    if (!isar.isOpen) {
-      return [];
-    }
-
-    // 更新日時の降順で全件返す
-    final diaryList = await isar.diarys
-        .where()
-        .diaryDateBetween(
-          selectedMonth,
-          DateTime(selectedMonth.year, selectedMonth.month + 1, 0),
-        )
-        .sortByDiaryDate()
-        .findAll();
-
+  Stream<List<Diary>> subscribedDiaryList(
+      {required DateTime selectedMonthDate}) {
+    final startDate = DateTime(selectedMonthDate.year, selectedMonthDate.month);
+    final endDate =
+        DateTime(selectedMonthDate.year, selectedMonthDate.month + 1, 0);
+    final snapshots = diaryRef
+        .where('diaryDate', isGreaterThanOrEqualTo: startDate)
+        .where('diaryDate', isLessThanOrEqualTo: endDate)
+        .snapshots();
+    final diaryList = snapshots.map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return doc.data();
+      }).toList();
+    });
     return diaryList;
   }
 
-  /// 日記を追加する
   Future<void> addDiary({
     required String content,
     required DateTime selectedDate,
-  }) {
-    if (!isar.isOpen) {
-      return Future<void>(() {});
-    }
-
+  }) async {
+    final id = const Uuid().v4();
     final now = DateTime.now();
-    final diary = Diary()
-      ..content = content
-      ..diaryDate = selectedDate
-      ..createdAt = now
-      ..updatedAt = now;
-    return isar.writeTxn(() async {
-      await isar.diarys.put(diary);
-    });
+    final diary = Diary(
+      id: id,
+      content: content,
+      diaryDate: selectedDate,
+      createdAt: now,
+      updatedAt: now,
+    );
+    await diaryRef.doc(id).set(diary);
   }
 
-  /// 日記を更新する
   Future<void> updateDiary({
     required Diary diary,
     required String content,
-  }) {
-    if (!isar.isOpen) {
-      return Future<void>(() {});
-    }
-
-    final now = DateTime.now();
-    diary
-      ..content = content
-      ..updatedAt = now;
-    return isar.writeTxn(() async {
-      await isar.diarys.put(diary);
+  }) async {
+    await diaryRef.doc(diary.id).update({
+      'content': content,
+      'updatedAt': DateTime.now(),
     });
   }
 
-  /// 日記を削除する
   Future<void> deleteDiary({required Diary diary}) async {
-    if (!isar.isOpen) {
-      return Future<void>(() {});
-    }
-
-    await isar.writeTxn(() async {
-      return isar.diarys.delete(diary.id);
-    });
+    await diaryRef.doc(diary.id).delete();
   }
 }
