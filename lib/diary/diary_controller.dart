@@ -29,7 +29,7 @@ final diaryRefProvider = Provider((ref) {
 });
 
 final diaryStreamProvider = StreamProvider<List<Diary>>((ref) {
-  final repo = ref.read(diaryRepoProvider);
+  final repo = ref.watch(diaryRepoProvider);
   final diaryList = repo.subscribedDiaryList();
   return diaryList;
 });
