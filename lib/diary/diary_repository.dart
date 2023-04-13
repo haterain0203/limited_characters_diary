@@ -54,4 +54,11 @@ class DiaryRepository {
   Future<void> deleteDiary({required Diary diary}) async {
     await diaryRef.doc(diary.id).delete();
   }
+
+  // DiaryCollectionのドキュメント数を取得する
+  Future<int> getDiaryCount() async {
+    final query = diaryRef.count();
+    final snap = await query.get();
+    return snap.count;
+  }
 }
