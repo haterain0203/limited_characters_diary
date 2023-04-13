@@ -129,7 +129,30 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
-      title: '登録完了！',
+      body: Column(
+        children: [
+          Column(
+            children: [
+              Text(
+                '登録完了！',
+                style: TextStyle(fontSize: 16.sp),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              HookConsumer(
+                builder: (context, ref, child) {
+                  final diaryCount = ref.watch(diaryCountProvider).value ?? 0;
+                  return Text(
+                    '$diaryCount個目の記録です',
+                    style: TextStyle(fontSize: 14.sp),
+                  );
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
       btnOkText: '閉じる',
       btnOkOnPress: () {
         Navigator.pop(context);

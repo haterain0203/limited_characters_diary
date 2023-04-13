@@ -59,6 +59,7 @@ class DiaryRepository {
   Future<int> getDiaryCount() async {
     final query = diaryRef.count();
     final snap = await query.get();
+    print(snap.count);
     return snap.count;
   }
 }
