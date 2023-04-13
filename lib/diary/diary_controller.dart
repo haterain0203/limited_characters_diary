@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/auth/auth_providers.dart';
+import 'package:limited_characters_diary/date/date_controller.dart';
 import 'package:limited_characters_diary/diary/diary_repository.dart';
 
 import 'diary.dart';
@@ -30,7 +31,9 @@ final diaryRefProvider = Provider((ref) {
 
 final diaryStreamProvider = StreamProvider<List<Diary>>((ref) {
   final repo = ref.watch(diaryRepoProvider);
-  final diaryList = repo.subscribedDiaryList();
+  final selectedMonthDate = ref.watch(selectedMonthDateProvider);
+  final diaryList =
+      repo.subscribedDiaryList(selectedMonthDate: selectedMonthDate);
   return diaryList;
 });
 

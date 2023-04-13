@@ -6,7 +6,7 @@ final todayProvider = Provider<DateTime>((ref) {
   return DateTime(now.year, now.month, now.day);
 });
 
-final selectedMonthProvider = StateProvider<DateTime>((ref) {
+final selectedMonthDateProvider = StateProvider<DateTime>((ref) {
   final today = ref.watch(todayProvider);
   final selectedMonth = DateTime(
     today.year,
@@ -29,10 +29,10 @@ class DateController {
 
   DateTime get today => ref.watch(todayProvider);
   DateTime get selectedDate => ref.watch(selectedDateProvider);
-  DateTime get selectedMonth => ref.watch(selectedMonthProvider);
+  DateTime get selectedMonth => ref.watch(selectedMonthDateProvider);
 
   void nextMonth() {
-    ref.read(selectedMonthProvider.notifier).update((state) {
+    ref.read(selectedMonthDateProvider.notifier).update((state) {
       return DateTime(
         selectedMonth.year,
         selectedMonth.month + 1,

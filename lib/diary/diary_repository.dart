@@ -8,8 +8,15 @@ class DiaryRepository {
 
   final CollectionReference<Diary> diaryRef;
 
-  Stream<List<Diary>> subscribedDiaryList() {
-    final snapshots = diaryRef.snapshots();
+  Stream<List<Diary>> subscribedDiaryList(
+      {required DateTime selectedMonthDate}) {
+    final startDate = DateTime(selectedMonthDate.year, selectedMonthDate.month);
+    final endDate =
+        DateTime(selectedMonthDate.year, selectedMonthDate.month + 1, 0);
+    final snapshots = diaryRef
+        .where('diaryDate', isGreaterThanOrEqualTo: startDate)
+        .where('diaryDate', isLessThanOrEqualTo: endDate)
+        .snapshots();
     final diaryList = snapshots.map((snapshot) {
       return snapshot.docs.map((doc) {
         return doc.data();
