@@ -41,7 +41,7 @@ class DateController {
   }
 
   void previousMonth() {
-    ref.read(selectedMonthProvider.notifier).update((state) {
+    ref.read(selectedMonthDateProvider.notifier).update((state) {
       return DateTime(
         selectedMonth.year,
         selectedMonth.month - 1,
