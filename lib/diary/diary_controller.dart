@@ -37,11 +37,10 @@ final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   return diaryList;
 });
 
-final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
+final diaryCountProvider = FutureProvider.autoDispose<String?>((ref) async {
   final repo = ref.watch(diaryRepoProvider);
   final count = await repo.getDiaryCount();
-  print('count = $count');
-  return count;
+  return count.toString();
 });
 
 final diaryControllerProvider = Provider((ref) => DiaryController(ref: ref));
