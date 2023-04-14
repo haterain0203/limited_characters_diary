@@ -11,7 +11,6 @@ class AuthPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(userStateProvider);
-
     return userState.when(
       error: (e, s) => Scaffold(
         body: Center(
