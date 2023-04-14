@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
 
 import 'constant.dart';
 import 'feature/auth/auth_providers.dart';
@@ -25,6 +26,8 @@ class ListPage extends HookConsumerWidget {
     final isOpenFirstLaunchDialog = useState(false);
     // StateProviderで初回起動（匿名認証でのアカウント作成）かどうか管理
     final isFirstLaunch = ref.watch(isFirstLaunchProvider);
+    // 強制アップデートダイアログを表示するかどうかのflag
+    final isForcedUpdate = ref.watch(forcedUpdateProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
@@ -33,6 +36,15 @@ class ListPage extends HookConsumerWidget {
         isOpenFirstLaunchDialog.value = true;
         ref.read(isFirstLaunchProvider.notifier).state = false;
       }
+
+      // 強制アップデートダイアログのLoadingやErrorのハンドリングは不要と考え、whenDataとした
+      isForcedUpdate.whenData(
+        (isForcedUpdate) {
+          if (isForcedUpdate) {
+            //TODO 強制アップデートダイアログの表示
+          }
+        },
+      );
     });
 
     final dateController = ref.watch(dateControllerProvider);
