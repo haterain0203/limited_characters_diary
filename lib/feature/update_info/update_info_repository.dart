@@ -3,12 +3,12 @@ import 'package:limited_characters_diary/feature/update_info/update_info.dart';
 
 class UpdateInfoRepository {
   UpdateInfoRepository({required this.updateInfoRef});
-  final CollectionReference<UpdateInfo> updateInfoRef;
+  final DocumentReference<UpdateInfo> updateInfoRef;
 
   Stream<UpdateInfo> subscribedUpdateInfo() {
     final snapshots = updateInfoRef.snapshots();
     final updateInfo = snapshots.map((snapshot) {
-      return snapshot.docs.first.data();
+      return snapshot.data()!;
     });
     return updateInfo;
   }
