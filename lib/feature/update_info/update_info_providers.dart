@@ -27,3 +27,15 @@ final updateInfoProvider = StreamProvider.autoDispose<UpdateInfo>((ref) {
   final updateInfo = repo.subscribedUpdateInfo();
   return updateInfo;
 });
+
+final forcedUpdateProvider = FutureProvider.autoDispose<bool>((ref) async {
+  //TODO selectを使用すべきか？
+  //この書き方だと、FirestoreのUpdateInfoのforcedUpdate以外が更新された場合も処理が走ってしまうのでは？
+  final updateInfo = ref.watch(updateInfoProvider);
+  if (updateInfo.value == null) {
+    return false;
+  }
+  final repo = ref.watch(updateRepoProvider);
+  final requiredUpdate = await repo.requiredUpdate(updateInfo.value!);
+  return requiredUpdate;
+});
