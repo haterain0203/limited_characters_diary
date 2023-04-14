@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/local_notification/local_notification_repository.dart';
-import 'package:limited_characters_diary/local_notification/local_notification_shared_preferences_repository.dart';
+
+import 'local_notification_repository.dart';
+import 'local_notification_shared_preferences_repository.dart';
 
 final localNotificationControllerProvider = Provider(
   (ref) => LocalNotificationController(ref: ref),

@@ -2,15 +2,15 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/auth/auth_providers.dart';
-import 'package:limited_characters_diary/diary/diary_controller.dart';
-import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
-import 'package:limited_characters_diary/setting/setting_page.dart';
 
 import 'constant.dart';
-import 'date/date_controller.dart';
-import 'diary/diary.dart';
-import 'diary/input_diary_dialog.dart';
+import 'feature/auth/auth_providers.dart';
+import 'feature/date/date_controller.dart';
+import 'feature/diary/diary.dart';
+import 'feature/diary/diary_controller.dart';
+import 'feature/diary/input_diary_dialog.dart';
+import 'feature/local_notification/local_notification_setting_dialog.dart';
+import 'feature/setting/setting_page.dart';
 
 class ListPage extends HookConsumerWidget {
   const ListPage({

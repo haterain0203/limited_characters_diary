@@ -1,9 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/auth/auth_providers.dart';
-import 'package:limited_characters_diary/date/date_controller.dart';
-import 'package:limited_characters_diary/diary/diary_repository.dart';
 
+import '../auth/auth_providers.dart';
+import '../date/date_controller.dart';
 import 'diary.dart';
+import 'diary_repository.dart';
 
 final uidProvider = Provider(
   (ref) => ref.watch(authInstanceProvider).currentUser?.uid,

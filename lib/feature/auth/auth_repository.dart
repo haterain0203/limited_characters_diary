@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:limited_characters_diary/app_user/app_user.dart';
+
+import '../app_user/app_user.dart';
 
 class AuthRepository {
   AuthRepository({
