@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialogs.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
 
 import 'constant.dart';
@@ -42,6 +43,7 @@ class ListPage extends HookConsumerWidget {
         (isForcedUpdate) {
           if (isForcedUpdate) {
             //TODO 強制アップデートダイアログの表示
+            _showForcedUpdateDialog(context);
           }
         },
       );
@@ -204,6 +206,18 @@ class ListPage extends HookConsumerWidget {
       context: context,
       builder: (_) {
         return const LocalNotificationSettingDialog();
+      },
+    );
+  }
+
+  void _showForcedUpdateDialog(
+    BuildContext context,
+  ) {
+    showDialog<ForcedUpdateDialog>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return const ForcedUpdateDialog();
       },
     );
   }
