@@ -19,17 +19,18 @@ class ListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 「WidgetsBinding.instance.addPostFrameCallback」は、ビルドするたびに呼び出されダイアログが複数重なってしまうため、
+    // 「WidgetsBinding.instance.addPostFrameCallback」は、
+    // ビルドするたびに呼び出されダイアログが複数重なってしまうため、
     // 既にダイアログが開かれたかを判定するフラグを用意
-    final isDoneFirstLaunchDialog = useState(false);
+    final isOpenFirstLaunchDialog = useState(false);
     // StateProviderで初回起動（匿名認証でのアカウント作成）かどうか管理
     final isFirstLaunch = ref.watch(isFirstLaunchProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
-      if (isFirstLaunch == true && isDoneFirstLaunchDialog.value == false) {
+      if (isFirstLaunch == true && isOpenFirstLaunchDialog.value == false) {
         _showSetNotificationDialog(context);
-        isDoneFirstLaunchDialog.value = true;
+        isOpenFirstLaunchDialog.value = true;
         ref.read(isFirstLaunchProvider.notifier).state = false;
       }
     });
