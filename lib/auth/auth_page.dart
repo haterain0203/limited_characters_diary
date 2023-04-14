@@ -11,7 +11,6 @@ class AuthPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(userStateProvider);
-
     return userState.when(
       error: (e, s) => Scaffold(
         body: Center(
@@ -27,7 +26,13 @@ class AuthPage extends HookConsumerWidget {
       ),
       data: (data) {
         if (data == null) {
-          ref.read(authControllerProvider).signInAnonymously();
+          // signInAnonymously()とisFirstLaunchProviderをtrueにする処理を並べて書くためにFutureでラップし
+          // Futureでラップしてawaitを付与せずに実行するとエラーになる
+          Future(() async {
+            await ref.read(authControllerProvider).signInAnonymously();
+            // 初回起動か否かを管理するProviderのflagをtrueにする
+            ref.read(isFirstLaunchProvider.notifier).state = true;
+          });
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
