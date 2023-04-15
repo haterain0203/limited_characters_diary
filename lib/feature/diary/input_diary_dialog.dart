@@ -142,9 +142,9 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
               ),
               HookConsumer(
                 builder: (context, ref, child) {
-                  final diaryCountStr = ref.watch(diaryCountProvider).value;
+                  final diaryCount = ref.watch(diaryCountProvider);
                   return Text(
-                    diaryCountStr != null ? '$diaryCountStr個目の記録です' : '',
+                    '${diaryCount.value}個目の記録です',
                     style: TextStyle(fontSize: 14.sp),
                   );
                 },
