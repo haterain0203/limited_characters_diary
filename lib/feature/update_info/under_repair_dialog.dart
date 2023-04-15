@@ -3,18 +3,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../component/stadium_border_button.dart';
-
-class ForcedUpdateDialog extends HookConsumerWidget {
-  const ForcedUpdateDialog({super.key});
+// メンテナンス中であることを表示するダイアログ
+class UnderRepairDialog extends HookConsumerWidget {
+  const UnderRepairDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isForcedUpdate = ref.watch(forcedUpdateProvider);
+    final updateInfo = ref.watch(updateInfoProvider);
 
     // このダイアログは、緊急時以外ユーザーに見せないもの
     // loadingおよびエラーハンドリングは不要と考え、.whenは使っていない
-    if (isForcedUpdate.value == null || !isForcedUpdate.value!) {
+    if (updateInfo.value == null || !updateInfo.value!.isUnderRepair) {
       return const SizedBox();
     }
 
@@ -33,18 +32,11 @@ class ForcedUpdateDialog extends HookConsumerWidget {
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(
-              '最新版がリリースされています。\nアップデートをお願いします。',
+              updateInfo.value!.underRepairComment,
               style: TextStyle(
                 fontSize: 13.sp,
               ),
             ),
-          ),
-          content: StadiumBorderButton(
-            onPressed: () {
-              //TODO ストアへ遷移
-              Navigator.pop(context);
-            },
-            title: 'アプリストアへ',
           ),
         ),
       ],

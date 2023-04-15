@@ -2,8 +2,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/component/dialogs.dart';
-import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
+import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
+import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
 import 'constant.dart';
 import 'feature/auth/auth_providers.dart';
@@ -27,7 +27,6 @@ class ListPage extends HookConsumerWidget {
     final isOpenFirstLaunchDialog = useState(false);
     // StateProviderで初回起動（匿名認証でのアカウント作成）かどうか管理
     final isFirstLaunch = ref.watch(isFirstLaunchProvider);
-    final isUnderRepair = ref.watch(updateInfoProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
@@ -37,11 +36,10 @@ class ListPage extends HookConsumerWidget {
         ref.read(isFirstLaunchProvider.notifier).state = false;
       }
 
-      isUnderRepair.whenData((value) {
-        if (value.isUnderRepair) {
-          //TODO メンテナンス中のダイアログ表示
-        }
-      });
+      //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
+      //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
+      //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
+      //煩雑になると考え、Stackとしたもの。
     });
 
     final dateController = ref.watch(dateControllerProvider);
@@ -170,6 +168,7 @@ class ListPage extends HookConsumerWidget {
           ),
         ),
         const ForcedUpdateDialog(),
+        const UnderRepairDialog(),
       ],
     );
   }
@@ -207,18 +206,6 @@ class ListPage extends HookConsumerWidget {
       context: context,
       builder: (_) {
         return const LocalNotificationSettingDialog();
-      },
-    );
-  }
-
-  void _showForcedUpdateDialog(
-    BuildContext context,
-  ) {
-    showDialog<ForcedUpdateDialog>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return const ForcedUpdateDialog();
       },
     );
   }
