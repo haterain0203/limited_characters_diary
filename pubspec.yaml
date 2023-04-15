@@ -60,6 +60,7 @@ dependencies:
   cloud_firestore: ^4.5.0
   firebase_analytics: ^10.2.0
   uuid: ^3.0.7
+  version: ^3.0.2
 
 dev_dependencies:
   flutter_test:

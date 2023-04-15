@@ -1,4 +1,4 @@
-import 'package:limited_characters_diary/auth/auth_repository.dart';
+import 'auth_repository.dart';
 
 class AuthController {
   AuthController({

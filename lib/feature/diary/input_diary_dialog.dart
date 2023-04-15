@@ -2,12 +2,12 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant.dart';
-import 'package:limited_characters_diary/date/date_controller.dart';
-import 'package:limited_characters_diary/diary/diary_controller.dart';
 import 'package:sizer/sizer.dart';
 
-import '../component/stadium_border_button.dart';
+import '../../component/stadium_border_button.dart';
+import '../date/date_controller.dart';
 import 'diary.dart';
+import 'diary_controller.dart';
 
 class InputDiaryDialog extends StatefulHookConsumerWidget {
   const InputDiaryDialog({

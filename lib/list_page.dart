@@ -2,15 +2,17 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/auth/auth_providers.dart';
-import 'package:limited_characters_diary/diary/diary_controller.dart';
-import 'package:limited_characters_diary/local_notification/local_notification_setting_dialog.dart';
-import 'package:limited_characters_diary/setting/setting_page.dart';
+import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
+import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
 import 'constant.dart';
-import 'date/date_controller.dart';
-import 'diary/diary.dart';
-import 'diary/input_diary_dialog.dart';
+import 'feature/auth/auth_providers.dart';
+import 'feature/date/date_controller.dart';
+import 'feature/diary/diary.dart';
+import 'feature/diary/diary_controller.dart';
+import 'feature/diary/input_diary_dialog.dart';
+import 'feature/local_notification/local_notification_setting_dialog.dart';
+import 'feature/setting/setting_page.dart';
 
 class ListPage extends HookConsumerWidget {
   const ListPage({
@@ -33,129 +35,141 @@ class ListPage extends HookConsumerWidget {
         isOpenFirstLaunchDialog.value = true;
         ref.read(isFirstLaunchProvider.notifier).state = false;
       }
+
+      //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
+      //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
+      //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
+      //煩雑になると考え、Stackとしたもの。
     });
 
     final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryStreamProvider);
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            _showSetNotificationDialog(context);
-          },
-          icon: const Icon(Icons.add_alert),
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-              onPressed: dateController.previousMonth,
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                _showSetNotificationDialog(context);
+              },
+              icon: const Icon(Icons.add_alert),
             ),
-            Text(
-              '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
-            ),
-            TextButton(
-              onPressed: dateController.nextMonth,
-              child: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (_) => const SettingPage(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
-      body: diaryList.when(
-        loading: () => const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-        error: (error, stack) {
-          return Scaffold(
-            body: Column(
+            title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                  child: Text(
-                    error.toString(),
-                    textAlign: TextAlign.center,
+                TextButton(
+                  onPressed: dateController.previousMonth,
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
+                ),
+                TextButton(
+                  onPressed: dateController.nextMonth,
+                  child: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
                   ),
                 ),
               ],
             ),
-          );
-        },
-        data: (data) => ListView.separated(
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(
-              height: 0.5,
-            );
-          },
-          itemCount: dateController.daysInMonth(),
-          itemBuilder: (BuildContext context, int index) {
-            final indexDate = DateTime(
-              dateController.selectedMonth.year,
-              dateController.selectedMonth.month,
-              index + 1,
-            );
-            //TODO firstWhereOrNull使いたい
-            //TODO element.dirayDate = indexDateに修正したい
-            final filteredDiary = data
-                .where((element) =>
-                    element.diaryDate.year == indexDate.year &&
-                    element.diaryDate.month == indexDate.month &&
-                    element.diaryDate.day == indexDate.day)
-                .toList();
-            final diary = filteredDiary.isNotEmpty ? filteredDiary[0] : null;
-            final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
-            final dayStrColor = dateController.choiceDayStrColor(indexDate);
-            return ListTile(
-              //本日はハイライト
-              tileColor: dateController.isToday(indexDate)
-                  ? Constant.accentColor
-                  : null,
-              dense: true,
-              leading: Text(
-                '${indexDate.day}（$dayOfWeekStr）',
-                style: TextStyle(color: dayStrColor),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) => const SettingPage(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.settings),
               ),
-              title: Text(
-                diary?.content ?? '',
+            ],
+          ),
+          body: diaryList.when(
+            loading: () => const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
               ),
-              onTap: () async {
-                ref.read(selectedDateProvider.notifier).state = indexDate;
-                await _showEditDialog(context, diary);
+            ),
+            error: (error, stack) {
+              return Scaffold(
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                        error.toString(),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            data: (data) => ListView.separated(
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(
+                  height: 0.5,
+                );
               },
-              onLongPress: diary == null
-                  ? null
-                  : () {
-                      _showConfirmDeleteDialog(
-                        context: context,
-                        ref: ref,
-                        diary: diary,
-                      );
-                    },
-            );
-          },
+              itemCount: dateController.daysInMonth(),
+              itemBuilder: (BuildContext context, int index) {
+                final indexDate = DateTime(
+                  dateController.selectedMonth.year,
+                  dateController.selectedMonth.month,
+                  index + 1,
+                );
+                //TODO firstWhereOrNull使いたい
+                //TODO element.dirayDate = indexDateに修正したい
+                final filteredDiary = data
+                    .where((element) =>
+                        element.diaryDate.year == indexDate.year &&
+                        element.diaryDate.month == indexDate.month &&
+                        element.diaryDate.day == indexDate.day)
+                    .toList();
+                final diary =
+                    filteredDiary.isNotEmpty ? filteredDiary[0] : null;
+                final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
+                final dayStrColor = dateController.choiceDayStrColor(indexDate);
+                return ListTile(
+                  //本日はハイライト
+                  tileColor: dateController.isToday(indexDate)
+                      ? Constant.accentColor
+                      : null,
+                  dense: true,
+                  leading: Text(
+                    '${indexDate.day}（$dayOfWeekStr）',
+                    style: TextStyle(color: dayStrColor),
+                  ),
+                  title: Text(
+                    diary?.content ?? '',
+                  ),
+                  onTap: () async {
+                    ref.read(selectedDateProvider.notifier).state = indexDate;
+                    await _showEditDialog(context, diary);
+                  },
+                  onLongPress: diary == null
+                      ? null
+                      : () {
+                          _showConfirmDeleteDialog(
+                            context: context,
+                            ref: ref,
+                            diary: diary,
+                          );
+                        },
+                );
+              },
+            ),
+          ),
         ),
-      ),
+        const ForcedUpdateDialog(),
+        const UnderRepairDialog(),
+      ],
     );
   }
 
