@@ -23,6 +23,8 @@ mixin _$UpdateInfo {
   bool get requiredUpdate => throw _privateConstructorUsedError;
   String get requiredIosVersion => throw _privateConstructorUsedError;
   String get requiredAndroidVersion => throw _privateConstructorUsedError;
+  bool get isUnderRepair => throw _privateConstructorUsedError;
+  String get underRepairComment => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,7 +41,9 @@ abstract class $UpdateInfoCopyWith<$Res> {
   $Res call(
       {bool requiredUpdate,
       String requiredIosVersion,
-      String requiredAndroidVersion});
+      String requiredAndroidVersion,
+      bool isUnderRepair,
+      String underRepairComment});
 }
 
 /// @nodoc
@@ -58,6 +62,8 @@ class _$UpdateInfoCopyWithImpl<$Res, $Val extends UpdateInfo>
     Object? requiredUpdate = null,
     Object? requiredIosVersion = null,
     Object? requiredAndroidVersion = null,
+    Object? isUnderRepair = null,
+    Object? underRepairComment = null,
   }) {
     return _then(_value.copyWith(
       requiredUpdate: null == requiredUpdate
@@ -71,6 +77,14 @@ class _$UpdateInfoCopyWithImpl<$Res, $Val extends UpdateInfo>
       requiredAndroidVersion: null == requiredAndroidVersion
           ? _value.requiredAndroidVersion
           : requiredAndroidVersion // ignore: cast_nullable_to_non_nullable
+              as String,
+      isUnderRepair: null == isUnderRepair
+          ? _value.isUnderRepair
+          : isUnderRepair // ignore: cast_nullable_to_non_nullable
+              as bool,
+      underRepairComment: null == underRepairComment
+          ? _value.underRepairComment
+          : underRepairComment // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -87,7 +101,9 @@ abstract class _$$_UpdateInfoCopyWith<$Res>
   $Res call(
       {bool requiredUpdate,
       String requiredIosVersion,
-      String requiredAndroidVersion});
+      String requiredAndroidVersion,
+      bool isUnderRepair,
+      String underRepairComment});
 }
 
 /// @nodoc
@@ -104,6 +120,8 @@ class __$$_UpdateInfoCopyWithImpl<$Res>
     Object? requiredUpdate = null,
     Object? requiredIosVersion = null,
     Object? requiredAndroidVersion = null,
+    Object? isUnderRepair = null,
+    Object? underRepairComment = null,
   }) {
     return _then(_$_UpdateInfo(
       requiredUpdate: null == requiredUpdate
@@ -118,6 +136,14 @@ class __$$_UpdateInfoCopyWithImpl<$Res>
           ? _value.requiredAndroidVersion
           : requiredAndroidVersion // ignore: cast_nullable_to_non_nullable
               as String,
+      isUnderRepair: null == isUnderRepair
+          ? _value.isUnderRepair
+          : isUnderRepair // ignore: cast_nullable_to_non_nullable
+              as bool,
+      underRepairComment: null == underRepairComment
+          ? _value.underRepairComment
+          : underRepairComment // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -128,7 +154,9 @@ class _$_UpdateInfo implements _UpdateInfo {
   const _$_UpdateInfo(
       {required this.requiredUpdate,
       required this.requiredIosVersion,
-      required this.requiredAndroidVersion});
+      required this.requiredAndroidVersion,
+      required this.isUnderRepair,
+      required this.underRepairComment});
 
   factory _$_UpdateInfo.fromJson(Map<String, dynamic> json) =>
       _$$_UpdateInfoFromJson(json);
@@ -139,10 +167,14 @@ class _$_UpdateInfo implements _UpdateInfo {
   final String requiredIosVersion;
   @override
   final String requiredAndroidVersion;
+  @override
+  final bool isUnderRepair;
+  @override
+  final String underRepairComment;
 
   @override
   String toString() {
-    return 'UpdateInfo(requiredUpdate: $requiredUpdate, requiredIosVersion: $requiredIosVersion, requiredAndroidVersion: $requiredAndroidVersion)';
+    return 'UpdateInfo(requiredUpdate: $requiredUpdate, requiredIosVersion: $requiredIosVersion, requiredAndroidVersion: $requiredAndroidVersion, isUnderRepair: $isUnderRepair, underRepairComment: $underRepairComment)';
   }
 
   @override
@@ -155,13 +187,22 @@ class _$_UpdateInfo implements _UpdateInfo {
             (identical(other.requiredIosVersion, requiredIosVersion) ||
                 other.requiredIosVersion == requiredIosVersion) &&
             (identical(other.requiredAndroidVersion, requiredAndroidVersion) ||
-                other.requiredAndroidVersion == requiredAndroidVersion));
+                other.requiredAndroidVersion == requiredAndroidVersion) &&
+            (identical(other.isUnderRepair, isUnderRepair) ||
+                other.isUnderRepair == isUnderRepair) &&
+            (identical(other.underRepairComment, underRepairComment) ||
+                other.underRepairComment == underRepairComment));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, requiredUpdate, requiredIosVersion, requiredAndroidVersion);
+      runtimeType,
+      requiredUpdate,
+      requiredIosVersion,
+      requiredAndroidVersion,
+      isUnderRepair,
+      underRepairComment);
 
   @JsonKey(ignore: true)
   @override
@@ -181,7 +222,9 @@ abstract class _UpdateInfo implements UpdateInfo {
   const factory _UpdateInfo(
       {required final bool requiredUpdate,
       required final String requiredIosVersion,
-      required final String requiredAndroidVersion}) = _$_UpdateInfo;
+      required final String requiredAndroidVersion,
+      required final bool isUnderRepair,
+      required final String underRepairComment}) = _$_UpdateInfo;
 
   factory _UpdateInfo.fromJson(Map<String, dynamic> json) =
       _$_UpdateInfo.fromJson;
@@ -192,6 +235,10 @@ abstract class _UpdateInfo implements UpdateInfo {
   String get requiredIosVersion;
   @override
   String get requiredAndroidVersion;
+  @override
+  bool get isUnderRepair;
+  @override
+  String get underRepairComment;
   @override
   @JsonKey(ignore: true)
   _$$_UpdateInfoCopyWith<_$_UpdateInfo> get copyWith =>

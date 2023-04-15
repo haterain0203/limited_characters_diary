@@ -11,6 +11,8 @@ _$_UpdateInfo _$$_UpdateInfoFromJson(Map<String, dynamic> json) =>
       requiredUpdate: json['requiredUpdate'] as bool,
       requiredIosVersion: json['requiredIosVersion'] as String,
       requiredAndroidVersion: json['requiredAndroidVersion'] as String,
+      isUnderRepair: json['isUnderRepair'] as bool,
+      underRepairComment: json['underRepairComment'] as String,
     );
 
 Map<String, dynamic> _$$_UpdateInfoToJson(_$_UpdateInfo instance) =>
@@ -18,4 +20,6 @@ Map<String, dynamic> _$$_UpdateInfoToJson(_$_UpdateInfo instance) =>
       'requiredUpdate': instance.requiredUpdate,
       'requiredIosVersion': instance.requiredIosVersion,
       'requiredAndroidVersion': instance.requiredAndroidVersion,
+      'isUnderRepair': instance.isUnderRepair,
+      'underRepairComment': instance.underRepairComment,
     };
