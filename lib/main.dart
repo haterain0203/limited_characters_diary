@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/firebase_options_dev.dart' as dev;
 import 'package:limited_characters_diary/firebase_options_prod.dart' as prod;
@@ -22,6 +23,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: firebaseOptions,
   );
+
+  await MobileAds.instance.initialize();
 
   runApp(
     DevicePreview(
