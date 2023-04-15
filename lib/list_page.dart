@@ -29,6 +29,7 @@ class ListPage extends HookConsumerWidget {
     final isFirstLaunch = ref.watch(isFirstLaunchProvider);
     // 強制アップデートダイアログを表示するかどうかのflag
     final isForcedUpdate = ref.watch(forcedUpdateProvider);
+    final isUnderRepair = ref.watch(updateInfoProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
@@ -47,6 +48,12 @@ class ListPage extends HookConsumerWidget {
           }
         },
       );
+
+      isUnderRepair.whenData((value) {
+        if (value.isUnderRepair) {
+          //TODO メンテナンス中のダイアログ表示
+        }
+      });
     });
 
     final dateController = ref.watch(dateControllerProvider);
