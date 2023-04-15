@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+// 参考にしたURL
+// https://zenn.dev/kazutxt/books/flutter_practice_introduction/viewer/38_chapter4_admob
 class AdBanner extends StatelessWidget {
   const AdBanner({
     super.key,
