@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant.dart';
 import 'package:sizer/sizer.dart';
@@ -9,34 +10,17 @@ import '../date/date_controller.dart';
 import 'diary.dart';
 import 'diary_controller.dart';
 
-class InputDiaryDialog extends StatefulHookConsumerWidget {
+class InputDiaryDialog extends HookConsumerWidget {
   const InputDiaryDialog({
     this.diary,
     super.key,
   });
 
   final Diary? diary;
-  @override
-  ConsumerState<InputDiaryDialog> createState() => _InputDiaryDialogState();
-}
-
-class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
-  TextEditingController diaryInputController = TextEditingController();
 
   @override
-  void initState() {
-    diaryInputController.text = widget.diary?.content ?? '';
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    diaryInputController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final diaryInputController = useTextEditingController();
     final selectedDate = ref.watch(selectedDateProvider);
     return AlertDialog(
       shape: const RoundedRectangleBorder(
@@ -80,11 +64,11 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                       _showErrorDialog(context, '文字が入力されていません');
                       return;
                     }
-                    if (widget.diary?.content == diaryInputController.text) {
+                    if (diary?.content == diaryInputController.text) {
                       _showErrorDialog(context, '内容が変更されていません');
                       return;
                     }
-                    if (widget.diary == null) {
+                    if (diary == null) {
                       ref.read(diaryControllerProvider).addDiary(
                             content: diaryInputController.text,
                             selectedDate: selectedDate,
@@ -93,7 +77,7 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
                       _showCompleteDialog(context);
                     } else {
                       ref.read(diaryControllerProvider).updateDiary(
-                            diary: widget.diary!,
+                            diary: diary!,
                             content: diaryInputController.text,
                           );
                       diaryInputController.clear();
