@@ -147,6 +147,7 @@ class InputDiaryDialog extends HookConsumerWidget {
                         onPressed: () async {
                           Navigator.pop(context);
                           Navigator.pop(context);
+                          // 日記の記録数が3の倍数の場合、全画面広告を出す
                           if (data % 3 == 0) {
                             await ref
                                 .read(adControllerProvider)
