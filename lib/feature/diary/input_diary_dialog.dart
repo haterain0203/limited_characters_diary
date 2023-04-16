@@ -61,7 +61,7 @@ class InputDiaryDialog extends HookConsumerWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.sp),
                 child: StadiumBorderButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (diaryInputController.text.isEmpty) {
                       _showErrorDialog(context, '文字が入力されていません');
                       return;
@@ -71,12 +71,12 @@ class InputDiaryDialog extends HookConsumerWidget {
                       return;
                     }
                     if (diary == null) {
-                      ref.read(diaryControllerProvider).addDiary(
+                      await ref.read(diaryControllerProvider).addDiary(
                             content: diaryInputController.text,
                             selectedDate: selectedDate,
                           );
                       diaryInputController.clear();
-                      _showCompleteDialog(context);
+                      await _showCompleteDialog(context);
                     } else {
                       ref.read(diaryControllerProvider).updateDiary(
                             diary: diary!,
@@ -109,10 +109,10 @@ class InputDiaryDialog extends HookConsumerWidget {
     ).show();
   }
 
-  void _showCompleteDialog(
+  Future<void> _showCompleteDialog(
     BuildContext context,
-  ) {
-    AwesomeDialog(
+  ) async {
+    await AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
       body: HookConsumer(
