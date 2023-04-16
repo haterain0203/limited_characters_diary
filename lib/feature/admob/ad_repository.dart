@@ -8,24 +8,6 @@ class AdRepository {
   int maxFailedToAttempt = 3;
   int _numInterstitialLoadAttempt = 0;
 
-  // void initBannerAd() {
-  //   bannerAd = BannerAd(
-  //     size: AdSize.banner,
-  //     adUnitId: bannerAdUnitId,
-  //     listener: const BannerAdListener(),
-  //     request: const AdRequest(),
-  //   );
-  // }
-  //
-  // void loadBannerAd() {
-  //   bannerAd?.load();
-  // }
-  //
-  // void dispose() {
-  //   bannerAd?.dispose();
-  // interstitialAd?.dispose();
-  // }
-
   // 公式のexampleを参照して作成
   // https://pub.dev/packages/google_mobile_ads/example
   Future<void> initInterstitialAd() async {
