@@ -6,6 +6,7 @@ import 'package:limited_characters_diary/constant.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
+import '../admob/ad_providers.dart';
 import '../date/date_controller.dart';
 import 'diary.dart';
 import 'diary_controller.dart';
@@ -20,7 +21,8 @@ class InputDiaryDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final diaryInputController = useTextEditingController();
+    final diaryInputController =
+        useTextEditingController(text: diary?.content ?? '');
     final selectedDate = ref.watch(selectedDateProvider);
     return AlertDialog(
       shape: const RoundedRectangleBorder(
@@ -113,34 +115,45 @@ class InputDiaryDialog extends HookConsumerWidget {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
-      body: Column(
-        children: [
-          Column(
-            children: [
-              Text(
-                '登録完了！',
-                style: TextStyle(fontSize: 16.sp),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              HookConsumer(
-                builder: (context, ref, child) {
-                  final diaryCount = ref.watch(diaryCountProvider);
-                  return Text(
-                    '${diaryCount.value}個目の記録です',
+      body: HookConsumer(
+        builder: (context, ref, child) {
+          final diaryCount = ref.watch(diaryCountProvider);
+          return diaryCount.when(
+            error: (e, s) => Text(e.toString()),
+            loading: CircularProgressIndicator.new,
+            data: (data) {
+              print('data = $data');
+              return Column(
+                children: [
+                  Text(
+                    '登録完了！',
+                    style: TextStyle(fontSize: 16.sp),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    '$data個目の記録です',
                     style: TextStyle(fontSize: 14.sp),
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+                  ),
+                  StadiumBorderButton(
+                    onPressed: () async {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      if (data % 3 == 0) {
+                        await ref
+                            .read(adControllerProvider)
+                            .showInterstitialAdd();
+                      }
+                    },
+                    title: '閉じる',
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
-      btnOkText: '閉じる',
-      btnOkOnPress: () {
-        Navigator.pop(context);
-      },
     ).show();
   }
 }

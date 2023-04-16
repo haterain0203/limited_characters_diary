@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
+import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
@@ -43,6 +44,15 @@ class ListPage extends HookConsumerWidget {
       //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
       //煩雑になると考え、Stackとしたもの。
     });
+
+    // 全画面広告のロード
+    useEffect(
+      () {
+        ref.read(adControllerProvider).initInterstitialAdd();
+        return null;
+      },
+      const [],
+    );
 
     final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryStreamProvider);

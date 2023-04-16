@@ -26,8 +26,10 @@ class AdRepository {
   // interstitialAd?.dispose();
   // }
 
-  void initInterstitialAd() {
-    InterstitialAd.load(
+  // 公式のexampleを参照して作成
+  // https://pub.dev/packages/google_mobile_ads/example
+  Future<void> initInterstitialAd() async {
+    await InterstitialAd.load(
       adUnitId: interstitialAdUnitId,
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
@@ -36,8 +38,8 @@ class AdRepository {
           _numInterstitialLoadAttempt = 0;
         },
         onAdFailedToLoad: (LoadAdError error) {
-          interstitialAd = null;
           _numInterstitialLoadAttempt++;
+          interstitialAd = null;
           if (_numInterstitialLoadAttempt <= maxFailedToAttempt) {
             initInterstitialAd();
           }
@@ -46,19 +48,20 @@ class AdRepository {
     );
   }
 
-  void loadInterstitialAd() {
+  Future<void> loadInterstitialAd() async {
     if (interstitialAd == null) {
       return;
     }
     interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-        onAdDismissedFullScreenContent: (InterstitialAd ad) {
-      ad.dispose();
-      initInterstitialAd();
-    }, onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError adError) {
-      ad.dispose();
-      initInterstitialAd();
+        onAdDismissedFullScreenContent: (InterstitialAd ad) async {
+      await ad.dispose();
+      await initInterstitialAd();
+    }, onAdFailedToShowFullScreenContent:
+            (InterstitialAd ad, AdError adError) async {
+      await ad.dispose();
+      await initInterstitialAd();
     });
-    interstitialAd!.show();
+    await interstitialAd!.show();
     interstitialAd = null;
   }
 

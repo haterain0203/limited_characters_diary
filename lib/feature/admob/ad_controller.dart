@@ -4,9 +4,11 @@ class AdController {
   AdController({required this.repo});
   final AdRepository repo;
 
-  void showInterstitialAdd() {
-    repo
-      ..initInterstitialAd()
-      ..loadInterstitialAd();
+  Future<void> showInterstitialAdd() async {
+    await repo.loadInterstitialAd();
+  }
+
+  Future<void> initInterstitialAdd() async {
+    await repo.initInterstitialAd();
   }
 }

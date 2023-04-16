@@ -56,7 +56,7 @@ class DiaryRepository {
   }
 
   // DiaryCollectionのドキュメント数を取得する
-  Future<int?> getDiaryCount() async {
+  Future<int> getDiaryCount() async {
     final query = diaryRef.count();
     final snap = await query.get();
     return snap.count;
