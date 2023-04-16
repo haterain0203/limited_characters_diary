@@ -31,25 +31,27 @@ class _WebViewPageState extends State<WebViewPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Builder(builder: (context) {
-        if (_isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (_errorMessage != null) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('エラー'),
-                Text(_errorMessage!),
-              ],
-            ),
-          );
-        }
-        return WebViewWidget(controller: webViewController!);
-      }),
+      body: Builder(
+        builder: (context) {
+          if (_isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (_errorMessage != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('エラー'),
+                  Text(_errorMessage!),
+                ],
+              ),
+            );
+          }
+          return WebViewWidget(controller: webViewController!);
+        },
+      ),
     );
   }
 

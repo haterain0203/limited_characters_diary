@@ -1,11 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
+import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
-import 'constant.dart';
+import 'constant/constant.dart';
 import 'feature/auth/auth_providers.dart';
 import 'feature/date/date_controller.dart';
 import 'feature/diary/diary.dart';
@@ -41,6 +44,15 @@ class ListPage extends HookConsumerWidget {
       //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
       //煩雑になると考え、Stackとしたもの。
     });
+
+    // 全画面広告のロード
+    useEffect(
+      () {
+        ref.read(adControllerProvider).initInterstitialAdd();
+        return null;
+      },
+      const [],
+    );
 
     final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryStreamProvider);
@@ -90,78 +102,108 @@ class ListPage extends HookConsumerWidget {
               ),
             ],
           ),
-          body: diaryList.when(
-            loading: () => const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
+          body: SafeArea(
+            child: diaryList.when(
+              loading: () => const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
-            ),
-            error: (error, stack) {
-              return Scaffold(
-                body: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              error: (error, stack) {
+                return Scaffold(
+                  body: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Text(
+                          error.toString(),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              data: (data) {
+                return Column(
                   children: [
-                    Center(
-                      child: Text(
-                        error.toString(),
-                        textAlign: TextAlign.center,
+                    Expanded(
+                      child: ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider(
+                            height: 0.5,
+                          );
+                        },
+                        itemCount: dateController.daysInMonth(),
+                        itemBuilder: (BuildContext context, int index) {
+                          final indexDate = DateTime(
+                            dateController.selectedMonth.year,
+                            dateController.selectedMonth.month,
+                            index + 1,
+                          );
+                          //TODO firstWhereOrNull使いたい
+                          //TODO element.dirayDate = indexDateに修正したい
+                          final filteredDiary = data
+                              .where(
+                                (element) =>
+                                    element.diaryDate.year == indexDate.year &&
+                                    element.diaryDate.month ==
+                                        indexDate.month &&
+                                    element.diaryDate.day == indexDate.day,
+                              )
+                              .toList();
+                          final diary = filteredDiary.isNotEmpty
+                              ? filteredDiary[0]
+                              : null;
+                          final dayOfWeekStr =
+                              dateController.searchDayOfWeek(indexDate);
+                          final dayStrColor =
+                              dateController.choiceDayStrColor(indexDate);
+                          return ListTile(
+                            //本日はハイライト
+                            tileColor: dateController.isToday(indexDate)
+                                ? Constant.accentColor
+                                : null,
+                            dense: true,
+                            leading: Text(
+                              '${indexDate.day}（$dayOfWeekStr）',
+                              style: TextStyle(color: dayStrColor),
+                            ),
+                            title: Text(
+                              diary?.content ?? '',
+                            ),
+                            onTap: () async {
+                              ref.read(selectedDateProvider.notifier).state =
+                                  indexDate;
+                              await _showEditDialog(context, diary);
+                            },
+                            onLongPress: diary == null
+                                ? null
+                                : () {
+                                    _showConfirmDeleteDialog(
+                                      context: context,
+                                      ref: ref,
+                                      diary: diary,
+                                    );
+                                  },
+                          );
+                        },
+                      ),
+                    ),
+                    //TODO サブスクプラン加入時には広告非表示に
+                    const SizedBox(
+                      width: double.infinity,
+                      child: ColoredBox(
+                        color: Colors.white24,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 8),
+                          child: AdBanner(
+                            size: AdSize.banner,
+                          ),
+                        ),
                       ),
                     ),
                   ],
-                ),
-              );
-            },
-            data: (data) => ListView.separated(
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider(
-                  height: 0.5,
-                );
-              },
-              itemCount: dateController.daysInMonth(),
-              itemBuilder: (BuildContext context, int index) {
-                final indexDate = DateTime(
-                  dateController.selectedMonth.year,
-                  dateController.selectedMonth.month,
-                  index + 1,
-                );
-                //TODO firstWhereOrNull使いたい
-                //TODO element.dirayDate = indexDateに修正したい
-                final filteredDiary = data
-                    .where((element) =>
-                        element.diaryDate.year == indexDate.year &&
-                        element.diaryDate.month == indexDate.month &&
-                        element.diaryDate.day == indexDate.day)
-                    .toList();
-                final diary =
-                    filteredDiary.isNotEmpty ? filteredDiary[0] : null;
-                final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
-                final dayStrColor = dateController.choiceDayStrColor(indexDate);
-                return ListTile(
-                  //本日はハイライト
-                  tileColor: dateController.isToday(indexDate)
-                      ? Constant.accentColor
-                      : null,
-                  dense: true,
-                  leading: Text(
-                    '${indexDate.day}（$dayOfWeekStr）',
-                    style: TextStyle(color: dayStrColor),
-                  ),
-                  title: Text(
-                    diary?.content ?? '',
-                  ),
-                  onTap: () async {
-                    ref.read(selectedDateProvider.notifier).state = indexDate;
-                    await _showEditDialog(context, diary);
-                  },
-                  onLongPress: diary == null
-                      ? null
-                      : () {
-                          _showConfirmDeleteDialog(
-                            context: context,
-                            ref: ref,
-                            diary: diary,
-                          );
-                        },
                 );
               },
             ),

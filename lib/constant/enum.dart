@@ -1,0 +1,4 @@
+enum InputDiaryType {
+  add,
+  update,
+}

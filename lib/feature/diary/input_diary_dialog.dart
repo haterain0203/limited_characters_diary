@@ -1,42 +1,29 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/constant.dart';
+import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
+import '../admob/ad_providers.dart';
 import '../date/date_controller.dart';
 import 'diary.dart';
 import 'diary_controller.dart';
 
-class InputDiaryDialog extends StatefulHookConsumerWidget {
+class InputDiaryDialog extends HookConsumerWidget {
   const InputDiaryDialog({
     this.diary,
     super.key,
   });
 
   final Diary? diary;
-  @override
-  ConsumerState<InputDiaryDialog> createState() => _InputDiaryDialogState();
-}
-
-class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
-  TextEditingController diaryInputController = TextEditingController();
 
   @override
-  void initState() {
-    diaryInputController.text = widget.diary?.content ?? '';
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    diaryInputController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final diaryInputController =
+        useTextEditingController(text: diary?.content ?? '');
     final selectedDate = ref.watch(selectedDateProvider);
     return AlertDialog(
       shape: const RoundedRectangleBorder(
@@ -75,29 +62,39 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.sp),
                 child: StadiumBorderButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (diaryInputController.text.isEmpty) {
                       _showErrorDialog(context, '文字が入力されていません');
                       return;
                     }
-                    if (widget.diary?.content == diaryInputController.text) {
+                    if (diary?.content == diaryInputController.text) {
                       _showErrorDialog(context, '内容が変更されていません');
                       return;
                     }
-                    if (widget.diary == null) {
-                      ref.read(diaryControllerProvider).addDiary(
+                    if (diary == null) {
+                      await ref.read(diaryControllerProvider).addDiary(
                             content: diaryInputController.text,
                             selectedDate: selectedDate,
                           );
                       diaryInputController.clear();
-                      _showCompleteDialog(context);
+                      if (context.mounted) {
+                        await _showCompleteDialog(
+                          context,
+                          InputDiaryType.add,
+                        );
+                      }
                     } else {
-                      ref.read(diaryControllerProvider).updateDiary(
-                            diary: widget.diary!,
+                      await ref.read(diaryControllerProvider).updateDiary(
+                            diary: diary!,
                             content: diaryInputController.text,
                           );
                       diaryInputController.clear();
-                      _showCompleteDialog(context);
+                      if (context.mounted) {
+                        await _showCompleteDialog(
+                          context,
+                          InputDiaryType.update,
+                        );
+                      }
                     }
                   },
                   title: '登録',
@@ -123,40 +120,67 @@ class _InputDiaryDialogState extends ConsumerState<InputDiaryDialog> {
     ).show();
   }
 
-  void _showCompleteDialog(
+  Future<void> _showCompleteDialog(
     BuildContext context,
-  ) {
-    AwesomeDialog(
+    InputDiaryType inputDiaryType,
+  ) async {
+    await AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
-      body: Column(
-        children: [
-          Column(
-            children: [
-              Text(
-                '登録完了！',
-                style: TextStyle(fontSize: 16.sp),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              HookConsumer(
-                builder: (context, ref, child) {
-                  final diaryCountStr = ref.watch(diaryCountProvider).value;
-                  return Text(
-                    diaryCountStr != null ? '$diaryCountStr個目の記録です' : '',
+      body: HookConsumer(
+        builder: (context, ref, child) {
+          final diaryCount = ref.watch(diaryCountProvider);
+          return diaryCount.when(
+            error: (e, s) => Text(e.toString()),
+            loading: CircularProgressIndicator.new,
+            data: (data) {
+              return Column(
+                children: [
+                  Text(
+                    inputDiaryType == InputDiaryType.add ? '登録完了！' : '更新完了！',
+                    style: TextStyle(fontSize: 16.sp),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    '$data個目の記録です',
                     style: TextStyle(fontSize: 14.sp),
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: StadiumBorderButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          if (inputDiaryType == InputDiaryType.update) {
+                            return;
+                          }
+                          // 日記の記録数が3の倍数の場合、全画面広告を出す
+                          if (data % 3 == 0) {
+                            await ref
+                                .read(adControllerProvider)
+                                .showInterstitialAdd();
+                          }
+                        },
+                        title: '閉じる',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                ],
+              );
+            },
+          );
+        },
       ),
-      btnOkText: '閉じる',
-      btnOkOnPress: () {
-        Navigator.pop(context);
-      },
     ).show();
   }
 }

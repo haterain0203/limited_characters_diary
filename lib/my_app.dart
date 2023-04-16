@@ -1,6 +1,6 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:limited_characters_diary/constant.dart';
+import 'package:limited_characters_diary/constant/constant.dart';
 import 'package:sizer/sizer.dart';
 
 import 'feature/auth/auth_page.dart';
