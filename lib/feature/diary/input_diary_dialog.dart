@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
@@ -77,7 +78,10 @@ class InputDiaryDialog extends HookConsumerWidget {
                           );
                       diaryInputController.clear();
                       if (context.mounted) {
-                        await _showCompleteDialog(context);
+                        await _showCompleteDialog(
+                          context,
+                          InputDiaryType.add,
+                        );
                       }
                     } else {
                       await ref.read(diaryControllerProvider).updateDiary(
@@ -86,7 +90,10 @@ class InputDiaryDialog extends HookConsumerWidget {
                           );
                       diaryInputController.clear();
                       if (context.mounted) {
-                        await _showCompleteDialog(context);
+                        await _showCompleteDialog(
+                          context,
+                          InputDiaryType.update,
+                        );
                       }
                     }
                   },
@@ -115,6 +122,7 @@ class InputDiaryDialog extends HookConsumerWidget {
 
   Future<void> _showCompleteDialog(
     BuildContext context,
+    InputDiaryType inputDiaryType,
   ) async {
     await AwesomeDialog(
       context: context,
@@ -129,7 +137,7 @@ class InputDiaryDialog extends HookConsumerWidget {
               return Column(
                 children: [
                   Text(
-                    '登録完了！',
+                    inputDiaryType == InputDiaryType.add ? '登録完了！' : '更新完了！',
                     style: TextStyle(fontSize: 16.sp),
                   ),
                   const SizedBox(
@@ -150,6 +158,9 @@ class InputDiaryDialog extends HookConsumerWidget {
                         onPressed: () async {
                           Navigator.pop(context);
                           Navigator.pop(context);
+                          if (inputDiaryType == InputDiaryType.update) {
+                            return;
+                          }
                           // 日記の記録数が3の倍数の場合、全画面広告を出す
                           if (data % 3 == 0) {
                             await ref
