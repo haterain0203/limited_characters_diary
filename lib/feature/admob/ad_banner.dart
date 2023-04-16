@@ -23,14 +23,15 @@ class AdBanner extends StatelessWidget {
           ? 'ca-app-pub-3940256099942544/6300978111'
           : 'ca-app-pub-3940256099942544/2934735716',
       // イベントのコールバック
-      listener: BannerAdListener(
-        onAdLoaded: (Ad ad) => print('Ad loaded.'),
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print('Ad failed to load: $error');
-        },
-        onAdOpened: (Ad ad) => print('Ad opened.'),
-        onAdClosed: (Ad ad) => print('Ad closed.'),
-      ),
+      listener: const BannerAdListener(
+          // 未使用のためコメントアウト
+          // onAdLoaded: (Ad ad) => print('Ad loaded.'),
+          // onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          //   print('Ad failed to load: $error');
+          // },
+          // onAdOpened: (Ad ad) => print('Ad opened.'),
+          // onAdClosed: (Ad ad) => print('Ad closed.'),
+          ),
       // リクエストはデフォルトを使う
       request: const AdRequest(),
     )
@@ -38,8 +39,9 @@ class AdBanner extends StatelessWidget {
       ..load();
     // 戻り値はSizedBoxで包んで返す
     return SizedBox(
-        width: banner.size.width.toDouble(),
-        height: banner.size.height.toDouble(),
-        child: AdWidget(ad: banner));
+      width: banner.size.width.toDouble(),
+      height: banner.size.height.toDouble(),
+      child: AdWidget(ad: banner),
+    );
   }
 }

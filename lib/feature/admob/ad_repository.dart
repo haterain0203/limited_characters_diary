@@ -53,14 +53,16 @@ class AdRepository {
       return;
     }
     interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-        onAdDismissedFullScreenContent: (InterstitialAd ad) async {
-      await ad.dispose();
-      await initInterstitialAd();
-    }, onAdFailedToShowFullScreenContent:
-            (InterstitialAd ad, AdError adError) async {
-      await ad.dispose();
-      await initInterstitialAd();
-    });
+      onAdDismissedFullScreenContent: (InterstitialAd ad) async {
+        await ad.dispose();
+        await initInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent:
+          (InterstitialAd ad, AdError adError) async {
+        await ad.dispose();
+        await initInterstitialAd();
+      },
+    );
     await interstitialAd!.show();
     interstitialAd = null;
   }

@@ -144,10 +144,13 @@ class ListPage extends HookConsumerWidget {
                           //TODO firstWhereOrNull使いたい
                           //TODO element.dirayDate = indexDateに修正したい
                           final filteredDiary = data
-                              .where((element) =>
-                                  element.diaryDate.year == indexDate.year &&
-                                  element.diaryDate.month == indexDate.month &&
-                                  element.diaryDate.day == indexDate.day)
+                              .where(
+                                (element) =>
+                                    element.diaryDate.year == indexDate.year &&
+                                    element.diaryDate.month ==
+                                        indexDate.month &&
+                                    element.diaryDate.day == indexDate.day,
+                              )
                               .toList();
                           final diary = filteredDiary.isNotEmpty
                               ? filteredDiary[0]

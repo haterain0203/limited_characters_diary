@@ -76,14 +76,18 @@ class InputDiaryDialog extends HookConsumerWidget {
                             selectedDate: selectedDate,
                           );
                       diaryInputController.clear();
-                      await _showCompleteDialog(context);
+                      if (context.mounted) {
+                        await _showCompleteDialog(context);
+                      }
                     } else {
-                      ref.read(diaryControllerProvider).updateDiary(
+                      await ref.read(diaryControllerProvider).updateDiary(
                             diary: diary!,
                             content: diaryInputController.text,
                           );
                       diaryInputController.clear();
-                      _showCompleteDialog(context);
+                      if (context.mounted) {
+                        await _showCompleteDialog(context);
+                      }
                     }
                   },
                   title: '登録',
@@ -122,7 +126,6 @@ class InputDiaryDialog extends HookConsumerWidget {
             error: (e, s) => Text(e.toString()),
             loading: CircularProgressIndicator.new,
             data: (data) {
-              print('data = $data');
               return Column(
                 children: [
                   Text(

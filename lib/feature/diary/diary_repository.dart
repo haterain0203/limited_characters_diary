@@ -8,8 +8,9 @@ class DiaryRepository {
 
   final CollectionReference<Diary> diaryRef;
 
-  Stream<List<Diary>> subscribedDiaryList(
-      {required DateTime selectedMonthDate}) {
+  Stream<List<Diary>> subscribedDiaryList({
+    required DateTime selectedMonthDate,
+  }) {
     final startDate = DateTime(selectedMonthDate.year, selectedMonthDate.month);
     final endDate =
         DateTime(selectedMonthDate.year, selectedMonthDate.month + 1, 0);
