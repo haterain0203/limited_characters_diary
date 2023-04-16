@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/constant.dart';
+import 'package:limited_characters_diary/constant/constant.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 

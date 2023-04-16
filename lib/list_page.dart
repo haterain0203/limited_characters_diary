@@ -8,7 +8,7 @@ import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
-import 'constant.dart';
+import 'constant/constant.dart';
 import 'feature/auth/auth_providers.dart';
 import 'feature/date/date_controller.dart';
 import 'feature/diary/diary.dart';
