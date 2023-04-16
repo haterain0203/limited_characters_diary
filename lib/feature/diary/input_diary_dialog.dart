@@ -136,17 +136,29 @@ class InputDiaryDialog extends HookConsumerWidget {
                     '$data個目の記録です',
                     style: TextStyle(fontSize: 14.sp),
                   ),
-                  StadiumBorderButton(
-                    onPressed: () async {
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      if (data % 3 == 0) {
-                        await ref
-                            .read(adControllerProvider)
-                            .showInterstitialAdd();
-                      }
-                    },
-                    title: '閉じる',
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: StadiumBorderButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          if (data % 3 == 0) {
+                            await ref
+                                .read(adControllerProvider)
+                                .showInterstitialAdd();
+                          }
+                        },
+                        title: '閉じる',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
                   ),
                 ],
               );
