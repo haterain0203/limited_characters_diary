@@ -79,6 +79,19 @@ dev_dependencies:
   freezed: ^2.3.2
   json_serializable: ^6.6.1
   isar_generator: ^3.0.5
+  flutter_native_splash: ^2.2.19
+
+flutter_native_splash:
+  color: '#6AB5E6'
+  image: 'assets/images/splash.png'
+#  color_dark: '#262626'
+#  image_dark: 'assets/images/splash.png'
+  fullscreen: false
+  android_12:
+    icon_background_color: '#6AB5E6'
+    image: 'assets/images/splash_android12.png'
+#    icon_background_color_dark: '#262626'
+#    image_dark: 'assets/images/splash_android12.png'
 
 flutter_icons:
   android: true
