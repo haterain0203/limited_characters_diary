@@ -12,6 +12,8 @@ class SettingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //なぜかSettingsList内のText（title/tilesともに）にはMyAppに指定したfontFamilyが適用されなかったため、個別で設定
+    const textStyle = TextStyle(fontFamily: 'M_PLUS_Rounded_1c');
     return Scaffold(
       appBar: AppBar(
         title: const Text('設定'),
@@ -20,11 +22,17 @@ class SettingPage extends StatelessWidget {
         platform: DevicePlatform.iOS,
         sections: [
           SettingsSection(
-            title: const Text('各種設定'),
+            title: const Text(
+              '各種設定',
+              style: textStyle,
+            ),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(Icons.notification_add),
-                title: const Text('通知設定'),
+                title: const Text(
+                  '通知設定',
+                  style: textStyle,
+                ),
                 onPressed: (BuildContext context) {
                   _showSetNotificationDialog(context);
                 },
@@ -32,11 +40,17 @@ class SettingPage extends StatelessWidget {
             ],
           ),
           SettingsSection(
-            title: const Text('このアプリについて'),
+            title: const Text(
+              'このアプリについて',
+              style: textStyle,
+            ),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(Icons.mail),
-                title: const Text('問い合わせ'),
+                title: const Text(
+                  '問い合わせ',
+                  style: textStyle,
+                ),
                 onPressed: (BuildContext context) {
                   Navigator.push(
                     context,
@@ -51,7 +65,10 @@ class SettingPage extends StatelessWidget {
               ),
               SettingsTile(
                 leading: const Icon(Icons.info),
-                title: const Text('アプリ名'),
+                title: const Text(
+                  'アプリ名',
+                  style: textStyle,
+                ),
                 trailing: HookConsumer(
                   builder: (context, ref, child) {
                     final appInfo = ref.watch(appInfoProvider);
@@ -69,7 +86,10 @@ class SettingPage extends StatelessWidget {
               ),
               SettingsTile(
                 leading: const Icon(Icons.info),
-                title: const Text('アプリバージョン'),
+                title: const Text(
+                  'アプリバージョン',
+                  style: textStyle,
+                ),
                 trailing: HookConsumer(
                   builder: (context, ref, child) {
                     final appInfo = ref.watch(appInfoProvider);
