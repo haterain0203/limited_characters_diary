@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
           title: 'limited_characters_diary',
           theme: ThemeData(
             primarySwatch: Constant.colorSwatch,
+            fontFamily: 'M_PLUS_Rounded_1c',
             appBarTheme: const AppBarTheme(
               foregroundColor: Colors.white,
             ),
