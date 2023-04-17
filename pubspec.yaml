@@ -81,6 +81,18 @@ dev_dependencies:
   isar_generator: ^3.0.5
   flutter_native_splash: ^2.2.19
 
+flutter_native_splash:
+  color: '#6AB5E6'
+  image: 'assets/images/splash.png'
+#  color_dark: '#262626'
+#  image_dark: 'assets/images/splash.png'
+  fullscreen: false
+  android_12:
+    icon_background_color: '#6AB5E6'
+    image: 'assets/images/splash_android12.png'
+#    icon_background_color_dark: '#262626'
+#    image_dark: 'assets/images/splash_android12.png'
+
 flutter_icons:
   android: true
   ios: true
@@ -89,18 +101,6 @@ flutter_icons:
   adaptive_icon_foreground: 'assets/images/icon_adaptive_foreground.png'
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
-flutter_native_splash:
-  color: '#6AB5E6'
-  image: 'assets/images/splash.png'
-#  color_dark: '#262626'
-#  image_dark: 'assets/images/splash.png'
-  fullscreen: true
-  android_12:
-    icon_background_color: '#6AB5E6'
-    image: 'assets/images/splash_android12.png'
-#    icon_background_color_dark: '#262626'
-#    image_dark: 'assets/images/splash_android12.png'
 
 # The following section is specific to Flutter packages.
 flutter:
