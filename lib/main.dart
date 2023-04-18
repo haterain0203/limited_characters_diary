@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
 import 'package:limited_characters_diary/firebase_options_dev.dart' as dev;
 import 'package:limited_characters_diary/firebase_options_prod.dart' as prod;
 
@@ -26,11 +28,19 @@ Future<void> main() async {
 
   await MobileAds.instance.initialize();
 
+  // ローカル通知の初期設定
+  final localNotificationRepo = LocalNotificationRepository();
+  await localNotificationRepo.init();
+
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (_) => const ProviderScope(
-        child: MyApp(),
+      builder: (_) => ProviderScope(
+        overrides: [
+          localNotificationRepoProvider
+              .overrideWithValue(localNotificationRepo),
+        ],
+        child: const MyApp(),
       ),
     ),
   );

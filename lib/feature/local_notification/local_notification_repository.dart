@@ -8,20 +8,15 @@ import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotificationRepository {
-  LocalNotificationRepository() {
-    _init();
-  }
-
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Future<void> _init() async {
+  Future<void> init() async {
     await _initialSetting();
     await _setTimeZone();
   }
 
   Future<void> _initialSetting() async {
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
     const initializationSettingsAndroid =
         AndroidInitializationSettings('app_icon');
     const initializationSettingsDarwin = DarwinInitializationSettings(
@@ -61,7 +56,7 @@ class LocalNotificationRepository {
     required TimeOfDay notificationTime,
   }) async {
     await _requestPermissions();
-    final now = DateTime.now();
+    final now = tz.TZDateTime.now(tz.local);
     final dateTimeNotificationTime = DateTime(
       now.year,
       now.month,
