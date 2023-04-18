@@ -72,6 +72,10 @@ class ListPage extends HookConsumerWidget {
               children: [
                 TextButton(
                   onPressed: dateController.previousMonth,
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.zero,
+                  ),
                   child: const Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
@@ -82,6 +86,10 @@ class ListPage extends HookConsumerWidget {
                 ),
                 TextButton(
                   onPressed: dateController.nextMonth,
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.zero,
+                  ),
                   child: const Icon(
                     Icons.arrow_forward_ios,
                     color: Colors.white,
