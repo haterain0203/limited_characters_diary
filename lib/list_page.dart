@@ -5,6 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
+import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
@@ -159,12 +160,11 @@ class ListPage extends HookConsumerWidget {
                               dateController.searchDayOfWeek(indexDate);
                           final dayStrColor =
                               dateController.choiceDayStrColor(indexDate);
-                          return ListTile(
+                          return SizedListTile(
                             //本日はハイライト
                             tileColor: dateController.isToday(indexDate)
                                 ? Constant.accentColor
                                 : null,
-                            dense: true,
                             leading: Text(
                               '${indexDate.day}（$dayOfWeekStr）',
                               style: TextStyle(color: dayStrColor),
