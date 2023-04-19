@@ -25,6 +25,17 @@ class ListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    /// バックグラウンドから復帰した際の処理
+    ///
+    /// 本日の日付をハイライトさせているが、バックグラウンドにした翌日にフォアグラウンドにした際、
+    /// アプリが再起動されずに、単純に復帰（resume）した場合、日付が更新されずに、ハイライト箇所が正しくならないため
+    useOnAppLifecycleStateChange((previous, current) {
+      if (current != AppLifecycleState.resumed) {
+        return;
+      }
+      //TODO 復帰時の処理
+    });
+
     // 「WidgetsBinding.instance.addPostFrameCallback」は、
     // ビルドするたびに呼び出されダイアログが複数重なってしまうため、
     // 既にダイアログが開かれたかを判定するフラグを用意
