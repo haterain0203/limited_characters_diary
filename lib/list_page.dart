@@ -30,14 +30,17 @@ class ListPage extends HookConsumerWidget {
     /// 本日の日付をハイライトさせているが、バックグラウンドにした翌日にフォアグラウンドにした際、
     /// アプリが再起動されずに、単純に復帰（resume）した場合、日付が更新されずに、ハイライト箇所が正しくならないため
     useOnAppLifecycleStateChange((previous, current) {
+      // 復帰以外のステータスなら処理終了
       if (current != AppLifecycleState.resumed) {
         return;
       }
       final currentTodayInfo = ref.read(todayProvider);
       final now = DateTime.now();
+      // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
       if (currentTodayInfo.day == now.day) {
         return;
       }
+      // バックグラウンド復帰時の日付でStateProviderを更新
       ref.read(todayProvider.notifier).update((state) {
         return DateTime(now.year, now.month, now.day);
       });
