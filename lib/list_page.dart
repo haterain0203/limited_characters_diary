@@ -5,6 +5,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
+import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
@@ -71,6 +72,10 @@ class ListPage extends HookConsumerWidget {
               children: [
                 TextButton(
                   onPressed: dateController.previousMonth,
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.zero,
+                  ),
                   child: const Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
@@ -81,6 +86,10 @@ class ListPage extends HookConsumerWidget {
                 ),
                 TextButton(
                   onPressed: dateController.nextMonth,
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.zero,
+                  ),
                   child: const Icon(
                     Icons.arrow_forward_ios,
                     color: Colors.white,
@@ -128,66 +137,69 @@ class ListPage extends HookConsumerWidget {
                 return Column(
                   children: [
                     Expanded(
-                      child: ListView.separated(
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const Divider(
-                            height: 0.5,
-                          );
-                        },
-                        itemCount: dateController.daysInMonth(),
-                        itemBuilder: (BuildContext context, int index) {
-                          final indexDate = DateTime(
-                            dateController.selectedMonth.year,
-                            dateController.selectedMonth.month,
-                            index + 1,
-                          );
-                          //TODO firstWhereOrNull使いたい
-                          //TODO element.dirayDate = indexDateに修正したい
-                          final filteredDiary = data
-                              .where(
-                                (element) =>
-                                    element.diaryDate.year == indexDate.year &&
-                                    element.diaryDate.month ==
-                                        indexDate.month &&
-                                    element.diaryDate.day == indexDate.day,
-                              )
-                              .toList();
-                          final diary = filteredDiary.isNotEmpty
-                              ? filteredDiary[0]
-                              : null;
-                          final dayOfWeekStr =
-                              dateController.searchDayOfWeek(indexDate);
-                          final dayStrColor =
-                              dateController.choiceDayStrColor(indexDate);
-                          return ListTile(
-                            //本日はハイライト
-                            tileColor: dateController.isToday(indexDate)
-                                ? Constant.accentColor
-                                : null,
-                            dense: true,
-                            leading: Text(
-                              '${indexDate.day}（$dayOfWeekStr）',
-                              style: TextStyle(color: dayStrColor),
-                            ),
-                            title: Text(
-                              diary?.content ?? '',
-                            ),
-                            onTap: () async {
-                              ref.read(selectedDateProvider.notifier).state =
-                                  indexDate;
-                              await _showEditDialog(context, diary);
-                            },
-                            onLongPress: diary == null
-                                ? null
-                                : () {
-                                    _showConfirmDeleteDialog(
-                                      context: context,
-                                      ref: ref,
-                                      diary: diary,
-                                    );
-                                  },
-                          );
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 8),
+                        child: ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const Divider(
+                              height: 0.5,
+                            );
+                          },
+                          itemCount: dateController.daysInMonth(),
+                          itemBuilder: (BuildContext context, int index) {
+                            final indexDate = DateTime(
+                              dateController.selectedMonth.year,
+                              dateController.selectedMonth.month,
+                              index + 1,
+                            );
+                            //TODO firstWhereOrNull使いたい
+                            //TODO element.dirayDate = indexDateに修正したい
+                            final filteredDiary = data
+                                .where(
+                                  (element) =>
+                                      element.diaryDate.year ==
+                                          indexDate.year &&
+                                      element.diaryDate.month ==
+                                          indexDate.month &&
+                                      element.diaryDate.day == indexDate.day,
+                                )
+                                .toList();
+                            final diary = filteredDiary.isNotEmpty
+                                ? filteredDiary[0]
+                                : null;
+                            final dayOfWeekStr =
+                                dateController.searchDayOfWeek(indexDate);
+                            final dayStrColor =
+                                dateController.choiceDayStrColor(indexDate);
+                            return SizedListTile(
+                              //本日はハイライト
+                              tileColor: dateController.isToday(indexDate)
+                                  ? Constant.accentColor
+                                  : null,
+                              leading: Text(
+                                '${indexDate.day}（$dayOfWeekStr）',
+                                style: TextStyle(color: dayStrColor),
+                              ),
+                              title: Text(
+                                diary?.content ?? '',
+                              ),
+                              onTap: () async {
+                                ref.read(selectedDateProvider.notifier).state =
+                                    indexDate;
+                                await _showEditDialog(context, diary);
+                              },
+                              onLongPress: diary == null
+                                  ? null
+                                  : () {
+                                      _showConfirmDeleteDialog(
+                                        context: context,
+                                        ref: ref,
+                                        diary: diary,
+                                      );
+                                    },
+                            );
+                          },
+                        ),
                       ),
                     ),
                     //TODO サブスクプラン加入時には広告非表示に
@@ -195,11 +207,8 @@ class ListPage extends HookConsumerWidget {
                       width: double.infinity,
                       child: ColoredBox(
                         color: Colors.white24,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: AdBanner(
-                            size: AdSize.banner,
-                          ),
+                        child: AdBanner(
+                          size: AdSize.banner,
                         ),
                       ),
                     ),
