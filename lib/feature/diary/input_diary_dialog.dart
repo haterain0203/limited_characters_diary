@@ -35,6 +35,7 @@ class InputDiaryDialog extends HookConsumerWidget {
         '${selectedDate.year}年${selectedDate.month}月${selectedDate.day}日',
       ),
       content: TextField(
+        autofocus: true,
         controller: diaryInputController,
         keyboardType: TextInputType.text,
         maxLength: Constant.limitedCharactersNumber,
