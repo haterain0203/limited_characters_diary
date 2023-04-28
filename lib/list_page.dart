@@ -35,10 +35,10 @@ class ListPage extends HookConsumerWidget {
       if (current != AppLifecycleState.resumed) {
         return;
       }
-      final currentTodayInfo = ref.read(todayProvider);
       final now = DateTime.now();
+      final nowDate = DateTime(now.year, now.month, now.day);
       // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
-      if (currentTodayInfo.day == now.day) {
+      if (ref.read(dateControllerProvider).isToday(nowDate)) {
         return;
       }
       // バックグラウンド復帰時の日付でStateProviderを更新
