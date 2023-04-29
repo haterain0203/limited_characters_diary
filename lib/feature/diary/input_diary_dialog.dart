@@ -72,15 +72,24 @@ class InputDiaryDialog extends HookConsumerWidget {
                       _showErrorDialog(context, '内容が変更されていません');
                       return;
                     }
+                    // 新規登録(diary == null)なら、新規登録処理を、そうでなければupdate処理を
                     if (diary == null) {
                       await ref.read(diaryControllerProvider).addDiary(
                             content: diaryInputController.text,
                             selectedDate: selectedDate,
                           );
-                      diaryInputController.clear();
-                      // #62 キーボードを閉じずに登録すると完了後にキーボードが閉じるアクションが入ってしまうため追加
-                      // 参考 https://zenn.dev/blendthink/articles/d2c96aa333be07
-                      primaryFocus?.unfocus();
+                    } else {
+                      await ref.read(diaryControllerProvider).updateDiary(
+                            diary: diary!,
+                            content: diaryInputController.text,
+                          );
+                    }
+                    diaryInputController.clear();
+                    // #62 キーボードを閉じずに登録すると完了後にキーボードが閉じるアクションが入ってしまうため追加
+                    // 参考 https://zenn.dev/blendthink/articles/d2c96aa333be07
+                    primaryFocus?.unfocus();
+                    // 新規登録(diary == null)なら、新規登録完了を示すダイアログを、そうでなければ更新完了のダイアログとを
+                    if (diary == null) {
                       if (context.mounted) {
                         await _showCompleteDialog(
                           context,
@@ -88,14 +97,6 @@ class InputDiaryDialog extends HookConsumerWidget {
                         );
                       }
                     } else {
-                      await ref.read(diaryControllerProvider).updateDiary(
-                            diary: diary!,
-                            content: diaryInputController.text,
-                          );
-                      diaryInputController.clear();
-                      // #62 キーボードを閉じずに登録すると完了後にキーボードが閉じるアクションが入ってしまうため追加
-                      // 参考 https://zenn.dev/blendthink/articles/d2c96aa333be07
-                      primaryFocus?.unfocus();
                       if (context.mounted) {
                         await _showCompleteDialog(
                           context,
