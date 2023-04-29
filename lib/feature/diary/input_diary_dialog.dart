@@ -78,6 +78,9 @@ class InputDiaryDialog extends HookConsumerWidget {
                             selectedDate: selectedDate,
                           );
                       diaryInputController.clear();
+                      // #62 キーボードを閉じずに登録すると完了後にキーボードが閉じるアクションが入ってしまうため追加
+                      // 参考 https://zenn.dev/blendthink/articles/d2c96aa333be07
+                      primaryFocus?.unfocus();
                       if (context.mounted) {
                         await _showCompleteDialog(
                           context,
@@ -90,6 +93,9 @@ class InputDiaryDialog extends HookConsumerWidget {
                             content: diaryInputController.text,
                           );
                       diaryInputController.clear();
+                      // #62 キーボードを閉じずに登録すると完了後にキーボードが閉じるアクションが入ってしまうため追加
+                      // 参考 https://zenn.dev/blendthink/articles/d2c96aa333be07
+                      primaryFocus?.unfocus();
                       if (context.mounted) {
                         await _showCompleteDialog(
                           context,
