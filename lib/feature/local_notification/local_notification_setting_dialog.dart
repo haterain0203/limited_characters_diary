@@ -6,6 +6,7 @@ import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
 import 'package:sizer/sizer.dart';
 
 import 'local_notification_controller.dart';
+import 'local_notification_providers.dart';
 
 class LocalNotificationSettingDialog extends HookConsumerWidget {
   const LocalNotificationSettingDialog({super.key});

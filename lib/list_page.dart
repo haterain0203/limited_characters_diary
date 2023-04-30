@@ -15,6 +15,7 @@ import 'feature/diary/diary.dart';
 import 'feature/diary/diary_providers.dart';
 import 'feature/diary/input_diary_dialog.dart';
 import 'feature/first_launch/first_launch_providers.dart';
+import 'feature/local_notification/local_notification_providers.dart';
 import 'feature/local_notification/local_notification_setting_dialog.dart';
 import 'feature/setting/setting_page.dart';
 
