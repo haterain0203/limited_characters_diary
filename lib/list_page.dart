@@ -261,11 +261,12 @@ class ListPage extends HookConsumerWidget {
     required WidgetRef ref,
     required Diary diary,
   }) {
+    final diaryDateStr = '${diary.diaryDate.year}/${diary.diaryDate.month}/${diary.diaryDate.day}';
     AwesomeDialog(
       //TODO ボタンカラー再検討
       context: context,
       dialogType: DialogType.question,
-      title: '削除しますか？',
+      title: '$diaryDateStrの\n日記を削除しますか？',
       btnCancelText: 'キャンセル',
       btnCancelOnPress: () {},
       btnOkText: '削除',
