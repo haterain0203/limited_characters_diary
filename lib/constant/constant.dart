@@ -22,4 +22,8 @@ class Constant {
 
   static const googleFormUrl =
       'https://docs.google.com/forms/d/e/1FAIpQLSd0PX7sqCV1MU6BW740N9TVnyn-NblQWBlureYeuFfFZI7LhQ/viewform?usp=sf_link';
+
+  static const privacyPolicyUrl = 'https://lizard-dash-dfc.notion.site/839460163cc2469c9f7afc17f0f30093';
+
+  static const termsOfServiceUrl = 'https://lizard-dash-dfc.notion.site/0c5ff092a6da46dfbaa8c8f6efa8e80c';
 }
