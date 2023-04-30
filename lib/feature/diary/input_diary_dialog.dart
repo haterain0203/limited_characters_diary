@@ -10,7 +10,6 @@ import '../../component/stadium_border_button.dart';
 import '../admob/ad_providers.dart';
 import '../date/date_controller.dart';
 import 'diary.dart';
-import 'diary_controller.dart';
 import 'diary_providers.dart';
 
 class InputDiaryDialog extends HookConsumerWidget {
@@ -67,6 +66,10 @@ class InputDiaryDialog extends HookConsumerWidget {
                   onPressed: () async {
                     if (diaryInputController.text.isEmpty) {
                       _showErrorDialog(context, '文字が入力されていません');
+                      return;
+                    }
+                    if(diaryInputController.text.length > 16) {
+                      _showErrorDialog(context, '16文字以内に修正してください');
                       return;
                     }
                     if (diary?.content == diaryInputController.text) {

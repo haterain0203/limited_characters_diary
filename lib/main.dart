@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
 import 'package:limited_characters_diary/firebase_options_dev.dart' as dev;
 import 'package:limited_characters_diary/firebase_options_prod.dart' as prod;
