@@ -25,6 +25,8 @@ class ListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    final isOpenedEditDialog = useState(false);
     /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
     ///
     /// 本日の日付をハイライトさせているが、
@@ -54,18 +56,32 @@ class ListPage extends HookConsumerWidget {
     // StateProviderで初回起動（匿名認証でのアカウント作成）かどうか管理
     final isFirstLaunch = ref.watch(isFirstLaunchProvider);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       // 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
       if (isFirstLaunch == true && isOpenFirstLaunchDialog.value == false) {
         _showSetNotificationDialog(context);
         isOpenFirstLaunchDialog.value = true;
         ref.read(isFirstLaunchProvider.notifier).state = false;
+        return;
       }
-
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
       //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
       //煩雑になると考え、Stackとしたもの。
+
+      if(isOpenedEditDialog.value) {
+        return;
+      }
+      final diaryList = ref.watch(diaryStreamProvider).value;
+      if(diaryList == null) {
+        return;
+      }
+      final today = ref.watch(todayProvider);
+      final filteredDiary = diaryList.where((element) => element.diaryDate == today).toList();
+      if(filteredDiary.isEmpty) {
+        isOpenedEditDialog.value = true;
+        await _showEditDialog(context, null);
+      }
     });
 
     // 全画面広告のロード
