@@ -26,7 +26,6 @@ class ListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final isOpenedEditDialog = useState(false);
     /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
     ///
     /// 本日の日付をハイライトさせているが、
@@ -69,17 +68,9 @@ class ListPage extends HookConsumerWidget {
       //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
       //煩雑になると考え、Stackとしたもの。
 
-      if(isOpenedEditDialog.value) {
-        return;
-      }
-      final diaryList = ref.watch(diaryStreamProvider).value;
-      if(diaryList == null) {
-        return;
-      }
-      final today = ref.watch(todayProvider);
-      final filteredDiary = diaryList.where((element) => element.diaryDate == today).toList();
-      if(filteredDiary.isEmpty) {
-        isOpenedEditDialog.value = true;
+      /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
+      if(ref.watch(isShowEditDialogOnLaunchProvider)) {
+        ref.read(isOpenedEditDialogProvider.notifier).state = true;
         await _showEditDialog(context, null);
       }
     });

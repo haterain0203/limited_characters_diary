@@ -45,3 +45,31 @@ final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
 });
 
 final diaryControllerProvider = Provider((ref) => DiaryController(ref: ref));
+
+/// 起動時に日記入力ダイアログを自動表示するかどうか
+final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
+
+  // 既に日記表示ダイアログが表示されていたら処理終了
+  final isOpenedEditDialog = ref.watch(isOpenedEditDialogProvider);
+  if(isOpenedEditDialog) {
+    return false;
+  }
+
+  // 日記情報がnullの場合処理終了
+  final diaryList = ref.watch(diaryStreamProvider).value;
+  if(diaryList == null) {
+    return false;
+  }
+
+  // 既に当日の日記が入力済みの場合処理終了
+  final today = ref.watch(todayProvider);
+  final filteredDiary = diaryList.where((element) => element.diaryDate == today).toList();
+  if(filteredDiary.isNotEmpty) {
+    return false;
+  }
+
+  //上記条件をクリアしている場合は、ダイアログを表示させる
+  return true;
+});
+
+final isOpenedEditDialogProvider = StateProvider((ref) => false);
