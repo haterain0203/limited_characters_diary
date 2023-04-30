@@ -9,6 +9,7 @@ import 'package:limited_characters_diary/feature/local_notification/local_notifi
 import 'package:limited_characters_diary/firebase_options_dev.dart' as dev;
 import 'package:limited_characters_diary/firebase_options_prod.dart' as prod;
 
+import 'feature/local_notification/local_notification_providers.dart';
 import 'my_app.dart';
 
 const flavor = String.fromEnvironment('FLAVOR');

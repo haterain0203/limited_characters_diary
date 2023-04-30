@@ -1,3 +1,3 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final isFirstLaunchProvider = StateProvider<bool>((ref) => false);
+final isFirstLaunchProvider = StateProvider<bool>((_) => false);

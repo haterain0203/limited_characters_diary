@@ -23,8 +23,6 @@ final userStateProvider = StreamProvider<User?>(
   },
 );
 
-final isFirstLaunchProvider = StateProvider<bool>((ref) => false);
-
 final authControllerProvider = Provider(
   (ref) => AuthController(
     repo: ref.read(authRepoProvider),
