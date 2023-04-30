@@ -63,6 +63,42 @@ class SettingPage extends StatelessWidget {
                   );
                 },
               ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.text_snippet),
+                title: const Text(
+                  '利用規約',
+                  style: textStyle,
+                ),
+                onPressed: (BuildContext context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) => const WebViewPage(
+                        title: '利用規約',
+                        url: Constant.termsOfServiceUrl,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              SettingsTile.navigation(
+                leading: const Icon(Icons.text_snippet),
+                title: const Text(
+                  'プライバシーポリシー',
+                  style: textStyle,
+                ),
+                onPressed: (BuildContext context) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (_) => const WebViewPage(
+                        title: 'プライバシーポリシー',
+                        url: Constant.privacyPolicyUrl,
+                      ),
+                    ),
+                  );
+                },
+              ),
               SettingsTile(
                 leading: const Icon(Icons.info),
                 title: const Text(
