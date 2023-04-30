@@ -10,11 +10,11 @@ import 'package:limited_characters_diary/feature/update_info/forced_update_dialo
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
 import 'constant/constant.dart';
-import 'feature/auth/auth_providers.dart';
 import 'feature/date/date_controller.dart';
 import 'feature/diary/diary.dart';
 import 'feature/diary/diary_providers.dart';
 import 'feature/diary/input_diary_dialog.dart';
+import 'feature/first_launch/first_launch_providers.dart';
 import 'feature/local_notification/local_notification_setting_dialog.dart';
 import 'feature/setting/setting_page.dart';
 
@@ -48,19 +48,12 @@ class ListPage extends HookConsumerWidget {
       });
     });
 
-    // 「WidgetsBinding.instance.addPostFrameCallback」は、
-    // ビルドするたびに呼び出されダイアログが複数重なってしまうため、
-    // 既にダイアログが開かれたかを判定するフラグを用意
-    final isOpenFirstLaunchDialog = useState(false);
-    // StateProviderで初回起動（匿名認証でのアカウント作成）かどうか管理
-    final isFirstLaunch = ref.watch(isFirstLaunchProvider);
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
-      if (isFirstLaunch == true && isOpenFirstLaunchDialog.value == false) {
-        _showSetNotificationDialog(context);
-        isOpenFirstLaunchDialog.value = true;
-        ref.read(isFirstLaunchProvider.notifier).state = false;
+      /// 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
+      if (ref.watch(isShowSetNotificationDialogOnLaunchProvider)) {
+        ref.read(isOpenedFirstLaunchDialogProvider.notifier).state = true;
+        ref.read(isFirstLaunchProvider.notifier).state = true;
+        await _showSetNotificationDialog(context);
         return;
       }
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
@@ -281,8 +274,8 @@ class ListPage extends HookConsumerWidget {
     ).show();
   }
 
-  void _showSetNotificationDialog(BuildContext context) {
-    showDialog<LocalNotificationSettingDialog>(
+  Future<void> _showSetNotificationDialog(BuildContext context) async {
+    await showDialog<LocalNotificationSettingDialog>(
       context: context,
       builder: (_) {
         return const LocalNotificationSettingDialog();

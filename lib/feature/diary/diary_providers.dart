@@ -46,6 +46,8 @@ final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
 
 final diaryControllerProvider = Provider((ref) => DiaryController(ref: ref));
 
+final isOpenedEditDialogProvider = StateProvider((ref) => false);
+
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
 
@@ -71,5 +73,3 @@ final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
   //上記条件をクリアしている場合は、ダイアログを表示させる
   return true;
 });
-
-final isOpenedEditDialogProvider = StateProvider((ref) => false);
