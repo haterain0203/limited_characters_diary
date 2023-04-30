@@ -48,7 +48,7 @@ class SettingPage extends StatelessWidget {
               SettingsTile.navigation(
                 leading: const Icon(Icons.mail),
                 title: const Text(
-                  '問い合わせ',
+                  Constant.contactUsStr,
                   style: textStyle,
                 ),
                 onPressed: (BuildContext context) {
@@ -56,7 +56,7 @@ class SettingPage extends StatelessWidget {
                     context,
                     MaterialPageRoute<dynamic>(
                       builder: (_) => const WebViewPage(
-                        title: '問い合わせ',
+                        title: Constant.contactUsStr,
                         url: Constant.googleFormUrl,
                       ),
                     ),
@@ -66,7 +66,7 @@ class SettingPage extends StatelessWidget {
               SettingsTile.navigation(
                 leading: const Icon(Icons.text_snippet),
                 title: const Text(
-                  '利用規約',
+                  Constant.termsOfServiceStr,
                   style: textStyle,
                 ),
                 onPressed: (BuildContext context) {
@@ -74,7 +74,7 @@ class SettingPage extends StatelessWidget {
                     context,
                     MaterialPageRoute<dynamic>(
                       builder: (_) => const WebViewPage(
-                        title: '利用規約',
+                        title: Constant.termsOfServiceStr,
                         url: Constant.termsOfServiceUrl,
                       ),
                     ),
@@ -84,7 +84,7 @@ class SettingPage extends StatelessWidget {
               SettingsTile.navigation(
                 leading: const Icon(Icons.text_snippet),
                 title: const Text(
-                  'プライバシーポリシー',
+                  Constant.privacyPolicyStr,
                   style: textStyle,
                 ),
                 onPressed: (BuildContext context) {
@@ -92,7 +92,7 @@ class SettingPage extends StatelessWidget {
                     context,
                     MaterialPageRoute<dynamic>(
                       builder: (_) => const WebViewPage(
-                        title: 'プライバシーポリシー',
+                        title: Constant.privacyPolicyStr,
                         url: Constant.privacyPolicyUrl,
                       ),
                     ),
