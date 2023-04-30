@@ -13,7 +13,7 @@ import 'constant/constant.dart';
 import 'feature/auth/auth_providers.dart';
 import 'feature/date/date_controller.dart';
 import 'feature/diary/diary.dart';
-import 'feature/diary/diary_controller.dart';
+import 'feature/diary/diary_providers.dart';
 import 'feature/diary/input_diary_dialog.dart';
 import 'feature/local_notification/local_notification_setting_dialog.dart';
 import 'feature/setting/setting_page.dart';
