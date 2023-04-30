@@ -52,7 +52,7 @@ class ListPage extends HookConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       /// 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
       if (ref.watch(isShowSetNotificationDialogOnLaunchProvider)) {
-        ref.read(isOpenedFirstLaunchDialogProvider.notifier).state = true;
+        ref.read(isOpenedSetNotificationDialogOnLaunchProvider.notifier).state = true;
         ref.read(isFirstLaunchProvider.notifier).state = true;
         await _showSetNotificationDialog(context);
         return;

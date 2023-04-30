@@ -38,7 +38,7 @@ FutureProvider.autoDispose((ref) async {
 // 「WidgetsBinding.instance.addPostFrameCallback」は、
 // ビルドするたびに呼び出されダイアログが複数重なってしまうため、
 // 既にダイアログが開かれたかを判定するフラグを用意
-final isOpenedFirstLaunchDialogProvider = StateProvider<bool>((_) => false);
+final isOpenedSetNotificationDialogOnLaunchProvider = StateProvider<bool>((_) => false);
 
 /// アラーム設定を促すダイアログを自動表示させるかどうか
 ///
@@ -49,8 +49,8 @@ final isShowSetNotificationDialogOnLaunchProvider = Provider<bool>((ref) {
     return false;
   }
 
-  final isOpenedFirstLaunchDialog = ref.watch(isOpenedFirstLaunchDialogProvider);
-  if(isOpenedFirstLaunchDialog) {
+  final isOpenedSetNotificationDialog = ref.watch(isOpenedSetNotificationDialogOnLaunchProvider);
+  if(isOpenedSetNotificationDialog) {
     return false;
   }
 
