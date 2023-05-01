@@ -7,8 +7,4 @@ class FirstLaunchController {
   Future<void> completedFirstLaunch() async {
     await repo.completedFirstLaunch();
   }
-
-  Future<void> fetchIsFirstLaunch() async {
-    await repo.fetchIsFirstLaunch();
-  }
 }

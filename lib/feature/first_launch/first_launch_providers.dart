@@ -4,6 +4,18 @@ import 'package:limited_characters_diary/feature/first_launch/first_launch_repos
 
 final isFirstLaunchProvider = StateProvider<bool>((_) => false);
 
+final isCompletedFirstLaunchProvider = FutureProvider<bool>((ref) async {
+  final repo = ref.watch(firstLaunchRepositoryProvider);
+  final isCompletedFirstLaunch = await repo.fetchIsCompletedFirstLaunch();
+  if(isCompletedFirstLaunch == null) {
+    return false;
+  }
+  if(!isCompletedFirstLaunch) {
+    return false;
+  }
+  return true;
+});
+
 final firstLaunchRepositoryProvider = Provider(
   (ref) => FirstLaunchRepository(),
 );

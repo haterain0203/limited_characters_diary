@@ -10,7 +10,7 @@ class FirstLaunchRepository {
     await prefs.setBool(completedFirstLaunchKey, true);
   }
 
-  Future<bool?> fetchIsFirstLaunch() async {
+  Future<bool?> fetchIsCompletedFirstLaunch() async {
     //TODO 共通化
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(completedFirstLaunchKey);
