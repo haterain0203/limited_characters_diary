@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
+import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
 import 'package:limited_characters_diary/firebase_options_dev.dart' as dev;
 import 'package:limited_characters_diary/firebase_options_prod.dart' as prod;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'feature/local_notification/local_notification_providers.dart';
 import 'my_app.dart';
@@ -32,6 +34,9 @@ Future<void> main() async {
   final localNotificationRepo = LocalNotificationRepository();
   await localNotificationRepo.init();
 
+  // SharedPreferencesのインスタンス
+  final prefs = await SharedPreferences.getInstance();
+
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
@@ -39,6 +44,7 @@ Future<void> main() async {
         overrides: [
           localNotificationRepoProvider
               .overrideWithValue(localNotificationRepo),
+          sharedPreferencesInstanceProvider.overrideWithValue(prefs),
         ],
         child: const MyApp(),
       ),

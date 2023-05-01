@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalNotificationSharedPreferencesRepository {
+  LocalNotificationSharedPreferencesRepository({required this.prefs});
+  final SharedPreferences prefs;
+
   final notificationTimeStrKey = 'notification_time';
 
   Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
-    final prefs = await SharedPreferences.getInstance();
     final now = DateTime.now();
     final notificationDateTime = DateTime(
       now.year,
@@ -19,7 +21,6 @@ class LocalNotificationSharedPreferencesRepository {
   }
 
   Future<String?> fetchNotificationTimeStr() async {
-    final prefs = await SharedPreferences.getInstance();
     return prefs.getString(notificationTimeStrKey);
   }
 }

@@ -1,15 +1,19 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
+import 'package:limited_characters_diary/feature/setting/terms_of_service/terms_of_service_confirmation_page.dart';
 import 'package:sizer/sizer.dart';
 
 import 'feature/auth/auth_page.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isCompletedFirstLaunch = ref.watch(isCompletedFirstLaunchProvider);
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -29,7 +33,22 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home: const AuthPage(),
+          home: isCompletedFirstLaunch.maybeWhen(
+            data: (data) {
+              if (data) {
+                return const AuthPage();
+              } else {
+                return const TermsOfServiceConfirmationPage();
+              }
+            },
+            orElse: () {
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
+          ),
         );
       },
     );
