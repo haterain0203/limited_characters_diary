@@ -17,8 +17,7 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              //TODO
-              'アプリ名が入ります',
+              Constant.appName,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -58,7 +57,7 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                 child: const Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Text('利用規約に同意'),
+                  child: Text('利用規約に同意してはじめる'),
                 ),
                 onPressed: () async {
                   await ref.read(firstLaunchControllerProvider).completedFirstLaunch();

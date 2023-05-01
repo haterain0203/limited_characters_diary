@@ -32,4 +32,6 @@ class Constant {
   static const termsOfServiceStr = '利用規約';
 
   static const contactUsStr = '問い合わせ';
+
+  static const appName = '16文字日記';
 }
