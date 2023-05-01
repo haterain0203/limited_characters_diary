@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
 
 import '../auth/auth_providers.dart';
 import '../date/date_controller.dart';
@@ -54,6 +55,12 @@ final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
   // 既に日記表示ダイアログが表示されていたら処理終了
   final isOpenedEditDialog = ref.watch(isOpenedEditDialogProvider);
   if(isOpenedEditDialog) {
+    return false;
+  }
+
+  // 初回起動時なら処理終了
+  final isFirstLaunch = ref.watch(isFirstLaunchProvider);
+  if(isFirstLaunch) {
     return false;
   }
 

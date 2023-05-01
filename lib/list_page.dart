@@ -50,23 +50,28 @@ class ListPage extends HookConsumerWidget {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      /// 初回起動時（匿名認証でのアカウント作成時）に限り、アラーム設定を促すダイアログを表示する
+      /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
+      if(ref.watch(isShowEditDialogOnLaunchProvider)) {
+        ref.read(isOpenedEditDialogProvider.notifier).state = true;
+        await _showEditDialog(context, null);
+        return;
+      }
+
+      /// 初回起動時に限り、アラーム設定を促すダイアログを表示する
+      ///それに加えて日記記入ダイアログを自動表示する
+      ///
+      /// ユーザー動作の順番的にSetNotificationDialog→EditDialog→ListPageの順で表示したいため、以下のような記述とした
       if (ref.watch(isShowSetNotificationDialogOnLaunchProvider)) {
         ref.read(isOpenedSetNotificationDialogOnLaunchProvider.notifier).state = true;
-        ref.read(isFirstLaunchProvider.notifier).state = false;
         await _showSetNotificationDialog(context);
-        return;
+        if(context.mounted) {
+          await _showEditDialog(context, null);
+        }
       }
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
       //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
       //煩雑になると考え、Stackとしたもの。
-
-      /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
-      if(ref.watch(isShowEditDialogOnLaunchProvider)) {
-        ref.read(isOpenedEditDialogProvider.notifier).state = true;
-        await _showEditDialog(context, null);
-      }
     });
 
     // 全画面広告のロード

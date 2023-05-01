@@ -62,6 +62,8 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                 ),
                 onPressed: () async {
                   await ref.read(firstLaunchControllerProvider).completedFirstLaunch();
+                  // 初回起動か否かを管理するProviderのflagをtrueにする
+                  ref.read(isFirstLaunchProvider.notifier).state = true;
                   if(context.mounted) {
                     await Navigator.push(
                       context,
