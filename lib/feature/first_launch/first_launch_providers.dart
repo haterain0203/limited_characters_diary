@@ -1,23 +1,26 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_controller.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_repository.dart';
+import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
 
 final isFirstLaunchProvider = StateProvider<bool>((_) => false);
 
 final isCompletedFirstLaunchProvider = FutureProvider<bool>((ref) async {
   final repo = ref.watch(firstLaunchRepositoryProvider);
   final isCompletedFirstLaunch = await repo.fetchIsCompletedFirstLaunch();
-  if(isCompletedFirstLaunch == null) {
+  if (isCompletedFirstLaunch == null) {
     return false;
   }
-  if(!isCompletedFirstLaunch) {
+  if (!isCompletedFirstLaunch) {
     return false;
   }
   return true;
 });
 
 final firstLaunchRepositoryProvider = Provider(
-  (ref) => FirstLaunchRepository(),
+  (ref) => FirstLaunchRepository(
+    prefs: ref.watch(sharedPreferencesInstanceProvider),
+  ),
 );
 
 final firstLaunchControllerProvider = Provider(
