@@ -12,12 +12,8 @@ class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    final isCompletedFirstLaunch =
-        ref.watch(isCompletedFirstLaunchProvider).value;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isCompletedFirstLaunch = ref.watch(isCompletedFirstLaunchProvider);
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -37,9 +33,22 @@ class MyApp extends HookConsumerWidget {
               ),
             ),
           ),
-          home: isCompletedFirstLaunch == null || !isCompletedFirstLaunch
-              ? const TermsOfServiceConfirmationPage()
-              : const AuthPage(),
+          home: isCompletedFirstLaunch.maybeWhen(
+            data: (data) {
+              if (data) {
+                return const AuthPage();
+              } else {
+                return const TermsOfServiceConfirmationPage();
+              }
+            },
+            orElse: () {
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
+          ),
         );
       },
     );
