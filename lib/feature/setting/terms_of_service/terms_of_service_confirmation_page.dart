@@ -5,6 +5,7 @@ import 'package:limited_characters_diary/feature/auth/auth_page.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
 import 'package:limited_characters_diary/list_page.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
+import 'package:sizer/sizer.dart';
 
 class TermsOfServiceConfirmationPage extends StatelessWidget {
   const TermsOfServiceConfirmationPage({super.key});
@@ -16,29 +17,17 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              Constant.appName,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+            SizedBox(
+              height: 20.h,
+              width: 20.h,
+              child: Image.asset('assets/images/icon.png'),
             ),
             const SizedBox(
               height: 36,
             ),
-            const Text(
-              '利用規約に同意',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Text('アプリを始めるには利用規約の同意が必要です。'),
-            ),
+            const Text('アプリを始めるには利用規約の同意が必要です。'),
             TextButton(
-              child: const Text('利用規約を確認'),
+              child: const Text('利用規約を確認する'),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute<WebViewPage>(
@@ -55,15 +44,16 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                   shape: const StadiumBorder(),
                 ),
                 child: const Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: Text('利用規約に同意してはじめる'),
                 ),
                 onPressed: () async {
-                  await ref.read(firstLaunchControllerProvider).completedFirstLaunch();
+                  await ref
+                      .read(firstLaunchControllerProvider)
+                      .completedFirstLaunch();
                   // 初回起動か否かを管理するProviderのflagをtrueにする
                   ref.read(isFirstLaunchProvider.notifier).state = true;
-                  if(context.mounted) {
+                  if (context.mounted) {
                     await Navigator.push(
                       context,
                       MaterialPageRoute<ListPage>(
