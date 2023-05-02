@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
@@ -17,6 +18,11 @@ const flavor = String.fromEnvironment('FLAVOR');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  //向き指定
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,//縦固定
+  ]);
 
   // Flavor に応じた FirebaseOptions を準備する
   final firebaseOptions = flavor == 'prod'
