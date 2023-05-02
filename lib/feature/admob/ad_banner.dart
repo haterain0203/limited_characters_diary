@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:limited_characters_diary/confidential.dart';
 
 // 参考にしたURL
 // https://zenn.dev/kazutxt/books/flutter_practice_introduction/viewer/38_chapter4_admob
@@ -19,9 +20,8 @@ class AdBanner extends StatelessWidget {
       size: size,
       // 広告ユニットID
       adUnitId: Platform.isAndroid
-          //TODO 本番用に切り替える
-          ? 'ca-app-pub-3940256099942544/6300978111'
-          : 'ca-app-pub-3940256099942544/2934735716',
+          ? Confidential.bannerAdUnitIdAndroid
+          : Confidential.bannerAdUnitIdIos,
       // イベントのコールバック
       listener: const BannerAdListener(
           // 未使用のためコメントアウト

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:limited_characters_diary/confidential.dart';
 
 class AdRepository {
   BannerAd? bannerAd;
@@ -50,35 +51,32 @@ class AdRepository {
   }
 
   static String get appId {
-    //TODO 本番用に切り替える
     if (Platform.isAndroid) {
-      return 'ca-app-pub-3940256099942544~3347511713';
+      return Confidential.adAppIdAndroid;
     } else if (Platform.isIOS) {
-      return 'ca-app-pub-3940256099942544~1458002511';
+      return Confidential.adAppIdIos;
     } else {
       throw UnsupportedError('Unsupported platform');
     }
   }
 
-  static String get bannerAdUnitId {
-    if (Platform.isAndroid) {
-      //TODO テスト用IDから本番用に切り替える
-      return 'ca-app-pub-3940256099942544/6300978111';
-    } else if (Platform.isIOS) {
-      //TODO テスト用IDから本番用に切り替える
-      return 'ca-app-pub-3940256099942544/2934735716';
-    } else {
-      throw UnsupportedError('Unsupported platform');
-    }
-  }
+  // static String get bannerAdUnitId {
+  //   if (Platform.isAndroid) {
+  //     //TODO テスト用IDから本番用に切り替える
+  //     return 'ca-app-pub-3940256099942544/6300978111';
+  //   } else if (Platform.isIOS) {
+  //     //TODO テスト用IDから本番用に切り替える
+  //     return 'ca-app-pub-3940256099942544/2934735716';
+  //   } else {
+  //     throw UnsupportedError('Unsupported platform');
+  //   }
+  // }
 
   static String get interstitialAdUnitId {
     if (Platform.isAndroid) {
-      //TODO テスト用IDのため追って変更
-      return 'ca-app-pub-3940256099942544/1033173712';
+      return Confidential.interstitialAdUnitIdAndroid;
     } else if (Platform.isIOS) {
-      //TODO テスト用IDのため追って変更
-      return 'ca-app-pub-3940256099942544/4411468910';
+      return Confidential.interstitialAdUnitIdIos;
     } else {
       throw UnsupportedError('Unsupported platform');
     }
