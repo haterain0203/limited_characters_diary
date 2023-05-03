@@ -34,6 +34,7 @@ Future<void> main() async {
     options: firebaseOptions,
   );
 
+  // Admobの初期化
   await MobileAds.instance.initialize();
 
   // ローカル通知の初期設定

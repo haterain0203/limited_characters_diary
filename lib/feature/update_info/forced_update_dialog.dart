@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
+import '../../constant/constant.dart';
+import '../link_to_app_or_web/link_to_app_or_web.dart';
 
 class ForcedUpdateDialog extends HookConsumerWidget {
   const ForcedUpdateDialog({super.key});
@@ -40,9 +44,11 @@ class ForcedUpdateDialog extends HookConsumerWidget {
             ),
           ),
           content: StadiumBorderButton(
-            onPressed: () {
-              //TODO ストアへ遷移
-              Navigator.pop(context);
+            onPressed: () async {
+              final url = Platform.isAndroid
+                  ? Constant.playStoreUrl
+                  : Constant.appStoreUrl;
+              await linkToAppOrWeb(url);
             },
             title: 'アプリストアへ',
           ),

@@ -1,6 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.futtaro.limited_characters_diary">
-   <application
+
+    <!-- The INTERNET permission is required for development. Specifically,
+     flutter needs it to communicate with the running application
+     to allow setting breakpoints, to provide hot reload, etc.
+    -->
+    <!-- https://github.com/flutter/packages/blob/main/packages/url_launcher/url_launcher/example/android/app/src/main/AndroidManifest.xml -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
         android:label="${appName}"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
