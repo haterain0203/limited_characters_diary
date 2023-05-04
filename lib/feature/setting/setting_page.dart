@@ -4,7 +4,7 @@ import 'package:limited_characters_diary/constant/constant.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../pass_code/pass_code.dart';
+import '../../pass_code/pass_code_functions.dart';
 import '../app_info/app_info_providers.dart';
 import '../local_notification/local_notification_setting_dialog.dart';
 
