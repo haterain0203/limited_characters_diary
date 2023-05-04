@@ -4,6 +4,7 @@ import 'package:limited_characters_diary/constant/constant.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import '../../pass_code/pass_code.dart';
 import '../app_info/app_info_providers.dart';
 import '../local_notification/local_notification_setting_dialog.dart';
 
@@ -36,6 +37,19 @@ class SettingPage extends StatelessWidget {
                 onPressed: (BuildContext context) {
                   _showSetNotificationDialog(context);
                 },
+              ),
+              SettingsTile.switchTile(
+                //TODO
+                initialValue: false,
+                onToggle: (bool value) {
+                  //TODO
+                  showScreenLock(context);
+                },
+                leading: const Icon(Icons.notification_add),
+                title: const Text(
+                  'パスコード設定',
+                  style: textStyle,
+                ),
               ),
             ],
           ),
