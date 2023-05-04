@@ -24,7 +24,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,//縦固定
   ]);
 
-  print('flavor = $flavor');
+  debugPrint('flavor = $flavor');
 
   // Flavor に応じた FirebaseOptions を準備する
   final firebaseOptions = flavor == 'prod'
