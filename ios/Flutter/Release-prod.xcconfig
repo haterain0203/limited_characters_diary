@@ -1,2 +1,2 @@
 #include "Release.xcconfig"
-#include "dev.xcconfig"
+#include "prod.xcconfig"
