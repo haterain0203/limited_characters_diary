@@ -57,14 +57,11 @@ class SettingPage extends StatelessWidget {
                             .saveIsPassCodeLock(
                               isPassCodeLock: false,
                             );
+                        ref.invalidate(passCodeProvider);
                       } else {
-                        await showScreenLockCreate(context, ref);
-                        await ref
-                            .read(passCodeControllerProvider)
-                            .saveIsPassCodeLock(isPassCodeLock: isPassCodeLock);
+                        await showScreenLockCreate(context, ref, isPassCodeLock);
                       }
                       // どちらの条件でもPassCodeProviderを再取得する
-                      ref.invalidate(passCodeProvider);
                     },
                     leading: const Icon(Icons.notification_add),
                     title: const Text(
