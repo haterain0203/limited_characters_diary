@@ -18,10 +18,7 @@ Future<void> showScreenLockCreate(BuildContext context, WidgetRef ref, bool isPa
     context: context,
     onConfirmed: (passCode) async {
       // 確認した値を保存する
-      await ref.read(passCodeControllerProvider).savePassCode(passCode);
-      await ref
-          .read(passCodeControllerProvider)
-          .saveIsPassCodeLock(isPassCodeLock: isPassCodeLock);
+      await ref.read(passCodeControllerProvider).savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
       ref.invalidate(passCodeProvider);
       // 画面を閉じる
       if(context.mounted) {

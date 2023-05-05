@@ -54,7 +54,8 @@ class SettingPage extends StatelessWidget {
                       if (!isPassCodeLock) {
                         await ref
                             .read(passCodeControllerProvider)
-                            .saveIsPassCodeLock(
+                            .savePassCode(
+                          passCode: '',
                               isPassCodeLock: false,
                             );
                         ref.invalidate(passCodeProvider);

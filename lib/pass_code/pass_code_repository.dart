@@ -22,13 +22,10 @@ class PassCodeRepository {
   }
 
   /// PassCodeをSharedPreferencesに保存する
-  Future<void> savePassCode(String passCode) async {
+  Future<void> savePassCode({required String passCode, required bool isPassCodeLock,}) async {
     await prefs.setString(passCodeKey, passCode);
-    print('$passCodeで登録しました');
+    await prefs.setBool(isPassCodeLockKey, isPassCodeLock);
+    print('passCode = $passCodeKey\nisPassCodeLock = $isPassCodeLock\nで登録しました');
   }
 
-  /// パスコードロックのon/offをSharedPreferencesに保存する
-  Future<void> saveIsPassCodeLock({required bool isPassCodeLock}) async {
-    await prefs.setBool(isPassCodeLockKey, isPassCodeLock);
-  }
 }

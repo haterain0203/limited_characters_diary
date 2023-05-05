@@ -4,12 +4,8 @@ class PassCodeController {
   PassCodeController({required this.repo});
   final PassCodeRepository repo;
 
-  Future<void> savePassCode(String passCode) async {
-    await repo.savePassCode(passCode);
-  }
-
-  Future<void> saveIsPassCodeLock({required bool isPassCodeLock}) async {
-    await repo.saveIsPassCodeLock(isPassCodeLock: isPassCodeLock);
+  Future<void> savePassCode({required String passCode, required bool isPassCodeLock,}) async {
+    await repo.savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock,);
   }
 
 }
