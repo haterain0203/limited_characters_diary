@@ -46,9 +46,11 @@ class SettingPage extends StatelessWidget {
                     },
                   ),
                   SettingsTile.switchTile(
-                    //TODO
+                    // 初期値はSharedPreferencesの値が入る
                     initialValue: isPassCodeLock,
                     onToggle: (bool isPassCodeLock) async {
+                      // トグルの値がtrue→falseならisPassCodeをfalseに
+                      // false→trueならパスコード登録画面を表示、パスコードを登録、パスコードロックの有効化
                       if (!isPassCodeLock) {
                         await ref
                             .read(passCodeControllerProvider)
@@ -56,12 +58,12 @@ class SettingPage extends StatelessWidget {
                               isPassCodeLock: false,
                             );
                       } else {
-                        //TODO
                         await showScreenLockCreate(context, ref);
                         await ref
                             .read(passCodeControllerProvider)
                             .saveIsPassCodeLock(isPassCodeLock: isPassCodeLock);
                       }
+                      // どちらの条件でもPassCodeProviderを再取得する
                       ref.invalidate(passCodeProvider);
                     },
                     leading: const Icon(Icons.notification_add),

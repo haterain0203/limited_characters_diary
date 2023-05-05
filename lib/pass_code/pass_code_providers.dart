@@ -20,6 +20,7 @@ final passCodeControllerProvider = Provider(
   },
 );
 
+/// PassCodeを取得するProvider
 final passCodeProvider = Provider<PassCode>((ref) {
   final repo = ref.watch(passCodeRepositoryProvider);
   final passCode = repo.fetchPassCode();
