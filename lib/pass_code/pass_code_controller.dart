@@ -8,4 +8,8 @@ class PassCodeController {
     await repo.savePassCode(passCode);
   }
 
+  Future<void> saveIsPassCodeLock({required bool isPassCodeLock}) async {
+    await repo.saveIsPassCodeLock(isPassCodeLock: isPassCodeLock);
+  }
+
 }
