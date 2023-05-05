@@ -49,8 +49,8 @@ class SettingPage extends StatelessWidget {
                     // 初期値はSharedPreferencesの値が入る
                     initialValue: isPassCodeLock,
                     onToggle: (bool isPassCodeLock) async {
-                      // トグルの値がtrue→falseならisPassCodeをfalseに
-                      // false→trueならパスコード登録画面を表示、パスコードを登録、パスコードロックの有効化
+                      // トグルの値がtrue→falseならpassCodeを空文字、isPassCodeをfalse、パスコードロックOFF
+                      // false→trueならパスコード登録画面を表示、パスコードを登録、パスコードロックON
                       if (!isPassCodeLock) {
                         await ref.read(passCodeControllerProvider).savePassCode(
                               passCode: '',
