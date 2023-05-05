@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
+import 'package:limited_characters_diary/pass_code/pass_code.dart';
 import 'package:limited_characters_diary/pass_code/pass_code_controller.dart';
 import 'package:limited_characters_diary/pass_code/pass_code_repository.dart';
 
@@ -18,3 +19,8 @@ final passCodeControllerProvider = Provider(
     );
   },
 );
+
+final passCodeProvider = Provider<PassCode>((ref) {
+  final repo = ref.watch(passCodeRepositoryProvider);
+  return repo.fetchPassCode();
+});
