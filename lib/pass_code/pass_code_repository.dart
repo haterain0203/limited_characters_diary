@@ -8,6 +8,7 @@ class PassCodeRepository {
 
   Future<void> savePassCode(String passCode) async {
     await prefs.setString(passCode, passCode);
+    print('$passCodeで登録しました');
   }
 
   Future<String?> fetchPassCode() async {

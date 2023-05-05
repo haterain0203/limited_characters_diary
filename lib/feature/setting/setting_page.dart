@@ -19,145 +19,147 @@ class SettingPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('設定'),
       ),
-      body: SettingsList(
-        platform: DevicePlatform.iOS,
-        sections: [
-          SettingsSection(
-            title: const Text(
-              '各種設定',
-              style: textStyle,
-            ),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: const Icon(Icons.notification_add),
-                title: const Text(
-                  '通知設定',
-                  style: textStyle,
-                ),
-                onPressed: (BuildContext context) {
-                  _showSetNotificationDialog(context);
-                },
+      body: HookConsumer(
+        builder: (context, ref, child) => SettingsList(
+          platform: DevicePlatform.iOS,
+          sections: [
+            SettingsSection(
+              title: const Text(
+                '各種設定',
+                style: textStyle,
               ),
-              SettingsTile.switchTile(
-                //TODO
-                initialValue: false,
-                onToggle: (bool value) {
+              tiles: <SettingsTile>[
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.notification_add),
+                  title: const Text(
+                    '通知設定',
+                    style: textStyle,
+                  ),
+                  onPressed: (BuildContext context) {
+                    _showSetNotificationDialog(context);
+                  },
+                ),
+                SettingsTile.switchTile(
                   //TODO
-                  showScreenLock(context);
-                },
-                leading: const Icon(Icons.notification_add),
-                title: const Text(
-                  'パスコード設定',
-                  style: textStyle,
+                  initialValue: false,
+                  onToggle: (bool value) async {
+                    //TODO
+                    await showScreenLockCreate(context, ref);
+                  },
+                  leading: const Icon(Icons.notification_add),
+                  title: const Text(
+                    'パスコード設定',
+                    style: textStyle,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SettingsSection(
-            title: const Text(
-              'このアプリについて',
-              style: textStyle,
+              ],
             ),
-            tiles: <SettingsTile>[
-              SettingsTile.navigation(
-                leading: const Icon(Icons.mail),
-                title: const Text(
-                  Constant.contactUsStr,
-                  style: textStyle,
-                ),
-                onPressed: (BuildContext context) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (_) => const WebViewPage(
-                        title: Constant.contactUsStr,
-                        url: Constant.googleFormUrl,
-                      ),
-                    ),
-                  );
-                },
+            SettingsSection(
+              title: const Text(
+                'このアプリについて',
+                style: textStyle,
               ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.text_snippet),
-                title: const Text(
-                  Constant.termsOfServiceStr,
-                  style: textStyle,
-                ),
-                onPressed: (BuildContext context) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (_) => const WebViewPage(
-                        title: Constant.termsOfServiceStr,
-                        url: Constant.termsOfServiceUrl,
+              tiles: <SettingsTile>[
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.mail),
+                  title: const Text(
+                    Constant.contactUsStr,
+                    style: textStyle,
+                  ),
+                  onPressed: (BuildContext context) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (_) => const WebViewPage(
+                          title: Constant.contactUsStr,
+                          url: Constant.googleFormUrl,
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
-              SettingsTile.navigation(
-                leading: const Icon(Icons.text_snippet),
-                title: const Text(
-                  Constant.privacyPolicyStr,
-                  style: textStyle,
-                ),
-                onPressed: (BuildContext context) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (_) => const WebViewPage(
-                        title: Constant.privacyPolicyStr,
-                        url: Constant.privacyPolicyUrl,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              SettingsTile(
-                leading: const Icon(Icons.info),
-                title: const Text(
-                  'アプリ名',
-                  style: textStyle,
-                ),
-                trailing: HookConsumer(
-                  builder: (context, ref, child) {
-                    final appInfo = ref.watch(appInfoProvider);
-                    return appInfo.when(
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      error: (error, stack) {
-                        return const Text('エラーが発生しました');
-                      },
-                      data: (data) => Text(data.appName),
                     );
                   },
                 ),
-              ),
-              SettingsTile(
-                leading: const Icon(Icons.info),
-                title: const Text(
-                  'アプリバージョン',
-                  style: textStyle,
-                ),
-                trailing: HookConsumer(
-                  builder: (context, ref, child) {
-                    final appInfo = ref.watch(appInfoProvider);
-                    return appInfo.when(
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.text_snippet),
+                  title: const Text(
+                    Constant.termsOfServiceStr,
+                    style: textStyle,
+                  ),
+                  onPressed: (BuildContext context) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (_) => const WebViewPage(
+                          title: Constant.termsOfServiceStr,
+                          url: Constant.termsOfServiceUrl,
+                        ),
                       ),
-                      error: (error, stack) {
-                        return const Text('エラーが発生しました');
-                      },
-                      data: (data) => Text(data.version),
                     );
                   },
                 ),
-              ),
-            ],
-          ),
-        ],
+                SettingsTile.navigation(
+                  leading: const Icon(Icons.text_snippet),
+                  title: const Text(
+                    Constant.privacyPolicyStr,
+                    style: textStyle,
+                  ),
+                  onPressed: (BuildContext context) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<dynamic>(
+                        builder: (_) => const WebViewPage(
+                          title: Constant.privacyPolicyStr,
+                          url: Constant.privacyPolicyUrl,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                SettingsTile(
+                  leading: const Icon(Icons.info),
+                  title: const Text(
+                    'アプリ名',
+                    style: textStyle,
+                  ),
+                  trailing: HookConsumer(
+                    builder: (context, ref, child) {
+                      final appInfo = ref.watch(appInfoProvider);
+                      return appInfo.when(
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        error: (error, stack) {
+                          return const Text('エラーが発生しました');
+                        },
+                        data: (data) => Text(data.appName),
+                      );
+                    },
+                  ),
+                ),
+                SettingsTile(
+                  leading: const Icon(Icons.info),
+                  title: const Text(
+                    'アプリバージョン',
+                    style: textStyle,
+                  ),
+                  trailing: HookConsumer(
+                    builder: (context, ref, child) {
+                      final appInfo = ref.watch(appInfoProvider);
+                      return appInfo.when(
+                        loading: () => const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        error: (error, stack) {
+                          return const Text('エラーが発生しました');
+                        },
+                        data: (data) => Text(data.version),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

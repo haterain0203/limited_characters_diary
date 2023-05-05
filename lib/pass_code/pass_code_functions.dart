@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
 Future<void> showScreenLock(BuildContext context) async {
   await screenLock(
@@ -9,10 +11,12 @@ Future<void> showScreenLock(BuildContext context) async {
   );
 }
 
-Future<void> showScreenLockCreate(BuildContext context) async {
+Future<void> showScreenLockCreate(BuildContext context, WidgetRef ref) async {
   await screenLockCreate(
     context: context,
     //TODO
-    onConfirmed: (value) => print(value), // store new passcode somewhere here
+    onConfirmed: (passCode) async {
+      await ref.read(passCodeControllerProvider).savePassCode(passCode);
+    }, // store new passcode somewhere here
   );
 }
