@@ -59,9 +59,9 @@ class SettingPage extends StatelessWidget {
                         ref.invalidate(passCodeProvider);
                       } else {
                         await showScreenLockCreate(
-                          context,
-                          ref,
-                          isPassCodeLock,
+                          context: context,
+                          ref: ref,
+                          isPassCodeLock: isPassCodeLock,
                         );
                       }
                       // どちらの条件でもPassCodeProviderを再取得する

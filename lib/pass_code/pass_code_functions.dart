@@ -12,16 +12,23 @@ Future<void> showScreenLock(BuildContext context) async {
   );
 }
 
-/// パスコード登録画面の表示
-Future<void> showScreenLockCreate(BuildContext context, WidgetRef ref, bool isPassCodeLock,) async {
+/// パスコード登録画面の表示とパスコードの登録
+Future<void> showScreenLockCreate({
+  required BuildContext context,
+  required WidgetRef ref,
+  required bool isPassCodeLock,
+}) async {
   await screenLockCreate(
     context: context,
     onConfirmed: (passCode) async {
-      // 確認した値を保存する
-      await ref.read(passCodeControllerProvider).savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
+      // Confirmした値を保存する
+      await ref
+          .read(passCodeControllerProvider)
+          .savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
+      // passCodeProviderの値を再取得
       ref.invalidate(passCodeProvider);
       // 画面を閉じる
-      if(context.mounted) {
+      if (context.mounted) {
         Navigator.pop(context);
       }
     },
