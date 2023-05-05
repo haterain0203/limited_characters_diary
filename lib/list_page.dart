@@ -46,20 +46,19 @@ class ListPage extends HookConsumerWidget {
       /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
       /// 上記の事象へ対応するもの
       // 復帰以外のステータスなら処理終了
-      if (current != AppLifecycleState.resumed) {
-        return;
+      if (current == AppLifecycleState.resumed) {
+        final now = DateTime.now();
+        final nowDate = DateTime(now.year, now.month, now.day);
+        // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
+        if (ref.read(dateControllerProvider).isToday(nowDate)) {
+          return;
+        }
+        // バックグラウンド復帰時の日付でStateProviderを更新
+        ref.read(todayProvider.notifier).update((state) {
+          return DateTime(now.year, now.month, now.day);
+        });
       }
 
-      final now = DateTime.now();
-      final nowDate = DateTime(now.year, now.month, now.day);
-      // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
-      if (ref.read(dateControllerProvider).isToday(nowDate)) {
-        return;
-      }
-      // バックグラウンド復帰時の日付でStateProviderを更新
-      ref.read(todayProvider.notifier).update((state) {
-        return DateTime(now.year, now.month, now.day);
-      });
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
