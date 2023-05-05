@@ -8,6 +8,8 @@ import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
+import 'package:limited_characters_diary/pass_code/pass_code_functions.dart';
+import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
 import 'constant/constant.dart';
 import 'feature/date/date_controller.dart';
@@ -26,16 +28,28 @@ class ListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
-    ///
-    /// 本日の日付をハイライトさせているが、
-    /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
-    /// 上記の事象へ対応するもの
-    useOnAppLifecycleStateChange((previous, current) {
+    useOnAppLifecycleStateChange((previous, current) async {
+
+      /// バックグラウンドになったタイミングで、ScreenLockを呼び出す
+      ///
+      /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
+      /// inactiveのタイミングで呼び出すこととしたもの
+      if(current == AppLifecycleState.inactive && !ref.watch(isOpenedScreenLockProvider)) {
+        ref.read(isOpenedScreenLockProvider.notifier).state = true;
+        await showScreenLock(context);
+        ref.read(isOpenedScreenLockProvider.notifier).state = false;
+      }
+
+      /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
+      ///
+      /// 本日の日付をハイライトさせているが、
+      /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
+      /// 上記の事象へ対応するもの
       // 復帰以外のステータスなら処理終了
       if (current != AppLifecycleState.resumed) {
         return;
       }
+
       final now = DateTime.now();
       final nowDate = DateTime(now.year, now.month, now.day);
       // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了

@@ -9,6 +9,7 @@ Future<void> showScreenLock(BuildContext context) async {
     context: context,
     //TODO
     correctString: '1234',
+    canCancel: false,
   );
 }
 

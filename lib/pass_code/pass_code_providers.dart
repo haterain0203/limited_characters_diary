@@ -27,3 +27,5 @@ final passCodeProvider = Provider<PassCode>((ref) {
   print('passCode = $passCode');
   return passCode;
 });
+
+final isOpenedScreenLockProvider = StateProvider((ref) => false);
