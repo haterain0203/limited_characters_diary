@@ -52,15 +52,17 @@ class SettingPage extends StatelessWidget {
                       // トグルの値がtrue→falseならisPassCodeをfalseに
                       // false→trueならパスコード登録画面を表示、パスコードを登録、パスコードロックの有効化
                       if (!isPassCodeLock) {
-                        await ref
-                            .read(passCodeControllerProvider)
-                            .savePassCode(
-                          passCode: '',
+                        await ref.read(passCodeControllerProvider).savePassCode(
+                              passCode: '',
                               isPassCodeLock: false,
                             );
                         ref.invalidate(passCodeProvider);
                       } else {
-                        await showScreenLockCreate(context, ref, isPassCodeLock);
+                        await showScreenLockCreate(
+                          context,
+                          ref,
+                          isPassCodeLock,
+                        );
                       }
                       // どちらの条件でもPassCodeProviderを再取得する
                     },
