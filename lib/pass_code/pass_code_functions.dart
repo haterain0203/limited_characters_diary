@@ -17,6 +17,9 @@ Future<void> showScreenLockCreate(BuildContext context, WidgetRef ref) async {
     //TODO
     onConfirmed: (passCode) async {
       await ref.read(passCodeControllerProvider).savePassCode(passCode);
+      if(context.mounted) {
+        Navigator.pop(context);
+      }
     }, // store new passcode somewhere here
   );
 }

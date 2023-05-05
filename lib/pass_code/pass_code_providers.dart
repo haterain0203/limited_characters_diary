@@ -22,5 +22,7 @@ final passCodeControllerProvider = Provider(
 
 final passCodeProvider = Provider<PassCode>((ref) {
   final repo = ref.watch(passCodeRepositoryProvider);
-  return repo.fetchPassCode();
+  final passCode = repo.fetchPassCode();
+  print('passCode = $passCode');
+  return passCode;
 });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -20,146 +21,164 @@ class SettingPage extends StatelessWidget {
         title: const Text('設定'),
       ),
       body: HookConsumer(
-        builder: (context, ref, child) => SettingsList(
-          platform: DevicePlatform.iOS,
-          sections: [
-            SettingsSection(
-              title: const Text(
-                '各種設定',
-                style: textStyle,
-              ),
-              tiles: <SettingsTile>[
-                SettingsTile.navigation(
-                  leading: const Icon(Icons.notification_add),
-                  title: const Text(
-                    '通知設定',
-                    style: textStyle,
-                  ),
-                  onPressed: (BuildContext context) {
-                    _showSetNotificationDialog(context);
-                  },
+        builder: (context, ref, child) {
+          // PassCodeのisPassCodeLockのみ監視する
+          final isPassCodeLock = ref.watch(
+            passCodeProvider.select((value) => value.isPassCodeLock),
+          );
+          return SettingsList(
+            platform: DevicePlatform.iOS,
+            sections: [
+              SettingsSection(
+                title: const Text(
+                  '各種設定',
+                  style: textStyle,
                 ),
-                SettingsTile.switchTile(
-                  //TODO
-                  initialValue: false,
-                  onToggle: (bool value) async {
+                tiles: <SettingsTile>[
+                  SettingsTile.navigation(
+                    leading: const Icon(Icons.notification_add),
+                    title: const Text(
+                      '通知設定',
+                      style: textStyle,
+                    ),
+                    onPressed: (BuildContext context) {
+                      _showSetNotificationDialog(context);
+                    },
+                  ),
+                  SettingsTile.switchTile(
                     //TODO
-                    await showScreenLockCreate(context, ref);
-                  },
-                  leading: const Icon(Icons.notification_add),
-                  title: const Text(
-                    'パスコード設定',
-                    style: textStyle,
+                    initialValue: isPassCodeLock,
+                    onToggle: (bool isPassCodeLock) async {
+                      if (!isPassCodeLock) {
+                        await ref
+                            .read(passCodeControllerProvider)
+                            .saveIsPassCodeLock(
+                              isPassCodeLock: false,
+                            );
+                      } else {
+                        //TODO
+                        await showScreenLockCreate(context, ref);
+                        await ref
+                            .read(passCodeControllerProvider)
+                            .saveIsPassCodeLock(isPassCodeLock: isPassCodeLock);
+                      }
+                      ref.invalidate(passCodeProvider);
+                    },
+                    leading: const Icon(Icons.notification_add),
+                    title: const Text(
+                      'パスコード設定',
+                      style: textStyle,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SettingsSection(
-              title: const Text(
-                'このアプリについて',
-                style: textStyle,
+                ],
               ),
-              tiles: <SettingsTile>[
-                SettingsTile.navigation(
-                  leading: const Icon(Icons.mail),
-                  title: const Text(
-                    Constant.contactUsStr,
-                    style: textStyle,
-                  ),
-                  onPressed: (BuildContext context) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) => const WebViewPage(
-                          title: Constant.contactUsStr,
-                          url: Constant.googleFormUrl,
-                        ),
-                      ),
-                    );
-                  },
+              SettingsSection(
+                title: const Text(
+                  'このアプリについて',
+                  style: textStyle,
                 ),
-                SettingsTile.navigation(
-                  leading: const Icon(Icons.text_snippet),
-                  title: const Text(
-                    Constant.termsOfServiceStr,
-                    style: textStyle,
-                  ),
-                  onPressed: (BuildContext context) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) => const WebViewPage(
-                          title: Constant.termsOfServiceStr,
-                          url: Constant.termsOfServiceUrl,
+                tiles: <SettingsTile>[
+                  SettingsTile.navigation(
+                    leading: const Icon(Icons.mail),
+                    title: const Text(
+                      Constant.contactUsStr,
+                      style: textStyle,
+                    ),
+                    onPressed: (BuildContext context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (_) => const WebViewPage(
+                            title: Constant.contactUsStr,
+                            url: Constant.googleFormUrl,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-                SettingsTile.navigation(
-                  leading: const Icon(Icons.text_snippet),
-                  title: const Text(
-                    Constant.privacyPolicyStr,
-                    style: textStyle,
-                  ),
-                  onPressed: (BuildContext context) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) => const WebViewPage(
-                          title: Constant.privacyPolicyStr,
-                          url: Constant.privacyPolicyUrl,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                SettingsTile(
-                  leading: const Icon(Icons.info),
-                  title: const Text(
-                    'アプリ名',
-                    style: textStyle,
-                  ),
-                  trailing: HookConsumer(
-                    builder: (context, ref, child) {
-                      final appInfo = ref.watch(appInfoProvider);
-                      return appInfo.when(
-                        loading: () => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        error: (error, stack) {
-                          return const Text('エラーが発生しました');
-                        },
-                        data: (data) => Text(data.appName),
                       );
                     },
                   ),
-                ),
-                SettingsTile(
-                  leading: const Icon(Icons.info),
-                  title: const Text(
-                    'アプリバージョン',
-                    style: textStyle,
-                  ),
-                  trailing: HookConsumer(
-                    builder: (context, ref, child) {
-                      final appInfo = ref.watch(appInfoProvider);
-                      return appInfo.when(
-                        loading: () => const Center(
-                          child: CircularProgressIndicator(),
+                  SettingsTile.navigation(
+                    leading: const Icon(Icons.text_snippet),
+                    title: const Text(
+                      Constant.termsOfServiceStr,
+                      style: textStyle,
+                    ),
+                    onPressed: (BuildContext context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (_) => const WebViewPage(
+                            title: Constant.termsOfServiceStr,
+                            url: Constant.termsOfServiceUrl,
+                          ),
                         ),
-                        error: (error, stack) {
-                          return const Text('エラーが発生しました');
-                        },
-                        data: (data) => Text(data.version),
                       );
                     },
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
+                  SettingsTile.navigation(
+                    leading: const Icon(Icons.text_snippet),
+                    title: const Text(
+                      Constant.privacyPolicyStr,
+                      style: textStyle,
+                    ),
+                    onPressed: (BuildContext context) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<dynamic>(
+                          builder: (_) => const WebViewPage(
+                            title: Constant.privacyPolicyStr,
+                            url: Constant.privacyPolicyUrl,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SettingsTile(
+                    leading: const Icon(Icons.info),
+                    title: const Text(
+                      'アプリ名',
+                      style: textStyle,
+                    ),
+                    trailing: HookConsumer(
+                      builder: (context, ref, child) {
+                        final appInfo = ref.watch(appInfoProvider);
+                        return appInfo.when(
+                          loading: () => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          error: (error, stack) {
+                            return const Text('エラーが発生しました');
+                          },
+                          data: (data) => Text(data.appName),
+                        );
+                      },
+                    ),
+                  ),
+                  SettingsTile(
+                    leading: const Icon(Icons.info),
+                    title: const Text(
+                      'アプリバージョン',
+                      style: textStyle,
+                    ),
+                    trailing: HookConsumer(
+                      builder: (context, ref, child) {
+                        final appInfo = ref.watch(appInfoProvider);
+                        return appInfo.when(
+                          loading: () => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          error: (error, stack) {
+                            return const Text('エラーが発生しました');
+                          },
+                          data: (data) => Text(data.version),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
       ),
     );
   }
