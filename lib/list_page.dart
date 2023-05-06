@@ -43,7 +43,6 @@ class ListPage extends HookConsumerWidget {
       /// 本日の日付をハイライトさせているが、
       /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
       /// 上記の事象へ対応するもの
-      // 復帰以外のステータスなら処理終了
       if (current == AppLifecycleState.resumed) {
         final now = DateTime.now();
         final nowDate = DateTime(now.year, now.month, now.day);
