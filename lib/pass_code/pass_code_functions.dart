@@ -56,5 +56,7 @@ Future<void> showScreenLockCreate({
     onCancelled: () {
       Navigator.pop(context);
     },
+    title: const Text('パスコードを登録'),
+    confirmTitle: const Text('パスコードの再確認')
   );
 }
