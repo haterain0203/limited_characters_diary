@@ -4,12 +4,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
 /// パスコードロック画面の表示
-Future<void> showScreenLock(BuildContext context) async {
+Future<void> showScreenLock(BuildContext context, WidgetRef ref) async {
   await screenLock(
     context: context,
-    //TODO
-    correctString: '1234',
+    // SharedPreferencesで保存された値
+    correctString: ref.read(passCodeProvider.select((value) => value.passCode)),
     canCancel: false,
+    title: const Text('パスコードを入力してください')
   );
 }
 
