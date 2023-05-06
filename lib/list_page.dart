@@ -86,8 +86,6 @@ class ListPage extends HookConsumerWidget {
 
     useEffect(
       () {
-        // 全画面広告のロード
-        ref.read(adControllerProvider).initInterstitialAdd();
         // パスコードロック画面の表示
         Future(() async {
           await showScreenLock(context, ref);
