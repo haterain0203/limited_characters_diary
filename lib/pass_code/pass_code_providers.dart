@@ -30,7 +30,3 @@ final passCodeProvider = Provider<PassCode>((ref) {
 });
 
 final isOpenedScreenLockProvider = StateProvider((ref) => false);
-
-// 今現在画面がロックされているかどうか
-// TODO PassCodeクラス内で管理すべきか？
-final isScreenLocked = StateProvider((ref) => false);
