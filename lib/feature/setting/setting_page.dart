@@ -24,7 +24,7 @@ class SettingPage extends StatelessWidget {
         builder: (context, ref, child) {
           // PassCodeのisPassCodeLockのみ監視する
           final isPassCodeLock = ref.watch(
-            passCodeProvider.select((value) => value.isPassCodeLock),
+            passCodeProvider.select((value) => value.isPassCodeEnabled),
           );
           return SettingsList(
             platform: DevicePlatform.iOS,

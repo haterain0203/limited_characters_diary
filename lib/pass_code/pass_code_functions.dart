@@ -10,7 +10,7 @@ Future<void> showScreenLock(BuildContext context, WidgetRef ref) async {
     return;
   }
   // パスコードロックがOFFなら処理終了
-  if(!ref.read(passCodeProvider.select((value) => value.isPassCodeLock))){
+  if(!ref.read(passCodeProvider.select((value) => value.isPassCodeEnabled))){
     return;
   }
 
