@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
@@ -10,8 +9,6 @@ import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 import 'package:limited_characters_diary/pass_code/pass_code_functions.dart';
-import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
-
 import 'constant/constant.dart';
 import 'feature/date/date_controller.dart';
 import 'feature/diary/diary.dart';
@@ -84,11 +81,6 @@ class ListPage extends HookConsumerWidget {
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
       //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
       //煩雑になると考え、Stackとしたもの。
-
-      if(context.mounted) {
-        await showScreenLock(context, ref);
-      }
-
     });
 
     // 全画面広告のロード
