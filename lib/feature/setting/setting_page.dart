@@ -56,6 +56,7 @@ class SettingPage extends StatelessWidget {
                               passCode: '',
                               isPassCodeLock: false,
                             );
+                        // PassCodeProviderを再取得する
                         ref.invalidate(passCodeProvider);
                       } else {
                         await showScreenLockCreate(
@@ -64,7 +65,6 @@ class SettingPage extends StatelessWidget {
                           isPassCodeLock: isPassCodeLock,
                         );
                       }
-                      // どちらの条件でもPassCodeProviderを再取得する
                     },
                     leading: const Icon(Icons.notification_add),
                     title: const Text(
