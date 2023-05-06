@@ -41,7 +41,8 @@ class AuthPage extends HookConsumerWidget {
             ),
           );
         }
-        return isPassCodeEnabled ? const PassCodePage() : const ListPage();
+        return const ListPage();
+        // return isPassCodeEnabled ? const PassCodePage() : const ListPage();
       },
     );
   }

@@ -10,6 +10,7 @@ import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 import 'package:limited_characters_diary/pass_code/pass_code_functions.dart';
+import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 import 'constant/constant.dart';
 import 'feature/date/date_controller.dart';
 import 'feature/diary/diary.dart';
@@ -84,10 +85,14 @@ class ListPage extends HookConsumerWidget {
       //煩雑になると考え、Stackとしたもの。
     });
 
-    // 全画面広告のロード
     useEffect(
       () {
+        // 全画面広告のロード
         ref.read(adControllerProvider).initInterstitialAdd();
+        // パスコードロック画面の表示
+        Future(() async {
+          await showScreenLock(context, ref, ShowScreenLockSituation.inactive);
+        });
         return null;
       },
       const [],
@@ -95,6 +100,14 @@ class ListPage extends HookConsumerWidget {
 
     final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryStreamProvider);
+
+    final isPassCodeLocked = ref.watch(isOpenedScreenLockProvider);
+    // パスコードロック画面を表示している間は何も表示しない
+    // これをしないと一瞬日記画面が表示されてしまうため
+    if(isPassCodeLocked) {
+      return const SizedBox();
+    }
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Stack(

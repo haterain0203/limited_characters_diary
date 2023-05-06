@@ -23,27 +23,17 @@ Future<void> showScreenLock(
   // パスコード画面を開いたことを示すためにtrueに
   ref.read(isOpenedScreenLockProvider.notifier).state = true;
   await screenLock(
-      context: context,
-      // SharedPreferencesで保存された値
-      correctString:
-          ref.read(passCodeProvider.select((value) => value.passCode)),
-      canCancel: false,
-      title: const Text('パスコードを入力してください'),
-      onUnlocked: () {
-        if (situation == ShowScreenLockSituation.appStart) {
-          Navigator.push(
-            context,
-            MaterialPageRoute<ListPage>(
-              builder: (_) => const ListPage(),
-            ),
-          );
-        }
-        if (situation == ShowScreenLockSituation.inactive) {
-          Navigator.pop(context);
-        }
-        // falseに戻さないと、2回目以降にバックグラウンドにした際にパスコードロック画面が開かない
-        ref.read(isOpenedScreenLockProvider.notifier).state = false;
-      });
+    context: context,
+    // SharedPreferencesで保存された値
+    correctString: ref.read(passCodeProvider.select((value) => value.passCode)),
+    canCancel: false,
+    title: const Text('パスコードを入力してください'),
+    onUnlocked: () {
+      // falseに戻さないと、2回目以降にバックグラウンドにした際にパスコードロック画面が開かない
+      ref.read(isOpenedScreenLockProvider.notifier).state = false;
+      Navigator.pop(context);
+    }
+  );
 }
 
 /// パスコード登録画面の表示とパスコードの登録
