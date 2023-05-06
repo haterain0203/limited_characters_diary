@@ -23,9 +23,7 @@ mixin _$PassCode {
 // パスコードそのもの
   String get passCode =>
       throw _privateConstructorUsedError; // パスコードロック設定のON/OFF
-  bool get isPassCodeEnabled =>
-      throw _privateConstructorUsedError; // 今現在画面がロックされているかどうか
-  bool get isScreenLocked => throw _privateConstructorUsedError;
+  bool get isPassCodeEnabled => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,7 +36,7 @@ abstract class $PassCodeCopyWith<$Res> {
   factory $PassCodeCopyWith(PassCode value, $Res Function(PassCode) then) =
       _$PassCodeCopyWithImpl<$Res, PassCode>;
   @useResult
-  $Res call({String passCode, bool isPassCodeEnabled, bool isScreenLocked});
+  $Res call({String passCode, bool isPassCodeEnabled});
 }
 
 /// @nodoc
@@ -56,7 +54,6 @@ class _$PassCodeCopyWithImpl<$Res, $Val extends PassCode>
   $Res call({
     Object? passCode = null,
     Object? isPassCodeEnabled = null,
-    Object? isScreenLocked = null,
   }) {
     return _then(_value.copyWith(
       passCode: null == passCode
@@ -66,10 +63,6 @@ class _$PassCodeCopyWithImpl<$Res, $Val extends PassCode>
       isPassCodeEnabled: null == isPassCodeEnabled
           ? _value.isPassCodeEnabled
           : isPassCodeEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isScreenLocked: null == isScreenLocked
-          ? _value.isScreenLocked
-          : isScreenLocked // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -82,7 +75,7 @@ abstract class _$$_PassCodeCopyWith<$Res> implements $PassCodeCopyWith<$Res> {
       __$$_PassCodeCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String passCode, bool isPassCodeEnabled, bool isScreenLocked});
+  $Res call({String passCode, bool isPassCodeEnabled});
 }
 
 /// @nodoc
@@ -98,7 +91,6 @@ class __$$_PassCodeCopyWithImpl<$Res>
   $Res call({
     Object? passCode = null,
     Object? isPassCodeEnabled = null,
-    Object? isScreenLocked = null,
   }) {
     return _then(_$_PassCode(
       passCode: null == passCode
@@ -109,10 +101,6 @@ class __$$_PassCodeCopyWithImpl<$Res>
           ? _value.isPassCodeEnabled
           : isPassCodeEnabled // ignore: cast_nullable_to_non_nullable
               as bool,
-      isScreenLocked: null == isScreenLocked
-          ? _value.isScreenLocked
-          : isScreenLocked // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -120,10 +108,7 @@ class __$$_PassCodeCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
-  const _$_PassCode(
-      {required this.passCode,
-      required this.isPassCodeEnabled,
-      required this.isScreenLocked});
+  const _$_PassCode({required this.passCode, required this.isPassCodeEnabled});
 
   factory _$_PassCode.fromJson(Map<String, dynamic> json) =>
       _$$_PassCodeFromJson(json);
@@ -134,13 +119,10 @@ class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
 // パスコードロック設定のON/OFF
   @override
   final bool isPassCodeEnabled;
-// 今現在画面がロックされているかどうか
-  @override
-  final bool isScreenLocked;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PassCode(passCode: $passCode, isPassCodeEnabled: $isPassCodeEnabled, isScreenLocked: $isScreenLocked)';
+    return 'PassCode(passCode: $passCode, isPassCodeEnabled: $isPassCodeEnabled)';
   }
 
   @override
@@ -149,8 +131,7 @@ class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
     properties
       ..add(DiagnosticsProperty('type', 'PassCode'))
       ..add(DiagnosticsProperty('passCode', passCode))
-      ..add(DiagnosticsProperty('isPassCodeEnabled', isPassCodeEnabled))
-      ..add(DiagnosticsProperty('isScreenLocked', isScreenLocked));
+      ..add(DiagnosticsProperty('isPassCodeEnabled', isPassCodeEnabled));
   }
 
   @override
@@ -161,15 +142,12 @@ class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
             (identical(other.passCode, passCode) ||
                 other.passCode == passCode) &&
             (identical(other.isPassCodeEnabled, isPassCodeEnabled) ||
-                other.isPassCodeEnabled == isPassCodeEnabled) &&
-            (identical(other.isScreenLocked, isScreenLocked) ||
-                other.isScreenLocked == isScreenLocked));
+                other.isPassCodeEnabled == isPassCodeEnabled));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, passCode, isPassCodeEnabled, isScreenLocked);
+  int get hashCode => Object.hash(runtimeType, passCode, isPassCodeEnabled);
 
   @JsonKey(ignore: true)
   @override
@@ -188,8 +166,7 @@ class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
 abstract class _PassCode implements PassCode {
   const factory _PassCode(
       {required final String passCode,
-      required final bool isPassCodeEnabled,
-      required final bool isScreenLocked}) = _$_PassCode;
+      required final bool isPassCodeEnabled}) = _$_PassCode;
 
   factory _PassCode.fromJson(Map<String, dynamic> json) = _$_PassCode.fromJson;
 
@@ -197,8 +174,6 @@ abstract class _PassCode implements PassCode {
   String get passCode;
   @override // パスコードロック設定のON/OFF
   bool get isPassCodeEnabled;
-  @override // 今現在画面がロックされているかどうか
-  bool get isScreenLocked;
   @override
   @JsonKey(ignore: true)
   _$$_PassCodeCopyWith<_$_PassCode> get copyWith =>

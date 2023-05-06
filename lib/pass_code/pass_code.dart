@@ -11,8 +11,6 @@ class PassCode with _$PassCode {
     required String passCode,
     // パスコードロック設定のON/OFF
     required bool isPassCodeEnabled,
-    // 今現在画面がロックされているかどうか
-    required bool isScreenLocked,
   }) = _PassCode;
 
   factory PassCode.fromJson(Map<String, dynamic> json) =>

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
 import 'package:limited_characters_diary/pass_code/pass_code.dart';
@@ -29,3 +30,7 @@ final passCodeProvider = Provider<PassCode>((ref) {
 });
 
 final isOpenedScreenLockProvider = StateProvider((ref) => false);
+
+// 今現在画面がロックされているかどうか
+// TODO PassCodeクラス内で管理すべきか？
+final isScreenLocked = StateProvider((ref) => false);

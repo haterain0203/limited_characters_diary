@@ -16,7 +16,6 @@ class PassCodeRepository {
     return PassCode(
       passCode: passCode ?? '',
       isPassCodeEnabled: isPassCodeLockEnabled ?? false,
-      isScreenLocked: false,
     );
   }
 
