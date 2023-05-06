@@ -43,11 +43,7 @@ class ListPage extends HookConsumerWidget {
         if(!ref.read(passCodeProvider.select((value) => value.isPassCodeLock))){
           return;
         }
-        // パスコード画面を開いたことを示すためにtrueに
-        ref.read(isOpenedScreenLockProvider.notifier).state = true;
         await showScreenLock(context, ref);
-        // falseに戻さないと、2回目以降にバックグラウンドにした際にパスコードロック画面が開かない
-        ref.read(isOpenedScreenLockProvider.notifier).state = false;
       }
 
       /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する

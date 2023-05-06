@@ -5,13 +5,17 @@ import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
 /// パスコードロック画面の表示
 Future<void> showScreenLock(BuildContext context, WidgetRef ref) async {
+  // パスコード画面を開いたことを示すためにtrueに
+  ref.read(isOpenedScreenLockProvider.notifier).state = true;
   await screenLock(
     context: context,
     // SharedPreferencesで保存された値
     correctString: ref.read(passCodeProvider.select((value) => value.passCode)),
     canCancel: false,
-    title: const Text('パスコードを入力してください')
+    title: const Text('パスコードを入力してください'),
   );
+  // falseに戻さないと、2回目以降にバックグラウンドにした際にパスコードロック画面が開かない
+  ref.read(isOpenedScreenLockProvider.notifier).state = false;
 }
 
 /// パスコード登録画面の表示とパスコードの登録
