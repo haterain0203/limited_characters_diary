@@ -66,7 +66,7 @@ class SettingPage extends StatelessWidget {
                         );
                       }
                     },
-                    leading: const Icon(Icons.notification_add),
+                    leading: const Icon(Icons.security),
                     title: const Text(
                       'パスコード設定',
                       style: textStyle,
