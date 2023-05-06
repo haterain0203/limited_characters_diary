@@ -5,6 +5,15 @@ import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
 /// パスコードロック画面の表示
 Future<void> showScreenLock(BuildContext context, WidgetRef ref) async {
+  // 既にロック画面が開いていたら処理終了
+  if(ref.read(isOpenedScreenLockProvider)) {
+    return;
+  }
+  // パスコードロックがOFFなら処理終了
+  if(!ref.read(passCodeProvider.select((value) => value.isPassCodeLock))){
+    return;
+  }
+
   // パスコード画面を開いたことを示すためにtrueに
   ref.read(isOpenedScreenLockProvider.notifier).state = true;
   await screenLock(

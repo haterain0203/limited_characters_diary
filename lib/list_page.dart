@@ -35,14 +35,6 @@ class ListPage extends HookConsumerWidget {
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
       if(current == AppLifecycleState.inactive) {
-        // 既にロック画面が開いていたら処理終了
-        if(ref.read(isOpenedScreenLockProvider)) {
-          return;
-        }
-        // パスコードロックがOFFなら処理終了
-        if(!ref.read(passCodeProvider.select((value) => value.isPassCodeLock))){
-          return;
-        }
         await showScreenLock(context, ref);
       }
 
@@ -68,7 +60,7 @@ class ListPage extends HookConsumerWidget {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-
+      
       /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
       if(ref.read(isShowEditDialogOnLaunchProvider)) {
         ref.read(isOpenedEditDialogProvider.notifier).state = true;
