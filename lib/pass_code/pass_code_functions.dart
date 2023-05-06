@@ -9,7 +9,6 @@ import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 Future<void> showScreenLock(
   BuildContext context,
   WidgetRef ref,
-  ShowScreenLockSituation situation,
 ) async {
   // 既にロック画面が開いていたら処理終了
   if (ref.read(isOpenedScreenLockProvider)) {

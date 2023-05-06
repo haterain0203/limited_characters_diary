@@ -35,7 +35,7 @@ class ListPage extends HookConsumerWidget {
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
       if(current == AppLifecycleState.inactive) {
-        await showScreenLock(context, ref, ShowScreenLockSituation.inactive,);
+        await showScreenLock(context, ref);
       }
 
       /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
@@ -91,7 +91,7 @@ class ListPage extends HookConsumerWidget {
         ref.read(adControllerProvider).initInterstitialAdd();
         // パスコードロック画面の表示
         Future(() async {
-          await showScreenLock(context, ref, ShowScreenLockSituation.inactive);
+          await showScreenLock(context, ref);
         });
         return null;
       },
