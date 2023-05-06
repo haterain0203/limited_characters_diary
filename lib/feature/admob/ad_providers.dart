@@ -9,3 +9,9 @@ final adControllerProvider = Provider(
     repo: ref.watch(adRepoProvider),
   ),
 );
+
+/// 全画面広告表示を行ったか否か
+///
+/// 全画面広告実行時にinactiveになるようで、それにより全画面広告完了後にパスコードロック画面が表示されてしまう
+/// 全画面広告実行時にはパスコードロック画面を表示しないようにするために使用
+final isShownInterstitialAdProvider = StateProvider((ref) => false);

@@ -169,6 +169,7 @@ class InputDiaryDialog extends HookConsumerWidget {
                             await ref
                                 .read(adControllerProvider)
                                 .showInterstitialAdd();
+                            ref.read(isShownInterstitialAdProvider.notifier).state = true;
                           }
                         },
                         title: '閉じる',

@@ -35,6 +35,10 @@ class ListPage extends HookConsumerWidget {
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
       if(current == AppLifecycleState.inactive) {
+        // 全画面広告から復帰した際は対象外とする
+        if(ref.read(isShownInterstitialAdProvider)) {
+          return;
+        }
         await showScreenLock(context, ref);
       }
 
