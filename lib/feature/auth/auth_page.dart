@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/list_page.dart';
+import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
+import '../../pass_code/pass_code_page.dart';
 import 'auth_providers.dart';
 
 class AuthPage extends HookConsumerWidget {
@@ -12,6 +14,7 @@ class AuthPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userState = ref.watch(userStateProvider);
+    final isPassCodeEnabled = ref.watch(passCodeProvider.select((value) => value.isPassCodeEnabled));
     return userState.when(
       error: (e, s) => Scaffold(
         body: Center(
@@ -38,7 +41,7 @@ class AuthPage extends HookConsumerWidget {
             ),
           );
         }
-        return const ListPage();
+        return isPassCodeEnabled ? const PassCodePage() : const ListPage();
       },
     );
   }

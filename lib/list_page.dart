@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
@@ -33,7 +34,7 @@ class ListPage extends HookConsumerWidget {
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
       if(current == AppLifecycleState.inactive) {
-        await showScreenLock(context, ref);
+        await showScreenLock(context, ref, ShowScreenLockSituation.inactive,);
       }
 
       /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
