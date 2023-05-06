@@ -34,7 +34,7 @@ class ListPage extends HookConsumerWidget {
       ///
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
-      if(current == AppLifecycleState.inactive && !ref.watch(isOpenedScreenLockProvider)) {
+      if(current == AppLifecycleState.inactive && !ref.read(isOpenedScreenLockProvider)) {
         ref.read(isOpenedScreenLockProvider.notifier).state = true;
         await showScreenLock(context);
         ref.read(isOpenedScreenLockProvider.notifier).state = false;
@@ -62,8 +62,9 @@ class ListPage extends HookConsumerWidget {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+
       /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
-      if(ref.watch(isShowEditDialogOnLaunchProvider)) {
+      if(ref.read(isShowEditDialogOnLaunchProvider)) {
         ref.read(isOpenedEditDialogProvider.notifier).state = true;
         await _showEditDialog(context, null);
         return;
@@ -73,7 +74,7 @@ class ListPage extends HookConsumerWidget {
       ///それに加えて日記記入ダイアログを自動表示する
       ///
       /// ユーザー動作の順番的にSetNotificationDialog→EditDialog→ListPageの順で表示したいため、以下のような記述とした
-      if (ref.watch(isShowSetNotificationDialogOnLaunchProvider)) {
+      if (ref.read(isShowSetNotificationDialogOnLaunchProvider)) {
         ref.read(isOpenedSetNotificationDialogOnLaunchProvider.notifier).state = true;
         await _showSetNotificationDialog(context);
         if(context.mounted) {
