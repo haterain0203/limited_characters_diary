@@ -34,7 +34,15 @@ class ListPage extends HookConsumerWidget {
       ///
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
-      if(current == AppLifecycleState.inactive && !ref.read(isOpenedScreenLockProvider)) {
+      if(current == AppLifecycleState.inactive) {
+        // 既にロック画面が開いていたら処理終了
+        if(ref.read(isOpenedScreenLockProvider)) {
+          return;
+        }
+        // パスコードロックがOFFなら処理終了
+        if(!ref.read(passCodeProvider.select((value) => value.isPassCodeLock))){
+          return;
+        }
         ref.read(isOpenedScreenLockProvider.notifier).state = true;
         await showScreenLock(context);
         ref.read(isOpenedScreenLockProvider.notifier).state = false;
