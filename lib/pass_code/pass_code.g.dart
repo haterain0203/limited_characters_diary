@@ -8,11 +8,13 @@ part of 'pass_code.dart';
 
 _$_PassCode _$$_PassCodeFromJson(Map<String, dynamic> json) => _$_PassCode(
       passCode: json['passCode'] as String,
-      isPassCodeLock: json['isPassCodeLock'] as bool,
+      isPassCodeEnabled: json['isPassCodeEnabled'] as bool,
+      isScreenLocked: json['isScreenLocked'] as bool,
     );
 
 Map<String, dynamic> _$$_PassCodeToJson(_$_PassCode instance) =>
     <String, dynamic>{
       'passCode': instance.passCode,
-      'isPassCodeLock': instance.isPassCodeLock,
+      'isPassCodeEnabled': instance.isPassCodeEnabled,
+      'isScreenLocked': instance.isScreenLocked,
     };

@@ -20,8 +20,12 @@ PassCode _$PassCodeFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PassCode {
-  String get passCode => throw _privateConstructorUsedError;
-  bool get isPassCodeLock => throw _privateConstructorUsedError;
+// パスコードそのもの
+  String get passCode =>
+      throw _privateConstructorUsedError; // パスコードロック設定のON/OFF
+  bool get isPassCodeEnabled =>
+      throw _privateConstructorUsedError; // 今現在画面がロックされているかどうか
+  bool get isScreenLocked => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +38,7 @@ abstract class $PassCodeCopyWith<$Res> {
   factory $PassCodeCopyWith(PassCode value, $Res Function(PassCode) then) =
       _$PassCodeCopyWithImpl<$Res, PassCode>;
   @useResult
-  $Res call({String passCode, bool isPassCodeLock});
+  $Res call({String passCode, bool isPassCodeEnabled, bool isScreenLocked});
 }
 
 /// @nodoc
@@ -51,16 +55,21 @@ class _$PassCodeCopyWithImpl<$Res, $Val extends PassCode>
   @override
   $Res call({
     Object? passCode = null,
-    Object? isPassCodeLock = null,
+    Object? isPassCodeEnabled = null,
+    Object? isScreenLocked = null,
   }) {
     return _then(_value.copyWith(
       passCode: null == passCode
           ? _value.passCode
           : passCode // ignore: cast_nullable_to_non_nullable
               as String,
-      isPassCodeLock: null == isPassCodeLock
-          ? _value.isPassCodeLock
-          : isPassCodeLock // ignore: cast_nullable_to_non_nullable
+      isPassCodeEnabled: null == isPassCodeEnabled
+          ? _value.isPassCodeEnabled
+          : isPassCodeEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isScreenLocked: null == isScreenLocked
+          ? _value.isScreenLocked
+          : isScreenLocked // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -73,7 +82,7 @@ abstract class _$$_PassCodeCopyWith<$Res> implements $PassCodeCopyWith<$Res> {
       __$$_PassCodeCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String passCode, bool isPassCodeLock});
+  $Res call({String passCode, bool isPassCodeEnabled, bool isScreenLocked});
 }
 
 /// @nodoc
@@ -88,16 +97,21 @@ class __$$_PassCodeCopyWithImpl<$Res>
   @override
   $Res call({
     Object? passCode = null,
-    Object? isPassCodeLock = null,
+    Object? isPassCodeEnabled = null,
+    Object? isScreenLocked = null,
   }) {
     return _then(_$_PassCode(
       passCode: null == passCode
           ? _value.passCode
           : passCode // ignore: cast_nullable_to_non_nullable
               as String,
-      isPassCodeLock: null == isPassCodeLock
-          ? _value.isPassCodeLock
-          : isPassCodeLock // ignore: cast_nullable_to_non_nullable
+      isPassCodeEnabled: null == isPassCodeEnabled
+          ? _value.isPassCodeEnabled
+          : isPassCodeEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isScreenLocked: null == isScreenLocked
+          ? _value.isScreenLocked
+          : isScreenLocked // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -106,19 +120,27 @@ class __$$_PassCodeCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
-  const _$_PassCode({required this.passCode, required this.isPassCodeLock});
+  const _$_PassCode(
+      {required this.passCode,
+      required this.isPassCodeEnabled,
+      required this.isScreenLocked});
 
   factory _$_PassCode.fromJson(Map<String, dynamic> json) =>
       _$$_PassCodeFromJson(json);
 
+// パスコードそのもの
   @override
   final String passCode;
+// パスコードロック設定のON/OFF
   @override
-  final bool isPassCodeLock;
+  final bool isPassCodeEnabled;
+// 今現在画面がロックされているかどうか
+  @override
+  final bool isScreenLocked;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PassCode(passCode: $passCode, isPassCodeLock: $isPassCodeLock)';
+    return 'PassCode(passCode: $passCode, isPassCodeEnabled: $isPassCodeEnabled, isScreenLocked: $isScreenLocked)';
   }
 
   @override
@@ -127,7 +149,8 @@ class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
     properties
       ..add(DiagnosticsProperty('type', 'PassCode'))
       ..add(DiagnosticsProperty('passCode', passCode))
-      ..add(DiagnosticsProperty('isPassCodeLock', isPassCodeLock));
+      ..add(DiagnosticsProperty('isPassCodeEnabled', isPassCodeEnabled))
+      ..add(DiagnosticsProperty('isScreenLocked', isScreenLocked));
   }
 
   @override
@@ -137,13 +160,16 @@ class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
             other is _$_PassCode &&
             (identical(other.passCode, passCode) ||
                 other.passCode == passCode) &&
-            (identical(other.isPassCodeLock, isPassCodeLock) ||
-                other.isPassCodeLock == isPassCodeLock));
+            (identical(other.isPassCodeEnabled, isPassCodeEnabled) ||
+                other.isPassCodeEnabled == isPassCodeEnabled) &&
+            (identical(other.isScreenLocked, isScreenLocked) ||
+                other.isScreenLocked == isScreenLocked));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, passCode, isPassCodeLock);
+  int get hashCode =>
+      Object.hash(runtimeType, passCode, isPassCodeEnabled, isScreenLocked);
 
   @JsonKey(ignore: true)
   @override
@@ -162,14 +188,17 @@ class _$_PassCode with DiagnosticableTreeMixin implements _PassCode {
 abstract class _PassCode implements PassCode {
   const factory _PassCode(
       {required final String passCode,
-      required final bool isPassCodeLock}) = _$_PassCode;
+      required final bool isPassCodeEnabled,
+      required final bool isScreenLocked}) = _$_PassCode;
 
   factory _PassCode.fromJson(Map<String, dynamic> json) = _$_PassCode.fromJson;
 
-  @override
+  @override // パスコードそのもの
   String get passCode;
-  @override
-  bool get isPassCodeLock;
+  @override // パスコードロック設定のON/OFF
+  bool get isPassCodeEnabled;
+  @override // 今現在画面がロックされているかどうか
+  bool get isScreenLocked;
   @override
   @JsonKey(ignore: true)
   _$$_PassCodeCopyWith<_$_PassCode> get copyWith =>

@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
@@ -60,7 +61,7 @@ class ListPage extends HookConsumerWidget {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      
+
       /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
       if(ref.read(isShowEditDialogOnLaunchProvider)) {
         ref.read(isOpenedEditDialogProvider.notifier).state = true;
@@ -83,6 +84,11 @@ class ListPage extends HookConsumerWidget {
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
       //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
       //煩雑になると考え、Stackとしたもの。
+
+      if(context.mounted) {
+        await showScreenLock(context, ref);
+      }
+
     });
 
     // 全画面広告のロード

@@ -12,12 +12,11 @@ class PassCodeRepository {
   /// SharedPreferencesに保存されたPassCodeの値を取得し返す
   PassCode fetchPassCode() {
     final passCode = prefs.getString(passCodeKey);
-    final isPassCodeLock = prefs.getBool(isPassCodeLockKey);
-    print('isPassCodeLock = $isPassCodeLock');
-    print('passCode = $passCode');
+    final isPassCodeLockEnabled = prefs.getBool(isPassCodeLockKey);
     return PassCode(
       passCode: passCode ?? '',
-      isPassCodeLock: isPassCodeLock ?? false,
+      isPassCodeEnabled: isPassCodeLockEnabled ?? false,
+      isScreenLocked: false,
     );
   }
 
