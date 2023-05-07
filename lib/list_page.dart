@@ -35,11 +35,9 @@ class ListPage extends HookConsumerWidget {
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
       if(current == AppLifecycleState.inactive) {
-        // 全画面広告から復帰した際は対象外とする
-        if(ref.read(isShownInterstitialAdProvider)) {
-          return;
+        if(ref.read(isShowScreenLockProvider)) {
+          await showScreenLock(context, ref);
         }
-        await showScreenLock(context, ref);
       }
 
       /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
@@ -48,6 +46,7 @@ class ListPage extends HookConsumerWidget {
       /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
       /// 上記の事象へ対応するもの
       if (current == AppLifecycleState.resumed) {
+
         final now = DateTime.now();
         final nowDate = DateTime(now.year, now.month, now.day);
         // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
@@ -91,9 +90,11 @@ class ListPage extends HookConsumerWidget {
     useEffect(
       () {
         // パスコードロック画面の表示
-        Future(() async {
-          await showScreenLock(context, ref);
-        });
+        if(ref.read(isShowScreenLockProvider)) {
+          Future(() async {
+            await showScreenLock(context, ref);
+          });
+        }
         return null;
       },
       const [],

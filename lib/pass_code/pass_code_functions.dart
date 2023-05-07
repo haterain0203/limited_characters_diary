@@ -8,15 +8,6 @@ Future<void> showScreenLock(
   BuildContext context,
   WidgetRef ref,
 ) async {
-  // 既にロック画面が開いていたら処理終了
-  if (ref.read(isOpenedScreenLockProvider)) {
-    return;
-  }
-  // パスコードロックがOFFなら処理終了
-  if (!ref.read(passCodeProvider.select((value) => value.isPassCodeEnabled))) {
-    return;
-  }
-
   // パスコード画面を開いたことを示すためにtrueに
   ref.read(isOpenedScreenLockProvider.notifier).state = true;
   await screenLock(
@@ -29,7 +20,7 @@ Future<void> showScreenLock(
       // falseに戻さないと、2回目以降にバックグラウンドにした際にパスコードロック画面が開かない
       ref.read(isOpenedScreenLockProvider.notifier).state = false;
       Navigator.pop(context);
-    }
+    },
   );
 }
 
