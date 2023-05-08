@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/list_page.dart';
-import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
 import 'auth_providers.dart';
 

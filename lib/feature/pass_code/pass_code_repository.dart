@@ -1,5 +1,6 @@
-import 'package:limited_characters_diary/pass_code/pass_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'pass_code.dart';
 
 class PassCodeRepository {
   PassCodeRepository({required this.prefs});
@@ -23,7 +24,7 @@ class PassCodeRepository {
   Future<void> savePassCode({required String passCode, required bool isPassCodeLock,}) async {
     await prefs.setString(passCodeKey, passCode);
     await prefs.setBool(isPassCodeLockKey, isPassCodeLock);
-    print('passCode = $passCodeKey\nisPassCodeLock = $isPassCodeLock\nで登録しました');
+    print('passCode = $passCode\nisPassCodeLock = $isPassCodeLock\nで登録しました');
   }
 
 }

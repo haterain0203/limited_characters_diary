@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
+
+import 'pass_code_providers.dart';
 
 /// パスコードロック画面の表示
 Future<void> showScreenLock(
