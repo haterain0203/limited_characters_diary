@@ -35,6 +35,7 @@ class ListPage extends HookConsumerWidget {
       /// inactiveのタイミングで呼び出すこととしたもの
       if(current == AppLifecycleState.inactive) {
         // 全画面広告から復帰した際は表示しない
+        // 全画面広告表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
         if(ref.read(isShownInterstitialAdProvider)) {
           return;
         }
@@ -44,6 +45,8 @@ class ListPage extends HookConsumerWidget {
         if(ref.read(isInitialSetNotificationProvider)) {
           return;
         }
+        // 上記の全画面広告と端末の通知設定によるinactive時は処理を除外するコードは、
+        // 当初「isShowScreenLockProvider」に記載していたが、inactive時にのみ必要な条件分岐のためこちらに記載
 
         if(ref.read(isShowScreenLockProvider)) {
           await showScreenLock(context, ref);
