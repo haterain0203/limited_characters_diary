@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_providers.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
 
 import '../admob/ad_providers.dart';
@@ -37,11 +38,6 @@ final isShowScreenLockProvider = Provider<bool>((ref) {
 
   // 設定でのパスコードロックがOFFなら表示しない
   if (!ref.watch(passCodeProvider.select((value) => value.isPassCodeEnabled))) {
-    return false;
-  }
-
-  // 全画面広告から復帰した際は表示しない
-  if(ref.watch(isShownInterstitialAdProvider)) {
     return false;
   }
 

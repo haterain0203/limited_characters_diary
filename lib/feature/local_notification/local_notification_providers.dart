@@ -61,3 +61,11 @@ final isShowSetNotificationDialogOnLaunchProvider = Provider<bool>((ref) {
 
   return true;
 });
+
+/// 初めて通知設定したかどうかの管理
+///
+/// iOSの場合、初めて通知設定する際に端末の通知許可設定が表示される
+/// その際アプリがinactiveになるため、パスコードロック画面が表示されてしまう
+/// このinactive時にはパスコードロック画面を表示したくないため、初めて通知設定したかどうかをフラグ管理するもの
+/// isShowScreenLockProviderにて使用
+final isInitialSetNotificationProvider = StateProvider((ref) => false);
