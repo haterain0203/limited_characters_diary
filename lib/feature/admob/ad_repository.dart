@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:limited_characters_diary/confidential.dart';
 
@@ -81,4 +82,13 @@ class AdRepository {
       throw UnsupportedError('Unsupported platform');
     }
   }
+
+  // ATTが未設定の場合、ATT許可ダイアログを表示する
+  Future<void> requestATT() async {
+    final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+    if (status == TrackingStatus.notDetermined) {
+      await AppTrackingTransparency.requestTrackingAuthorization();
+    }
+  }
+
 }
