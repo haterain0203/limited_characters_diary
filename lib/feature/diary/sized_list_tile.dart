@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:limited_characters_diary/constant/constant.dart';
 
 class SizedListTile extends StatelessWidget {
   const SizedListTile({
     required this.onTap,
     this.onLongPress,
-    this.height,
     this.tileColor,
     required this.leading,
     required this.title,
@@ -12,7 +12,6 @@ class SizedListTile extends StatelessWidget {
   });
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
-  final double? height;
   final Color? tileColor;
   final Widget leading;
   final Widget title;
@@ -24,7 +23,7 @@ class SizedListTile extends StatelessWidget {
       onLongPress: onLongPress,
       child: SizedBox(
         width: double.infinity,
-        height: height ?? 32,
+        height: Constant.sizedListTileHeight,
         child: ColoredBox(
           color: tileColor ?? Colors.transparent,
           child: Row(

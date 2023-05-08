@@ -92,7 +92,7 @@ class ListPage extends HookConsumerWidget {
         if(today.day <= 10) {
           return;
         }
-        scrollController.jumpTo((32.0 * (today.day - 5)));
+        scrollController.jumpTo(Constant.sizedListTileHeight * (today.day - 5));
       }
 
       /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
