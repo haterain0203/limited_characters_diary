@@ -129,6 +129,11 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
     if (setTime == data) {
       return;
     }
+    //初めて通知設定する場合、trueに
+    //
+    if(data == null) {
+      ref.read(isInitialSetNotificationProvider.notifier).state = true;
+    }
     //通知設定
     await ref
         .read(localNotificationControllerProvider)

@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_providers.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
 
 import '../admob/ad_providers.dart';
@@ -42,6 +43,12 @@ final isShowScreenLockProvider = Provider<bool>((ref) {
 
   // 全画面広告から復帰した際は表示しない
   if(ref.watch(isShownInterstitialAdProvider)) {
+    return false;
+  }
+
+  // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は表示しない
+  // isShowScreenLockProviderにて使用
+  if(ref.watch(isInitialSetNotificationProvider)) {
     return false;
   }
 
