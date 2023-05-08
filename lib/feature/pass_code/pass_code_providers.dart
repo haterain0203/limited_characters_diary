@@ -41,17 +41,6 @@ final isShowScreenLockProvider = Provider<bool>((ref) {
     return false;
   }
 
-  // 全画面広告から復帰した際は表示しない
-  if(ref.watch(isShownInterstitialAdProvider)) {
-    return false;
-  }
-
-  // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は表示しない
-  // isShowScreenLockProviderにて使用
-  if(ref.watch(isInitialSetNotificationProvider)) {
-    return false;
-  }
-
   // 既にロック画面が開いていたら表示しない
   if (ref.watch(isOpenedScreenLockProvider)) {
     return false;
