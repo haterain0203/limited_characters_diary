@@ -1,5 +1,6 @@
-import 'package:limited_characters_diary/pass_code/pass_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'pass_code.dart';
 
 class PassCodeRepository {
   PassCodeRepository({required this.prefs});

@@ -1,9 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
-import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
 import '../auth/auth_providers.dart';
 import '../date/date_controller.dart';
+import '../pass_code/pass_code_providers.dart';
 import 'diary.dart';
 import 'diary_controller.dart';
 import 'diary_repository.dart';
