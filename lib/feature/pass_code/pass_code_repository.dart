@@ -24,7 +24,7 @@ class PassCodeRepository {
   Future<void> savePassCode({required String passCode, required bool isPassCodeLock,}) async {
     await prefs.setString(passCodeKey, passCode);
     await prefs.setBool(isPassCodeLockKey, isPassCodeLock);
-    print('passCode = $passCodeKey\nisPassCodeLock = $isPassCodeLock\nで登録しました');
+    print('passCode = $passCode\nisPassCodeLock = $isPassCodeLock\nで登録しました');
   }
 
 }
