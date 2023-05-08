@@ -83,16 +83,11 @@ class ListPage extends HookConsumerWidget {
       /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
       /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
       /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
-      final today = ref.read(dateControllerProvider).today;
-      final selectedMonth = ref.read(dateControllerProvider).selectedMonth;
-      if(today.month == selectedMonth.month) {
-        if (!scrollController.hasClients) {
-          return;
+      if(ref.read(dateControllerProvider).isJumpToToday()) {
+        final today = ref.read(todayProvider);
+        if (scrollController.hasClients) {
+          scrollController.jumpTo(Constant.sizedListTileHeight * (today.day - 5));
         }
-        if(today.day <= 10) {
-          return;
-        }
-        scrollController.jumpTo(Constant.sizedListTileHeight * (today.day - 5));
       }
 
       /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する

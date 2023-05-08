@@ -71,6 +71,13 @@ final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
     return false;
   }
 
+  // 当月以外の月を表示した際は表示しない
+  final today = ref.watch(todayProvider);
+  final selectedMonth = ref.watch(selectedMonthDateProvider);
+  if(today.month != selectedMonth.month) {
+    return false;
+  }
+
   // 日記情報がnullの場合処理終了
   final diaryList = ref.watch(diaryStreamProvider).value;
   if(diaryList == null) {
@@ -78,7 +85,6 @@ final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
   }
 
   // 既に当日の日記が入力済みの場合処理終了
-  final today = ref.watch(todayProvider);
   final filteredDiary = diaryList.where((element) => element.diaryDate == today).toList();
   if(filteredDiary.isNotEmpty) {
     return false;
