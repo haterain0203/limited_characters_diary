@@ -4,11 +4,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
-import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
-
+import 'package:limited_characters_diary/pass_code/pass_code_functions.dart';
+import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 import 'constant/constant.dart';
 import 'feature/date/date_controller.dart';
 import 'feature/diary/diary.dart';
@@ -26,31 +26,43 @@ class ListPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
-    ///
-    /// 本日の日付をハイライトさせているが、
-    /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
-    /// 上記の事象へ対応するもの
-    useOnAppLifecycleStateChange((previous, current) {
-      // 復帰以外のステータスなら処理終了
-      if (current != AppLifecycleState.resumed) {
-        return;
+    useOnAppLifecycleStateChange((previous, current) async {
+
+      /// バックグラウンドになったタイミングで、ScreenLockを呼び出す
+      ///
+      /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
+      /// inactiveのタイミングで呼び出すこととしたもの
+      if(current == AppLifecycleState.inactive) {
+        if(ref.read(isShowScreenLockProvider)) {
+          await showScreenLock(context, ref);
+        }
       }
-      final now = DateTime.now();
-      final nowDate = DateTime(now.year, now.month, now.day);
-      // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
-      if (ref.read(dateControllerProvider).isToday(nowDate)) {
-        return;
+
+      /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
+      ///
+      /// 本日の日付をハイライトさせているが、
+      /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
+      /// 上記の事象へ対応するもの
+      if (current == AppLifecycleState.resumed) {
+
+        final now = DateTime.now();
+        final nowDate = DateTime(now.year, now.month, now.day);
+        // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
+        if (ref.read(dateControllerProvider).isToday(nowDate)) {
+          return;
+        }
+        // バックグラウンド復帰時の日付でStateProviderを更新
+        ref.read(todayProvider.notifier).update((state) {
+          return DateTime(now.year, now.month, now.day);
+        });
       }
-      // バックグラウンド復帰時の日付でStateProviderを更新
-      ref.read(todayProvider.notifier).update((state) {
-        return DateTime(now.year, now.month, now.day);
-      });
+
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+
       /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
-      if(ref.watch(isShowEditDialogOnLaunchProvider)) {
+      if(ref.read(isShowEditDialogOnLaunchProvider)) {
         ref.read(isOpenedEditDialogProvider.notifier).state = true;
         await _showEditDialog(context, null);
         return;
@@ -60,7 +72,7 @@ class ListPage extends HookConsumerWidget {
       ///それに加えて日記記入ダイアログを自動表示する
       ///
       /// ユーザー動作の順番的にSetNotificationDialog→EditDialog→ListPageの順で表示したいため、以下のような記述とした
-      if (ref.watch(isShowSetNotificationDialogOnLaunchProvider)) {
+      if (ref.read(isShowSetNotificationDialogOnLaunchProvider)) {
         ref.read(isOpenedSetNotificationDialogOnLaunchProvider.notifier).state = true;
         await _showSetNotificationDialog(context);
         if(context.mounted) {
@@ -73,10 +85,14 @@ class ListPage extends HookConsumerWidget {
       //煩雑になると考え、Stackとしたもの。
     });
 
-    // 全画面広告のロード
     useEffect(
       () {
-        ref.read(adControllerProvider).initInterstitialAdd();
+        // パスコードロック画面の表示
+        if(ref.read(isShowScreenLockProvider)) {
+          Future(() async {
+            await showScreenLock(context, ref);
+          });
+        }
         return null;
       },
       const [],
@@ -84,6 +100,14 @@ class ListPage extends HookConsumerWidget {
 
     final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryStreamProvider);
+
+    final isPassCodeLocked = ref.watch(isOpenedScreenLockProvider);
+    // パスコードロック画面を表示している間は何も表示しない
+    // これをしないと一瞬日記画面が表示されてしまうため
+    if(isPassCodeLocked) {
+      return const SizedBox();
+    }
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Stack(

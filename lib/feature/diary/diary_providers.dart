@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
+import 'package:limited_characters_diary/pass_code/pass_code_providers.dart';
 
 import '../auth/auth_providers.dart';
 import '../date/date_controller.dart';
@@ -55,6 +56,12 @@ final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
   // 既に日記表示ダイアログが表示されていたら処理終了
   final isOpenedEditDialog = ref.watch(isOpenedEditDialogProvider);
   if(isOpenedEditDialog) {
+    return false;
+  }
+
+  // パスコード画面を表示している場合は処理終了
+  final isScreenLocked = ref.watch(isOpenedScreenLockProvider);
+  if(isScreenLocked) {
     return false;
   }
 
