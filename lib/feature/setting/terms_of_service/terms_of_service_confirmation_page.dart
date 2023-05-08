@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/auth/auth_page.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
 import 'package:limited_characters_diary/list_page.dart';
@@ -53,6 +54,8 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                       .completedFirstLaunch();
                   // 初回起動か否かを管理するProviderのflagをtrueにする
                   ref.read(isFirstLaunchProvider.notifier).state = true;
+                  // 広告トラッキング許可ダイアログ表示
+                  await ref.read(adControllerProvider).requestATT();
                   if (context.mounted) {
                     await Navigator.push(
                       context,

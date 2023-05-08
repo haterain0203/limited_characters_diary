@@ -13,4 +13,8 @@ class AdController {
   Future<void> initInterstitialAdd() async {
     await repo.initInterstitialAd();
   }
+
+  Future<void> requestATT() async {
+    await repo.requestATT();
+  }
 }
