@@ -259,7 +259,7 @@ class ListPage extends HookConsumerWidget {
                                   dateController.searchDayOfWeek(indexDate);
                               final dayStrColor =
                                   dateController.choiceDayStrColor(indexDate);
-                              return SizedListTile(
+                              return SizedHeightListTile(
                                 //本日はハイライト
                                 tileColor: dateController.isToday(indexDate)
                                     ? Constant.accentColor

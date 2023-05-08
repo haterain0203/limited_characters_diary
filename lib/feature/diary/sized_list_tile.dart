@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
 
-class SizedListTile extends StatelessWidget {
-  const SizedListTile({
+class SizedHeightListTile extends StatelessWidget {
+  const SizedHeightListTile({
     required this.onTap,
     this.onLongPress,
     this.tileColor,
