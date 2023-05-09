@@ -38,27 +38,14 @@ final localNotificationTimeFutureProvider =
   return notificationTime;
 });
 
-// 「WidgetsBinding.instance.addPostFrameCallback」は、
-// ビルドするたびに呼び出されダイアログが複数重なってしまうため、
-// 既にダイアログが開かれたかを判定するフラグを用意
-final isOpenedSetNotificationDialogOnLaunchProvider =
-    StateProvider<bool>((_) => false);
-
 /// アラーム設定を促すダイアログを自動表示させるかどうか
 ///
-/// 初回起動かつ、アラーム設定ダイアログが表示されていない場合には、自動表示する
+/// 初回起動の場合には、自動表示する
 final isShowSetNotificationDialogOnLaunchProvider = Provider<bool>((ref) {
   final isFirstLaunch = ref.watch(isFirstLaunchProvider);
   if (!isFirstLaunch) {
     return false;
   }
-
-  final isOpenedSetNotificationDialog =
-      ref.watch(isOpenedSetNotificationDialogOnLaunchProvider);
-  if (isOpenedSetNotificationDialog) {
-    return false;
-  }
-
   return true;
 });
 

@@ -26,31 +26,31 @@ class ListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final scrollController = useScrollController();
 
     useOnAppLifecycleStateChange((previous, current) async {
-
       /// バックグラウンドになったタイミングで、ScreenLockを呼び出す
       ///
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
-      if(current == AppLifecycleState.inactive) {
+      if (current == AppLifecycleState.inactive) {
         // 全画面広告から復帰した際は表示しない
         // 全画面広告表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
-        if(ref.read(isShownInterstitialAdProvider)) {
+        if (ref.read(isShownInterstitialAdProvider)) {
           return;
         }
 
         // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は表示しない
         // isShowScreenLockProviderにて使用
-        if(ref.read(isInitialSetNotificationProvider)) {
+        if (ref.read(isInitialSetNotificationProvider)) {
+          // falseに戻さないと、初めて通知設定した後にinactiveにした際にロック画面が表示されない
+          ref.read(isInitialSetNotificationProvider.notifier).state = false;
           return;
         }
         // 上記の全画面広告と端末の通知設定によるinactive時は処理を除外するコードは、
         // 当初「isShowScreenLockProvider」に記載していたが、inactive時にのみ必要な条件分岐のためこちらに記載
 
-        if(ref.read(isShowScreenLockProvider)) {
+        if (ref.read(isShowScreenLockProvider)) {
           await showScreenLock(context, ref);
         }
       }
@@ -61,7 +61,6 @@ class ListPage extends HookConsumerWidget {
       /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
       /// 上記の事象へ対応するもの
       if (current == AppLifecycleState.resumed) {
-
         final now = DateTime.now();
         final nowDate = DateTime(now.year, now.month, now.day);
         // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
@@ -73,60 +72,62 @@ class ListPage extends HookConsumerWidget {
           return DateTime(now.year, now.month, now.day);
         });
       }
-
-    });
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-
-      /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
-      ///
-      /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
-      /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
-      /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
-      final today = ref.read(dateControllerProvider).today;
-      final selectedMonth = ref.read(dateControllerProvider).selectedMonth;
-      if(today.month == selectedMonth.month) {
-        if (!scrollController.hasClients) {
-          return;
-        }
-        if(today.day <= 10) {
-          return;
-        }
-        scrollController.jumpTo(Constant.sizedListTileHeight * (today.day - 5));
-      }
-
-      /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
-      if(ref.read(isShowEditDialogOnLaunchProvider)) {
-        ref.read(isOpenedEditDialogProvider.notifier).state = true;
-        await _showEditDialog(context, null);
-        return;
-      }
-
-      /// 初回起動時に限り、アラーム設定を促すダイアログを表示する
-      ///それに加えて日記記入ダイアログを自動表示する
-      ///
-      /// ユーザー動作の順番的にSetNotificationDialog→EditDialog→ListPageの順で表示したいため、以下のような記述とした
-      if (ref.read(isShowSetNotificationDialogOnLaunchProvider)) {
-        ref.read(isOpenedSetNotificationDialogOnLaunchProvider.notifier).state = true;
-        await _showSetNotificationDialog(context);
-        if(context.mounted) {
-          await _showEditDialog(context, null);
-        }
-      }
-      //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
-      //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
-      //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
-      //煩雑になると考え、Stackとしたもの。
     });
 
     useEffect(
       () {
-        // パスコードロック画面の表示
-        if(ref.read(isShowScreenLockProvider)) {
-          Future(() async {
+        Future(() async {
+
+          // パスコードロック画面の表示
+          if (ref.read(isShowScreenLockProvider)) {
             await showScreenLock(context, ref);
-          });
-        }
+          }
+
+          /// 0.5秒待機
+          ///
+          /// [scrollController.hasClients]と[ref.read(isShowEditDialogOnLaunchProvider]内の
+          /// 今日の日付の日記が記録済みかどうか？の判定に少し時間がかかるため、少し待ってから処理を行う
+          /// 待つ処理を挟まないと、jumpToの条件判定と、isShowEditDialogOnLaunchProviderの判定が適切に動作しない
+          await Future<void>.delayed(const Duration(milliseconds: 500));
+
+          if (!context.mounted) {
+            return;
+          }
+
+          /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
+          ///
+          /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
+          /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
+          /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
+          if (ref.read(dateControllerProvider).isJumpToAroundToday()) {
+            final today = ref.read(todayProvider);
+            if (scrollController.hasClients) {
+              scrollController
+                  .jumpTo(Constant.sizedListTileHeight * (today.day - 5));
+            }
+          }
+
+          /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
+          if (ref.read(isShowEditDialogOnLaunchProvider)) {
+            await _showEditDialog(context, null);
+            return;
+          }
+
+          /// 初回起動時に限り、アラーム設定を促すダイアログを表示する
+          ///それに加えて日記記入ダイアログを自動表示する
+          ///
+          /// ユーザー動作の順番的にSetNotificationDialog→EditDialog→ListPageの順で表示したいため、以下のような記述とした
+          if (ref.read(isShowSetNotificationDialogOnLaunchProvider)) {
+            await _showSetNotificationDialog(context);
+            if (context.mounted) {
+              await _showEditDialog(context, null);
+            }
+          }
+          //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
+          //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
+          //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
+          //煩雑になると考え、Stackとしたもの。
+        });
         return null;
       },
       const [],
@@ -138,7 +139,7 @@ class ListPage extends HookConsumerWidget {
     final isPassCodeLocked = ref.watch(isOpenedScreenLockProvider);
     // パスコードロック画面を表示している間は何も表示しない
     // これをしないと一瞬日記画面が表示されてしまうため
-    if(isPassCodeLocked) {
+    if (isPassCodeLocked) {
       return const SizedBox();
     }
 
@@ -228,7 +229,8 @@ class ListPage extends HookConsumerWidget {
                           padding: const EdgeInsets.only(top: 4, bottom: 8),
                           child: ListView.separated(
                             controller: scrollController,
-                            separatorBuilder: (BuildContext context, int index) {
+                            separatorBuilder:
+                                (BuildContext context, int index) {
                               return const Divider(
                                 height: 0.5,
                               );
@@ -272,8 +274,9 @@ class ListPage extends HookConsumerWidget {
                                   diary?.content ?? '',
                                 ),
                                 onTap: () async {
-                                  ref.read(selectedDateProvider.notifier).state =
-                                      indexDate;
+                                  ref
+                                      .read(selectedDateProvider.notifier)
+                                      .state = indexDate;
                                   await _showEditDialog(context, diary);
                                 },
                                 onLongPress: diary == null
@@ -327,7 +330,8 @@ class ListPage extends HookConsumerWidget {
     required WidgetRef ref,
     required Diary diary,
   }) {
-    final diaryDateStr = '${diary.diaryDate.year}/${diary.diaryDate.month}/${diary.diaryDate.day}';
+    final diaryDateStr =
+        '${diary.diaryDate.year}/${diary.diaryDate.month}/${diary.diaryDate.day}';
     AwesomeDialog(
       //TODO ボタンカラー再検討
       context: context,

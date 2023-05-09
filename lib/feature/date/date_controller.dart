@@ -89,6 +89,21 @@ class DateController {
     return indexDate.isAtSameMomentAs(today);
   }
 
+  bool isThisMonth() {
+    return selectedMonth.month == today.month;
+  }
+
+  // 今日-5日に自動で画面スクロールするかどうか
+  bool isJumpToAroundToday() {
+    if(!isThisMonth()) {
+      return false;
+    }
+    if(today.day <= 10) {
+      return false;
+    }
+    return true;
+  }
+
   //2029年までの日本の祝日 20230324時点
   //以下のデータを加工
   //https://github.com/holiday-jp/holiday_jp/blob/master/holidays.yml
