@@ -88,6 +88,7 @@ class ListPage extends HookConsumerWidget {
           /// [scrollController.hasClients]と[ref.read(isShowEditDialogOnLaunchProvider]内の
           /// 今日の日付の日記が記録済みかどうか？の判定に少し時間がかかるため、少し待ってから処理を行う
           /// 待つ処理を挟まないと、jumpToの条件判定と、isShowEditDialogOnLaunchProviderの判定が適切に動作しない
+          //TODO [milliseconds: 500]と固定値でしているが改善できないか？
           await Future<void>.delayed(const Duration(milliseconds: 500));
 
           if (!context.mounted) {
