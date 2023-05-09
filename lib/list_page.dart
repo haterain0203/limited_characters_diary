@@ -107,7 +107,6 @@ class ListPage extends HookConsumerWidget {
 
           /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
           if (ref.read(isShowEditDialogOnLaunchProvider)) {
-            ref.read(isOpenedEditDialogProvider.notifier).state = true;
             await _showEditDialog(context, null);
             return;
           }
@@ -117,9 +116,6 @@ class ListPage extends HookConsumerWidget {
           ///
           /// ユーザー動作の順番的にSetNotificationDialog→EditDialog→ListPageの順で表示したいため、以下のような記述とした
           if (ref.read(isShowSetNotificationDialogOnLaunchProvider)) {
-            ref
-                .read(isOpenedSetNotificationDialogOnLaunchProvider.notifier)
-                .state = true;
             await _showSetNotificationDialog(context);
             if (context.mounted) {
               await _showEditDialog(context, null);

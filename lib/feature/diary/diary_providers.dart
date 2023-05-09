@@ -48,16 +48,8 @@ final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
 
 final diaryControllerProvider = Provider((ref) => DiaryController(ref: ref));
 
-final isOpenedEditDialogProvider = StateProvider((ref) => false);
-
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
-
-  // 既に日記表示ダイアログが表示されていたら処理終了
-  final isOpenedEditDialog = ref.watch(isOpenedEditDialogProvider);
-  if(isOpenedEditDialog) {
-    return false;
-  }
 
   // パスコード画面を表示している場合は処理終了
   final isScreenLocked = ref.watch(isOpenedScreenLockProvider);
