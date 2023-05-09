@@ -43,6 +43,8 @@ class ListPage extends HookConsumerWidget {
         // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は表示しない
         // isShowScreenLockProviderにて使用
         if (ref.read(isInitialSetNotificationProvider)) {
+          // falseに戻さないと、初めて通知設定した後にinactiveにした際にロック画面が表示されない
+          ref.read(isInitialSetNotificationProvider.notifier).state = false;
           return;
         }
         // 上記の全画面広告と端末の通知設定によるinactive時は処理を除外するコードは、
