@@ -38,7 +38,11 @@ Future<void> main() async {
   );
 
   // Firebase App Checkの初期化
-  await FirebaseAppCheck.instance.activate();
+  await FirebaseAppCheck.instance.activate(
+    // Debug用のトークンを取得するためには以下が必要だった
+    // androidProvider: AndroidProvider.debug,
+    // appleProvider: AppleProvider.debug,
+  );
 
   // Admobの初期化
   await MobileAds.instance.initialize();

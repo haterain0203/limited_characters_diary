@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import Firebase
 import flutter_local_notifications
 
 @UIApplicationMain
@@ -8,7 +9,12 @@ import flutter_local_notifications
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    // This is required to make any communication available in the action isolate.
+  // Use the debug provider in Debug builds:
+#if DEBUG
+    let providerFactory = AppCheckDebugProviderFactory()
+    AppCheck.setAppCheckProviderFactory(providerFactory)
+#endif
+// This is required to make any communication available in the action isolate.
     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
         GeneratedPluginRegistrant.register(with: registry)
     }
