@@ -15,7 +15,8 @@ class AuthRepository {
 
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
-  Future<void> signInAnonymously() async {
+  //TODO 匿名認証とユーザー登録の2つの責務が入っているため分割した方が良さそう
+  Future<void> signInAnonymouslyAndAddUser() async {
     try {
       // 匿名認証
       final userCredential = await auth.signInAnonymously();
