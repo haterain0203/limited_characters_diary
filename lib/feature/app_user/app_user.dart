@@ -11,6 +11,7 @@ class AppUser with _$AppUser {
   const factory AppUser({
     required String uid,
     @DateTimeConverter() required DateTime createdAt,
+    String? fcmToken,
   }) = _AppUser;
 
   factory AppUser.fromJson(Map<String, dynamic> json) =>

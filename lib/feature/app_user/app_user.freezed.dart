@@ -23,6 +23,7 @@ mixin _$AppUser {
   String get uid => throw _privateConstructorUsedError;
   @DateTimeConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
+  String? get fcmToken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,8 @@ abstract class $AppUserCopyWith<$Res> {
   factory $AppUserCopyWith(AppUser value, $Res Function(AppUser) then) =
       _$AppUserCopyWithImpl<$Res, AppUser>;
   @useResult
-  $Res call({String uid, @DateTimeConverter() DateTime createdAt});
+  $Res call(
+      {String uid, @DateTimeConverter() DateTime createdAt, String? fcmToken});
 }
 
 /// @nodoc
@@ -52,6 +54,7 @@ class _$AppUserCopyWithImpl<$Res, $Val extends AppUser>
   $Res call({
     Object? uid = null,
     Object? createdAt = null,
+    Object? fcmToken = freezed,
   }) {
     return _then(_value.copyWith(
       uid: null == uid
@@ -62,6 +65,10 @@ class _$AppUserCopyWithImpl<$Res, $Val extends AppUser>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -73,7 +80,8 @@ abstract class _$$_AppUserCopyWith<$Res> implements $AppUserCopyWith<$Res> {
       __$$_AppUserCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String uid, @DateTimeConverter() DateTime createdAt});
+  $Res call(
+      {String uid, @DateTimeConverter() DateTime createdAt, String? fcmToken});
 }
 
 /// @nodoc
@@ -88,6 +96,7 @@ class __$$_AppUserCopyWithImpl<$Res>
   $Res call({
     Object? uid = null,
     Object? createdAt = null,
+    Object? fcmToken = freezed,
   }) {
     return _then(_$_AppUser(
       uid: null == uid
@@ -98,6 +107,10 @@ class __$$_AppUserCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      fcmToken: freezed == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -106,7 +119,9 @@ class __$$_AppUserCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_AppUser implements _AppUser {
   const _$_AppUser(
-      {required this.uid, @DateTimeConverter() required this.createdAt});
+      {required this.uid,
+      @DateTimeConverter() required this.createdAt,
+      this.fcmToken});
 
   factory _$_AppUser.fromJson(Map<String, dynamic> json) =>
       _$$_AppUserFromJson(json);
@@ -116,10 +131,12 @@ class _$_AppUser implements _AppUser {
   @override
   @DateTimeConverter()
   final DateTime createdAt;
+  @override
+  final String? fcmToken;
 
   @override
   String toString() {
-    return 'AppUser(uid: $uid, createdAt: $createdAt)';
+    return 'AppUser(uid: $uid, createdAt: $createdAt, fcmToken: $fcmToken)';
   }
 
   @override
@@ -129,12 +146,14 @@ class _$_AppUser implements _AppUser {
             other is _$_AppUser &&
             (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uid, createdAt);
+  int get hashCode => Object.hash(runtimeType, uid, createdAt, fcmToken);
 
   @JsonKey(ignore: true)
   @override
@@ -153,7 +172,8 @@ class _$_AppUser implements _AppUser {
 abstract class _AppUser implements AppUser {
   const factory _AppUser(
       {required final String uid,
-      @DateTimeConverter() required final DateTime createdAt}) = _$_AppUser;
+      @DateTimeConverter() required final DateTime createdAt,
+      final String? fcmToken}) = _$_AppUser;
 
   factory _AppUser.fromJson(Map<String, dynamic> json) = _$_AppUser.fromJson;
 
@@ -162,6 +182,8 @@ abstract class _AppUser implements AppUser {
   @override
   @DateTimeConverter()
   DateTime get createdAt;
+  @override
+  String? get fcmToken;
   @override
   @JsonKey(ignore: true)
   _$$_AppUserCopyWith<_$_AppUser> get copyWith =>
