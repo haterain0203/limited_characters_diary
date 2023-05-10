@@ -38,6 +38,7 @@ class AuthRepository {
               AppUser(
                 uid: uid,
                 createdAt: DateTime.now(),
+                fcmToken: fcmToken,
               ),
             );
       }
