@@ -11,4 +11,8 @@ class AuthController {
   }
 
 //TODO サインアウト
+//   Future<void> signOut() async {
+//     await repo.signOut();
+//   }
+
 }
