@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/feature/auth/auth_providers.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -176,6 +177,23 @@ class SettingPage extends StatelessWidget {
                       },
                     ),
                   ),
+                  // SettingsTile(
+                  //   leading: const Icon(Icons.info),
+                  //   title: const Text(
+                  //     'サインアウト',
+                  //     style: textStyle,
+                  //   ),
+                  //   trailing: HookConsumer(
+                  //     builder: (context, ref, child) {
+                  //       return ElevatedButton(
+                  //         child: Text('サインアウト'),
+                  //         onPressed: () async {
+                  //           await ref.read(authControllerProvider).signOut();
+                  //         },
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ],

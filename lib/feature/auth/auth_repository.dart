@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../app_user/app_user.dart';
@@ -8,14 +9,17 @@ class AuthRepository {
   AuthRepository({
     required this.auth,
     required this.firestore,
+    required this.fcm,
   });
 
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
+  final FirebaseMessaging fcm;
 
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
-  Future<void> signInAnonymously() async {
+  //TODO 匿名認証とユーザー登録の2つの責務が入っているため分割した方が良さそう
+  Future<void> signInAnonymouslyAndAddUser() async {
     try {
       // 匿名認証
       final userCredential = await auth.signInAnonymously();
@@ -23,6 +27,7 @@ class AuthRepository {
       // firestoreにUserを登録する
       final user = userCredential.user;
       if (user != null) {
+        final fcmToken = await fcm.getToken();
         final uid = user.uid;
         final userRef = firestore.collection('users').withConverter<AppUser>(
               fromFirestore: (snapshot, _) =>
@@ -33,6 +38,7 @@ class AuthRepository {
               AppUser(
                 uid: uid,
                 createdAt: DateTime.now(),
+                fcmToken: fcmToken,
               ),
             );
       }
