@@ -113,7 +113,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: trigger == NotificationDialogTrigger.autoOnFirstLaunch
+              child: trigger == NotificationDialogTrigger.onFirstLaunch
                   ? const Text('あとで設定する')
                   : const Text('閉じる'),
             ),

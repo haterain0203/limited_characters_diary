@@ -4,6 +4,6 @@ enum InputDiaryType {
 }
 
 enum NotificationDialogTrigger {
-  autoOnFirstLaunch,
+  onFirstLaunch,
   userAction,
 }

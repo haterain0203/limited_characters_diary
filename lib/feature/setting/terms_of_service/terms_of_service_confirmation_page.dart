@@ -86,7 +86,7 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
       context: context,
       builder: (_) {
         return const LocalNotificationSettingDialog(
-          trigger: NotificationDialogTrigger.autoOnFirstLaunch,
+          trigger: NotificationDialogTrigger.onFirstLaunch,
         );
       },
     );
