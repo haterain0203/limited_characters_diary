@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'local_notification_providers.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_shared_preferences_repository.dart';
 
 class LocalNotificationController {
-  LocalNotificationController({required this.ref});
+  LocalNotificationController({
+    required this.localNotificationRepository,
+    required this.localNotificationSharedPreferencesRepository
+  });
 
-  final ProviderRef<dynamic> ref;
+  //TODO Repositoryが2つあるのはおかしい？
+  final LocalNotificationRepository localNotificationRepository;
+  final LocalNotificationSharedPreferencesRepository localNotificationSharedPreferencesRepository;
 
   Future<void> scheduledNotification(TimeOfDay setTime) async {
-    final repo = ref.watch(localNotificationRepoProvider);
-    await repo.scheduledNotification(notificationTime: setTime);
+    await localNotificationRepository.scheduledNotification(notificationTime: setTime);
   }
 
   Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
-    final repo = ref.read(localNotificationSharedRepoProvider);
-    await repo.saveNotificationTime(notificationTime);
+    await localNotificationSharedPreferencesRepository.saveNotificationTime(notificationTime);
   }
 
   Future<void> deleteNotification() async {
-    final repo = ref.watch(localNotificationRepoProvider);
-    await repo.deleteNotification();
-    final sharedRepo = ref.watch(localNotificationSharedRepoProvider);
-    await sharedRepo.deleteNotificationTimeStr();
+    await localNotificationRepository.deleteNotification();
+    await localNotificationSharedPreferencesRepository.deleteNotificationTimeStr();
   }
 }
