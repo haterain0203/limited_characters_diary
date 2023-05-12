@@ -86,14 +86,28 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                   ref,
                 ),
                 child: Text(
-                  data?.to24hours() ?? '-- : --',
+                  data?.to24hours() ?? 'ここをタップして\n時間を設定',
                   style: TextStyle(
-                    fontSize: 48.sp,
+                    fontSize: 18.sp,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-            const StadiumBorderButton(),
+            // ダイアログが呼び出されたタイミングが初回起動時かどうかで処理を分岐
+            trigger == NotificationDialogTrigger.autoOnFirstLaunch
+                ? TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<ListPage>(
+                          builder: (_) => const ListPage(),
+                        ),
+                      );
+                    },
+                    child: const Text('あとで設定する'),
+                  )
+                : const StadiumBorderButton(),
           ],
         ),
       ),
