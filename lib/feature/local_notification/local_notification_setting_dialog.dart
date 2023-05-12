@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/stadium_border_button.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
+import 'package:limited_characters_diary/list_page.dart';
 import 'package:sizer/sizer.dart';
 import '../../constant/enum.dart';
 import 'local_notification_providers.dart';
@@ -109,7 +110,15 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
       title: '$setTimeに通知を設定しました',
       btnOkText: '閉じる',
       btnOkOnPress: () {
-        Navigator.pop(context);
+        // 初回起動時とそれ以外で処理を分岐
+        trigger == NotificationDialogTrigger.autoOnFirstLaunch
+            ? Navigator.push(
+                context,
+                MaterialPageRoute<ListPage>(
+                  builder: (_) => const ListPage(),
+                ),
+              )
+            : Navigator.pop(context);
       },
     ).show();
   }
