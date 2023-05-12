@@ -4,10 +4,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/stadium_border_button.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
 import 'package:sizer/sizer.dart';
+import '../../constant/enum.dart';
 import 'local_notification_providers.dart';
 
 class LocalNotificationSettingDialog extends HookConsumerWidget {
-  const LocalNotificationSettingDialog({super.key});
+  const LocalNotificationSettingDialog({
+    required this.trigger,
+    super.key,
+  });
+
+  final NotificationDialogTrigger trigger;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,12 +57,16 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
         ),
         title: Column(
           children: [
-            const SizedBox(height: 8,),
+            const SizedBox(
+              height: 8,
+            ),
             Text(
               '通知時間を設定してください',
               style: TextStyle(fontSize: 14.sp),
             ),
-            const SizedBox(height: 16,),
+            const SizedBox(
+              height: 16,
+            ),
             Text(
               '設定時間に毎日通知して\n継続をサポートします',
               style: TextStyle(fontSize: 14.sp),
@@ -131,7 +141,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
     }
     //初めて通知設定する場合、trueに
     //
-    if(data == null) {
+    if (data == null) {
       ref.read(isInitialSetNotificationProvider.notifier).state = true;
     }
     //通知設定
