@@ -99,12 +99,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
             trigger == NotificationDialogTrigger.autoOnFirstLaunch
                 ? TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<ListPage>(
-                          builder: (_) => const AuthPage(),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
                     child: const Text('あとで設定する'),
                   )
@@ -125,15 +120,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
       title: '$setTimeに通知を設定しました',
       btnOkText: '閉じる',
       btnOkOnPress: () {
-        // 初回起動時とそれ以外で処理を分岐
-        trigger == NotificationDialogTrigger.autoOnFirstLaunch
-            ? Navigator.push(
-                context,
-                MaterialPageRoute<ListPage>(
-                  builder: (_) => const ListPage(),
-                ),
-              )
-            : Navigator.pop(context);
+        Navigator.pop(context);
       },
     ).show();
   }

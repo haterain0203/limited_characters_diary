@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
 import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
+import 'package:limited_characters_diary/feature/auth/auth_page.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:sizer/sizer.dart';
@@ -59,6 +60,17 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                   await ref.read(adControllerProvider).requestATT();
                   if (context.mounted) {
                     await _showSetNotificationDialog(context);
+                    // 通知設定完了後（通知設定ダイアログが閉じたら）、AuthPageへ遷移する
+                    // 当初は通知設定ダイアログ側でAuthPageへの遷移を記述していたが、それだとローカル通知時間が正しく反映されない
+                    if (!context.mounted) {
+                      return;
+                    }
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute<AuthPage>(
+                        builder: (_) => const AuthPage(),
+                      ),
+                    );
                   }
                 },
               ),
@@ -79,5 +91,4 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
       },
     );
   }
-
 }
