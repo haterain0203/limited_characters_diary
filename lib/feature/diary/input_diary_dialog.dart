@@ -54,7 +54,7 @@ class InputDiaryDialog extends HookConsumerWidget {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  title: 'キャンセル',
+                  title: const Text('キャンセル'),
                   backgroundColor: Colors.grey,
                 ),
               ),
@@ -100,7 +100,7 @@ class InputDiaryDialog extends HookConsumerWidget {
                       );
                     }
                   },
-                  title: '登録',
+                  title: const Text('登録'),
                 ),
               ),
             ),
@@ -172,7 +172,6 @@ class InputDiaryDialog extends HookConsumerWidget {
                             ref.read(isShownInterstitialAdProvider.notifier).state = true;
                           }
                         },
-                        title: '閉じる',
                       ),
                     ),
                   ),

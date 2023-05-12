@@ -83,4 +83,8 @@ class LocalNotificationRepository {
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
+
+  Future<void> deleteNotification() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+  }
 }

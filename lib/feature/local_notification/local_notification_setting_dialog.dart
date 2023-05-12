@@ -4,10 +4,16 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/stadium_border_button.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
 import 'package:sizer/sizer.dart';
+import '../../constant/enum.dart';
 import 'local_notification_providers.dart';
 
 class LocalNotificationSettingDialog extends HookConsumerWidget {
-  const LocalNotificationSettingDialog({super.key});
+  const LocalNotificationSettingDialog({
+    required this.trigger,
+    super.key,
+  });
+
+  final NotificationDialogTrigger trigger;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,40 +55,68 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
             Radius.circular(20),
           ),
         ),
-        title: Column(
-          children: [
-            const SizedBox(height: 8,),
-            Text(
-              '通知時間を設定してください',
-              style: TextStyle(fontSize: 14.sp),
-            ),
-            const SizedBox(height: 16,),
-            Text(
-              '設定時間に毎日通知して\n継続をサポートします',
-              style: TextStyle(fontSize: 14.sp),
-            ),
-          ],
+        title: Text(
+          '設定時間に毎日通知して\n継続をサポートします',
+          style: TextStyle(fontSize: 14.sp),
+          textAlign: TextAlign.center,
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 30),
-              child: TextButton(
-                onPressed: () async => _setNotification(
-                  context,
-                  data,
-                  ref,
-                ),
-                child: Text(
-                  data?.to24hours() ?? '-- : --',
-                  style: TextStyle(
-                    fontSize: 48.sp,
+            data == null
+                ? StadiumBorderButton(
+                    onPressed: () {
+                      _setNotification(
+                        context,
+                        data,
+                        ref,
+                      );
+                    },
+                    title: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        '通知時間を設定する',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                    ),
+                  )
+                : TextButton(
+                    onPressed: () async => _setNotification(
+                      context,
+                      data,
+                      ref,
+                    ),
+                    child: Text(
+                      data.to24hours(),
+                      style: TextStyle(
+                        fontSize: 48.sp,
+                      ),
+                    ),
                   ),
-                ),
+            Visibility(
+              visible: data != null,
+              child: Column(
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      await ref
+                          .read(localNotificationControllerProvider)
+                          .deleteNotification();
+                      ref.invalidate(localNotificationTimeFutureProvider);
+                    },
+                    child: const Text('通知設定をリセットする'),
+                  ),
+                ],
               ),
             ),
-            const StadiumBorderButton(),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: trigger == NotificationDialogTrigger.onFirstLaunch
+                  ? const Text('あとで設定する')
+                  : const Text('閉じる'),
+            ),
           ],
         ),
       ),
@@ -131,7 +165,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
     }
     //初めて通知設定する場合、trueに
     //
-    if(data == null) {
+    if (data == null) {
       ref.read(isInitialSetNotificationProvider.notifier).state = true;
     }
     //通知設定

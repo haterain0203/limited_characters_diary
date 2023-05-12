@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
-
-import '../first_launch/first_launch_providers.dart';
 import 'local_notification_controller.dart';
 import 'local_notification_repository.dart';
 import 'local_notification_shared_preferences_repository.dart';
 
 final localNotificationControllerProvider = Provider(
-  (ref) => LocalNotificationController(ref: ref),
+  (ref) => LocalNotificationController(
+    localNotificationRepository: ref.watch(localNotificationRepoProvider),
+    localNotificationSharedPreferencesRepository: ref.watch(localNotificationSharedRepoProvider),
+  ),
 );
 
 final localNotificationRepoProvider = Provider<LocalNotificationRepository>(
@@ -36,17 +37,6 @@ final localNotificationTimeFutureProvider =
   final notificationTimeDateTime = DateTime.parse(notificationTimeStr);
   final notificationTime = TimeOfDay.fromDateTime(notificationTimeDateTime);
   return notificationTime;
-});
-
-/// アラーム設定を促すダイアログを自動表示させるかどうか
-///
-/// 初回起動の場合には、自動表示する
-final isShowSetNotificationDialogOnLaunchProvider = Provider<bool>((ref) {
-  final isFirstLaunch = ref.watch(isFirstLaunchProvider);
-  if (!isFirstLaunch) {
-    return false;
-  }
-  return true;
 });
 
 /// 初めて通知設定したかどうかの管理

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
@@ -77,7 +78,6 @@ class ListPage extends HookConsumerWidget {
     useEffect(
       () {
         Future(() async {
-
           // パスコードロック画面の表示
           if (ref.read(isShowScreenLockProvider)) {
             await showScreenLock(context, ref);
@@ -114,16 +114,6 @@ class ListPage extends HookConsumerWidget {
             return;
           }
 
-          /// 初回起動時に限り、アラーム設定を促すダイアログを表示する
-          ///それに加えて日記記入ダイアログを自動表示する
-          ///
-          /// ユーザー動作の順番的にSetNotificationDialog→EditDialog→ListPageの順で表示したいため、以下のような記述とした
-          if (ref.read(isShowSetNotificationDialogOnLaunchProvider)) {
-            await _showSetNotificationDialog(context);
-            if (context.mounted) {
-              await _showEditDialog(context, null);
-            }
-          }
           //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
           //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
           //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
@@ -353,7 +343,9 @@ class ListPage extends HookConsumerWidget {
     await showDialog<LocalNotificationSettingDialog>(
       context: context,
       builder: (_) {
-        return const LocalNotificationSettingDialog();
+        return const LocalNotificationSettingDialog(
+          trigger: NotificationDialogTrigger.userAction,
+        );
       },
     );
   }
