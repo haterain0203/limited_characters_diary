@@ -67,7 +67,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
               style: TextStyle(fontSize: 14.sp),
             ),
             const SizedBox(
-              height: 16,
+              height: 8,
             ),
             Text(
               '設定時間に毎日通知して\n継続をサポートします',
@@ -78,40 +78,42 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 30),
-              child: TextButton(
-                onPressed: () async => _setNotification(
-                  context,
-                  data,
-                  ref,
-                ),
-                child: data?.to24hours() == null
-                    ? Text(
-                        'ここをタップして\n時間を設定',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                        ),
-                        textAlign: TextAlign.center,
-                      )
-                    : Text(
-                        data!.to24hours(),
-                        style: TextStyle(
-                          fontSize: 48.sp,
-                        ),
-                      ),
+            TextButton(
+              onPressed: () async => _setNotification(
+                context,
+                data,
+                ref,
               ),
+              child: data?.to24hours() == null
+                  ? Text(
+                      'ここをタップして\n時間を設定',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                      ),
+                      textAlign: TextAlign.center,
+                    )
+                  : Text(
+                      data!.to24hours(),
+                      style: TextStyle(
+                        fontSize: 48.sp,
+                      ),
+                    ),
             ),
             Visibility(
-              visible: trigger == NotificationDialogTrigger.userAction,
-              child: TextButton(
-                onPressed: () async {
-                  await ref.read(localNotificationControllerProvider).deleteNotification();
-                  ref.invalidate(localNotificationTimeFutureProvider);
-                },
-                child: const Text('通知設定をリセットする'),
+              visible: data != null,
+              child: Column(
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      await ref.read(localNotificationControllerProvider).deleteNotification();
+                      ref.invalidate(localNotificationTimeFutureProvider);
+                    },
+                    child: const Text('通知設定をリセットする'),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(height: 16,),
             // ダイアログが呼び出されたタイミングが初回起動時かどうかで処理を分岐
             trigger == NotificationDialogTrigger.autoOnFirstLaunch
                 ? TextButton(
