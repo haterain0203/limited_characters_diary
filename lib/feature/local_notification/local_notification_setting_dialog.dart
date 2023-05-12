@@ -102,6 +102,15 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                       ),
               ),
             ),
+            Visibility(
+              visible: trigger == NotificationDialogTrigger.userAction,
+              child: TextButton(
+                onPressed: () {
+
+                },
+                child: const Text('通知設定をリセットする'),
+              ),
+            ),
             // ダイアログが呼び出されたタイミングが初回起動時かどうかで処理を分岐
             trigger == NotificationDialogTrigger.autoOnFirstLaunch
                 ? TextButton(
