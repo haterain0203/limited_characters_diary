@@ -86,13 +86,20 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                   data,
                   ref,
                 ),
-                child: Text(
-                  data?.to24hours() ?? 'ここをタップして\n時間を設定',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                child: data?.to24hours() == null
+                    ? Text(
+                        'ここをタップして\n時間を設定',
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+                    : Text(
+                        data!.to24hours(),
+                        style: TextStyle(
+                          fontSize: 48.sp,
+                        ),
+                      ),
               ),
             ),
             // ダイアログが呼び出されたタイミングが初回起動時かどうかで処理を分岐
