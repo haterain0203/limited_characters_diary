@@ -9,6 +9,9 @@ import 'package:limited_characters_diary/list_page.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../constant/enum.dart';
+import '../../local_notification/local_notification_setting_dialog.dart';
+
 class TermsOfServiceConfirmationPage extends StatelessWidget {
   const TermsOfServiceConfirmationPage({super.key});
 
@@ -58,12 +61,7 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                   // 広告トラッキング許可ダイアログ表示
                   await ref.read(adControllerProvider).requestATT();
                   if (context.mounted) {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute<ListPage>(
-                        builder: (context) => const LocalNotificationSettingPage(),
-                      ),
-                    );
+                    await _showSetNotificationDialog(context);
                   }
                 },
               ),
@@ -73,4 +71,16 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _showSetNotificationDialog(BuildContext context) async {
+    await showDialog<LocalNotificationSettingDialog>(
+      context: context,
+      builder: (_) {
+        return const LocalNotificationSettingDialog(
+          trigger: NotificationDialogTrigger.autoOnFirstLaunch,
+        );
+      },
+    );
+  }
+
 }
