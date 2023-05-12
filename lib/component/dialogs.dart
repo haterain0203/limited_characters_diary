@@ -21,7 +21,6 @@ class OnlyCloseDialog extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          title: '閉じる',
         ),
       ],
     );

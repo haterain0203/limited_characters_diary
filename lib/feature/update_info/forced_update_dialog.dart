@@ -50,7 +50,7 @@ class ForcedUpdateDialog extends HookConsumerWidget {
                   : Constant.appStoreUrl;
               await linkToAppOrWeb(url);
             },
-            title: 'アプリストアへ',
+            title: const Text('アプリストアへ'),
           ),
         ),
       ],

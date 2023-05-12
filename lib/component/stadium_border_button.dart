@@ -9,7 +9,7 @@ class StadiumBorderButton extends StatelessWidget {
   });
 
   final VoidCallback? onPressed;
-  final String? title;
+  final Widget? title;
   final Color? backgroundColor;
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class StadiumBorderButton extends StatelessWidget {
         shape: const StadiumBorder(),
         backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
       ),
-      child: Text(title ?? '閉じる'),
+      child: title ?? const Text('閉じる'),
     );
   }
 }

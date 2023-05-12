@@ -57,16 +57,10 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
             Radius.circular(20),
           ),
         ),
-        title: Column(
-          children: [
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              '設定時間に毎日通知して\n継続をサポートします',
-              style: TextStyle(fontSize: 14.sp),
-            ),
-          ],
+        title: Text(
+          '設定時間に毎日通知して\n継続をサポートします',
+          style: TextStyle(fontSize: 14.sp),
+          textAlign: TextAlign.center,
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -80,7 +74,13 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                         ref,
                       );
                     },
-                    title: '通知時間を設定する',
+                    title: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        '通知時間を設定する',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                    ),
                   )
                 : TextButton(
                     onPressed: () async => _setNotification(
