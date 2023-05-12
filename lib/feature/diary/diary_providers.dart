@@ -1,6 +1,4 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/app_info/app_info_providers.dart';
-import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
 
 import '../auth/auth_providers.dart';
