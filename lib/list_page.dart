@@ -114,16 +114,6 @@ class ListPage extends HookConsumerWidget {
             return;
           }
 
-          /// 初回起動時に限り、アラーム設定を促すダイアログを表示する
-          ///それに加えて日記記入ダイアログを自動表示する
-          ///
-          /// ユーザー動作の順番的にSetNotificationDialog→EditDialog→ListPageの順で表示したいため、以下のような記述とした
-          if (ref.read(isShowSetNotificationDialogOnLaunchProvider)) {
-            await _showSetNotificationDialog(context);
-            if (context.mounted) {
-              await _showEditDialog(context, null);
-            }
-          }
           //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
           //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
           //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、

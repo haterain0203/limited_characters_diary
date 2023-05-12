@@ -38,17 +38,6 @@ final localNotificationTimeFutureProvider =
   return notificationTime;
 });
 
-/// アラーム設定を促すダイアログを自動表示させるかどうか
-///
-/// 初回起動の場合には、自動表示する
-final isShowSetNotificationDialogOnLaunchProvider = Provider<bool>((ref) {
-  final isFirstLaunch = ref.watch(isFirstLaunchProvider);
-  if (!isFirstLaunch) {
-    return false;
-  }
-  return true;
-});
-
 /// 初めて通知設定したかどうかの管理
 ///
 /// iOSの場合、初めて通知設定する際に端末の通知許可設定が表示される

@@ -77,12 +77,6 @@ final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
     return false;
   }
 
-  // 初回起動時なら処理終了
-  final isFirstLaunch = ref.watch(isFirstLaunchProvider);
-  if(isFirstLaunch) {
-    return false;
-  }
-
   // 当月以外の月を表示した際は表示しない
   final today = ref.watch(todayProvider);
   final selectedMonth = ref.watch(selectedMonthDateProvider);
