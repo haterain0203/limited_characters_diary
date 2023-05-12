@@ -21,5 +21,7 @@ class LocalNotificationController {
   Future<void> deleteNotification() async {
     final repo = ref.watch(localNotificationRepoProvider);
     await repo.deleteNotification();
+    final sharedRepo = ref.watch(localNotificationSharedRepoProvider);
+    await sharedRepo.deleteNotificationTimeStr();
   }
 }

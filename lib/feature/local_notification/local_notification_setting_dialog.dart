@@ -105,8 +105,9 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
             Visibility(
               visible: trigger == NotificationDialogTrigger.userAction,
               child: TextButton(
-                onPressed: () {
-
+                onPressed: () async {
+                  await ref.read(localNotificationControllerProvider).deleteNotification();
+                  ref.invalidate(localNotificationTimeFutureProvider);
                 },
                 child: const Text('通知設定をリセットする'),
               ),

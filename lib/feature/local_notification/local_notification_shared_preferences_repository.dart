@@ -23,4 +23,8 @@ class LocalNotificationSharedPreferencesRepository {
   Future<String?> fetchNotificationTimeStr() async {
     return prefs.getString(notificationTimeStrKey);
   }
+
+  Future<void> deleteNotificationTimeStr() async {
+    await prefs.remove(notificationTimeStrKey);
+  }
 }
