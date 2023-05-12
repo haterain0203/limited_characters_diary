@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 
 import 'local_notification_setting_dialog.dart';
 
-class LocalNotificationSettingPage extends HookConsumerWidget {
+class LocalNotificationSettingPage extends StatelessWidget {
   const LocalNotificationSettingPage({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _showSetNotificationDialog(context);
     });
