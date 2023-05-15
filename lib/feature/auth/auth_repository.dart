@@ -52,6 +52,17 @@ class AuthRepository {
   //   await auth.signOut();
   // }
 
+  Future<void> deleteUserAccount() async {
+    final user = auth.currentUser;
+    // このメソッドを呼べるのは認証後なので、
+    // currentUserがnullになることは基本ないはずだが、念の為nullチェック
+    if(user == null) {
+      return;
+    }
+    await user.delete();
+  }
+
+
   String _convertToErrorMessageFromErrorCode(String errorCode) {
     switch (errorCode) {
       case 'email-already-exists':
