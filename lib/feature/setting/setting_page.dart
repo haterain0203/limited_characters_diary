@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialogs.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
+import 'package:limited_characters_diary/feature/auth/confirm_delete_all_data_dialog.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -225,10 +227,10 @@ class SettingPage extends StatelessWidget {
   }
 
   void _showConfirmDeleteAllDataDialog(BuildContext context) {
-    showDialog(
+    showDialog<ConfirmDeleteAllDataDialog>(
       context: context,
       builder: (_) {
-        return Container();
+        return ConfirmDeleteAllDataDialog();
       },
     );
   }
