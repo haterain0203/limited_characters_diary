@@ -15,4 +15,9 @@ class AuthController {
 //     await repo.signOut();
 //   }
 
+  Future<void> deleteUser() async {
+    await repo.deleteUserAccount;
+    await repo.deleteUserData;
+  }
+
 }
