@@ -6,6 +6,7 @@ import 'package:limited_characters_diary/feature/pass_code/pass_code_providers.d
 class PassCodePage extends HookConsumerWidget {
   const PassCodePage({super.key});
 
+  //TODO 戻るボタン無効化した方がいいかも
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ScreenLock(
