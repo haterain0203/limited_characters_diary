@@ -21,7 +21,7 @@ class PassCodeOrListWidget extends HookConsumerWidget {
       ///
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
-      if (current == AppLifecycleState.resumed) {
+      if (current == AppLifecycleState.inactive) {
 
         // パスコード設定がOFFなら処理終了
         if(!ref.read(isSetPassCodeLockProvider)) {
