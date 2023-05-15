@@ -99,13 +99,6 @@ class ListPage extends HookConsumerWidget {
     final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryStreamProvider);
 
-    final isPassCodeLocked = ref.watch(isOpenedScreenLockProvider);
-    // パスコードロック画面を表示している間は何も表示しない
-    // これをしないと一瞬日記画面が表示されてしまうため
-    if (isPassCodeLocked) {
-      return const SizedBox();
-    }
-
     return WillPopScope(
       onWillPop: () async => false,
       child: Stack(

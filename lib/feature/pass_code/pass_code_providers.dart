@@ -29,8 +29,6 @@ final passCodeProvider = Provider<PassCode>((ref) {
   return passCode;
 });
 
-final isOpenedScreenLockProvider = StateProvider((ref) => false);
-
 /// パスコードロック設定をOn/Off状態の取得
 final isSetPassCodeLockProvider = Provider<bool>((ref) {
 

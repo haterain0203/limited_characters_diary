@@ -50,7 +50,7 @@ final diaryControllerProvider = Provider((ref) => DiaryController(ref: ref));
 
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
-  
+
   // メンテナンス画面表示中の場合は処理終了
   final updateInfo = ref.watch(updateInfoProvider).value;
   if(updateInfo == null) {
