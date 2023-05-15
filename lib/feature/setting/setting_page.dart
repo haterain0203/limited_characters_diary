@@ -80,7 +80,7 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {
-
+                      _showConfirmDeleteAllDataDialog(context);
                     },
                   ),
                 ],
@@ -220,6 +220,15 @@ class SettingPage extends StatelessWidget {
         return const LocalNotificationSettingDialog(
           trigger: NotificationDialogTrigger.userAction,
         );
+      },
+    );
+  }
+
+  void _showConfirmDeleteAllDataDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return Container();
       },
     );
   }
