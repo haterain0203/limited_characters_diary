@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_page.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 import 'constant/constant.dart';
@@ -30,31 +31,6 @@ class ListPage extends HookConsumerWidget {
     final scrollController = useScrollController();
 
     useOnAppLifecycleStateChange((previous, current) async {
-      /// バックグラウンドになったタイミングで、ScreenLockを呼び出す
-      ///
-      /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
-      /// inactiveのタイミングで呼び出すこととしたもの
-      if (current == AppLifecycleState.inactive) {
-        // 全画面広告から復帰した際は表示しない
-        // 全画面広告表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
-        if (ref.read(isShownInterstitialAdProvider)) {
-          return;
-        }
-
-        // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は表示しない
-        // isShowScreenLockProviderにて使用
-        if (ref.read(isInitialSetNotificationProvider)) {
-          // falseに戻さないと、初めて通知設定した後にinactiveにした際にロック画面が表示されない
-          ref.read(isInitialSetNotificationProvider.notifier).state = false;
-          return;
-        }
-        // 上記の全画面広告と端末の通知設定によるinactive時は処理を除外するコードは、
-        // 当初「isShowScreenLockProvider」に記載していたが、inactive時にのみ必要な条件分岐のためこちらに記載
-
-        if (ref.read(isShowScreenLockProvider)) {
-          await showScreenLock(context, ref);
-        }
-      }
 
       /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
       ///
@@ -78,10 +54,6 @@ class ListPage extends HookConsumerWidget {
     useEffect(
       () {
         Future(() async {
-          // パスコードロック画面の表示
-          if (ref.read(isShowScreenLockProvider)) {
-            await showScreenLock(context, ref);
-          }
 
           /// 0.5秒待機
           ///
