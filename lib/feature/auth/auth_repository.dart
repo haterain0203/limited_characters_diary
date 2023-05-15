@@ -52,14 +52,16 @@ class AuthRepository {
   //   await auth.signOut();
   // }
 
-  Future<void> deleteUserAccount() async {
+  Future<void> deleteUserAccountAndUserData() async {
     final user = auth.currentUser;
     // このメソッドを呼べるのは認証後なので、
     // currentUserがnullになることは基本ないはずだが、念の為nullチェック
     if(user == null) {
       return;
     }
+    // Authアカウントの削除
     await user.delete();
+
   }
 
 

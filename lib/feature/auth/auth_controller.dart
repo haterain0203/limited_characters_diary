@@ -16,8 +16,7 @@ class AuthController {
 //   }
 
   Future<void> deleteUser() async {
-    await repo.deleteUserAccount;
-    await repo.deleteUserData;
+    await repo.deleteUserAccountAndUserData();
   }
 
 }
