@@ -29,21 +29,25 @@ final passCodeProvider = Provider<PassCode>((ref) {
   return passCode;
 });
 
-final isOpenedScreenLockProvider = StateProvider((ref) => false);
-
-/// パスコードロック画面を表示するかどうかを判定するProvider
-final isShowScreenLockProvider = Provider<bool>((ref) {
+/// パスコードロック設定をOn/Off状態の取得
+final isSetPassCodeLockProvider = Provider<bool>((ref) {
 
   // 設定でのパスコードロックがOFFなら表示しない
   if (!ref.watch(passCodeProvider.select((value) => value.isPassCodeEnabled))) {
     return false;
   }
 
-  // 既にロック画面が開いていたら表示しない
-  if (ref.watch(isOpenedScreenLockProvider)) {
+  return true;
+});
+
+/// パスコードロック画面を表示するかどうかを管理するProvider
+final isShowScreenLockProvider = StateProvider<bool>((ref) {
+
+  // 設定でのパスコードロックがOFFなら表示しない
+  if(!ref.watch(isSetPassCodeLockProvider)) {
     return false;
   }
-
+  
   return true;
 
 });
