@@ -73,6 +73,16 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                   ),
+                  SettingsTile.navigation(
+                    leading: const Icon(Icons.delete_forever),
+                    title: const Text(
+                      'データを全て削除',
+                      style: textStyle,
+                    ),
+                    onPressed: (BuildContext context) {
+
+                    },
+                  ),
                 ],
               ),
               SettingsSection(
