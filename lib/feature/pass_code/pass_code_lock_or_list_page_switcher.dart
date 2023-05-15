@@ -9,8 +9,8 @@ import '../admob/ad_providers.dart';
 import '../local_notification/local_notification_providers.dart';
 
 /// パスコードロック画面とListPageを切り替えるためのWidget
-class PassCodeOrListWidget extends HookConsumerWidget {
-  const PassCodeOrListWidget({
+class PassCodeLockOrListPageSwitcher extends HookConsumerWidget {
+  const PassCodeLockOrListPageSwitcher({
     super.key,
   });
 
