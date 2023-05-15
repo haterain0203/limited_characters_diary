@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
-import 'package:limited_characters_diary/feature/pass_code/pass_code_page.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 import 'constant/constant.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/pass_code/pass_code_page.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_providers.dart';
 import 'package:limited_characters_diary/list_page.dart';
 
@@ -44,7 +44,7 @@ class PassCodeOrListWidget extends HookConsumerWidget {
 
     final isShownPassCodeScreen = ref.watch(isShowScreenLockProvider);
     if (isShownPassCodeScreen) {
-      return const PassCodePage();
+      return const PassCodeLockPage();
     } else {
       return const ListPage();
     }
