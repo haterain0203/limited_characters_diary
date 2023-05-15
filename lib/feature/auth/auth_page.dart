@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/list_page.dart';
-
+import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_or_list_page_switcher.dart';
 import 'auth_providers.dart';
 
 class AuthPage extends HookConsumerWidget {
@@ -38,7 +37,7 @@ class AuthPage extends HookConsumerWidget {
             ),
           );
         }
-        return const ListPage();
+        return const PassCodeLockOrListPageSwitcher();
       },
     );
   }
