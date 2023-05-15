@@ -3,7 +3,6 @@ import 'package:limited_characters_diary/feature/update_info/update_info_provide
 
 import '../auth/auth_providers.dart';
 import '../date/date_controller.dart';
-import '../pass_code/pass_code_providers.dart';
 import 'diary.dart';
 import 'diary_controller.dart';
 import 'diary_repository.dart';
