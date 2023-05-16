@@ -56,8 +56,12 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
                     isLoading.value = true;
                     //TODO 削除処理
                     await ref.read(authControllerProvider).deleteUser();
+                    ref.read(isUserDeletedProvider.notifier).state = true;
                     if (context.mounted) {
-                      await _showCompletedDeleteDialog(context: context);
+                      await _showCompletedDeleteDialog(
+                        context: context,
+                        ref: ref,
+                      );
                     }
                   },
                   backgroundColor: Colors.red,
@@ -79,6 +83,7 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
 
   Future<void> _showCompletedDeleteDialog({
     required BuildContext context,
+    required WidgetRef ref,
   }) async {
     await AwesomeDialog(
       context: context,
@@ -88,6 +93,7 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
       title: '全てのデータを削除しました',
       btnOkText: '閉じる',
       btnOkOnPress: () async {
+        ref.read(isUserDeletedProvider.notifier).state = false;
         await Phoenix.rebirth(context);
       },
     ).show();
