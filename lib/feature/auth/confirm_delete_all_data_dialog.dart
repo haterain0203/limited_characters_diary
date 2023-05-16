@@ -34,6 +34,7 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
   void _showFinalConfirmDialog(BuildContext context) {
     showDialog<AlertDialog>(
       context: context,
+      barrierDismissible: false,
       builder: (_) {
         return HookConsumer(
           builder: (context, ref, child) {
