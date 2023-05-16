@@ -230,7 +230,7 @@ class SettingPage extends StatelessWidget {
     showDialog<ConfirmDeleteAllDataDialog>(
       context: context,
       builder: (_) {
-        return ConfirmDeleteAllDataDialog();
+        return const ConfirmDeleteAllDataDialog();
       },
     );
   }

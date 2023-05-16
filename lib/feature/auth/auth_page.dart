@@ -37,6 +37,7 @@ class AuthPage extends HookConsumerWidget {
             ),
           );
         }
+        print(data.uid);
         return const PassCodeLockOrListPageSwitcher();
       },
     );
