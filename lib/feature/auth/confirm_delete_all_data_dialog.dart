@@ -54,8 +54,9 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
                 StadiumBorderButton(
                   onPressed: () async {
                     isLoading.value = true;
-                    //TODO 削除処理
+                    // 削除処理
                     await ref.read(authControllerProvider).deleteUser();
+                    // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
                     ref.read(isUserDeletedProvider.notifier).state = true;
                     if (context.mounted) {
                       await _showCompletedDeleteDialog(
@@ -94,6 +95,7 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
       btnOkText: '閉じる',
       btnOkOnPress: () async {
         ref.read(isUserDeletedProvider.notifier).state = false;
+        // アプリの再起動
         await Phoenix.rebirth(context);
       },
     ).show();
