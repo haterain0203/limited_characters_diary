@@ -4,6 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/stadium_border_button.dart';
 
+import 'auth_providers.dart';
+
 class ConfirmDeleteAllDataDialog extends StatelessWidget {
   const ConfirmDeleteAllDataDialog({super.key});
 
@@ -52,8 +54,7 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
                   onPressed: () async {
                     isLoading.value = true;
                     //TODO 削除処理
-                    await Future.delayed(const Duration(seconds: 3));
-                    // await ref.read(authControllerProvider).deleteUser();
+                    await ref.read(authControllerProvider).deleteUser();
                     if (context.mounted) {
                       await _showCompletedDeleteDialog(context: context);
                     }
