@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_or_list_page_switcher.dart';
 import 'auth_providers.dart';
@@ -29,7 +30,14 @@ class AuthPage extends HookConsumerWidget {
           // signInAnonymously()とisFirstLaunchProviderをtrueにする処理を並べて書くためにFutureでラップし
           // Futureでラップしてawaitを付与せずに実行するとエラーになる
           Future(() async {
-            await ref.read(authControllerProvider).signInAnonymouslyAndAddUser();
+            try {
+              await ref
+                  .read(authControllerProvider)
+                  .signInAnonymouslyAndAddUser();
+            } catch (e) {
+              //TODO
+              debugPrint(e.toString());
+            }
           });
           return const Scaffold(
             body: Center(
@@ -37,7 +45,9 @@ class AuthPage extends HookConsumerWidget {
             ),
           );
         }
-        print(data.uid);
+        debugPrint('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+        debugPrint(data.uid);
+        debugPrint('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
         return const PassCodeLockOrListPageSwitcher();
       },
     );

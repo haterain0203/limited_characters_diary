@@ -90,10 +90,6 @@ class AuthRepository {
 
     // users情報の削除
     await userRef.delete();
-
-    // サインアウト処理
-    // セッションが残ってしまう可能性を考慮
-    await auth.signOut();
   }
 
 
