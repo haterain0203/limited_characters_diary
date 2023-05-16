@@ -27,8 +27,6 @@ class AuthPage extends HookConsumerWidget {
       ),
       data: (data) {
         if (data == null) {
-          // signInAnonymously()とisFirstLaunchProviderをtrueにする処理を並べて書くためにFutureでラップし
-          // Futureでラップしてawaitを付与せずに実行するとエラーになる
           Future(() async {
             try {
               await ref
