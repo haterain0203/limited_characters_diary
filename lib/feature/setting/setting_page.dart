@@ -77,7 +77,7 @@ class SettingPage extends StatelessWidget {
                   SettingsTile.navigation(
                     leading: const Icon(Icons.delete_forever),
                     title: const Text(
-                      'データを全て削除',
+                      '退会する（全データ削除）',
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {

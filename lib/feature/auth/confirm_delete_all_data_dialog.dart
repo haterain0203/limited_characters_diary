@@ -13,8 +13,8 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('全てのデータ削除'),
-      content: const Text('全てのデータを削除します。\nよろしいですか？'),
+      title: const Text('退会する（全データ削除）'),
+      content: const Text('退会すると、全てのデータが削除されます。よろしいですか？'),
       actions: [
         StadiumBorderButton(
           onPressed: () {
@@ -65,7 +65,7 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
                     }
                   },
                   backgroundColor: Colors.red,
-                  title: const Text('削除する'),
+                  title: const Text('退会する'),
                 ),
                 TextButton(
                   onPressed: () {
