@@ -13,12 +13,13 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
       title: const Text('全てのデータ削除'),
       content: const Text('全てのデータを削除します。\nよろしいですか？'),
       actions: [
-        TextButton(
+        StadiumBorderButton(
           onPressed: () {
             Navigator.pop(context);
             _showFinalConfirmDialog(context);
           },
-          child: const Text('はい'),
+          title: const Text('はい'),
+          backgroundColor: Colors.red,
         ),
         TextButton(
           onPressed: () {
