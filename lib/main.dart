@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
@@ -55,15 +56,17 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
 
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (_) => ProviderScope(
-        overrides: [
-          localNotificationRepoProvider
-              .overrideWithValue(localNotificationRepo),
-          sharedPreferencesInstanceProvider.overrideWithValue(prefs),
-        ],
-        child: const MyApp(),
+    Phoenix(
+      child: DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (_) => ProviderScope(
+          overrides: [
+            localNotificationRepoProvider
+                .overrideWithValue(localNotificationRepo),
+            sharedPreferencesInstanceProvider.overrideWithValue(prefs),
+          ],
+          child: const MyApp(),
+        ),
       ),
     ),
   );

@@ -52,6 +52,47 @@ class AuthRepository {
   //   await auth.signOut();
   // }
 
+  Future<void> deleteUserAccountAndUserData() async {
+    final user = auth.currentUser;
+    // このメソッドを呼べるのは認証後なので、
+    // currentUserがnullになることは基本ないはずだが、念の為nullチェック
+    if(user == null) {
+      return;
+    }
+    // Authアカウントの削除
+    await user.delete();
+    final uid = user.uid;
+    final userRef = firestore.collection('users').doc(uid);
+
+    //TODO サブコレクションをすべて削除する処理は、CloudFunctionsに変更すべき？
+    // サブコレクションのdiaryListをすべて削除
+    final diaryListSnapshot = await userRef.collection('diaryList').get();
+
+    // Initialize a new WriteBatch
+    var batch = firestore.batch();
+
+    var counter = 0;
+    if(diaryListSnapshot.size > 0) {
+      for (final doc in diaryListSnapshot.docs) {
+        batch.delete(doc.reference);
+        counter++;
+
+        // Firestoreのバッチ処理には500の操作の制限があるため、diaryListのドキュメントの数が500を超える場合を考慮
+        if (counter == 500) {
+          await batch.commit();
+          batch = firestore.batch();
+          counter = 0;
+        }
+      }
+    }
+    // Commit the batch
+    await batch.commit();
+
+    // users情報の削除
+    await userRef.delete();
+  }
+
+
   String _convertToErrorMessageFromErrorCode(String errorCode) {
     switch (errorCode) {
       case 'email-already-exists':

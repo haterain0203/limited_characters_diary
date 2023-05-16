@@ -26,10 +26,15 @@ class AuthPage extends HookConsumerWidget {
       ),
       data: (data) {
         if (data == null) {
-          // signInAnonymously()とisFirstLaunchProviderをtrueにする処理を並べて書くためにFutureでラップし
-          // Futureでラップしてawaitを付与せずに実行するとエラーになる
           Future(() async {
-            await ref.read(authControllerProvider).signInAnonymouslyAndAddUser();
+            try {
+              await ref
+                  .read(authControllerProvider)
+                  .signInAnonymouslyAndAddUser();
+            } catch (e) {
+              //TODO
+              debugPrint(e.toString());
+            }
           });
           return const Scaffold(
             body: Center(
@@ -37,6 +42,9 @@ class AuthPage extends HookConsumerWidget {
             ),
           );
         }
+        debugPrint('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+        debugPrint(data.uid);
+        debugPrint('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
         return const PassCodeLockOrListPageSwitcher();
       },
     );

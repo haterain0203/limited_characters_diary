@@ -30,3 +30,6 @@ final authControllerProvider = Provider(
     repo: ref.read(authRepoProvider),
   ),
 );
+
+/// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため
+final isUserDeletedProvider = StateProvider((ref) => false);
