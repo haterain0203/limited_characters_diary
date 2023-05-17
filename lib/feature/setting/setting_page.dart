@@ -183,7 +183,7 @@ class SettingPage extends StatelessWidget {
                           error: (error, stack) {
                             return const Text('エラーが発生しました');
                           },
-                          data: (data) => Text(data.version),
+                          data: (data) => Text('${data.version}（${data.buildNumber}）'),
                         );
                       },
                     ),
