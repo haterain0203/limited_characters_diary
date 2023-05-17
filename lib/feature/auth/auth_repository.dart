@@ -59,8 +59,7 @@ class AuthRepository {
     if(user == null) {
       return;
     }
-    // Authアカウントの削除
-    await user.delete();
+
     final uid = user.uid;
     final userRef = firestore.collection('users').doc(uid);
 
@@ -90,6 +89,13 @@ class AuthRepository {
 
     // users情報の削除
     await userRef.delete();
+
+    // Authアカウントの削除
+    // データ削除よりも前にアカウント削除してしまうと、
+    // セキュリティルールの「isUserAuthenticated(userId)」で引っかかりエラーが発生する
+    // そのため、アカウント削除は最後に実行する
+    await user.delete();
+
   }
 
 
