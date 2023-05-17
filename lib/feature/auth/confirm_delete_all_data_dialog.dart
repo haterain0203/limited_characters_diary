@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -55,14 +56,22 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
                   onPressed: () async {
                     isLoading.value = true;
                     // 削除処理
-                    await ref.read(authControllerProvider).deleteUser();
-                    // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
-                    ref.read(isUserDeletedProvider.notifier).state = true;
-                    if (context.mounted) {
-                      await _showCompletedDeleteDialog(
-                        context: context,
-                        ref: ref,
-                      );
+                    try {
+                      await ref.read(authControllerProvider).deleteUser();
+                      // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
+                      ref.read(isUserDeletedProvider.notifier).state = true;
+                      if (context.mounted) {
+                        await _showCompletedDeleteDialog(
+                          context: context,
+                          ref: ref,
+                        );
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      //TODO ここのエラーハンドリングはもう少し考えたほうが良さそう
+                      // 現状だと、CircularProgressIndicatorが表示されて、操作不可になる
+                      _showErrorDialog(context, e.toString());
+                    } on FirebaseException catch (e) {
+                      _showErrorDialog(context, e.toString());
                     }
                   },
                   backgroundColor: Colors.red,
@@ -99,5 +108,26 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
         await Phoenix.rebirth(context);
       },
     ).show();
+  }
+
+  //TODO 共通化
+  void _showErrorDialog(BuildContext context, String e) {
+    showDialog<AlertDialog>(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('エラーが発生しました'),
+          content: Text(e),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('閉じる'),
+            )
+          ],
+        );
+      },
+    );
   }
 }
