@@ -2,6 +2,8 @@
 - 16文字までしか入力できない日記アプリ
 - [AppStore](https://apps.apple.com/us/app/16%E6%96%87%E5%AD%97%E6%97%A5%E8%A8%98/id6448646374)
 - [GooglePlay](https://play.google.com/store/apps/details?id=com.futtaro.limited_characters_diary)
+<img src="https://github.com/haterain0203/limited_characters_diary/assets/58384546/ed2ebbec-a8da-4edd-a38f-e7443735f2b4" width=400>
+<img src="https://github.com/haterain0203/limited_characters_diary/assets/58384546/837870fb-55d0-454e-bafe-2d4a50ba702e" width=400>
 
 ## 機能
 - 匿名認証
