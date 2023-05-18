@@ -86,23 +86,14 @@ class DiaryList extends HookConsumerWidget {
     );
 
     return diaryList.when(
-      loading: () => const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
       ),
       error: (error, stack) {
-        return Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  error.toString(),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
+        return Center(
+          child: Text(
+            error.toString(),
+            textAlign: TextAlign.center,
           ),
         );
       },
