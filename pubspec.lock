@@ -662,18 +662,10 @@ packages:
     source: hosted
     version: "1.0.4"
   isar:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: isar
       sha256: "5be35dbc489880fccc535da3d1c4b3f5fdeee6ebfcacd4b149e39e803c4029cd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.5"
-  isar_flutter_libs:
-    dependency: "direct main"
-    description:
-      name: isar_flutter_libs
-      sha256: "9794524734856a8a3629652f9f359b66e3fea3cebeec4dbdeb3e3a8fb253073e"
       url: "https://pub.dev"
     source: hosted
     version: "3.0.5"
@@ -797,30 +789,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.2"
-  path_provider:
-    dependency: "direct main"
-    description:
-      name: path_provider
-      sha256: c7edf82217d4b2952b2129a61d3ad60f1075b9299e629e149a8d2e39c2e6aad4
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.14"
-  path_provider_android:
-    dependency: transitive
-    description:
-      name: path_provider_android
-      sha256: "019f18c9c10ae370b08dce1f3e3b73bc9f58e7f087bb5e921f06529438ac0ae7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.24"
-  path_provider_foundation:
-    dependency: transitive
-    description:
-      name: path_provider_foundation
-      sha256: "12eee51abdf4d34c590f043f45073adbb45514a108bd9db4491547a2fd891059"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.0"
   path_provider_linux:
     dependency: transitive
     description:
