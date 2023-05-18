@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_providers.dart';
-import 'package:limited_characters_diary/list_page.dart';
+import 'package:limited_characters_diary/home_page.dart';
 
 import '../admob/ad_providers.dart';
 import '../local_notification/local_notification_providers.dart';
@@ -22,9 +22,8 @@ class PassCodeLockOrListPageSwitcher extends HookConsumerWidget {
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
       if (current == AppLifecycleState.inactive) {
-
         // パスコード設定がOFFなら処理終了
-        if(!ref.read(isSetPassCodeLockProvider)) {
+        if (!ref.read(isSetPassCodeLockProvider)) {
           return;
         }
 
@@ -48,7 +47,7 @@ class PassCodeLockOrListPageSwitcher extends HookConsumerWidget {
     if (isShownPassCodeScreen) {
       return const PassCodeLockPage();
     } else {
-      return const ListPage();
+      return const HomePage();
     }
   }
 }

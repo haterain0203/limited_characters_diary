@@ -8,6 +8,7 @@ import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
+
 import 'constant/constant.dart';
 import 'feature/date/date_controller.dart';
 import 'feature/diary/diary.dart';
@@ -16,8 +17,8 @@ import 'feature/diary/input_diary_dialog.dart';
 import 'feature/local_notification/local_notification_setting_dialog.dart';
 import 'feature/setting/setting_page.dart';
 
-class ListPage extends HookConsumerWidget {
-  const ListPage({
+class HomePage extends HookConsumerWidget {
+  const HomePage({
     super.key,
   });
 
@@ -26,7 +27,6 @@ class ListPage extends HookConsumerWidget {
     final scrollController = useScrollController();
 
     useOnAppLifecycleStateChange((previous, current) async {
-
       /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
       ///
       /// 本日の日付をハイライトさせているが、
@@ -49,7 +49,6 @@ class ListPage extends HookConsumerWidget {
     useEffect(
       () {
         Future(() async {
-
           /// 0.5秒待機
           ///
           /// [scrollController.hasClients]と[ref.read(isShowEditDialogOnLaunchProvider]内の
