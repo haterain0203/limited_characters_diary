@@ -1,41 +1,26 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-/// 今日の日付を提供する
-/// 基本は外部から更新しないが、アプリから復帰した際に最新の日付に更新する
-/// そのためにProviderではなくStateProvider
-final todayProvider = StateProvider<DateTime>((ref) {
-  final now = DateTime.now();
-  return DateTime(now.year, now.month, now.day);
-});
-
-final selectedMonthDateProvider = StateProvider<DateTime>((ref) {
-  final today = ref.watch(todayProvider);
-  final selectedMonth = DateTime(
-    today.year,
-    today.month,
-  );
-  return selectedMonth;
-});
-
-final selectedDateProvider = StateProvider<DateTime>((ref) {
-  final today = ref.watch(todayProvider);
-  final selectedDate = DateTime(today.year, today.month, today.day);
-  return selectedDate;
-});
-
-final dateControllerProvider = Provider((ref) => DateController(ref: ref));
+import '../diary/diary.dart';
 
 class DateController {
-  DateController({required this.ref});
-  final ProviderRef<dynamic> ref;
+  DateController({
+    required this.today,
+    required this.selectedDate,
+    required this.selectedMonth,
+    required this.todayNotifier,
+    required this.selectedMonthNotifier,
+  });
 
-  DateTime get today => ref.watch(todayProvider);
-  DateTime get selectedDate => ref.watch(selectedDateProvider);
-  DateTime get selectedMonth => ref.watch(selectedMonthDateProvider);
+  final DateTime today;
+  final DateTime selectedDate;
+  final DateTime selectedMonth;
+  final StateController<DateTime> todayNotifier;
+  final StateController<DateTime> selectedMonthNotifier;
 
   void nextMonth() {
-    ref.read(selectedMonthDateProvider.notifier).update((state) {
+    selectedMonthNotifier.update((state) {
       return DateTime(
         selectedMonth.year,
         selectedMonth.month + 1,
@@ -44,7 +29,7 @@ class DateController {
   }
 
   void previousMonth() {
-    ref.read(selectedMonthDateProvider.notifier).update((state) {
+    selectedMonthNotifier.update((state) {
       return DateTime(
         selectedMonth.year,
         selectedMonth.month - 1,
@@ -89,19 +74,42 @@ class DateController {
     return indexDate.isAtSameMomentAs(today);
   }
 
+  void updateToday(DateTime now) {
+    todayNotifier.update((state) {
+      return DateTime(now.year, now.month, now.day);
+    });
+  }
+
   bool isThisMonth() {
     return selectedMonth.month == today.month;
   }
 
   // 今日-5日に自動で画面スクロールするかどうか
   bool isJumpToAroundToday() {
-    if(!isThisMonth()) {
+    if (!isThisMonth()) {
       return false;
     }
-    if(today.day <= 10) {
+    if (today.day <= 10) {
       return false;
     }
     return true;
+  }
+
+  /// ListViewのindexに該当する日付を返す
+  DateTime indexToDateTime(int index) {
+    return DateTime(
+      selectedMonth.year,
+      selectedMonth.month,
+      index + 1,
+    );
+  }
+
+  /// ListViewのindexに該当する日記を返す
+  Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
+    final indexDateDiary = diaryList.firstWhereOrNull((diary) {
+      return diary.diaryDate == indexDate;
+    });
+    return indexDateDiary;
   }
 
   //2029年までの日本の祝日 20230324時点
