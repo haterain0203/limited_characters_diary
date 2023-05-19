@@ -45,7 +45,11 @@ final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
   return count;
 });
 
-final diaryControllerProvider = Provider((ref) => DiaryController(ref: ref));
+final diaryControllerProvider = Provider(
+  (ref) => DiaryController(
+    repo: ref.watch(diaryRepoProvider),
+  ),
+);
 
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
