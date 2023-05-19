@@ -60,11 +60,12 @@ class DiaryList extends HookConsumerWidget {
           /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
           /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
           /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
-          if (ref.read(dateControllerProvider).isJumpToAroundToday()) {
-            final today = ref.read(todayProvider);
+          final dateController = ref.read(dateControllerProvider);
+          if (dateController.isJumpToAroundToday()) {
             if (scrollController.hasClients) {
-              scrollController
-                  .jumpTo(Constant.sizedListTileHeight * (today.day - 5));
+              scrollController.jumpTo(
+                Constant.sizedListTileHeight * (dateController.today.day - 5),
+              );
             }
           }
 
