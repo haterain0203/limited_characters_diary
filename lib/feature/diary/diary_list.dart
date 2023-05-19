@@ -18,7 +18,6 @@ class DiaryList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scrollController = useScrollController();
-    final dateController = ref.watch(dateControllerProvider);
     final diaryList = ref.watch(diaryStreamProvider);
 
     useOnAppLifecycleStateChange((previous, current) async {
@@ -98,6 +97,7 @@ class DiaryList extends HookConsumerWidget {
         );
       },
       data: (data) {
+        final dateController = ref.read(dateControllerProvider);
         return Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 8),
           child: ListView.separated(
