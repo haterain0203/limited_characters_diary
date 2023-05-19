@@ -109,9 +109,13 @@ class DiaryList extends HookConsumerWidget {
             },
             itemCount: dateController.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
+              // indexに応じた日付
               final indexDate = dateController.indexToDateTime(index);
+              // indexに応じた日記データ
               final diary = dateController.getIndexDateDiary(data, indexDate);
+              // indexに応じた曜日文字列
               final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
+              // indexに応じた日付の文字色（土日祝日の場合色がつく）
               final dayStrColor = dateController.choiceDayStrColor(indexDate);
               return SizedHeightListTile(
                 //本日はハイライト

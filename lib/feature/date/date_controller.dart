@@ -110,6 +110,7 @@ class DateController {
     return true;
   }
 
+  /// ListViewのindexに該当する日付を返す
   DateTime indexToDateTime(int index) {
     return DateTime(
       selectedMonth.year,
@@ -118,6 +119,7 @@ class DateController {
     );
   }
 
+  /// ListViewのindexに該当する日記を返す
   Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
     final indexDateDiary = diaryList.firstWhereOrNull((diary) {
       return diary.diaryDate == indexDate;
