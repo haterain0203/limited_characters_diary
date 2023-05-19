@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -30,10 +31,13 @@ final dateControllerProvider = Provider((ref) => DateController(ref: ref));
 
 class DateController {
   DateController({required this.ref});
+
   final ProviderRef<dynamic> ref;
 
   DateTime get today => ref.watch(todayProvider);
+
   DateTime get selectedDate => ref.watch(selectedDateProvider);
+
   DateTime get selectedMonth => ref.watch(selectedMonthDateProvider);
 
   void nextMonth() {
@@ -115,17 +119,10 @@ class DateController {
   }
 
   Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
-    //TODO firstWhereOrNull使いたい
-    //TODO element.dirayDate = indexDateに修正したい
-    final filteredDiary = diaryList
-        .where(
-          (element) =>
-              element.diaryDate.year == indexDate.year &&
-              element.diaryDate.month == indexDate.month &&
-              element.diaryDate.day == indexDate.day,
-        )
-        .toList();
-    return filteredDiary.isNotEmpty ? filteredDiary[0] : null;
+    final indexDateDiary = diaryList.firstWhereOrNull((diary) {
+      return diary.diaryDate == indexDate;
+    });
+    return indexDateDiary;
   }
 
   //2029年までの日本の祝日 20230324時点
