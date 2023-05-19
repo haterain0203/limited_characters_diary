@@ -27,21 +27,30 @@ final selectedDateProvider = StateProvider<DateTime>((ref) {
   return selectedDate;
 });
 
-final dateControllerProvider = Provider((ref) => DateController(ref: ref));
+final dateControllerProvider = Provider(
+  (ref) => DateController(
+    today: ref.watch(todayProvider),
+    selectedDate: ref.watch(selectedDateProvider),
+    selectedMonth: ref.watch(selectedMonthDateProvider),
+    selectedMonthNotifier: ref.read(todayProvider.notifier),
+  ),
+);
 
 class DateController {
-  DateController({required this.ref});
+  DateController({
+    required this.today,
+    required this.selectedDate,
+    required this.selectedMonth,
+    required this.selectedMonthNotifier,
+  });
 
-  final ProviderRef<dynamic> ref;
-
-  DateTime get today => ref.watch(todayProvider);
-
-  DateTime get selectedDate => ref.watch(selectedDateProvider);
-
-  DateTime get selectedMonth => ref.watch(selectedMonthDateProvider);
+  final DateTime today;
+  final DateTime selectedDate;
+  final DateTime selectedMonth;
+  final StateController<DateTime> selectedMonthNotifier;
 
   void nextMonth() {
-    ref.read(selectedMonthDateProvider.notifier).update((state) {
+    selectedMonthNotifier.update((state) {
       return DateTime(
         selectedMonth.year,
         selectedMonth.month + 1,
@@ -50,7 +59,7 @@ class DateController {
   }
 
   void previousMonth() {
-    ref.read(selectedMonthDateProvider.notifier).update((state) {
+    selectedMonthNotifier.update((state) {
       return DateTime(
         selectedMonth.year,
         selectedMonth.month - 1,
