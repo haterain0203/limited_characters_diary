@@ -30,6 +30,7 @@ final dateControllerProvider = Provider(
     today: ref.watch(todayProvider),
     selectedDate: ref.watch(selectedDateProvider),
     selectedMonth: ref.watch(selectedMonthDateProvider),
-    selectedMonthNotifier: ref.read(todayProvider.notifier),
+    todayNotifier: ref.read(todayProvider.notifier),
+    selectedMonthNotifier: ref.read(selectedMonthDateProvider.notifier),
   ),
 );

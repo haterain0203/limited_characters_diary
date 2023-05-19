@@ -9,12 +9,14 @@ class DateController {
     required this.today,
     required this.selectedDate,
     required this.selectedMonth,
+    required this.todayNotifier,
     required this.selectedMonthNotifier,
   });
 
   final DateTime today;
   final DateTime selectedDate;
   final DateTime selectedMonth;
+  final StateController<DateTime> todayNotifier;
   final StateController<DateTime> selectedMonthNotifier;
 
   void nextMonth() {
@@ -70,6 +72,12 @@ class DateController {
   bool isToday(DateTime indexDate) {
     //TODO 重複しているためリファクタリングしたい
     return indexDate.isAtSameMomentAs(today);
+  }
+
+  void updateToday(DateTime now) {
+    todayNotifier.update((state) {
+      return DateTime(now.year, now.month, now.day);
+    });
   }
 
   bool isThisMonth() {

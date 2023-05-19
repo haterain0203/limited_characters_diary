@@ -35,9 +35,7 @@ class DiaryList extends HookConsumerWidget {
           return;
         }
         // バックグラウンド復帰時の日付でStateProviderを更新
-        ref.read(todayProvider.notifier).update((state) {
-          return DateTime(now.year, now.month, now.day);
-        });
+        ref.read(dateControllerProvider).updateToday(nowDate);
       }
     });
 
