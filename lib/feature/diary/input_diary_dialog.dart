@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
+import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
@@ -64,43 +65,12 @@ class InputDiaryDialog extends HookConsumerWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10.sp),
                 child: StadiumBorderButton(
                   onPressed: () async {
-                    if (diaryInputController.text.isEmpty) {
-                      _showErrorDialog(context, '文字が入力されていません');
-                      return;
-                    }
-                    if (diaryInputController.text.length > 16) {
-                      _showErrorDialog(context, '16文字以内に修正してください');
-                      return;
-                    }
-                    if (diary?.content == diaryInputController.text) {
-                      _showErrorDialog(context, '内容が変更されていません');
-                      return;
-                    }
-                    // 新規登録(diary == null)なら、新規登録処理を、そうでなければupdate処理を
-                    if (diary == null) {
-                      await ref.read(diaryControllerProvider).addDiary(
-                            content: diaryInputController.text,
-                            selectedDate: selectedDate,
-                          );
-                    } else {
-                      await ref.read(diaryControllerProvider).updateDiary(
-                            diary: diary!,
-                            content: diaryInputController.text,
-                          );
-                    }
-                    diaryInputController.clear();
-                    // #62 キーボードを閉じずに登録すると完了後にキーボードが閉じるアクションが入ってしまうため追加
-                    // 参考 https://zenn.dev/blendthink/articles/d2c96aa333be07
-                    primaryFocus?.unfocus();
-                    // 新規登録(diary == null)なら、新規登録完了を示すダイアログを、そうでなければ更新完了のダイアログとを
-                    if (context.mounted) {
-                      await _showCompleteDialog(
-                        context,
-                        diary == null
-                            ? InputDiaryType.add
-                            : InputDiaryType.update,
-                      );
-                    }
+                    await _inputDiary(
+                      context,
+                      diaryInputController,
+                      ref.read(diaryControllerProvider),
+                      selectedDate,
+                    );
                   },
                   title: const Text('登録'),
                 ),
@@ -110,6 +80,49 @@ class InputDiaryDialog extends HookConsumerWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _inputDiary(
+    BuildContext context,
+    TextEditingController diaryInputController,
+    DiaryController diaryController,
+    DateTime selectedDate,
+  ) async {
+    if (diaryInputController.text.isEmpty) {
+      _showErrorDialog(context, '文字が入力されていません');
+      return;
+    }
+    if (diaryInputController.text.length > 16) {
+      _showErrorDialog(context, '16文字以内に修正してください');
+      return;
+    }
+    if (diary?.content == diaryInputController.text) {
+      _showErrorDialog(context, '内容が変更されていません');
+      return;
+    }
+    // 新規登録(diary == null)なら、新規登録処理を、そうでなければupdate処理を
+    if (diary == null) {
+      await diaryController.addDiary(
+        content: diaryInputController.text,
+        selectedDate: selectedDate,
+      );
+    } else {
+      await diaryController.updateDiary(
+        diary: diary!,
+        content: diaryInputController.text,
+      );
+    }
+    diaryInputController.clear();
+    // #62 キーボードを閉じずに登録すると完了後にキーボードが閉じるアクションが入ってしまうため追加
+    // 参考 https://zenn.dev/blendthink/articles/d2c96aa333be07
+    primaryFocus?.unfocus();
+    // 新規登録(diary == null)なら、新規登録完了を示すダイアログを、そうでなければ更新完了のダイアログとを
+    if (context.mounted) {
+      await _showCompleteDialog(
+        context,
+        diary == null ? InputDiaryType.add : InputDiaryType.update,
+      );
+    }
   }
 
   void _showErrorDialog(
