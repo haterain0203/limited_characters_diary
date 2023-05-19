@@ -109,11 +109,7 @@ class DiaryList extends HookConsumerWidget {
             },
             itemCount: dateController.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
-              final indexDate = DateTime(
-                dateController.selectedMonth.year,
-                dateController.selectedMonth.month,
-                index + 1,
-              );
+              final indexDate = dateController.indexToDateTime(index);
               //TODO firstWhereOrNull使いたい
               //TODO element.dirayDate = indexDateに修正したい
               final filteredDiary = data

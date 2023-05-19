@@ -95,13 +95,21 @@ class DateController {
 
   // 今日-5日に自動で画面スクロールするかどうか
   bool isJumpToAroundToday() {
-    if(!isThisMonth()) {
+    if (!isThisMonth()) {
       return false;
     }
-    if(today.day <= 10) {
+    if (today.day <= 10) {
       return false;
     }
     return true;
+  }
+
+  DateTime indexToDateTime(int index) {
+    return DateTime(
+      selectedMonth.year,
+      selectedMonth.month,
+      index + 1,
+    );
   }
 
   //2029年までの日本の祝日 20230324時点
