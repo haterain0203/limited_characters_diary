@@ -8,7 +8,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
 import '../admob/ad_providers.dart';
-import '../date/date_controller.dart';
+import '../date/data_providers.dart';
 import 'diary.dart';
 import 'diary_providers.dart';
 
@@ -68,7 +68,7 @@ class InputDiaryDialog extends HookConsumerWidget {
                       _showErrorDialog(context, '文字が入力されていません');
                       return;
                     }
-                    if(diaryInputController.text.length > 16) {
+                    if (diaryInputController.text.length > 16) {
                       _showErrorDialog(context, '16文字以内に修正してください');
                       return;
                     }
@@ -96,7 +96,9 @@ class InputDiaryDialog extends HookConsumerWidget {
                     if (context.mounted) {
                       await _showCompleteDialog(
                         context,
-                        diary == null ? InputDiaryType.add : InputDiaryType.update,
+                        diary == null
+                            ? InputDiaryType.add
+                            : InputDiaryType.update,
                       );
                     }
                   },
@@ -169,7 +171,9 @@ class InputDiaryDialog extends HookConsumerWidget {
                             await ref
                                 .read(adControllerProvider)
                                 .showInterstitialAdd();
-                            ref.read(isShownInterstitialAdProvider.notifier).state = true;
+                            ref
+                                .read(isShownInterstitialAdProvider.notifier)
+                                .state = true;
                           }
                         },
                       ),

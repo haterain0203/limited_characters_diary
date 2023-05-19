@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
 import '../../constant/constant.dart';
-import '../date/date_controller.dart';
+import '../date/data_providers.dart';
 import 'diary.dart';
 import 'diary_providers.dart';
 import 'input_diary_dialog.dart';
