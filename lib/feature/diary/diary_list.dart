@@ -28,14 +28,15 @@ class DiaryList extends HookConsumerWidget {
       /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
       /// 上記の事象へ対応するもの
       if (current == AppLifecycleState.resumed) {
+        final dateController = ref.read(dateControllerProvider);
         final now = DateTime.now();
         final nowDate = DateTime(now.year, now.month, now.day);
         // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
-        if (ref.read(dateControllerProvider).isToday(nowDate)) {
+        if (dateController.isToday(nowDate)) {
           return;
         }
         // バックグラウンド復帰時の日付でStateProviderを更新
-        ref.read(dateControllerProvider).updateToday(nowDate);
+        dateController.updateToday(nowDate);
       }
     });
 
