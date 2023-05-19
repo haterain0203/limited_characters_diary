@@ -110,17 +110,7 @@ class DiaryList extends HookConsumerWidget {
             itemCount: dateController.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
               final indexDate = dateController.indexToDateTime(index);
-              //TODO firstWhereOrNull使いたい
-              //TODO element.dirayDate = indexDateに修正したい
-              final filteredDiary = data
-                  .where(
-                    (element) =>
-                        element.diaryDate.year == indexDate.year &&
-                        element.diaryDate.month == indexDate.month &&
-                        element.diaryDate.day == indexDate.day,
-                  )
-                  .toList();
-              final diary = filteredDiary.isNotEmpty ? filteredDiary[0] : null;
+              final diary = dateController.getIndexDateDiary(data, indexDate);
               final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
               final dayStrColor = dateController.choiceDayStrColor(indexDate);
               return SizedHeightListTile(

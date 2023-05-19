@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../diary/diary.dart';
+
 /// 今日の日付を提供する
 /// 基本は外部から更新しないが、アプリから復帰した際に最新の日付に更新する
 /// そのためにProviderではなくStateProvider
@@ -110,6 +112,20 @@ class DateController {
       selectedMonth.month,
       index + 1,
     );
+  }
+
+  Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
+    //TODO firstWhereOrNull使いたい
+    //TODO element.dirayDate = indexDateに修正したい
+    final filteredDiary = diaryList
+        .where(
+          (element) =>
+              element.diaryDate.year == indexDate.year &&
+              element.diaryDate.month == indexDate.month &&
+              element.diaryDate.day == indexDate.day,
+        )
+        .toList();
+    return filteredDiary.isNotEmpty ? filteredDiary[0] : null;
   }
 
   //2029年までの日本の祝日 20230324時点
