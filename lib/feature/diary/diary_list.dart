@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
 import '../../constant/constant.dart';
@@ -138,7 +139,7 @@ class DiaryList extends HookConsumerWidget {
                     : () {
                         _showConfirmDeleteDialog(
                           context: context,
-                          ref: ref,
+                          diaryController: ref.read(diaryControllerProvider),
                           diary: diary,
                         );
                       },
@@ -161,7 +162,7 @@ class DiaryList extends HookConsumerWidget {
 
   void _showConfirmDeleteDialog({
     required BuildContext context,
-    required WidgetRef ref,
+    required DiaryController diaryController,
     required Diary diary,
   }) {
     final diaryDateStr =
@@ -177,7 +178,7 @@ class DiaryList extends HookConsumerWidget {
       btnOkColor: Theme.of(context).primaryColor,
       btnOkText: '削除',
       btnOkOnPress: () {
-        ref.read(diaryControllerProvider).deleteDiary(diary: diary);
+        diaryController.deleteDiary(diary: diary);
       },
     ).show();
   }
