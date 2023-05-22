@@ -19,8 +19,8 @@ class PassCodeController {
       isPassCodeLock: isPassCodeLock,
     );
     // passCodeProviderの値を再取得
-    // パスコード登録した後にアプリをバックグラウンドに移行した際にパスコードロック画麺を表示するため
-    // ここで再取得しないと、次にアプリが新たに起動されるまでパスコードONが反映されない
+    // パスコード登録orOFFした際、設定を即時反映させるため
+    // ここで再取得しないと、次にアプリが新たに起動されるまでパスコードON/OFFが反映されない
     invalidatePassCodeProvider();
   }
 }
