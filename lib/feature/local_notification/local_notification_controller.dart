@@ -15,16 +15,19 @@ class LocalNotificationController {
       localNotificationSharedPreferencesRepository;
   final void Function() invalidateLocalNotificationTimeFutureProvider;
 
+  //TODO エラーハンドリング
   Future<void> scheduledNotification(TimeOfDay setTime) async {
     await localNotificationRepository.scheduledNotification(
         notificationTime: setTime);
   }
 
+  //TODO エラーハンドリング
   Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
     await localNotificationSharedPreferencesRepository
         .saveNotificationTime(notificationTime);
   }
 
+  //TODO エラーハンドリング
   Future<void> deleteNotification() async {
     await localNotificationRepository.deleteNotification();
     await localNotificationSharedPreferencesRepository
