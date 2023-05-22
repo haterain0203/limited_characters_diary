@@ -58,8 +58,6 @@ class SettingPage extends StatelessWidget {
                               passCode: '',
                               isPassCodeLock: false,
                             );
-                        // PassCodeProviderを再取得する
-                        ref.invalidate(passCodeProvider);
                       } else {
                         await showScreenLockCreate(
                           context: context,
@@ -183,7 +181,8 @@ class SettingPage extends StatelessWidget {
                           error: (error, stack) {
                             return const Text('エラーが発生しました');
                           },
-                          data: (data) => Text('${data.version}（${data.buildNumber}）'),
+                          data: (data) =>
+                              Text('${data.version}（${data.buildNumber}）'),
                         );
                       },
                     ),
