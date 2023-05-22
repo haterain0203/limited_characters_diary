@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
+
 import 'local_notification_controller.dart';
 import 'local_notification_repository.dart';
 import 'local_notification_shared_preferences_repository.dart';
 
 final localNotificationControllerProvider = Provider(
-  (ref) => LocalNotificationController(
-    localNotificationRepository: ref.watch(localNotificationRepoProvider),
-    localNotificationSharedPreferencesRepository: ref.watch(localNotificationSharedRepoProvider),
-  ),
+  (ref) {
+    void invalidate() => ref.invalidate(localNotificationTimeFutureProvider);
+    return LocalNotificationController(
+      localNotificationRepository: ref.watch(localNotificationRepoProvider),
+      localNotificationSharedPreferencesRepository:
+          ref.watch(localNotificationSharedRepoProvider),
+      invalidateLocalNotificationTimeFutureProvider: invalidate,
+    );
+  },
 );
 
 final localNotificationRepoProvider = Provider<LocalNotificationRepository>(
