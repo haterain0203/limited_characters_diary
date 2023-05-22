@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/stadium_border_button.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
 import 'package:sizer/sizer.dart';
+
 import '../../constant/enum.dart';
 import 'local_notification_providers.dart';
 
@@ -102,7 +103,6 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                       await ref
                           .read(localNotificationControllerProvider)
                           .deleteNotification();
-                      ref.invalidate(localNotificationTimeFutureProvider);
                     },
                     child: const Text('通知設定をリセットする'),
                   ),
