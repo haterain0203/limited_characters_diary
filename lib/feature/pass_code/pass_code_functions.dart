@@ -17,8 +17,6 @@ Future<void> showScreenLockCreate({
       await ref
           .read(passCodeControllerProvider)
           .savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
-      // passCodeProviderの値を再取得
-      ref.invalidate(passCodeProvider);
       // 画面を閉じる
       if (context.mounted) {
         Navigator.pop(context);
