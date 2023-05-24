@@ -122,7 +122,6 @@ class DiaryList extends HookConsumerWidget {
               return Slidable(
                 // 該当日に日記がある場合のみ動作
                 enabled: diary != null,
-                key: Key(index.toString()),
                 endActionPane: ActionPane(
                   extentRatio: 0.15,
                   motion: const BehindMotion(),
