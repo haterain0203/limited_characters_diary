@@ -127,8 +127,16 @@ class DiaryList extends HookConsumerWidget {
                   extentRatio: 0.15,
                   motion: const BehindMotion(),
                   children: [
+                    // 該当行をスライドすると削除ボタンが表示される
                     SlidableAction(
-                      onPressed: (_) {},
+                      onPressed: (_) {
+                        _showConfirmDeleteDialog(
+                          context: context,
+                          diaryController: ref.read(diaryControllerProvider),
+                          // enabled: diary != null を設定しているため、「!」
+                          diary: diary!,
+                        );
+                      },
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
