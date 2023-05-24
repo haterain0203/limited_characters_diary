@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
@@ -118,31 +119,55 @@ class DiaryList extends HookConsumerWidget {
               final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
               // indexに応じた日付の文字色（土日祝日の場合色がつく）
               final dayStrColor = dateController.choiceDayStrColor(indexDate);
-              return SizedHeightListTile(
-                //本日はハイライト
-                tileColor: dateController.isToday(indexDate)
-                    ? Constant.accentColor
-                    : null,
-                leading: Text(
-                  '${indexDate.day}（$dayOfWeekStr）',
-                  style: TextStyle(color: dayStrColor),
-                ),
-                title: Text(
-                  diary?.content ?? '',
-                ),
-                onTap: () async {
-                  ref.read(selectedDateProvider.notifier).state = indexDate;
-                  await _showEditDialog(context, diary);
-                },
-                onLongPress: diary == null
-                    ? null
-                    : () {
+              return Slidable(
+                // 該当日に日記がある場合のみ動作
+                enabled: diary != null,
+                endActionPane: ActionPane(
+                  extentRatio: 0.15,
+                  motion: const BehindMotion(),
+                  children: [
+                    // 該当行をスライドすると削除ボタンが表示される
+                    SlidableAction(
+                      onPressed: (_) {
                         _showConfirmDeleteDialog(
                           context: context,
                           diaryController: ref.read(diaryControllerProvider),
-                          diary: diary,
+                          // enabled: diary != null を設定しているため、「!」
+                          diary: diary!,
                         );
                       },
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                    ),
+                  ],
+                ),
+                child: SizedHeightListTile(
+                  //本日はハイライト
+                  tileColor: dateController.isToday(indexDate)
+                      ? Constant.accentColor
+                      : null,
+                  leading: Text(
+                    '${indexDate.day}（$dayOfWeekStr）',
+                    style: TextStyle(color: dayStrColor),
+                  ),
+                  title: Text(
+                    diary?.content ?? '',
+                  ),
+                  onTap: () async {
+                    ref.read(selectedDateProvider.notifier).state = indexDate;
+                    await _showEditDialog(context, diary);
+                  },
+                  onLongPress: diary == null
+                      ? null
+                      : () {
+                          _showConfirmDeleteDialog(
+                            context: context,
+                            diaryController: ref.read(diaryControllerProvider),
+                            diary: diary,
+                          );
+                        },
+                ),
               );
             },
           ),
@@ -172,12 +197,12 @@ class DiaryList extends HookConsumerWidget {
       context: context,
       dialogType: DialogType.question,
       title: '$diaryDateStrの\n日記を削除しますか？',
-      btnCancelColor: Colors.grey,
-      btnCancelText: 'キャンセル',
-      btnCancelOnPress: () {},
-      btnOkColor: Theme.of(context).primaryColor,
-      btnOkText: '削除',
-      btnOkOnPress: () {
+      btnOkColor: Colors.grey,
+      btnOkText: 'キャンセル',
+      btnOkOnPress: () {},
+      btnCancelColor: Colors.red,
+      btnCancelText: '削除',
+      btnCancelOnPress: () {
         diaryController.deleteDiary(diary: diary);
       },
     ).show();
