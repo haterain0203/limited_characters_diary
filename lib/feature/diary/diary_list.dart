@@ -198,12 +198,12 @@ class DiaryList extends HookConsumerWidget {
       context: context,
       dialogType: DialogType.question,
       title: '$diaryDateStrの\n日記を削除しますか？',
-      btnCancelColor: Colors.grey,
-      btnCancelText: 'キャンセル',
-      btnCancelOnPress: () {},
-      btnOkColor: Theme.of(context).primaryColor,
-      btnOkText: '削除',
-      btnOkOnPress: () {
+      btnOkColor: Colors.grey,
+      btnOkText: 'キャンセル',
+      btnOkOnPress: () {},
+      btnCancelColor: Colors.red,
+      btnCancelText: '削除',
+      btnCancelOnPress: () {
         diaryController.deleteDiary(diary: diary);
       },
     ).show();
