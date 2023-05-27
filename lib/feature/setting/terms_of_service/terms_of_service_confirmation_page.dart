@@ -55,9 +55,12 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                       .read(firstLaunchControllerProvider)
                       .completedFirstLaunch();
                   // 初回起動か否かを管理するProviderのflagをtrueにする
+                  //TODO ここでしか使用されていないため削除して良さそう
                   ref.read(isFirstLaunchProvider.notifier).state = true;
                   // 広告トラッキング許可ダイアログ表示
                   await ref.read(adControllerProvider).requestATT();
+
+                  //TODO check context.mountedの使い方
                   if (context.mounted) {
                     await _showSetNotificationDialog(context);
                     // 通知設定完了後（通知設定ダイアログが閉じたら）、AuthPageへ遷移する

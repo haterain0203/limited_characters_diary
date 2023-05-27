@@ -33,6 +33,8 @@ class DiaryList extends HookConsumerWidget {
         final now = DateTime.now();
         final nowDate = DateTime(now.year, now.month, now.day);
         // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
+        //TODO check 以下の処理は適切か？
+        //TODO check 対象となるProviderを.autoDisposeとすることも検討したが、バックグラウンドに移行してもアプリが終了されない限り破棄されないはず
         if (dateController.isToday(nowDate)) {
           return;
         }
@@ -50,6 +52,7 @@ class DiaryList extends HookConsumerWidget {
           /// 今日の日付の日記が記録済みかどうか？の判定に少し時間がかかるため、少し待ってから処理を行う
           /// 待つ処理を挟まないと、jumpToの条件判定と、isShowEditDialogOnLaunchProviderの判定が適切に動作しない
           //TODO [milliseconds: 500]と固定値でしているが改善できないか？
+          //TODO check 対応は適切か？
           await Future<void>.delayed(const Duration(milliseconds: 500));
 
           if (!context.mounted) {

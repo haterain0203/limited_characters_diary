@@ -8,6 +8,7 @@ final isFirstLaunchProvider = StateProvider<bool>((_) => false);
 final isCompletedFirstLaunchProvider = FutureProvider<bool>((ref) async {
   final repo = ref.watch(firstLaunchRepositoryProvider);
   final isCompletedFirstLaunch = await repo.fetchIsCompletedFirstLaunch();
+  // null = 初めての起動
   if (isCompletedFirstLaunch == null) {
     return false;
   }

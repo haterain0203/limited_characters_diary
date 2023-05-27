@@ -19,6 +19,7 @@ class ForcedUpdateDialog extends HookConsumerWidget {
     // このダイアログは、緊急時以外ユーザーに見せないもの
     // loadingおよびエラーハンドリングは不要と考え、.whenは使っていない
     if (isForcedUpdate.value == null || !isForcedUpdate.value!) {
+      //TODO check SizedBox()を返すこの方法は問題ないか？
       return const SizedBox();
     }
 

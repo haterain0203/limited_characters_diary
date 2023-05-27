@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../diary/diary.dart';
 
+//TODO check 各メソッドはControllerに記載すべきか否か？
 class DateController {
   DateController({
     required this.today,
@@ -37,13 +38,14 @@ class DateController {
     });
   }
 
+  /// 曜日の文字列を返す
   String searchDayOfWeek(DateTime indexDate) {
     final dayOfWeekInt = indexDate.weekday;
     final dayOfWeekStr = '月火水木金土日'[dayOfWeekInt - 1];
     return dayOfWeekStr;
   }
 
-  //当月の日数を返す
+  /// 当月の日数を返す
   int daysInMonth() {
     //https://note.com/hatchoutschool/n/ne95862d50623
     final daysInMonth = DateTime(
@@ -53,9 +55,8 @@ class DateController {
     return daysInMonth;
   }
 
-  //土日祝日の場合なら色を、それ以外なら黒を返す
+  /// 土日祝日の場合なら色を、それ以外なら黒を返す
   Color choiceDayStrColor(DateTime indexDate) {
-    //TODO 重複しているためリファクタリングしたい
     final dayOfWeekInt = indexDate.weekday;
     if (dayOfWeekInt == DateTime.saturday) {
       return Colors.blue;
@@ -70,10 +71,10 @@ class DateController {
   }
 
   bool isToday(DateTime indexDate) {
-    //TODO 重複しているためリファクタリングしたい
     return indexDate.isAtSameMomentAs(today);
   }
 
+  /// inactive時とresume時で日付が変わっている場合更新する
   void updateToday(DateTime now) {
     todayNotifier.update((state) {
       return DateTime(now.year, now.month, now.day);
@@ -84,7 +85,7 @@ class DateController {
     return selectedMonth.month == today.month;
   }
 
-  // 今日-5日に自動で画面スクロールするかどうか
+  /// 今日-5日に自動で画面スクロールするかどうか
   bool isJumpToAroundToday() {
     if (!isThisMonth()) {
       return false;
@@ -112,6 +113,7 @@ class DateController {
     return indexDateDiary;
   }
 
+  //TODO check データの持ち方として適切か？
   //2029年までの日本の祝日 20230324時点
   //以下のデータを加工
   //https://github.com/holiday-jp/holiday_jp/blob/master/holidays.yml

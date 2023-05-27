@@ -18,6 +18,8 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //TODO check dateControllerはref.readで良いのでは？
+    // build関数内ではref.watchとすべき？
     final dateController = ref.watch(dateControllerProvider);
 
     return WillPopScope(

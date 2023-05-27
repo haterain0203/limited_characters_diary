@@ -23,7 +23,7 @@ Future<void> main() async {
 
   //向き指定
   await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,//縦固定
+    DeviceOrientation.portraitUp, //縦固定
   ]);
 
   debugPrint('flavor = $flavor');
@@ -41,8 +41,10 @@ Future<void> main() async {
   // Firebase App Checkの初期化
   await FirebaseAppCheck.instance.activate(
     // Debug用のトークンを取得 & 登録したDebugトークンを使うためには.debugが必要
-    androidProvider: kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
-    appleProvider: kReleaseMode ? AppleProvider.deviceCheck : AppleProvider.debug,
+    androidProvider:
+        kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
+    appleProvider:
+        kReleaseMode ? AppleProvider.deviceCheck : AppleProvider.debug,
   );
 
   // Admobの初期化
@@ -52,6 +54,7 @@ Future<void> main() async {
   final localNotificationRepo = LocalNotificationRepository();
   await localNotificationRepo.init();
 
+  //TODO check
   // SharedPreferencesのインスタンス
   final prefs = await SharedPreferences.getInstance();
 
