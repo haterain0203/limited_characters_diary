@@ -9,7 +9,7 @@ class LocalNotificationController {
     required this.invalidateLocalNotificationTimeFutureProvider,
   });
 
-  //TODO Repositoryが2つあるのはおかしい？
+  //TODO check Repositoryが2つあるのはおかしい？
   final LocalNotificationRepository localNotificationRepository;
   final LocalNotificationSharedPreferencesRepository
       localNotificationSharedPreferencesRepository;
@@ -18,7 +18,8 @@ class LocalNotificationController {
   //TODO エラーハンドリング
   Future<void> scheduledNotification(TimeOfDay setTime) async {
     await localNotificationRepository.scheduledNotification(
-        notificationTime: setTime);
+      notificationTime: setTime,
+    );
   }
 
   //TODO エラーハンドリング

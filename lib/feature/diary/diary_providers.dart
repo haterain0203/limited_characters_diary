@@ -13,6 +13,7 @@ final uidProvider = Provider(
 
 final diaryRepoProvider = Provider(
   (ref) => DiaryRepository(
+    //TODO check ref.watchが望ましいか？
     diaryRef: ref.watch(diaryRefProvider),
   ),
 );
@@ -39,6 +40,11 @@ final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   return diaryList;
 });
 
+final aProvider = Provider<bool>((ref) {
+  final diaryList = ref.watch(diaryStreamProvider);
+
+})
+
 final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
   final repo = ref.watch(diaryRepoProvider);
   final count = await repo.getDiaryCount();
@@ -51,7 +57,7 @@ final diaryControllerProvider = Provider(
   ),
 );
 
-//TODO check 記載箇所はここで問題ないか？
+//TODO check 記述箇所/記述方法について確認
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
   // メンテナンス画面表示中の場合は処理終了

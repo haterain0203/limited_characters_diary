@@ -6,6 +6,7 @@ class DiaryController {
   DiaryController({required this.repo});
   final DiaryRepository repo;
 
+  //TODO エラーハンドリング
   Future<void> addDiary({
     required String content,
     required DateTime selectedDate,
@@ -16,6 +17,7 @@ class DiaryController {
     );
   }
 
+  //TODO エラーハンドリング
   Future<void> updateDiary({
     required Diary diary,
     required String content,
@@ -23,6 +25,7 @@ class DiaryController {
     await repo.updateDiary(diary: diary, content: content);
   }
 
+  //TODO エラーハンドリング
   Future<void> deleteDiary({required Diary diary}) async {
     await repo.deleteDiary(diary: diary);
   }

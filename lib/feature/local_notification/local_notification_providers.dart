@@ -8,6 +8,7 @@ import 'local_notification_shared_preferences_repository.dart';
 
 final localNotificationControllerProvider = Provider(
   (ref) {
+    //TODO check refごと渡さないことを意識し、invalidateを渡す形にしたが、不自然か？
     void invalidate() => ref.invalidate(localNotificationTimeFutureProvider);
     return LocalNotificationController(
       localNotificationRepository: ref.watch(localNotificationRepoProvider),
@@ -20,6 +21,7 @@ final localNotificationControllerProvider = Provider(
 
 final localNotificationRepoProvider = Provider<LocalNotificationRepository>(
   (ref) {
+    //TODO check この方法で問題ないか？
     //main.dartで上書きされる
     throw UnimplementedError();
   },
@@ -33,6 +35,7 @@ final localNotificationSharedRepoProvider = Provider(
 
 // SharedPreferencesにアクセスし、記録された通知時間の文字列を取得
 // TimeOfDayに直して返す
+//TODO check autoDisposeの使い所
 final localNotificationTimeFutureProvider =
     FutureProvider.autoDispose((ref) async {
   final repo = ref.read(localNotificationSharedRepoProvider);

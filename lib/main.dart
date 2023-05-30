@@ -57,6 +57,11 @@ Future<void> main() async {
   //TODO check
   // SharedPreferencesのインスタンス
   final prefs = await SharedPreferences.getInstance();
+  final isFirstLaunch = prefs.get(key);
+
+  await Future.wait<void>([
+    SharedPreferences.getInstance(),
+  ]);
 
   runApp(
     Phoenix(

@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'pass_code_providers.dart';
 
+//TODO check グローバルな関数だが問題はあるか？
 /// パスコード登録画面の表示とパスコードの登録
 Future<void> showScreenLockCreate({
   required BuildContext context,

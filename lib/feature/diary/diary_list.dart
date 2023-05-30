@@ -102,6 +102,7 @@ class DiaryList extends HookConsumerWidget {
         );
       },
       data: (data) {
+        //TODO check ref.readで問題ないか？
         final dateController = ref.read(dateControllerProvider);
         return Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 8),
@@ -158,6 +159,7 @@ class DiaryList extends HookConsumerWidget {
                     diary?.content ?? '',
                   ),
                   onTap: () async {
+                    //TODO check ここは素直にindexDateを渡すべきか？
                     ref.read(selectedDateProvider.notifier).state = indexDate;
                     await _showEditDialog(context, diary);
                   },
@@ -179,6 +181,7 @@ class DiaryList extends HookConsumerWidget {
     );
   }
 
+  //TODO メソッド名と呼び出しているダイアログ名が整合していない
   Future<void> _showEditDialog(BuildContext context, Diary? diary) async {
     await showDialog<AlertDialog>(
       context: context,

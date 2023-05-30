@@ -33,6 +33,7 @@ class InputDiaryDialog extends HookConsumerWidget {
         ),
       ),
       title: Text(
+        //TODO 曜日も表示する
         '${selectedDate.year}年${selectedDate.month}月${selectedDate.day}日',
       ),
       content: TextField(
@@ -118,6 +119,7 @@ class InputDiaryDialog extends HookConsumerWidget {
     primaryFocus?.unfocus();
     // 新規登録(diary == null)なら、新規登録完了を示すダイアログを、そうでなければ更新完了のダイアログとを
     if (context.mounted) {
+      //TODO check Dialogを呼び出す際は漏れなくawaitすべきか？他に実行する処理がない場合はawait不要では？
       await _showCompleteDialog(
         context,
         diary == null ? InputDiaryType.add : InputDiaryType.update,
@@ -174,6 +176,7 @@ class InputDiaryDialog extends HookConsumerWidget {
                       width: double.infinity,
                       child: StadiumBorderButton(
                         onPressed: () async {
+                          //TODO check ここに限った話ではないが、DialogにDialogを重ねるのは問題ないか？
                           Navigator.pop(context);
                           Navigator.pop(context);
                           if (inputDiaryType == InputDiaryType.update) {
