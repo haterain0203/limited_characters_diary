@@ -54,13 +54,11 @@ Future<void> main() async {
   final localNotificationRepo = LocalNotificationRepository();
   await localNotificationRepo.init();
 
-  //TODO check
   // SharedPreferencesのインスタンス
   final prefs = await SharedPreferences.getInstance();
-
-  await Future.wait<void>([
-    SharedPreferences.getInstance(),
-  ]);
+  //TODO check ControllerやRepositoryに定義して実行すべきではないか？
+  final isCompletedFirstLaunch =
+      prefs.getBool('completed_first_launch') ?? false;
 
   runApp(
     Phoenix(
@@ -72,7 +70,9 @@ Future<void> main() async {
                 .overrideWithValue(localNotificationRepo),
             sharedPreferencesInstanceProvider.overrideWithValue(prefs),
           ],
-          child: const MyApp(),
+          child: MyApp(
+            isCompletedFirstLaunch: isCompletedFirstLaunch,
+          ),
         ),
       ),
     ),

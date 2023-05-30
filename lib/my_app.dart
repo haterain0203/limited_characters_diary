@@ -11,14 +11,15 @@ import 'feature/admob/ad_providers.dart';
 import 'feature/auth/auth_page.dart';
 
 class MyApp extends HookConsumerWidget {
-  const MyApp({super.key});
+  const MyApp({required this.isCompletedFirstLaunch, super.key});
+  final bool isCompletedFirstLaunch;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isCompletedFirstLaunch = ref.watch(isCompletedFirstLaunchProvider);
 
     useEffect(
-          () {
+      () {
         Future(() async {
           // 全画面広告のロード
           await ref.read(adControllerProvider).initInterstitialAdd();
