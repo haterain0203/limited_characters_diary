@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant.dart';
-import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
 import 'package:limited_characters_diary/feature/setting/terms_of_service/terms_of_service_confirmation_page.dart';
 import 'package:sizer/sizer.dart';
 
@@ -11,13 +10,13 @@ import 'feature/admob/ad_providers.dart';
 import 'feature/auth/auth_page.dart';
 
 class MyApp extends HookConsumerWidget {
+  //TODO check 引数を受けることに問題はないか？（constつけられなくなるが特に気にするほどでもないか？）
   const MyApp({required this.isCompletedFirstLaunch, super.key});
+
   final bool isCompletedFirstLaunch;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isCompletedFirstLaunch = ref.watch(isCompletedFirstLaunchProvider);
-
     useEffect(
       () {
         Future(() async {
@@ -48,22 +47,9 @@ class MyApp extends HookConsumerWidget {
               ),
             ),
           ),
-          home: isCompletedFirstLaunch.maybeWhen(
-            data: (data) {
-              if (data) {
-                return const AuthPage();
-              } else {
-                return const TermsOfServiceConfirmationPage();
-              }
-            },
-            orElse: () {
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            },
-          ),
+          home: isCompletedFirstLaunch
+              ? const AuthPage()
+              : const TermsOfServiceConfirmationPage(),
         );
       },
     );
