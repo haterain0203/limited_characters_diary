@@ -20,7 +20,7 @@ final localNotificationControllerProvider = Provider(
 );
 
 final localNotificationRepoProvider = Provider<LocalNotificationRepository>(
-  (ref) {
+  (_) {
     //TODO check この方法で問題ないか？
     //main.dartで上書きされる
     throw UnimplementedError();
