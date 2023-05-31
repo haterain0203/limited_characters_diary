@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_or_list_page_switcher.dart';
+
 import 'auth_providers.dart';
 
 class AuthPage extends HookConsumerWidget {
@@ -26,16 +27,13 @@ class AuthPage extends HookConsumerWidget {
       ),
       data: (data) {
         if (data == null) {
-          Future(() async {
-            try {
-              await ref
-                  .read(authControllerProvider)
-                  .signInAnonymouslyAndAddUser();
-            } catch (e) {
-              //TODO
-              debugPrint(e.toString());
-            }
-          });
+          //TODO check try/catchはController or Provider側に書くべきか？
+          try {
+            ref.read(authControllerProvider).signInAnonymouslyAndAddUser();
+          } catch (e) {
+            //TODO
+            debugPrint(e.toString());
+          }
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
