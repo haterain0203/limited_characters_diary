@@ -59,22 +59,21 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                   ref.read(isFirstLaunchProvider.notifier).state = true;
                   // 広告トラッキング許可ダイアログ表示
                   await ref.read(adControllerProvider).requestATT();
-
-                  //TODO check context.mountedの使い方
-                  if (context.mounted) {
-                    await _showSetNotificationDialog(context);
-                    // 通知設定完了後（通知設定ダイアログが閉じたら）、AuthPageへ遷移する
-                    // 当初は通知設定ダイアログ側でAuthPageへの遷移を記述していたが、それだとローカル通知時間が正しく反映されない
-                    if (!context.mounted) {
-                      return;
-                    }
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute<AuthPage>(
-                        builder: (_) => const AuthPage(),
-                      ),
-                    );
+                  if (!context.mounted) {
+                    return;
                   }
+                  await _showSetNotificationDialog(context);
+                  // 通知設定完了後（通知設定ダイアログが閉じたら）、AuthPageへ遷移する
+                  // 当初は通知設定ダイアログ側でAuthPageへの遷移を記述していたが、それだとローカル通知時間が正しく反映されない
+                  if (!context.mounted) {
+                    return;
+                  }
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute<AuthPage>(
+                      builder: (_) => const AuthPage(),
+                    ),
+                  );
                 },
               ),
             ),
