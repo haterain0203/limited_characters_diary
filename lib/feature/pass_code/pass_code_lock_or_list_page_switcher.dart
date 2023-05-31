@@ -22,28 +22,29 @@ class PassCodeLockOrListPageSwitcher extends HookConsumerWidget {
       ///
       /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
       /// inactiveのタイミングで呼び出すこととしたもの
-      if (current == AppLifecycleState.inactive) {
-        //TODO check
-        // パスコード設定がOFFなら処理終了
-        if (!ref.read(isSetPassCodeLockProvider)) {
-          return;
-        }
-
-        // 全画面広告から復帰した際は処理終了
-        // 全画面広告表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
-        // TODO check 全画面広告以外にもこういったことが今後発生する可能性がある、その度にこういった分岐を増やすのか？
-        if (ref.read(isShownInterstitialAdProvider)) {
-          return;
-        }
-
-        // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は処理終了
-        if (ref.read(isInitialSetNotificationProvider)) {
-          // falseに戻さないと、初めて通知設定した後にinactiveにした際にロック画面が表示されない
-          ref.read(isInitialSetNotificationProvider.notifier).state = false;
-          return;
-        }
-        ref.read(isShowScreenLockProvider.notifier).state = true;
+      if (current != AppLifecycleState.inactive) {
+        return;
       }
+      //TODO check
+      // パスコード設定がOFFなら処理終了
+      if (!ref.read(isSetPassCodeLockProvider)) {
+        return;
+      }
+
+      // 全画面広告から復帰した際は処理終了
+      // 全画面広告表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
+      // TODO check 全画面広告以外にもこういったことが今後発生する可能性がある、その度にこういった分岐を増やすのか？
+      if (ref.read(isShownInterstitialAdProvider)) {
+        return;
+      }
+
+      // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は処理終了
+      if (ref.read(isInitialSetNotificationProvider)) {
+        // falseに戻さないと、初めて通知設定した後にinactiveにした際にロック画面が表示されない
+        ref.read(isInitialSetNotificationProvider.notifier).state = false;
+        return;
+      }
+      ref.read(isShowScreenLockProvider.notifier).state = true;
     });
 
     //TODO check 日記画面が写らないようにこういった対応をしたが、適切か？
