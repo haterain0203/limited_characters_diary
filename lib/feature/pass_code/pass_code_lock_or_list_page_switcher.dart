@@ -5,9 +5,6 @@ import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.d
 import 'package:limited_characters_diary/feature/pass_code/pass_code_providers.dart';
 import 'package:limited_characters_diary/home_page.dart';
 
-import '../admob/ad_providers.dart';
-import '../local_notification/local_notification_providers.dart';
-
 /// パスコードロック画面とListPageを切り替えるためのWidget
 class PassCodeLockOrListPageSwitcher extends HookConsumerWidget {
   const PassCodeLockOrListPageSwitcher({
@@ -25,26 +22,12 @@ class PassCodeLockOrListPageSwitcher extends HookConsumerWidget {
       if (current != AppLifecycleState.inactive) {
         return;
       }
-      //TODO check
-      // パスコード設定がOFFなら処理終了
-      if (!ref.read(isSetPassCodeLockProvider)) {
-        return;
-      }
 
-      // 全画面広告から復帰した際は処理終了
-      // 全画面広告表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
-      // TODO check 全画面広告以外にもこういったことが今後発生する可能性がある、その度にこういった分岐を増やすのか？
-      if (ref.read(isShownInterstitialAdProvider)) {
-        return;
+      //TODO check 常にパスコード画面を表示するか否かを監視する必要はなく、
+      //TODO check inactive時に判定すれば良いので、ProviderではなくContollerのメソッドとしたがどうか？
+      if (ref.read(passCodeControllerProvider).shouldShowPassCodeLock()) {
+        ref.read(isShowScreenLockProvider.notifier).state = true;
       }
-
-      // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は処理終了
-      if (ref.read(isInitialSetNotificationProvider)) {
-        // falseに戻さないと、初めて通知設定した後にinactiveにした際にロック画面が表示されない
-        ref.read(isInitialSetNotificationProvider.notifier).state = false;
-        return;
-      }
-      ref.read(isShowScreenLockProvider.notifier).state = true;
     });
 
     //TODO check 日記画面が写らないようにこういった対応をしたが、適切か？
