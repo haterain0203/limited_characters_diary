@@ -36,8 +36,8 @@ class DateController {
     });
   }
 
-  /// 当月の日数を返す
-  int daysInMonth() {
+  //TODO check 選択された月の状態が必要なため、extensionではなくcontrollerとしたがどうか？
+  int daysInMonth(DateTime indexDate) {
     //https://note.com/hatchoutschool/n/ne95862d50623
     final daysInMonth = DateTime(
       selectedMonth.year,
