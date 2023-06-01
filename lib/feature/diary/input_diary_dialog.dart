@@ -118,13 +118,14 @@ class InputDiaryDialog extends HookConsumerWidget {
     // 参考 https://zenn.dev/blendthink/articles/d2c96aa333be07
     primaryFocus?.unfocus();
     // 新規登録(diary == null)なら、新規登録完了を示すダイアログを、そうでなければ更新完了のダイアログとを
-    if (context.mounted) {
-      //TODO check Dialogを呼び出す際は漏れなくawaitすべきか？他に実行する処理がない場合はawait不要では？
-      await _showCompleteDialog(
-        context,
-        diary == null ? InputDiaryType.add : InputDiaryType.update,
-      );
+    if (!context.mounted) {
+      return;
     }
+    //TODO check Dialogを呼び出す際は漏れなくawaitすべきか？他に実行する処理がない場合はawait不要では？
+    await _showCompleteDialog(
+      context,
+      diary == null ? InputDiaryType.add : InputDiaryType.update,
+    );
   }
 
   void _showErrorDialog(
