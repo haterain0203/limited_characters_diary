@@ -97,14 +97,10 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<WebViewPage>(
-                          builder: (_) => const WebViewPage(
-                            title: ConstantString.contactUsStr,
-                            url: ConstantString.googleFormUrl,
-                          ),
-                        ),
+                      _openWebViewPage(
+                        context: context,
+                        title: ConstantString.contactUsStr,
+                        url: ConstantString.googleFormUrl,
                       );
                     },
                   ),
@@ -115,14 +111,10 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<WebViewPage>(
-                          builder: (_) => const WebViewPage(
-                            title: ConstantString.termsOfServiceStr,
-                            url: ConstantString.termsOfServiceUrl,
-                          ),
-                        ),
+                      _openWebViewPage(
+                        context: context,
+                        title: ConstantString.termsOfServiceStr,
+                        url: ConstantString.termsOfServiceUrl,
                       );
                     },
                   ),
@@ -133,14 +125,10 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<WebViewPage>(
-                          builder: (_) => const WebViewPage(
-                            title: ConstantString.privacyPolicyStr,
-                            url: ConstantString.privacyPolicyUrl,
-                          ),
-                        ),
+                      _openWebViewPage(
+                        context: context,
+                        title: ConstantString.privacyPolicyStr,
+                        url: ConstantString.privacyPolicyUrl,
                       );
                     },
                   ),
@@ -230,6 +218,22 @@ class SettingPage extends StatelessWidget {
       builder: (_) {
         return const ConfirmDeleteAllDataDialog();
       },
+    );
+  }
+
+  void _openWebViewPage({
+    required BuildContext context,
+    required String title,
+    required String url,
+  }) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<WebViewPage>(
+        builder: (_) => WebViewPage(
+          title: title,
+          url: url,
+        ),
+      ),
     );
   }
 }
