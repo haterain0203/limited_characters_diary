@@ -57,13 +57,9 @@ class DateController {
     });
   }
 
-  bool _isThisMonth() {
-    return selectedMonth.month == today.month;
-  }
-
   /// 今日-5日に自動で画面スクロールするかどうか
   bool isJumpToAroundToday() {
-    if (!_isThisMonth()) {
+    if (selectedMonth.month != today.month) {
       return false;
     }
     if (today.day <= 10) {
