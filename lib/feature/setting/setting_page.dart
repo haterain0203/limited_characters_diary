@@ -96,10 +96,10 @@ class SettingPage extends StatelessWidget {
                       ConstantString.contactUsStr,
                       style: textStyle,
                     ),
-                    onPressed: (BuildContext context) {
+                    onPressed: (_) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute<dynamic>(
+                        MaterialPageRoute<WebViewPage>(
                           builder: (_) => const WebViewPage(
                             title: ConstantString.contactUsStr,
                             url: ConstantString.googleFormUrl,
@@ -114,10 +114,10 @@ class SettingPage extends StatelessWidget {
                       ConstantString.termsOfServiceStr,
                       style: textStyle,
                     ),
-                    onPressed: (BuildContext context) {
+                    onPressed: (_) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute<dynamic>(
+                        MaterialPageRoute<WebViewPage>(
                           builder: (_) => const WebViewPage(
                             title: ConstantString.termsOfServiceStr,
                             url: ConstantString.termsOfServiceUrl,
@@ -132,10 +132,10 @@ class SettingPage extends StatelessWidget {
                       ConstantString.privacyPolicyStr,
                       style: textStyle,
                     ),
-                    onPressed: (BuildContext context) {
+                    onPressed: (_) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute<dynamic>(
+                        MaterialPageRoute<WebViewPage>(
                           builder: (_) => const WebViewPage(
                             title: ConstantString.privacyPolicyStr,
                             url: ConstantString.privacyPolicyUrl,

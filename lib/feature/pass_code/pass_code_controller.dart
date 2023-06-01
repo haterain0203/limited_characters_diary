@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'pass_code_repository.dart';
 
 class PassCodeController {
+  //TODO check Controllerの引数が肥大化する場合、何かしら改善すべきか？
   PassCodeController({
     required this.repo,
     required this.invalidatePassCodeProvider,
