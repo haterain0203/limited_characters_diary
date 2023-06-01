@@ -46,6 +46,7 @@ class PassCodeController {
     // 全画面広告表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
     //TODO check 全画面広告を閉じて以降、アプリをバックグラウンドに移動させた際、パスコードロックが正しく表示されない
     if (isShownInterstitialAd) {
+      // isShownInterstitialAdNotifier.state = false;
       return false;
     }
 
