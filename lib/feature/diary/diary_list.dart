@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/extension/date_time_extensions.dart';
+import 'package:limited_characters_diary/feature/date/date_controller.dart';
 import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
@@ -48,22 +49,14 @@ class DiaryList extends HookConsumerWidget {
       //煩雑になると考え、Stackとしたもの。
     });
 
-    /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
-    ///
-    /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
-    /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
-    /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!dateController.shouldJumpToAroundToday()) {
-        return;
-      }
-      if (!scrollController.hasClients) {
-        return;
-      }
-      scrollController.jumpTo(
-        ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
+      _autoJumpToAroundToday(
+        dateController: dateController,
+        scrollController: scrollController,
+        isJumpedToAroundTodayController: ref.read(
+          isJumpedToAroundTodayProvider.notifier,
+        ),
       );
-      ref.read(isJumpedToAroundTodayProvider.notifier).state = true;
     });
 
     return diaryList.when(
@@ -188,5 +181,27 @@ class DiaryList extends HookConsumerWidget {
         diaryController.deleteDiary(diary: diary);
       },
     ).show();
+  }
+
+  /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
+  ///
+  /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
+  /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
+  /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
+  void _autoJumpToAroundToday({
+    required DateController dateController,
+    required ScrollController scrollController,
+    required StateController<bool> isJumpedToAroundTodayController,
+  }) {
+    if (!dateController.shouldJumpToAroundToday()) {
+      return;
+    }
+    if (!scrollController.hasClients) {
+      return;
+    }
+    scrollController.jumpTo(
+      ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
+    );
+    isJumpedToAroundTodayController.state = true;
   }
 }
