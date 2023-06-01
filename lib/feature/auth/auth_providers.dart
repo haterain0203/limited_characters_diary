@@ -12,7 +12,7 @@ final firestoreInstanceProvider = Provider((ref) => FirebaseFirestore.instance);
 
 final authRepoProvider = Provider(
   (ref) => AuthRepository(
-    //TODO ref.watchにすべきか？
+    //TODO check ref.watchにすべきか？
     auth: ref.read(authInstanceProvider),
     firestore: ref.read(firestoreInstanceProvider),
     fcm: ref.read(fcmInstanceProvider),
