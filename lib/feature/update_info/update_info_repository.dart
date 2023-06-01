@@ -17,6 +17,7 @@ class UpdateInfoRepository {
     return updateInfo;
   }
 
+  //TODO ここも向きが逆転しているかも
   // 端末のアプリバージョンとfirebaseのバージョンを比較し、firebaseの方が新しい場合、
   // 強制アップデートを促すダイアログを表示するためのboolを返す
   Future<bool> requiredUpdate(UpdateInfo updateInfo) async {
