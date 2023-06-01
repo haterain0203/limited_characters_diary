@@ -10,8 +10,7 @@ class FirstLaunchRepository {
     await prefs.setBool(completedFirstLaunchKey, true);
   }
 
-  Future<bool?> fetchIsCompletedFirstLaunch() async {
-    return prefs.getBool(completedFirstLaunchKey);
-  }
-
+  // Future<bool?> fetchIsCompletedFirstLaunch() async {
+  //   return prefs.getBool(completedFirstLaunchKey);
+  // }
 }
