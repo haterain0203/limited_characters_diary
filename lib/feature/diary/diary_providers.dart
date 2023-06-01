@@ -4,6 +4,7 @@ import 'package:limited_characters_diary/feature/update_info/update_info_provide
 
 import '../auth/auth_providers.dart';
 import '../date/date_providers.dart';
+import '../update_info/update_info.dart';
 import 'diary.dart';
 import 'diary_controller.dart';
 import 'diary_repository.dart';
@@ -70,26 +71,18 @@ final isInputDiaryDialogShownProvider = StateProvider((ref) => false);
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final isShowInputDiaryDialogOnLaunchProvider =
     Provider.autoDispose<bool>((ref) {
-  // 既に日記入力ダイアログが表示済みならfalse
+  // 既に日記入力ダイアログが表示済みなら日記ダイアログを自動表示しない
   if (ref.watch(isInputDiaryDialogShownProvider)) {
     return false;
   }
 
-  // メンテナンス画面表示中の場合は処理終了
-  final updateInfo = ref.watch(updateInfoProvider).value;
-  if (updateInfo == null) {
-    return false;
-  }
-  if (updateInfo.isUnderRepair) {
+  // メンテナンス中なら日記ダイアログを自動表示しない
+  if (_isUnderRepair(updateInfo: ref.watch(updateInfoProvider).value)) {
     return false;
   }
 
-  // 強制アップデート表示中の場合は処理終了
-  final forcedUpdate = ref.watch(forcedUpdateProvider).value;
-  if (forcedUpdate == null) {
-    return false;
-  }
-  if (forcedUpdate) {
+  // 強制アップデート表示中の場合は日記ダイアログを自動表示しない
+  if (_isForcedUpdate(isForcedUpdate: ref.watch(forcedUpdateProvider).value)) {
     return false;
   }
 
@@ -126,3 +119,17 @@ final isShowInputDiaryDialogOnLaunchProvider =
   //上記条件をクリアしている場合は、ダイアログを表示させる
   return true;
 });
+
+bool _isUnderRepair({required UpdateInfo? updateInfo}) {
+  if (updateInfo != null && updateInfo.isUnderRepair) {
+    return true;
+  }
+  return false;
+}
+
+bool _isForcedUpdate({required bool? isForcedUpdate}) {
+  if (isForcedUpdate != null && isForcedUpdate) {
+    return true;
+  }
+  return false;
+}
