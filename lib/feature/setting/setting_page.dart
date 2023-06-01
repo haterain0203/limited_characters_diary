@@ -28,6 +28,7 @@ class SettingPage extends StatelessWidget {
           final isPassCodeLock = ref.watch(
             passCodeProvider.select((value) => value.isPassCodeEnabled),
           );
+          final appInfo = ref.watch(appInfoProvider);
           return SettingsList(
             platform: DevicePlatform.iOS,
             sections: [
@@ -159,20 +160,15 @@ class SettingPage extends StatelessWidget {
                       'アプリバージョン',
                       style: textStyle,
                     ),
-                    trailing: HookConsumer(
-                      builder: (context, ref, child) {
-                        final appInfo = ref.watch(appInfoProvider);
-                        return appInfo.when(
-                          loading: () => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          error: (error, stack) {
-                            return const Text('エラーが発生しました');
-                          },
-                          data: (data) =>
-                              Text('${data.version}（${data.buildNumber}）'),
-                        );
+                    trailing: appInfo.when(
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      error: (error, stack) {
+                        return const Text('エラーが発生しました');
                       },
+                      data: (data) =>
+                          Text('${data.version}（${data.buildNumber}）'),
                     ),
                   ),
                   // SettingsTile(
