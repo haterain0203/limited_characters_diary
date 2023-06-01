@@ -28,7 +28,7 @@ final selectedDateProvider = StateProvider<DateTime>((ref) {
   return selectedDate;
 });
 
-final dateControllerProvider = Provider(
+final dateControllerProvider = Provider.autoDispose(
   (ref) => DateController(
     today: ref.watch(todayProvider),
     selectedDate: ref.watch(selectedDateProvider),

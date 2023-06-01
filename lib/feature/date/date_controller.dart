@@ -1,7 +1,4 @@
-import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../diary/diary.dart';
 
 class DateController {
   DateController({
@@ -79,10 +76,15 @@ class DateController {
   }
 
   /// ListViewのindexに該当する日記を返す
-  Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
-    final indexDateDiary = diaryList.firstWhereOrNull((diary) {
-      return diary.diaryDate == indexDate;
-    });
-    return indexDateDiary;
-  }
+  //TODO check Providerに書くべきか、Controllerに書くべきかの判断がまだ腹落ちできていない
+  //TODO check ref.watch(diaryStreamProvider)を注入して使用する方法でも良いのか？
+  //TODO Providerで処理するもの＝値を監視したいもの、Controllerで処理するもの＝ユーザーの動作に起因するもの（自動処理も含む）
+  //TODO とした場合、以下の処理は、常に監視したいものではないので、Controllerの方が適切では？
+  //TODO （ただし、仮にControllerに書くとしてもDateControllerではなく、DiaryControllerで良さそう）
+  // Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
+  //   final indexDateDiary = diaryList.firstWhereOrNull((diary) {
+  //     return diary.diaryDate == indexDate;
+  //   });
+  //   return indexDateDiary;
+  // }
 }

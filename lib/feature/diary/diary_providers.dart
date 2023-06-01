@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
 
@@ -38,6 +39,16 @@ final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   final diaryList =
       repo.subscribedDiaryList(selectedMonthDate: selectedMonthDate);
   return diaryList;
+});
+
+//TODO check Controllerから移動したが、書き方に問題はないか？
+final indexDateDiaryProvider =
+    Provider.autoDispose.family<Diary?, DateTime>((ref, indexDate) {
+  final diaryList = ref.watch(diaryStreamProvider).value ?? [];
+  final indexDateDiary = diaryList.firstWhereOrNull((diary) {
+    return diary.diaryDate == indexDate;
+  });
+  return indexDateDiary;
 });
 
 final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {

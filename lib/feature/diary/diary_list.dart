@@ -121,7 +121,7 @@ class DiaryList extends HookConsumerWidget {
               // indexに応じた日付
               final indexDate = dateController.indexToDateTime(index);
               // indexに応じた日記データ
-              final diary = dateController.getIndexDateDiary(data, indexDate);
+              final diary = ref.watch(indexDateDiaryProvider(indexDate));
               // indexに応じた曜日文字列
               //TODO check extensionの使い方合ってるか？
               final dayOfWeekStr = DateTime.now().searchDayOfWeek(indexDate);
