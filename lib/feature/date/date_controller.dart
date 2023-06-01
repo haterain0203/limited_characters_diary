@@ -37,7 +37,7 @@ class DateController {
   }
 
   //TODO check 選択された月の状態が必要なため、extensionではなくcontrollerとしたがどうか？
-  int daysInMonth(DateTime indexDate) {
+  int daysInMonth() {
     //https://note.com/hatchoutschool/n/ne95862d50623
     final daysInMonth = DateTime(
       selectedMonth.year,
