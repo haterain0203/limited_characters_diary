@@ -49,8 +49,8 @@ class DiaryList extends HookConsumerWidget {
       //煩雑になると考え、Stackとしたもの。
     });
 
+    /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
       _autoJumpToAroundToday(
         dateController: dateController,
         scrollController: scrollController,
