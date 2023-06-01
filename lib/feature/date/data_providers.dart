@@ -7,7 +7,7 @@ import 'date_controller.dart';
 /// そのためにProviderではなくStateProvider
 //TODO check StateProviderで問題ないか？
 final todayProvider = StateProvider<DateTime>((ref) {
-  final now = DateTime.now();
+  final now = DateTime(2023, 5, 25);
   return DateTime(now.year, now.month, now.day);
 });
 
