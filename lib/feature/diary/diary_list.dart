@@ -24,8 +24,6 @@ class DiaryList extends HookConsumerWidget {
     final dateController = ref.watch(dateControllerProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
-    final isShownEditDialog = useState(false);
-    final isJumped = useState(false);
 
     useOnAppLifecycleStateChange((previous, current) async {
       if (current == AppLifecycleState.resumed) {
@@ -36,16 +34,13 @@ class DiaryList extends HookConsumerWidget {
 
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 既にダイアログが表示されていたら処理終了
-      if (isShownEditDialog.value) {
-        return;
-      }
       //TODO check ここはonPressedの中のように.readを使うで良いか？
       if (!ref.read(isShowEditDialogOnLaunchProvider)) {
         return;
       }
       _showEditDialog(context, null);
-      isShownEditDialog.value = true;
+      // 日記入力ダイアログが表示済みであることを記録する
+      ref.read(isEditDialogShownProvider.notifier).state = true;
 
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
@@ -59,9 +54,6 @@ class DiaryList extends HookConsumerWidget {
     /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
     /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (isJumped.value) {
-        return;
-      }
       if (!dateController.shouldJumpToAroundToday()) {
         return;
       }
@@ -71,7 +63,7 @@ class DiaryList extends HookConsumerWidget {
       scrollController.jumpTo(
         ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
       );
-      isJumped.value = true;
+      ref.read(isJumpedToAroundTodayProvider.notifier).state = true;
     });
 
     return diaryList.when(

@@ -35,5 +35,8 @@ final dateControllerProvider = Provider.autoDispose(
     selectedMonth: ref.watch(selectedMonthDateProvider),
     todayNotifier: ref.read(todayProvider.notifier),
     selectedMonthNotifier: ref.read(selectedMonthDateProvider.notifier),
+    isJumpedToAroundToday: ref.watch(isJumpedToAroundTodayProvider),
   ),
 );
+
+final isJumpedToAroundTodayProvider = StateProvider((ref) => false);

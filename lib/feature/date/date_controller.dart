@@ -7,6 +7,7 @@ class DateController {
     required this.selectedMonth,
     required this.todayNotifier,
     required this.selectedMonthNotifier,
+    required this.isJumpedToAroundToday,
   });
 
   final DateTime today;
@@ -14,6 +15,7 @@ class DateController {
   final DateTime selectedMonth;
   final StateController<DateTime> todayNotifier;
   final StateController<DateTime> selectedMonthNotifier;
+  final bool isJumpedToAroundToday;
 
   void showNextMonth() {
     selectedMonthNotifier.update((state) {
@@ -68,6 +70,10 @@ class DateController {
 
   /// 今日-5日に自動で画面スクロールするかどうか
   bool shouldJumpToAroundToday() {
+    // 既にスクロール済みならfalseを返す（スクロールさせない）
+    if (isJumpedToAroundToday) {
+      return false;
+    }
     if (selectedMonth.month != today.month) {
       return false;
     }
