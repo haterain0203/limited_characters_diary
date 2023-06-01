@@ -17,6 +17,7 @@ final passCodeRepositoryProvider = Provider(
 
 final passCodeControllerProvider = Provider(
   (ref) {
+    //TODO check Controllerにinvalidateを渡すのは不自然か？渡し方に違和感ないか？
     void invalidate() => ref.invalidate(passCodeProvider);
     return PassCodeController(
       repo: ref.watch(passCodeRepositoryProvider),

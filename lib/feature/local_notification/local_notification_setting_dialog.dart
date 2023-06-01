@@ -18,9 +18,8 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notificationTimeFromLocalDB =
-        ref.watch(localNotificationTimeFutureProvider);
-    return notificationTimeFromLocalDB.when(
+    final notificationTime = ref.watch(localNotificationTimeFutureProvider);
+    return notificationTime.when(
       loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
