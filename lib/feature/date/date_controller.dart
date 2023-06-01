@@ -19,7 +19,7 @@ class DateController {
   final StateController<DateTime> todayNotifier;
   final StateController<DateTime> selectedMonthNotifier;
 
-  void nextMonth() {
+  void showNextMonth() {
     selectedMonthNotifier.update((state) {
       return DateTime(
         selectedMonth.year,
@@ -28,7 +28,7 @@ class DateController {
     });
   }
 
-  void previousMonth() {
+  void showPreviousMonth() {
     selectedMonthNotifier.update((state) {
       return DateTime(
         selectedMonth.year,

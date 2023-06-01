@@ -36,7 +36,7 @@ class HomePage extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: dateController.previousMonth,
+                    onPressed: dateController.showPreviousMonth,
                     style: TextButton.styleFrom(
                       minimumSize: Size.zero,
                       padding: EdgeInsets.zero,
@@ -50,7 +50,7 @@ class HomePage extends HookConsumerWidget {
                     '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
                   ),
                   TextButton(
-                    onPressed: dateController.nextMonth,
+                    onPressed: dateController.showNextMonth,
                     style: TextButton.styleFrom(
                       minimumSize: Size.zero,
                       padding: EdgeInsets.zero,
