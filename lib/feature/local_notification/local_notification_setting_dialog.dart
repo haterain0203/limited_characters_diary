@@ -81,11 +81,13 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                     ),
                   )
                 : TextButton(
-                    onPressed: () async => _setNotification(
-                      context,
-                      data,
-                      ref,
-                    ),
+                    onPressed: () async {
+                      return _setNotification(
+                        context,
+                        data,
+                        ref,
+                      );
+                    },
                     child: Text(
                       data.to24hours(),
                       style: TextStyle(
@@ -122,21 +124,6 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
     );
   }
 
-  Future<void> _showSetCompleteDialog(
-    BuildContext context,
-    String setTime,
-  ) async {
-    await AwesomeDialog(
-      context: context,
-      dialogType: DialogType.success,
-      title: '$setTimeに通知を設定しました',
-      btnOkText: '閉じる',
-      btnOkOnPress: () {
-        Navigator.pop(context);
-      },
-    ).show();
-  }
-
   Future<void> _setNotification(
     BuildContext context,
     TimeOfDay? data,
@@ -163,7 +150,6 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
       return;
     }
     //初めて通知設定する場合、trueに
-    //
     if (data == null) {
       ref.read(isInitialSetNotificationProvider.notifier).state = true;
     }
@@ -178,5 +164,20 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
     if (context.mounted) {
       await _showSetCompleteDialog(context, setTime.to24hours());
     }
+  }
+
+  Future<void> _showSetCompleteDialog(
+    BuildContext context,
+    String setTime,
+  ) async {
+    await AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      title: '$setTimeに通知を設定しました',
+      btnOkText: '閉じる',
+      btnOkOnPress: () {
+        Navigator.pop(context);
+      },
+    ).show();
   }
 }
