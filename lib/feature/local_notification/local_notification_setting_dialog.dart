@@ -67,9 +67,9 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                 ? StadiumBorderButton(
                     onPressed: () {
                       _setNotification(
-                        context,
-                        data,
-                        ref,
+                        context: context,
+                        savedNotificationTime: data,
+                        ref: ref,
                       );
                     },
                     title: Padding(
@@ -83,9 +83,9 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                 : TextButton(
                     onPressed: () async {
                       return _setNotification(
-                        context,
-                        data,
-                        ref,
+                        context: context,
+                        savedNotificationTime: data,
+                        ref: ref,
                       );
                     },
                     child: Text(
@@ -124,14 +124,15 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
     );
   }
 
-  Future<void> _setNotification(
-    BuildContext context,
-    TimeOfDay? data,
-    WidgetRef ref,
-  ) async {
+  Future<void> _setNotification({
+    required BuildContext context,
+    required TimeOfDay? savedNotificationTime,
+    required WidgetRef ref,
+  }) async {
     final setTime = await showTimePicker(
       context: context,
-      initialTime: data ?? const TimeOfDay(hour: 21, minute: 00),
+      initialTime:
+          savedNotificationTime ?? const TimeOfDay(hour: 21, minute: 00),
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
@@ -146,11 +147,11 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
       return;
     }
     //DBに保存されている値と入力された値が同じ場合も早期リターン
-    if (setTime == data) {
+    if (setTime == savedNotificationTime) {
       return;
     }
     //初めて通知設定する場合、trueに
-    if (data == null) {
+    if (savedNotificationTime == null) {
       ref.read(isInitialSetNotificationProvider.notifier).state = true;
     }
     //通知設定
