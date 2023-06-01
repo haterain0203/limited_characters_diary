@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/constant/constant_string.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/auth/confirm_delete_all_data_dialog.dart';
 import 'package:limited_characters_diary/web_view_page.dart';

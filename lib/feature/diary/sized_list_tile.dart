@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/constant/constant_string.dart';
 
 class SizedHeightListTile extends StatelessWidget {
   const SizedHeightListTile({

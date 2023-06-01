@@ -6,7 +6,7 @@ import 'package:limited_characters_diary/feature/update_info/update_info_provide
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
-import '../../constant/constant.dart';
+import '../../constant/constant_string.dart';
 import '../link_to_app_or_web/link_to_app_or_web.dart';
 
 class ForcedUpdateDialog extends HookConsumerWidget {

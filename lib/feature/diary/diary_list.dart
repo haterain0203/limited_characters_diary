@@ -7,7 +7,7 @@ import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
-import '../../constant/constant.dart';
+import '../../constant/constant_string.dart';
 import '../date/data_providers.dart';
 import 'diary.dart';
 import 'diary_providers.dart';
