@@ -40,7 +40,7 @@ class DiaryList extends HookConsumerWidget {
           return;
         }
         // バックグラウンド復帰時の日付でStateProviderを更新
-        dateController.updateToday(nowDate);
+        dateController.updateToCurrentDate(nowDate);
       }
     });
 

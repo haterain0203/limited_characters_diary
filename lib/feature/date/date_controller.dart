@@ -51,7 +51,7 @@ class DateController {
   }
 
   /// inactive時とresume時で日付が変わっている場合更新する
-  void updateToday(DateTime now) {
+  void updateToCurrentDate(DateTime now) {
     todayNotifier.update((state) {
       return DateTime(now.year, now.month, now.day);
     });
