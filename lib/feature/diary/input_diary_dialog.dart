@@ -180,6 +180,7 @@ class InputDiaryDialog extends HookConsumerWidget {
                           //TODO check ここに限った話ではないが、DialogにDialogを重ねるのは問題ないか？
                           Navigator.pop(context);
                           Navigator.pop(context);
+                          // 更新の場合全画面広告は表示しない
                           if (inputDiaryType == InputDiaryType.update) {
                             return;
                           }
