@@ -47,11 +47,23 @@ class DateController {
     return indexDate.isAtSameMomentAs(today);
   }
 
-  /// inactive時とresume時で日付が変わっている場合更新する
-  void updateToCurrentDate(DateTime now) {
-    todayNotifier.update((state) {
-      return DateTime(now.year, now.month, now.day);
-    });
+  /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
+  ///
+  /// 本日の日付をハイライトさせているが、
+  /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
+  /// 上記の事象へ対応するもの
+  void updateToCurrentDate() {
+    final now = DateTime.now();
+    final nowDate = DateTime(now.year, now.month, now.day);
+    // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
+    if (isToday(nowDate)) {
+      return;
+    }
+    todayNotifier.update(
+      (_) {
+        return DateTime(now.year, now.month, now.day);
+      },
+    );
   }
 
   /// 今日-5日に自動で画面スクロールするかどうか
@@ -76,15 +88,15 @@ class DateController {
   }
 
   /// ListViewのindexに該当する日記を返す
-  //TODO check Providerに書くべきか、Controllerに書くべきかの判断がまだ腹落ちできていない
-  //TODO check ref.watch(diaryStreamProvider)を注入して使用する方法でも良いのか？
-  //TODO Providerで処理するもの＝値を監視したいもの、Controllerで処理するもの＝ユーザーの動作に起因するもの（自動処理も含む）
-  //TODO とした場合、以下の処理は、常に監視したいものではないので、Controllerの方が適切では？
-  //TODO （ただし、仮にControllerに書くとしてもDateControllerではなく、DiaryControllerで良さそう）
-  // Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
-  //   final indexDateDiary = diaryList.firstWhereOrNull((diary) {
-  //     return diary.diaryDate == indexDate;
-  //   });
-  //   return indexDateDiary;
-  // }
+//TODO check Providerに書くべきか、Controllerに書くべきかの判断がまだ腹落ちできていない
+//TODO check ref.watch(diaryStreamProvider)を注入して使用する方法でも良いのか？
+//TODO Providerで処理するもの＝値を監視したいもの、Controllerで処理するもの＝ユーザーの動作に起因するもの（自動処理も含む）
+//TODO とした場合、以下の処理は、常に監視したいものではないので、Controllerの方が適切では？
+//TODO （ただし、仮にControllerに書くとしてもDateControllerではなく、DiaryControllerで良さそう）
+// Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
+//   final indexDateDiary = diaryList.firstWhereOrNull((diary) {
+//     return diary.diaryDate == indexDate;
+//   });
+//   return indexDateDiary;
+// }
 }
