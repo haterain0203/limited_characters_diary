@@ -189,6 +189,8 @@ class InputDiaryDialog extends HookConsumerWidget {
                             await ref
                                 .read(adControllerProvider)
                                 .showInterstitialAdd();
+                            //TODO check 以下の処理はController内に記述すべきか？
+                            //TODO Controllerのメソッドの責務が2つになってしまうため望ましくないか？
                             ref
                                 .read(isShownInterstitialAdProvider.notifier)
                                 .state = true;
