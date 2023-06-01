@@ -33,31 +33,39 @@ class DiaryList extends HookConsumerWidget {
       }
     });
 
+    /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
-      ///
-      /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
-      /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
-      /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
-      if (dateController.shouldJumpToAroundToday()) {
-        if (scrollController.hasClients) {
-          scrollController.jumpTo(
-            ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
-          );
-        }
+      if (isShownEditDialog.value) {
+        return;
       }
-
-      /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
-      if (!isShownEditDialog.value &&
-          ref.read(isShowEditDialogOnLaunchProvider)) {
-        _showEditDialog(context, null);
-        isShownEditDialog.value = true;
+      //TODO check ここは.watchが適切？buildメソッド直下ではないので.read?
+      if (!ref.read(isShowEditDialogOnLaunchProvider)) {
+        return;
       }
+      _showEditDialog(context, null);
+      isShownEditDialog.value = true;
 
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
       //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
       //煩雑になると考え、Stackとしたもの。
+    });
+
+    /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
+    ///
+    /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
+    /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
+    /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!dateController.shouldJumpToAroundToday()) {
+        return;
+      }
+      if (!scrollController.hasClients) {
+        return;
+      }
+      scrollController.jumpTo(
+        ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
+      );
     });
 
     return diaryList.when(
