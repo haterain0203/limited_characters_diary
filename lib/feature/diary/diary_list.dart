@@ -10,7 +10,7 @@ import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
 import '../../constant/constant_color.dart';
 import '../../constant/constant_num.dart';
-import '../date/data_providers.dart';
+import '../date/date_providers.dart';
 import 'diary.dart';
 import 'diary_providers.dart';
 import 'input_diary_dialog.dart';
@@ -26,13 +26,14 @@ class DiaryList extends HookConsumerWidget {
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
 
+    /// バックグラウンド復帰時の日付でStateProviderを更新
     useOnAppLifecycleStateChange((previous, current) async {
       if (current == AppLifecycleState.resumed) {
-        // バックグラウンド復帰時の日付でStateProviderを更新
         dateController.updateToCurrentDate();
       }
     });
 
+    //TODO check Build後に実行することで、Future.delayedを削除したが、対応としてどうか？
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _autoShowEditDialog(
@@ -103,6 +104,7 @@ class DiaryList extends HookConsumerWidget {
                     // 該当行をスライドすると削除ボタンが表示される
                     SlidableAction(
                       onPressed: (_) {
+                        //TODO ダイアログを表示する処理はController側に書くべき？
                         _showConfirmDeleteDialog(
                           context: context,
                           diaryController: ref.read(diaryControllerProvider),

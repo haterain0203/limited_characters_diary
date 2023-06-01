@@ -9,7 +9,7 @@ import 'package:sizer/sizer.dart';
 import '../../component/stadium_border_button.dart';
 import '../../constant/constant_num.dart';
 import '../admob/ad_providers.dart';
-import '../date/data_providers.dart';
+import '../date/date_providers.dart';
 import 'diary.dart';
 import 'diary_providers.dart';
 
