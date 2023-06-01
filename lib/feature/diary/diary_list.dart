@@ -133,7 +133,7 @@ class DiaryList extends HookConsumerWidget {
                   onTap: () async {
                     //TODO check ここは素直にindexDateを渡すべきか？
                     ref.read(selectedDateProvider.notifier).state = indexDate;
-                    await _showEditDialog(context, diary);
+                    await _showInputDiaryDialog(context, diary);
                   },
                   onLongPress: diary == null
                       ? null
@@ -154,7 +154,7 @@ class DiaryList extends HookConsumerWidget {
   }
 
   //TODO メソッド名と呼び出しているダイアログ名が整合していない
-  Future<void> _showEditDialog(BuildContext context, Diary? diary) async {
+  Future<void> _showInputDiaryDialog(BuildContext context, Diary? diary) async {
     await showDialog<AlertDialog>(
       context: context,
       builder: (_) {
@@ -217,7 +217,7 @@ class DiaryList extends HookConsumerWidget {
     if (!isShowEditDialogOnLaunch) {
       return;
     }
-    _showEditDialog(context, null);
+    _showInputDiaryDialog(context, null);
     // 日記入力ダイアログが表示済みであることを記録する
     isEditDialogShownController.state = true;
   }
