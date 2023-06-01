@@ -13,12 +13,11 @@ class PassCodeLockOrListPageSwitcher extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // バックグラウンドになったタイミングで、ScreenLockを表示を管理するフラグをtrueにする
+    //
+    // 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
+    // inactiveのタイミングで呼び出すこととしたもの
     useOnAppLifecycleStateChange((previous, current) async {
-      //TODO check inactiveで実行するのが最前か？
-      /// バックグラウンドになったタイミングで、ScreenLockを表示を管理するフラグをtrueにする
-      ///
-      /// 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
-      /// inactiveのタイミングで呼び出すこととしたもの
       if (current != AppLifecycleState.inactive) {
         return;
       }
