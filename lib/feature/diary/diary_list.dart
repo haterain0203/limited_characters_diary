@@ -21,6 +21,7 @@ class DiaryList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final dateController = ref.watch(dateControllerProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
     final isShownEditDialog = useState(false);
@@ -28,13 +29,11 @@ class DiaryList extends HookConsumerWidget {
     useOnAppLifecycleStateChange((previous, current) async {
       if (current == AppLifecycleState.resumed) {
         // バックグラウンド復帰時の日付でStateProviderを更新
-        ref.read(dateControllerProvider).updateToCurrentDate();
+        dateController.updateToCurrentDate();
       }
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final dateController = ref.read(dateControllerProvider);
-
       /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
       ///
       /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
@@ -74,7 +73,6 @@ class DiaryList extends HookConsumerWidget {
         );
       },
       data: (data) {
-        final dateController = ref.read(dateControllerProvider);
         return Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 8),
           child: ListView.separated(
