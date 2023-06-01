@@ -35,10 +35,11 @@ class DiaryList extends HookConsumerWidget {
 
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 既にダイアログが表示されていたら処理終了
       if (isShownEditDialog.value) {
         return;
       }
-      //TODO check ここは.watchが適切？buildメソッド直下ではないので.read?
+      //TODO check ここはonPressedの中のように.readを使うで良いか？
       if (!ref.read(isShowEditDialogOnLaunchProvider)) {
         return;
       }
