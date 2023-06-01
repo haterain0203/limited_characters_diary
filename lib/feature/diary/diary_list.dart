@@ -35,13 +35,13 @@ class DiaryList extends HookConsumerWidget {
 
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      //TODO check ここはonPressedの中のように.readを使うで良いか？
-      if (!ref.read(isShowEditDialogOnLaunchProvider)) {
-        return;
-      }
-      _showEditDialog(context, null);
-      // 日記入力ダイアログが表示済みであることを記録する
-      ref.read(isEditDialogShownProvider.notifier).state = true;
+      _autoShowEditDialog(
+        //TODO check ここはonPressedの中のように.readを使うで良いか？
+        isShowEditDialogOnLaunch: ref.read(isShowEditDialogOnLaunchProvider),
+        context: context,
+        isEditDialogShownController:
+            ref.read(isEditDialogShownProvider.notifier),
+      );
 
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
@@ -50,6 +50,7 @@ class DiaryList extends HookConsumerWidget {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
       _autoJumpToAroundToday(
         dateController: dateController,
         scrollController: scrollController,
@@ -203,5 +204,19 @@ class DiaryList extends HookConsumerWidget {
       ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
     );
     isJumpedToAroundTodayController.state = true;
+  }
+
+  /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
+  void _autoShowEditDialog({
+    required bool isShowEditDialogOnLaunch,
+    required BuildContext context,
+    required StateController<bool> isEditDialogShownController,
+  }) {
+    if (!isShowEditDialogOnLaunch) {
+      return;
+    }
+    _showEditDialog(context, null);
+    // 日記入力ダイアログが表示済みであることを記録する
+    isEditDialogShownController.state = true;
   }
 }
