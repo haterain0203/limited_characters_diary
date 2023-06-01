@@ -25,6 +25,7 @@ class DiaryList extends HookConsumerWidget {
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
     final isShownEditDialog = useState(false);
+    final isJumped = useState(false);
 
     useOnAppLifecycleStateChange((previous, current) async {
       if (current == AppLifecycleState.resumed) {
@@ -58,6 +59,9 @@ class DiaryList extends HookConsumerWidget {
     /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
     /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (isJumped.value) {
+        return;
+      }
       if (!dateController.shouldJumpToAroundToday()) {
         return;
       }
@@ -67,6 +71,7 @@ class DiaryList extends HookConsumerWidget {
       scrollController.jumpTo(
         ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
       );
+      isJumped.value = true;
     });
 
     return diaryList.when(
