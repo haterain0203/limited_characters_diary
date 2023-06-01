@@ -36,12 +36,13 @@ class DiaryList extends HookConsumerWidget {
     //TODO check Build後に実行することで、Future.delayedを削除したが、対応としてどうか？
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _autoShowEditDialog(
+      _autoShowInputDiaryDialog(
         //TODO check ここはonPressedの中のように.readを使うで良いか？
-        isShowEditDialogOnLaunch: ref.read(isShowEditDialogOnLaunchProvider),
+        isShowInputDiaryDialogOnLaunch:
+            ref.read(isShowInputDiaryDialogOnLaunchProvider),
         context: context,
-        isEditDialogShownController:
-            ref.read(isEditDialogShownProvider.notifier),
+        isInputDiaryDialogShownController:
+            ref.read(isInputDiaryDialogShownProvider.notifier),
       );
 
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
@@ -209,16 +210,16 @@ class DiaryList extends HookConsumerWidget {
   }
 
   /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
-  void _autoShowEditDialog({
-    required bool isShowEditDialogOnLaunch,
+  void _autoShowInputDiaryDialog({
+    required bool isShowInputDiaryDialogOnLaunch,
     required BuildContext context,
-    required StateController<bool> isEditDialogShownController,
+    required StateController<bool> isInputDiaryDialogShownController,
   }) {
-    if (!isShowEditDialogOnLaunch) {
+    if (!isShowInputDiaryDialogOnLaunch) {
       return;
     }
     _showInputDiaryDialog(context, null);
     // 日記入力ダイアログが表示済みであることを記録する
-    isEditDialogShownController.state = true;
+    isInputDiaryDialogShownController.state = true;
   }
 }

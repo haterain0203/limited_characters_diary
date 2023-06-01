@@ -64,13 +64,14 @@ final diaryControllerProvider = Provider(
 );
 
 /// 既に日記入力ダイアログが表示済みかどうか
-final isEditDialogShownProvider = StateProvider((ref) => false);
+final isInputDiaryDialogShownProvider = StateProvider((ref) => false);
 
 //TODO check 記述箇所/記述方法について確認
 /// 起動時に日記入力ダイアログを自動表示するかどうか
-final isShowEditDialogOnLaunchProvider = Provider.autoDispose<bool>((ref) {
+final isShowInputDiaryDialogOnLaunchProvider =
+    Provider.autoDispose<bool>((ref) {
   // 既に日記入力ダイアログが表示済みならfalse
-  if (ref.watch(isEditDialogShownProvider)) {
+  if (ref.watch(isInputDiaryDialogShownProvider)) {
     return false;
   }
 
