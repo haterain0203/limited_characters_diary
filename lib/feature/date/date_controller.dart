@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../diary/diary.dart';
 
-//TODO check 各メソッドはControllerに記載すべきか否か？
 class DateController {
   DateController({
     required this.today,
