@@ -58,7 +58,7 @@ class DateController {
   }
 
   /// 今日-5日に自動で画面スクロールするかどうか
-  bool isJumpToAroundToday() {
+  bool shouldJumpToAroundToday() {
     if (selectedMonth.month != today.month) {
       return false;
     }
