@@ -35,8 +35,8 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                 context,
                 MaterialPageRoute<WebViewPage>(
                   builder: (context) => const WebViewPage(
-                    title: Constant.termsOfServiceStr,
-                    url: Constant.termsOfServiceUrl,
+                    title: ConstantString.termsOfServiceStr,
+                    url: ConstantString.termsOfServiceUrl,
                   ),
                 ),
               ),

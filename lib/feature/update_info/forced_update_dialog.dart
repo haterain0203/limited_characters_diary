@@ -47,8 +47,8 @@ class ForcedUpdateDialog extends HookConsumerWidget {
           content: StadiumBorderButton(
             onPressed: () async {
               final url = Platform.isAndroid
-                  ? Constant.playStoreUrl
-                  : Constant.appStoreUrl;
+                  ? ConstantString.playStoreUrl
+                  : ConstantString.appStoreUrl;
               await linkToAppOrWeb(url);
             },
             title: const Text('アプリストアへ'),

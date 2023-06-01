@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:limited_characters_diary/constant/constant_string.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+
+import '../../constant/constant_num.dart';
 
 class LocalNotificationRepository {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -66,7 +67,7 @@ class LocalNotificationRepository {
     );
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
-      '${Constant.limitedCharactersNumber}文字以内で今日を記録しませんか？',
+      '${ConstantNum.limitedCharactersNumber}文字以内で今日を記録しませんか？',
       '',
       tz.TZDateTime.from(dateTimeNotificationTime, tz.local),
       const NotificationDetails(

@@ -93,7 +93,7 @@ class SettingPage extends StatelessWidget {
                   SettingsTile.navigation(
                     leading: const Icon(Icons.mail),
                     title: const Text(
-                      Constant.contactUsStr,
+                      ConstantString.contactUsStr,
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {
@@ -101,8 +101,8 @@ class SettingPage extends StatelessWidget {
                         context,
                         MaterialPageRoute<dynamic>(
                           builder: (_) => const WebViewPage(
-                            title: Constant.contactUsStr,
-                            url: Constant.googleFormUrl,
+                            title: ConstantString.contactUsStr,
+                            url: ConstantString.googleFormUrl,
                           ),
                         ),
                       );
@@ -111,7 +111,7 @@ class SettingPage extends StatelessWidget {
                   SettingsTile.navigation(
                     leading: const Icon(Icons.text_snippet),
                     title: const Text(
-                      Constant.termsOfServiceStr,
+                      ConstantString.termsOfServiceStr,
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {
@@ -119,8 +119,8 @@ class SettingPage extends StatelessWidget {
                         context,
                         MaterialPageRoute<dynamic>(
                           builder: (_) => const WebViewPage(
-                            title: Constant.termsOfServiceStr,
-                            url: Constant.termsOfServiceUrl,
+                            title: ConstantString.termsOfServiceStr,
+                            url: ConstantString.termsOfServiceUrl,
                           ),
                         ),
                       );
@@ -129,7 +129,7 @@ class SettingPage extends StatelessWidget {
                   SettingsTile.navigation(
                     leading: const Icon(Icons.text_snippet),
                     title: const Text(
-                      Constant.privacyPolicyStr,
+                      ConstantString.privacyPolicyStr,
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {
@@ -137,8 +137,8 @@ class SettingPage extends StatelessWidget {
                         context,
                         MaterialPageRoute<dynamic>(
                           builder: (_) => const WebViewPage(
-                            title: Constant.privacyPolicyStr,
-                            url: Constant.privacyPolicyUrl,
+                            title: ConstantString.privacyPolicyStr,
+                            url: ConstantString.privacyPolicyUrl,
                           ),
                         ),
                       );

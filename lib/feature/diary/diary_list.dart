@@ -7,7 +7,8 @@ import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
-import '../../constant/constant_string.dart';
+import '../../constant/constant_color.dart';
+import '../../constant/constant_num.dart';
 import '../date/data_providers.dart';
 import 'diary.dart';
 import 'diary_providers.dart';
@@ -69,7 +70,8 @@ class DiaryList extends HookConsumerWidget {
           if (dateController.isJumpToAroundToday()) {
             if (scrollController.hasClients) {
               scrollController.jumpTo(
-                Constant.sizedListTileHeight * (dateController.today.day - 5),
+                ConstantNum.sizedListTileHeight *
+                    (dateController.today.day - 5),
               );
             }
           }
@@ -151,7 +153,7 @@ class DiaryList extends HookConsumerWidget {
                 child: SizedHeightListTile(
                   //本日はハイライト
                   tileColor: dateController.isToday(indexDate)
-                      ? Constant.accentColor
+                      ? ConstantColor.accentColor
                       : null,
                   leading: Text(
                     '${indexDate.day}（$dayOfWeekStr）',
