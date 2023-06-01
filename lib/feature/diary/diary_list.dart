@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
@@ -120,9 +121,10 @@ class DiaryList extends HookConsumerWidget {
               // indexに応じた日記データ
               final diary = dateController.getIndexDateDiary(data, indexDate);
               // indexに応じた曜日文字列
-              final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
+              //TODO check extensionの使い方合ってるか？
+              final dayOfWeekStr = DateTime.now().searchDayOfWeek(indexDate);
               // indexに応じた日付の文字色（土日祝日の場合色がつく）
-              final dayStrColor = dateController.choiceDayStrColor(indexDate);
+              final dayStrColor = DateTime.now().choiceDayStrColor(indexDate);
               return Slidable(
                 // 該当日に日記がある場合のみ動作
                 enabled: diary != null,
