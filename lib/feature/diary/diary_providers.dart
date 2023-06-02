@@ -4,7 +4,6 @@ import 'package:limited_characters_diary/feature/update_info/update_info_provide
 
 import '../auth/auth_providers.dart';
 import '../date/date_providers.dart';
-import '../update_info/update_info.dart';
 import 'diary.dart';
 import 'diary_controller.dart';
 import 'diary_repository.dart';
@@ -77,12 +76,12 @@ final isShowInputDiaryDialogOnLaunchProvider =
   }
 
   // メンテナンス中なら日記ダイアログを自動表示しない
-  if (_isUnderRepair(updateInfo: ref.watch(updateInfoProvider).value)) {
+  if (ref.watch(updateInfoProvider).value?.isUnderRepair == true) {
     return false;
   }
 
   // 強制アップデート表示中の場合は日記ダイアログを自動表示しない
-  if (_isForcedUpdate(isForcedUpdate: ref.watch(forcedUpdateProvider).value)) {
+  if (ref.watch(forcedUpdateProvider).value == true) {
     return false;
   }
 
@@ -119,17 +118,3 @@ final isShowInputDiaryDialogOnLaunchProvider =
   //上記条件をクリアしている場合は、ダイアログを表示させる
   return true;
 });
-
-bool _isUnderRepair({required UpdateInfo? updateInfo}) {
-  if (updateInfo != null && updateInfo.isUnderRepair) {
-    return true;
-  }
-  return false;
-}
-
-bool _isForcedUpdate({required bool? isForcedUpdate}) {
-  if (isForcedUpdate != null && isForcedUpdate) {
-    return true;
-  }
-  return false;
-}
