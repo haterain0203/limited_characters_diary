@@ -110,8 +110,7 @@ final isShowInputDiaryDialogOnLaunchProvider =
   // ユーザーデータ削除 → userがnullになる → AuthPageがリビルドする → ListPageがreturnされる → ListPageのuseEffectが実行 → 日記入力ダイアログが表示される
   // という流れだが、ユーザー削除は設定画面から行われ、削除時にはListPageが表示されないため（Phoenixによって再起動されるために最終的にはListPageが呼ばれるが）、
   // ListPageが呼び出される流れ自体に問題がありそう
-  final isUserDeleted = ref.watch(isUserDeletedProvider);
-  if (isUserDeleted) {
+  if (ref.watch(isUserDeletedProvider)) {
     return false;
   }
 
