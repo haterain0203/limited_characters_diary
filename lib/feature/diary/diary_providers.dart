@@ -92,16 +92,16 @@ final isShowInputDiaryDialogOnLaunchProvider =
     return false;
   }
 
-  // 日記情報がnullの場合処理終了
+  // 日記情報がnullの場合=日記情報取得中の場合は、日記入力ダイアログを表示しない
   final diaryList = ref.watch(diaryStreamProvider).value;
   if (diaryList == null) {
     return false;
   }
 
-  // 既に当日の日記が入力済みの場合処理終了
-  final filteredDiary =
-      diaryList.where((element) => element.diaryDate == today).toList();
-  if (filteredDiary.isNotEmpty) {
+  // 既に当日の日記が入力済みの場合は、日記入力ダイアログを表示しない
+  final todayDiary =
+      diaryList.firstWhereOrNull((element) => element.diaryDate == today);
+  if (todayDiary != null) {
     return false;
   }
 
