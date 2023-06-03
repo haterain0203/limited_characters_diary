@@ -25,6 +25,8 @@ class DiaryList extends HookConsumerWidget {
     final dateController = ref.watch(dateControllerProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
+    final isShowInputDiaryDialog =
+        ref.watch(isShowInputDiaryDialogOnLaunchProvider);
 
     /// バックグラウンド復帰時の日付でStateProviderを更新
     useOnAppLifecycleStateChange((previous, current) async {
@@ -35,15 +37,12 @@ class DiaryList extends HookConsumerWidget {
 
     //TODO check Build後に実行することで、Future.delayedを削除したが、対応としてどうか？
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _autoShowInputDiaryDialog(
-        //TODO check ここはonPressedの中のように.readを使うで良いか？
-        isShowInputDiaryDialogOnLaunch:
-            ref.read(isShowInputDiaryDialogOnLaunchProvider),
-        context: context,
-        isInputDiaryDialogShownController:
-            ref.read(isInputDiaryDialogShownProvider.notifier),
-      );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (isShowInputDiaryDialog == const AsyncData(true)) {
+        await _showInputDiaryDialog(context, null);
+        // 日記入力ダイアログが表示済みであることを記録する
+        ref.read(isInputDiaryDialogShownProvider.notifier).state = true;
+      }
 
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
@@ -207,19 +206,5 @@ class DiaryList extends HookConsumerWidget {
       ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
     );
     isJumpedToAroundTodayController.state = true;
-  }
-
-  /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
-  void _autoShowInputDiaryDialog({
-    required bool isShowInputDiaryDialogOnLaunch,
-    required BuildContext context,
-    required StateController<bool> isInputDiaryDialogShownController,
-  }) {
-    if (!isShowInputDiaryDialogOnLaunch) {
-      return;
-    }
-    _showInputDiaryDialog(context, null);
-    // 日記入力ダイアログが表示済みであることを記録する
-    isInputDiaryDialogShownController.state = true;
   }
 }

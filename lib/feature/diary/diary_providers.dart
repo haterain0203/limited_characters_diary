@@ -69,7 +69,7 @@ final isInputDiaryDialogShownProvider = StateProvider((ref) => false);
 //TODO check 記述箇所/記述方法について確認
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final isShowInputDiaryDialogOnLaunchProvider =
-    Provider.autoDispose<bool>((ref) {
+    FutureProvider.autoDispose<bool>((ref) async {
   // 既に日記入力ダイアログが表示済みなら日記ダイアログを自動表示しない
   if (ref.watch(isInputDiaryDialogShownProvider)) {
     return false;
@@ -81,7 +81,7 @@ final isShowInputDiaryDialogOnLaunchProvider =
   }
 
   // 強制アップデート表示中の場合は日記ダイアログを自動表示しない
-  if (ref.watch(forcedUpdateProvider).value == true) {
+  if (await ref.watch(forcedUpdateProvider.future)) {
     return false;
   }
 
