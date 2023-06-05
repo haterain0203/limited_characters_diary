@@ -6,6 +6,7 @@ import 'date_controller.dart';
 /// 基本は外部から更新しないが、アプリから復帰した際に最新の日付に更新する
 /// そのためにProviderではなくStateProvider
 //TODO check StateProviderで問題ないか？
+//TODO check Providerに修正して、invalidateで更新すべきか？
 final todayProvider = StateProvider<DateTime>((ref) {
   final now = DateTime.now();
   return DateTime(now.year, now.month, now.day);
