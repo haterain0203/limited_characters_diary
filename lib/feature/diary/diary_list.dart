@@ -93,6 +93,10 @@ class DiaryList extends HookConsumerWidget {
               //     .read(diaryControllerProvider)
               //     .getIndexDateDiary(indexDate);
               // indexに応じた曜日文字列
+              // View側で記述する場合
+              // final diary = data.firstWhereOrNull((diary) {
+              //   return diary.diaryDate == indexDate;
+              // });
               //TODO check extensionの使い方合ってるか？
               final dayOfWeekStr = DateTime.now().searchDayOfWeek(indexDate);
               // indexに応じた日付の文字色（土日祝日の場合色がつく）
