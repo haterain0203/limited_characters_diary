@@ -124,6 +124,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
     );
   }
 
+  //TODO check ユーザーアクションなのでControllerに記述すべき？
   Future<void> _setNotification({
     required BuildContext context,
     required TimeOfDay? savedNotificationTime,
