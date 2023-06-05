@@ -75,16 +75,6 @@ final isShowInputDiaryDialogOnLaunchProvider =
     return false;
   }
 
-  // メンテナンス中なら日記ダイアログを自動表示しない
-  if (ref.watch(updateInfoProvider).value?.isUnderRepair == true) {
-    return false;
-  }
-
-  // 強制アップデート表示中の場合は日記ダイアログを自動表示しない
-  if (await ref.watch(forcedUpdateProvider.future)) {
-    return false;
-  }
-
   // 当月以外の月を表示した際は表示しない
   final today = ref.watch(todayProvider);
   final selectedMonth = ref.watch(selectedMonthDateProvider);
@@ -102,6 +92,16 @@ final isShowInputDiaryDialogOnLaunchProvider =
   final todayDiary =
       diaryList.firstWhereOrNull((element) => element.diaryDate == today);
   if (todayDiary != null) {
+    return false;
+  }
+
+  // メンテナンス中なら日記ダイアログを自動表示しない
+  if (ref.watch(updateInfoProvider).value?.isUnderRepair == true) {
+    return false;
+  }
+
+  // 強制アップデート表示中の場合は日記ダイアログを自動表示しない
+  if (await ref.watch(forcedUpdateProvider.future)) {
     return false;
   }
 
