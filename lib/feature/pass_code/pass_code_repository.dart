@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pass_code.dart';
@@ -21,10 +22,13 @@ class PassCodeRepository {
   }
 
   /// PassCodeをSharedPreferencesに保存する
-  Future<void> savePassCode({required String passCode, required bool isPassCodeLock,}) async {
+  Future<void> savePassCode({
+    required String passCode,
+    required bool isPassCodeLock,
+  }) async {
     await prefs.setString(passCodeKey, passCode);
     await prefs.setBool(isPassCodeLockKey, isPassCodeLock);
-    print('passCode = $passCode\nisPassCodeLock = $isPassCodeLock\nで登録しました');
+    debugPrint(
+        'passCode = $passCode\nisPassCodeLock = $isPassCodeLock\nで登録しました');
   }
-
 }
