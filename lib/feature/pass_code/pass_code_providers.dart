@@ -47,8 +47,9 @@ final isSetPassCodeLockProvider = Provider<bool>((ref) {
   return ref.watch(passCodeProvider.select((value) => value.isPassCodeEnabled));
 });
 
+//TODO isSetPassCodeLockProviderと役割が重複していないか？
 /// パスコードロック画面を表示するかどうかを管理するProvider
 final isShowScreenLockProvider = StateProvider<bool>((ref) {
-  // 設定でのパスコードロックがOFFなら表示しない
+  // 初期値は、パスコードロック設定の値
   return ref.watch(isSetPassCodeLockProvider);
 });
