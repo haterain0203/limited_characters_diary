@@ -83,6 +83,7 @@ class InputDiaryDialog extends HookConsumerWidget {
     );
   }
 
+  //TODO ユーザーアクションなのでDiaryControllerに記述すべきか？その場合、どう移行するか確認したい。
   Future<void> _inputDiary(
     BuildContext context,
     TextEditingController diaryInputController,
