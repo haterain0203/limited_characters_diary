@@ -29,7 +29,7 @@ class DiaryList extends HookConsumerWidget {
         ref.watch(isShowInputDiaryDialogOnLaunchProvider);
 
     /// バックグラウンド復帰時の日付でStateProviderを更新
-    useOnAppLifecycleStateChange((previous, current) async {
+    useOnAppLifecycleStateChange((previous, current) {
       if (current == AppLifecycleState.resumed) {
         dateController.updateToCurrentDate();
       }
