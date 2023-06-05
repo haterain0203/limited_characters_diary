@@ -111,7 +111,7 @@ class DiaryList extends HookConsumerWidget {
                     // 該当行をスライドすると削除ボタンが表示される
                     SlidableAction(
                       onPressed: (_) {
-                        //TODO ダイアログを表示する処理はController側に書くべき？
+                        //TODO check ダイアログを表示する処理はController側に書くべき？
                         _showConfirmDeleteDialog(
                           context: context,
                           diaryController: ref.read(diaryControllerProvider),
