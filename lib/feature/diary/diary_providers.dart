@@ -60,6 +60,7 @@ final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
 final diaryControllerProvider = Provider(
   (ref) => DiaryController(
     repo: ref.watch(diaryRepoProvider),
+    // diaryList: ref.watch(diaryStreamProvider).value,
   ),
 );
 
