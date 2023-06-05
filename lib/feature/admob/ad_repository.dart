@@ -2,9 +2,15 @@ import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/confidential.dart';
 
 class AdRepository {
+  AdRepository({
+    required this.isShownInterstitialAdController,
+  });
+  final StateController<bool> isShownInterstitialAdController;
+
   BannerAd? bannerAd;
   InterstitialAd? interstitialAd;
   int maxFailedToAttempt = 3;
@@ -38,6 +44,9 @@ class AdRepository {
     }
     interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (InterstitialAd ad) async {
+        //TODO check repository層がriveropodに依存するのはおかしいのではないか？
+        // 全画面広告を閉じて以降、アプリをバックグラウンドに移動させた際、パスコードロックを正しく表示するため
+        isShownInterstitialAdController.state = false;
         await ad.dispose();
         await initInterstitialAd();
       },
@@ -47,6 +56,11 @@ class AdRepository {
         await initInterstitialAd();
       },
     );
+
+    //TODO check repository層がriveropodに依存するのはおかしいのではないか？
+    // 全画面広告を表示する際、アプリがinactiveになるが、その際はパスコードロックを表示したくないためflagをtrueに
+    isShownInterstitialAdController.state = true;
+
     await interstitialAd!.show();
     interstitialAd = null;
   }
@@ -90,5 +104,4 @@ class AdRepository {
       await AppTrackingTransparency.requestTrackingAuthorization();
     }
   }
-
 }
