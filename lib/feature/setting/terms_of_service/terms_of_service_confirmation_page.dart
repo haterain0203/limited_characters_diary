@@ -51,6 +51,7 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
                   child: Text('利用規約に同意してはじめる'),
                 ),
                 onPressed: () async {
+                  //TODO check こういった冗長な処理も細かく分解して切り分けるべきか？
                   await ref
                       .read(firstLaunchControllerProvider)
                       .completedFirstLaunch();
