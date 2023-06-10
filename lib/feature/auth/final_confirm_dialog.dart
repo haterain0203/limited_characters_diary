@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -26,24 +25,17 @@ class FinalConfirmDialog extends HookConsumerWidget {
         StadiumBorderButton(
           onPressed: () async {
             isLoading.value = true;
-            // 削除処理
-            try {
-              await ref.read(authControllerProvider).deleteUser();
-              if (!context.mounted) {
-                return;
-              }
-              // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
-              ref.read(isUserDeletedProvider.notifier).state = true;
-              await ref
-                  .read(authControllerProvider)
-                  .showDeleteCompletedDialog(context: context);
-            } on FirebaseAuthException catch (e) {
-              //TODO ここのエラーハンドリングはもう少し考えたほうが良さそう
-              // 現状だと、CircularProgressIndicatorが表示されて、操作不可になる
-              _showErrorDialog(context, e.toString());
-            } on FirebaseException catch (e) {
-              _showErrorDialog(context, e.toString());
+            // ユーザー情報および匿名認証アカウント削除処理
+            await ref.read(authControllerProvider).deleteUser();
+            if (!context.mounted) {
+              return;
             }
+            // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
+            ref.read(isUserDeletedProvider.notifier).state = true;
+            // 削除が完了したことをダイアログ表示
+            await ref
+                .read(authControllerProvider)
+                .showDeleteCompletedDialog(context: context);
           },
           backgroundColor: Colors.red,
           title: const Text('退会する'),
@@ -58,7 +50,7 @@ class FinalConfirmDialog extends HookConsumerWidget {
     );
   }
 
-  //TODO 共通化
+  //TODO check 共通化
   void _showErrorDialog(BuildContext context, String e) {
     showDialog<AlertDialog>(
       context: context,

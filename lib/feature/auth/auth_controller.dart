@@ -22,11 +22,10 @@ class AuthController {
   final StateController<bool> isUserDeletedNotifier;
 
   Future<void> signInAnonymouslyAndAddUser() async {
-    //TODO check try/catchはController or Provider側に書くべきか？
     try {
       await service.signInAnonymouslyAndAddUser();
     } on FirebaseAuthException catch (e) {
-      //TODO dialogでエラーメッセージ表示
+      //TODO check dialogでエラーメッセージ表示
       debugPrint(e.toString());
     }
   }
@@ -42,9 +41,13 @@ class AuthController {
     } on FirebaseAuthException catch (e) {
       //TODO dialogでエラーメッセージ表示
       debugPrint(e.toString());
+    } on FirebaseException catch (e) {
+      //TODO dialogでエラーメッセージ表示
+      debugPrint(e.toString());
     }
   }
 
+  //TODO check 似たようなダイアログ呼び出し処理が重複しているのでまとめるべきか？
   Future<void> showConfirmDeleteAllDataDialog(BuildContext context) async {
     await showDialog<ConfirmDeleteAllDataDialog>(
       context: context,

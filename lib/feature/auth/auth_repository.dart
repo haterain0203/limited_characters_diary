@@ -55,6 +55,7 @@ class AuthRepository {
               ),
             );
       }
+      //TODO check Controllerにエラーハンドリングを記述したので、ここでのcatchは不要では？
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       throw _convertToErrorMessageFromErrorCode(e.code);
@@ -110,6 +111,7 @@ class AuthRepository {
     await user.delete();
   }
 
+  //TODO controllerへ移行すべきでは？
   String _convertToErrorMessageFromErrorCode(String errorCode) {
     switch (errorCode) {
       case 'email-already-exists':
