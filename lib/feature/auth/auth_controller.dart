@@ -22,7 +22,13 @@ class AuthController {
   final StateController<bool> isUserDeletedNotifier;
 
   Future<void> signInAnonymouslyAndAddUser() async {
-    await service.signInAnonymouslyAndAddUser();
+    //TODO check try/catchはController or Provider側に書くべきか？
+    try {
+      await service.signInAnonymouslyAndAddUser();
+    } on FirebaseAuthException catch (e) {
+      //TODO dialogでエラーメッセージ表示
+      debugPrint(e.toString());
+    }
   }
 
 //TODO サインアウト

@@ -28,13 +28,7 @@ class AuthPage extends HookConsumerWidget {
       ),
       data: (data) {
         if (data == null) {
-          //TODO check try/catchはController or Provider側に書くべきか？
-          try {
-            ref.read(authControllerProvider).signInAnonymouslyAndAddUser();
-          } catch (e) {
-            //TODO
-            debugPrint(e.toString());
-          }
+          ref.read(authControllerProvider).signInAnonymouslyAndAddUser();
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
