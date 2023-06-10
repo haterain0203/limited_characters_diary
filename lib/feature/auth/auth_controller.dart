@@ -37,7 +37,12 @@ class AuthController {
 //   }
 
   Future<void> deleteUser() async {
-    await service.deleteUser();
+    try {
+      await service.deleteUser();
+    } on FirebaseAuthException catch (e) {
+      //TODO dialogでエラーメッセージ表示
+      debugPrint(e.toString());
+    }
   }
 
   Future<void> showConfirmDeleteAllDataDialog(BuildContext context) async {
