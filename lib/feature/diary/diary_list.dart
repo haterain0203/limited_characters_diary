@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -92,16 +93,9 @@ class DiaryList extends HookConsumerWidget {
             itemBuilder: (BuildContext context, int index) {
               // indexに応じた日付
               final indexDate = dateController.indexToDateTime(index);
-              // indexに応じた日記データ
-              final diary = ref.watch(indexDateDiaryProvider(indexDate));
-              // final diary = ref
-              //     .read(diaryControllerProvider)
-              //     .getIndexDateDiary(indexDate);
-              // indexに応じた曜日文字列
-              // View側で記述する場合
-              // final diary = data.firstWhereOrNull((diary) {
-              //   return diary.diaryDate == indexDate;
-              // });
+              final diary = data.firstWhereOrNull((diary) {
+                return diary.diaryDate == indexDate;
+              });
               //TODO check extensionの使い方合ってるか？
               final dayOfWeekStr = DateTime.now().searchDayOfWeek(indexDate);
               // indexに応じた日付の文字色（土日祝日の場合色がつく）
