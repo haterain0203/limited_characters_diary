@@ -2,12 +2,12 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/setting/terms_of_service/terms_of_service_confirmation_page.dart';
 import 'package:sizer/sizer.dart';
 
 import 'constant/constant_color.dart';
 import 'feature/admob/ad_providers.dart';
 import 'feature/auth/auth_page.dart';
+import 'feature/setting/terms_of_service/terms_of_service_confirmation_page.dart';
 
 class MyApp extends HookConsumerWidget {
   //TODO check 引数を受けることに問題はないか？（constつけられなくなるが特に気にするほどでもないか？）
