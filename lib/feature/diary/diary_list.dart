@@ -23,6 +23,7 @@ class DiaryList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedDateTime = ref.watch(selectedDateTimeProvider);
     final dateController = ref.watch(dateControllerProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
@@ -87,12 +88,15 @@ class DiaryList extends HookConsumerWidget {
               );
             },
             //TODO check extensionの使い方
-            itemCount: DateTime.now().daysInMonth(
-              ref.watch(selectedDateTimeProvider),
-            ),
+            itemCount: DateTime.now().daysInMonth(selectedDateTime),
             itemBuilder: (BuildContext context, int index) {
               // indexに応じた日付
-              final indexDate = dateController.indexToDateTime(index);
+              final indexDate = DateTime(
+                selectedDateTime.year,
+                selectedDateTime.month,
+                index + 1,
+              );
+              // indexの日付に応じた日記
               final diary = data.firstWhereOrNull((diary) {
                 return diary.diaryDate == indexDate;
               });

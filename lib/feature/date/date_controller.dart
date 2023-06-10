@@ -23,14 +23,4 @@ class DateController {
     }
     return true;
   }
-
-  /// ListViewのindexに該当する日付を返す
-  //TODO check これはユーザー操作ではないため、View側に移動したいが、移動方法について確認
-  DateTime indexToDateTime(int index) {
-    return DateTime(
-      selectedDateTime.year,
-      selectedDateTime.month,
-      index + 1,
-    );
-  }
 }
