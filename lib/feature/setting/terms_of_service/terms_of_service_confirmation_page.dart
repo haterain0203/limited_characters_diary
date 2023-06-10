@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/constant/constant_string.dart';
 import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/auth/auth_page.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
-import 'package:limited_characters_diary/web_view_page.dart';
+import 'package:limited_characters_diary/feature/setting/terms_of_service/terms_of_service_confirmation_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../constant/enum.dart';
 import '../../local_notification/local_notification_setting_dialog.dart';
 
-class TermsOfServiceConfirmationPage extends StatelessWidget {
+class TermsOfServiceConfirmationPage extends HookConsumerWidget {
   const TermsOfServiceConfirmationPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.watch(termsOfServiceConfirmationControllerProvider);
     return Scaffold(
       body: Center(
         child: Column(
@@ -31,7 +31,7 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
             const Text('アプリを始めるには利用規約の同意が必要です。'),
             TextButton(
               child: const Text('利用規約を確認する'),
-              onPressed: () =>
+              onPressed: () => controller.goTermsOfServiceOnWebView(context),
             ),
             HookConsumer(
               builder: (context, ref, child) => ElevatedButton(
