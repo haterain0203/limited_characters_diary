@@ -5,10 +5,17 @@ import '../../../constant/constant_string.dart';
 import '../../../web_view_page.dart';
 import '../auth/auth_page.dart';
 
-final routingControllerProvider = Provider((_) => RoutingController());
+final routingControllerProvider =
+    Provider.autoDispose.family<RoutingController, BuildContext>(
+  (ref, context) => RoutingController(context: context),
+);
 
 class RoutingController {
-  Future<void> goTermsOfServiceOnWebView(BuildContext context) async {
+  RoutingController({required this.context});
+
+  final BuildContext context;
+
+  Future<void> goTermsOfServiceOnWebView() async {
     await Navigator.push(
       context,
       MaterialPageRoute<WebViewPage>(
@@ -20,7 +27,7 @@ class RoutingController {
     );
   }
 
-  Future<void> goAuthPage(BuildContext context) async {
+  Future<void> goAuthPage() async {
     await Navigator.push(
       context,
       MaterialPageRoute<AuthPage>(
