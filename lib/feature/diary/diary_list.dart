@@ -60,7 +60,7 @@ class DiaryList extends HookConsumerWidget {
         dateController: dateController,
         scrollController: scrollController,
         isJumpedToAroundTodayController: ref.read(
-          isJumpedToAroundTodayProvider.notifier,
+          hasJumpedToAroundTodayProvider.notifier,
         ),
       );
     });

@@ -7,8 +7,8 @@ final selectedDateTimeProvider = StateProvider((ref) => DateTime.now());
 final dateControllerProvider = Provider.autoDispose(
   (ref) => DateController(
     selectedDateTime: ref.watch(selectedDateTimeProvider),
-    isJumpedToAroundToday: ref.watch(isJumpedToAroundTodayProvider),
+    hasJumpedToAroundToday: ref.watch(hasJumpedToAroundTodayProvider),
   ),
 );
 
-final isJumpedToAroundTodayProvider = StateProvider((ref) => false);
+final hasJumpedToAroundTodayProvider = StateProvider((ref) => false);
