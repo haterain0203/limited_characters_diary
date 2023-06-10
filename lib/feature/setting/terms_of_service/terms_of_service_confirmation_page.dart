@@ -31,15 +31,7 @@ class TermsOfServiceConfirmationPage extends StatelessWidget {
             const Text('アプリを始めるには利用規約の同意が必要です。'),
             TextButton(
               child: const Text('利用規約を確認する'),
-              onPressed: () => Navigator.push(
-                context,
-                MaterialPageRoute<WebViewPage>(
-                  builder: (context) => const WebViewPage(
-                    title: ConstantString.termsOfServiceStr,
-                    url: ConstantString.termsOfServiceUrl,
-                  ),
-                ),
-              ),
+              onPressed: () =>
             ),
             HookConsumer(
               builder: (context, ref, child) => ElevatedButton(
