@@ -34,7 +34,7 @@ class FinalConfirmDialog extends HookConsumerWidget {
               }
               await ref
                   .read(authControllerProvider)
-                  .showCompletedDeleteDialog(context: context);
+                  .showDeleteCompletedDialog(context: context);
             } on FirebaseAuthException catch (e) {
               //TODO ここのエラーハンドリングはもう少し考えたほうが良さそう
               // 現状だと、CircularProgressIndicatorが表示されて、操作不可になる

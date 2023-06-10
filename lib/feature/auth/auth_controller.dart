@@ -9,15 +9,13 @@ import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart'
 final authControllerProvider = Provider(
   (ref) => AuthController(
     service: ref.read(authServiceProvider),
-      isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier);
+    isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier),
   ),
 );
 
 class AuthController {
-  AuthController({
-    required this.service,
-    required this.isUserDeletedNotifier
-});
+  AuthController({required this.service, required this.isUserDeletedNotifier});
+
   final AuthService service;
   final StateController<bool> isUserDeletedNotifier;
 
@@ -44,7 +42,7 @@ class AuthController {
     );
   }
 
-  Future<void> showCompletedDeleteDialog({
+  Future<void> showDeleteCompletedDialog({
     required BuildContext context,
   }) async {
     // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
@@ -63,7 +61,6 @@ class AuthController {
       },
     ).show();
   }
-
 }
 
 /// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため
