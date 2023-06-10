@@ -6,6 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
 
+import 'confirm_delete_all_data_dialog.dart';
+
 final authControllerProvider = Provider(
   (ref) => AuthController(
     service: ref.read(authServiceProvider),
@@ -32,6 +34,15 @@ class AuthController {
     await service.deleteUser();
   }
 
+  Future<void> showConfirmDeleteAllDataDialog(BuildContext context) async {
+    await showDialog<ConfirmDeleteAllDataDialog>(
+      context: context,
+      builder: (_) {
+        return const ConfirmDeleteAllDataDialog();
+      },
+    );
+  }
+
   Future<void> showFinalConfirmDialog(BuildContext context) async {
     await showDialog<FinalConfirmDialog>(
       context: context,
@@ -45,8 +56,6 @@ class AuthController {
   Future<void> showDeleteCompletedDialog({
     required BuildContext context,
   }) async {
-    // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
-    isUserDeletedNotifier.state = true;
     await AwesomeDialog(
       context: context,
       dismissOnBackKeyPress: false,
@@ -55,9 +64,9 @@ class AuthController {
       title: '全てのデータを削除しました',
       btnOkText: '閉じる',
       btnOkOnPress: () async {
-        isUserDeletedNotifier.state = false;
         // アプリの再起動
         await Phoenix.rebirth(context);
+        isUserDeletedNotifier.state = false;
       },
     ).show();
   }

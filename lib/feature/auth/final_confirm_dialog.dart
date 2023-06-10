@@ -32,6 +32,8 @@ class FinalConfirmDialog extends HookConsumerWidget {
               if (!context.mounted) {
                 return;
               }
+              // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
+              ref.read(isUserDeletedProvider.notifier).state = true;
               await ref
                   .read(authControllerProvider)
                   .showDeleteCompletedDialog(context: context);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant_string.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
-import 'package:limited_characters_diary/feature/auth/confirm_delete_all_data_dialog.dart';
+import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -80,7 +80,9 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {
-                      _showConfirmDeleteAllDataDialog(context);
+                      ref
+                          .read(authControllerProvider)
+                          .showConfirmDeleteAllDataDialog(context);
                     },
                   ),
                 ],
@@ -204,15 +206,6 @@ class SettingPage extends StatelessWidget {
         return const LocalNotificationSettingDialog(
           trigger: NotificationDialogTrigger.userAction,
         );
-      },
-    );
-  }
-
-  void _showConfirmDeleteAllDataDialog(BuildContext context) {
-    showDialog<ConfirmDeleteAllDataDialog>(
-      context: context,
-      builder: (_) {
-        return const ConfirmDeleteAllDataDialog();
       },
     );
   }
