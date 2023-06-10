@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/admob/ad_providers.dart';
 import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
-import 'package:limited_characters_diary/feature/setting/terms_of_service/terms_of_service_confirmation_controller.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_providers.dart';
+import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:sizer/sizer.dart';
 
 class TermsOfServiceConfirmationPage extends HookConsumerWidget {
@@ -10,8 +11,7 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final termsController =
-        ref.watch(termsOfServiceConfirmationControllerProvider);
+    final routingController = ref.watch(routingControllerProvider);
     return Scaffold(
       body: Center(
         child: Column(
@@ -29,7 +29,7 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
             TextButton(
               child: const Text('利用規約を確認する'),
               onPressed: () =>
-                  termsController.goTermsOfServiceOnWebView(context),
+                  routingController.goTermsOfServiceOnWebView(context),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -50,13 +50,15 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
                 if (!context.mounted) {
                   return;
                 }
-                await termsController.showSetNotificationDialog(context);
+                await ref
+                    .read(localNotificationControllerProvider)
+                    .showSetNotificationDialog(context);
                 // 通知設定完了後（通知設定ダイアログが閉じたら）、AuthPageへ遷移する
                 // 当初は通知設定ダイアログ側でAuthPageへの遷移を記述していたが、それだとローカル通知時間が正しく反映されない
                 if (!context.mounted) {
                   return;
                 }
-                await termsController.goAuthPage(context);
+                await routingController.goAuthPage(context);
               },
             ),
           ],

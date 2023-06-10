@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_shared_preferences_repository.dart';
 
+import '../../constant/enum.dart';
+import 'local_notification_setting_dialog.dart';
+
 class LocalNotificationController {
   LocalNotificationController({
     required this.localNotificationRepository,
@@ -36,5 +39,16 @@ class LocalNotificationController {
     // ローカル通知時間の再取得
     // 通知をリセットした際にUIもリセットするため
     invalidateLocalNotificationTimeFutureProvider();
+  }
+
+  Future<void> showSetNotificationDialog(BuildContext context) async {
+    await showDialog<LocalNotificationSettingDialog>(
+      context: context,
+      builder: (_) {
+        return const LocalNotificationSettingDialog(
+          trigger: NotificationDialogTrigger.onFirstLaunch,
+        );
+      },
+    );
   }
 }
