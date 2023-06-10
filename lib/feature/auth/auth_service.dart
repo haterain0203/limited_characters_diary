@@ -1,9 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'auth_repository.dart';
+
+final authServiceProvider = Provider(
+  (ref) => AuthService(
+    repo: ref.watch(authRepoProvider),
+  ),
+);
 
 class AuthService {
   AuthService({
     required this.repo,
   });
+
   final AuthRepository repo;
 
   Future<void> signInAnonymouslyAndAddUser() async {
@@ -19,3 +29,10 @@ class AuthService {
     await repo.deleteUserAccountAndUserData();
   }
 }
+
+final userStateProvider = StreamProvider<User?>(
+  (ref) {
+    final repo = ref.read(authRepoProvider);
+    return repo.authStateChanges();
+  },
+);

@@ -2,8 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../app_user/app_user.dart';
+import '../fcm/fcm_providers.dart';
+import '../firestore/firestore_instance_provider.dart';
+import 'auth_controller.dart';
+
+final authRepoProvider = Provider(
+  (ref) => AuthRepository(
+    //TODO check ref.watchにすべきか？
+    auth: ref.read(authInstanceProvider),
+    firestore: ref.read(firestoreInstanceProvider),
+    fcm: ref.read(fcmInstanceProvider),
+  ),
+);
 
 class AuthRepository {
   AuthRepository({
@@ -56,7 +69,7 @@ class AuthRepository {
     final user = auth.currentUser;
     // このメソッドを呼べるのは認証後なので、
     // currentUserがnullになることは基本ないはずだが、念の為nullチェック
-    if(user == null) {
+    if (user == null) {
       return;
     }
 
@@ -71,7 +84,7 @@ class AuthRepository {
     var batch = firestore.batch();
 
     var counter = 0;
-    if(diaryListSnapshot.size > 0) {
+    if (diaryListSnapshot.size > 0) {
       for (final doc in diaryListSnapshot.docs) {
         batch.delete(doc.reference);
         counter++;
@@ -95,9 +108,7 @@ class AuthRepository {
     // セキュリティルールの「isUserAuthenticated(userId)」で引っかかりエラーが発生する
     // そのため、アカウント削除は最後に実行する
     await user.delete();
-
   }
-
 
   String _convertToErrorMessageFromErrorCode(String errorCode) {
     switch (errorCode) {

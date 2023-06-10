@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_or_list_page_switcher.dart';
 
-import 'auth_providers.dart';
+import 'auth_controller.dart';
+import 'auth_service.dart';
 
 class AuthPage extends HookConsumerWidget {
   const AuthPage({

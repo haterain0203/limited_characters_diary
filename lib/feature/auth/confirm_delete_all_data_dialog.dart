@@ -6,7 +6,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/stadium_border_button.dart';
 
-import 'auth_providers.dart';
+import 'auth_controller.dart';
 
 class ConfirmDeleteAllDataDialog extends StatelessWidget {
   const ConfirmDeleteAllDataDialog({super.key});

@@ -2,7 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info_repository.dart';
 
-import '../auth/auth_providers.dart';
+import '../firestore/firestore_instance_provider.dart';
 
 final updateRepoProvider = Provider(
   (ref) => UpdateInfoRepository(
