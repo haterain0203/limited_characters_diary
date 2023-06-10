@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
 
 import '../auth/auth_controller.dart';
-import '../date/date_providers.dart';
+import '../date/date_controller.dart';
 import '../firestore/firestore_instance_provider.dart';
 import 'diary.dart';
 import 'diary_controller.dart';

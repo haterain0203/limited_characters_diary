@@ -7,7 +7,7 @@ import 'package:limited_characters_diary/feature/diary/diary_list.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
-import 'feature/date/date_providers.dart';
+import 'feature/date/date_controller.dart';
 import 'feature/local_notification/local_notification_setting_dialog.dart';
 import 'feature/setting/setting_page.dart';
 

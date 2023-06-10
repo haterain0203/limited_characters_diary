@@ -1,3 +1,12 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final dateControllerProvider = Provider.autoDispose(
+  (ref) => DateController(
+    selectedDateTime: ref.watch(selectedDateTimeProvider),
+    hasJumpedToAroundToday: ref.watch(hasJumpedToAroundTodayProvider),
+  ),
+);
+
 class DateController {
   DateController({
     required this.selectedDateTime,
@@ -24,3 +33,7 @@ class DateController {
     return true;
   }
 }
+
+final selectedDateTimeProvider = StateProvider((ref) => DateTime.now());
+
+final hasJumpedToAroundTodayProvider = StateProvider((ref) => false);
