@@ -24,4 +24,19 @@ extension DateTimeExtensions on DateTime {
     }
     return Colors.black;
   }
+
+  int daysInMonth(DateTime selectedDateTime) {
+    //https://note.com/hatchoutschool/n/ne95862d50623
+    final daysInMonth = DateTime(
+      selectedDateTime.year,
+      selectedDateTime.month + 1,
+    ).add(const Duration(days: -1)).day;
+    return daysInMonth;
+  }
+
+  bool isToday(DateTime indexDate) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    return indexDate.isAtSameMomentAs(today);
+  }
 }

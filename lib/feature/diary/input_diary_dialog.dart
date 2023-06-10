@@ -25,7 +25,7 @@ class InputDiaryDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final diaryInputController =
         useTextEditingController(text: diary?.content ?? '');
-    final selectedDate = ref.watch(selectedDateProvider);
+    final selectedDate = ref.watch(selectedDateTimeProvider);
     return AlertDialog(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(

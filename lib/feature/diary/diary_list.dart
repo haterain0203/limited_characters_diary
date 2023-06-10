@@ -31,7 +31,9 @@ class DiaryList extends HookConsumerWidget {
     /// バックグラウンド復帰時の日付でStateProviderを更新
     useOnAppLifecycleStateChange((previous, current) {
       if (current == AppLifecycleState.resumed) {
-        dateController.updateToCurrentDate();
+        ref
+            .read(selectedDateTimeProvider.notifier)
+            .update((_) => DateTime.now());
       }
     });
 
@@ -83,7 +85,10 @@ class DiaryList extends HookConsumerWidget {
                 height: 0.5,
               );
             },
-            itemCount: dateController.daysInMonth(),
+            //TODO check extensionの使い方
+            itemCount: DateTime.now().daysInMonth(
+              ref.watch(selectedDateTimeProvider),
+            ),
             itemBuilder: (BuildContext context, int index) {
               // indexに応じた日付
               final indexDate = dateController.indexToDateTime(index);
@@ -127,7 +132,8 @@ class DiaryList extends HookConsumerWidget {
                 ),
                 child: SizedHeightListTile(
                   //本日はハイライト
-                  tileColor: dateController.isToday(indexDate)
+                  //TODO check extensionの使い方
+                  tileColor: DateTime.now().isToday(indexDate)
                       ? ConstantColor.accentColor
                       : null,
                   leading: Text(
@@ -139,7 +145,8 @@ class DiaryList extends HookConsumerWidget {
                   ),
                   onTap: () async {
                     //TODO check ここは素直にindexDateを渡すべきか？
-                    ref.read(selectedDateProvider.notifier).state = indexDate;
+                    ref.read(selectedDateTimeProvider.notifier).state =
+                        indexDate;
                     await _showInputDiaryDialog(context, diary);
                   },
                   onLongPress: diary == null
@@ -210,7 +217,7 @@ class DiaryList extends HookConsumerWidget {
       return;
     }
     scrollController.jumpTo(
-      ConstantNum.sizedListTileHeight * (dateController.today.day - 5),
+      ConstantNum.sizedListTileHeight * (DateTime.now().day - 5),
     );
     isJumpedToAroundTodayController.state = true;
   }

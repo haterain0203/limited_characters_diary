@@ -18,7 +18,7 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dateController = ref.watch(dateControllerProvider);
+    final selectedDateTime = ref.watch(selectedDateTimeProvider);
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -36,7 +36,12 @@ class HomePage extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: dateController.showPreviousMonth,
+                    onPressed: () {
+                      // 前の月へ
+                      ref.read(selectedDateTimeProvider.notifier).update(
+                            (state) => DateTime(state.year, state.month - 1),
+                          );
+                    },
                     style: TextButton.styleFrom(
                       minimumSize: Size.zero,
                       padding: EdgeInsets.zero,
@@ -47,10 +52,15 @@ class HomePage extends HookConsumerWidget {
                     ),
                   ),
                   Text(
-                    '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
+                    '${selectedDateTime.year}年${selectedDateTime.month}月',
                   ),
                   TextButton(
-                    onPressed: dateController.showNextMonth,
+                    onPressed: () {
+                      // 次の月へ
+                      ref.read(selectedDateTimeProvider.notifier).update(
+                            (state) => DateTime(state.year, state.month + 1),
+                          );
+                    },
                     style: TextButton.styleFrom(
                       minimumSize: Size.zero,
                       padding: EdgeInsets.zero,

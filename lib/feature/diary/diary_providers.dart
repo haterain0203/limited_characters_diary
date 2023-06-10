@@ -36,9 +36,8 @@ final diaryRefProvider = Provider((ref) {
 
 final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   final repo = ref.watch(diaryRepoProvider);
-  final selectedMonthDate = ref.watch(selectedMonthDateProvider);
-  final diaryList =
-      repo.subscribedDiaryList(selectedMonthDate: selectedMonthDate);
+  final selectedDate = ref.watch(selectedDateTimeProvider);
+  final diaryList = repo.subscribedDiaryList(selectedMonthDate: selectedDate);
   return diaryList;
 });
 
@@ -80,9 +79,10 @@ final isShowInputDiaryDialogOnLaunchProvider =
   }
 
   // 当月以外の月を表示した際は表示しない
-  final today = ref.watch(todayProvider);
-  final selectedMonth = ref.watch(selectedMonthDateProvider);
-  if (today.month != selectedMonth.month) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final selectedDate = ref.watch(selectedDateTimeProvider);
+  if (today.month != selectedDate.month) {
     return false;
   }
 
