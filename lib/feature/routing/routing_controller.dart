@@ -8,8 +8,8 @@ import '../auth/auth_page.dart';
 final routingControllerProvider = Provider((_) => RoutingController());
 
 class RoutingController {
-  void goTermsOfServiceOnWebView(BuildContext context) {
-    Navigator.push(
+  Future<void> goTermsOfServiceOnWebView(BuildContext context) async {
+    await Navigator.push(
       context,
       MaterialPageRoute<WebViewPage>(
         builder: (context) => const WebViewPage(
