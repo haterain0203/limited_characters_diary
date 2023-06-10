@@ -39,8 +39,7 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
                 child: Text('利用規約に同意してはじめる'),
               ),
               onPressed: () async {
-                //TODO check 複数のコントローラーのメソッドを呼び出しているのでこれらはこのままで問題ないか？
-                //TODO check Controllerから別のControllerのメソッドを呼び出すのはよろしくないと考えるため
+                //TODO check 複数のコントローラーのメソッドを呼び出しているのでこれらはこれ以上まとめづらいと考えるが問題ないか？
                 await ref
                     .read(firstLaunchControllerProvider)
                     .completedFirstLaunch();
