@@ -35,6 +35,8 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
     );
   }
 
+  //TODO Controllerへの移管を検討
+  //TODO check 移管方法
   void _showFinalConfirmDialog(BuildContext context) {
     showDialog<AlertDialog>(
       context: context,
