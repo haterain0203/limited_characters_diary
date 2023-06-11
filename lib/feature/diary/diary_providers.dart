@@ -40,16 +40,6 @@ final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   return diaryList;
 });
 
-//TODO check Controllerから移動したが、書き方に問題はないか？
-final indexDateDiaryProvider =
-    Provider.autoDispose.family<Diary?, DateTime>((ref, indexDate) {
-  final diaryList = ref.watch(diaryStreamProvider).value ?? [];
-  final indexDateDiary = diaryList.firstWhereOrNull((diary) {
-    return diary.diaryDate == indexDate;
-  });
-  return indexDateDiary;
-});
-
 //TODO 日記の数は日記入力完了後のダイアログ表示時にのみ使用するため、常に監視する必要はないが、Controller側に記述した方が良いか？
 //TODO ただしその場合、Future<int>を返すことになるので、UI側で待機する処理を別途実装しなければ行けなくなるのでは？
 final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
