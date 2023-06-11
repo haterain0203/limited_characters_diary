@@ -4,7 +4,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
 import '../../constant/enum.dart';
-import '../admob/ad_providers.dart';
+import '../admob/ad_controller.dart';
 import 'diary_service.dart';
 
 class CompleteDialogContent extends HookConsumerWidget {
