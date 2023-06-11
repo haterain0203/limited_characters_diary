@@ -5,11 +5,20 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/confidential.dart';
 
+import 'ad_providers.dart';
+
+final adServiceProvider = Provider(
+  (ref) => AdService(
+    isShownInterstitialAdNotifier:
+        ref.read(isShownInterstitialAdProvider.notifier),
+  ),
+);
+
 class AdService {
   AdService({
-    required this.isShownInterstitialAdController,
+    required this.isShownInterstitialAdNotifier,
   });
-  final StateController<bool> isShownInterstitialAdController;
+  final StateController<bool> isShownInterstitialAdNotifier;
 
   BannerAd? bannerAd;
   InterstitialAd? interstitialAd;
