@@ -131,6 +131,7 @@ class DiaryList extends HookConsumerWidget {
                   ),
                   onTap: () async {
                     //TODO check ここは素直にindexDateを渡すべきか？
+                    //TODO check selectedDateTimeProviderを更新するため、DiaryListが再描画され、カレンダーの一番上が表示されてしまう
                     ref.read(selectedDateTimeProvider.notifier).state =
                         indexDate;
                     await diaryController.showInputDiaryDialog(context, diary);
