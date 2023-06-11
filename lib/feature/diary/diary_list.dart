@@ -8,9 +8,7 @@ import 'package:limited_characters_diary/feature/date/date_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
 import '../../constant/constant_color.dart';
-import 'diary.dart';
 import 'diary_providers.dart';
-import 'input_diary_dialog.dart';
 
 class DiaryList extends HookConsumerWidget {
   const DiaryList({
@@ -40,7 +38,7 @@ class DiaryList extends HookConsumerWidget {
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (isShowInputDiaryDialog == const AsyncData(true)) {
-        await _showInputDiaryDialog(context, null);
+        await diaryController.showInputDiaryDialog(context, null);
         // 日記入力ダイアログが表示済みであることを記録する
         ref.read(isInputDiaryDialogShownProvider.notifier).state = true;
       }
@@ -135,7 +133,7 @@ class DiaryList extends HookConsumerWidget {
                     //TODO check ここは素直にindexDateを渡すべきか？
                     ref.read(selectedDateTimeProvider.notifier).state =
                         indexDate;
-                    await _showInputDiaryDialog(context, diary);
+                    await diaryController.showInputDiaryDialog(context, diary);
                   },
                   onLongPress: diary == null
                       ? null
@@ -150,16 +148,6 @@ class DiaryList extends HookConsumerWidget {
             },
           ),
         );
-      },
-    );
-  }
-
-  //TODO メソッド名と呼び出しているダイアログ名が整合していない
-  Future<void> _showInputDiaryDialog(BuildContext context, Diary? diary) async {
-    await showDialog<AlertDialog>(
-      context: context,
-      builder: (_) {
-        return InputDiaryDialog(diary: diary);
       },
     );
   }

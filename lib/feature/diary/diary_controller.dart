@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:limited_characters_diary/feature/diary/diary_repository.dart';
 
 import 'diary.dart';
+import 'input_diary_dialog.dart';
 
 class DiaryController {
   DiaryController({
@@ -34,6 +35,15 @@ class DiaryController {
   //TODO エラーハンドリング
   Future<void> deleteDiary({required Diary diary}) async {
     await repo.deleteDiary(diary: diary);
+  }
+
+  Future<void> showInputDiaryDialog(BuildContext context, Diary? diary) async {
+    await showDialog<AlertDialog>(
+      context: context,
+      builder: (_) {
+        return InputDiaryDialog(diary: diary);
+      },
+    );
   }
 
   Future<void> showConfirmDeleteDialog({
