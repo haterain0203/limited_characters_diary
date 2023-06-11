@@ -8,6 +8,7 @@ import 'package:limited_characters_diary/feature/date/date_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
 import '../../constant/constant_color.dart';
+import 'diary_controller.dart';
 import 'diary_providers.dart';
 
 class DiaryList extends HookConsumerWidget {

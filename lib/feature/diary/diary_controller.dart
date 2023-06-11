@@ -1,16 +1,24 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:limited_characters_diary/feature/diary/diary_repository.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/diary/diary_service.dart';
 
 import 'diary.dart';
 import 'input_diary_dialog.dart';
 
+final diaryControllerProvider = Provider(
+  (ref) => DiaryController(
+    service: ref.watch(diaryServiceProvider),
+    // diaryList: ref.watch(diaryStreamProvider).value,
+  ),
+);
+
 class DiaryController {
   DiaryController({
-    required this.repo,
+    required this.service,
     // this.diaryList,
   });
-  final DiaryRepository repo;
+  final DiaryService service;
   // final List<Diary>? diaryList;
 
   //TODO エラーハンドリング
@@ -18,7 +26,7 @@ class DiaryController {
     required String content,
     required DateTime selectedDate,
   }) async {
-    await repo.addDiary(
+    await service.addDiary(
       content: content,
       selectedDate: selectedDate,
     );
@@ -29,12 +37,12 @@ class DiaryController {
     required Diary diary,
     required String content,
   }) async {
-    await repo.updateDiary(diary: diary, content: content);
+    await service.updateDiary(diary: diary, content: content);
   }
 
   //TODO エラーハンドリング
   Future<void> deleteDiary({required Diary diary}) async {
-    await repo.deleteDiary(diary: diary);
+    await service.deleteDiary(diary: diary);
   }
 
   Future<void> showInputDiaryDialog(BuildContext context, Diary? diary) async {

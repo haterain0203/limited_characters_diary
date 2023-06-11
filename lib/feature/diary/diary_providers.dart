@@ -6,7 +6,6 @@ import '../auth/auth_controller.dart';
 import '../date/date_controller.dart';
 import '../firestore/firestore_instance_provider.dart';
 import 'diary.dart';
-import 'diary_controller.dart';
 import 'diary_repository.dart';
 
 final uidProvider = Provider(
@@ -58,13 +57,6 @@ final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
   final count = await repo.getDiaryCount();
   return count;
 });
-
-final diaryControllerProvider = Provider(
-  (ref) => DiaryController(
-    repo: ref.watch(diaryRepoProvider),
-    // diaryList: ref.watch(diaryStreamProvider).value,
-  ),
-);
 
 /// 既に日記入力ダイアログが表示済みかどうか
 final isInputDiaryDialogShownProvider = StateProvider((ref) => false);
