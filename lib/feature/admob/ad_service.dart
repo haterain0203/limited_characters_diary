@@ -5,10 +5,11 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/confidential.dart';
 
-import 'ad_providers.dart';
+import 'ad_controller.dart';
 
 final adServiceProvider = Provider(
   (ref) => AdService(
+    //TODO controllerに依存するのはおかしい
     isShownInterstitialAdNotifier:
         ref.read(isShownInterstitialAdProvider.notifier),
   ),
@@ -55,7 +56,7 @@ class AdService {
       onAdDismissedFullScreenContent: (InterstitialAd ad) async {
         //TODO check repository層がriveropodに依存するのはおかしいのではないか？
         // 全画面広告を閉じて以降、アプリをバックグラウンドに移動させた際、パスコードロックを正しく表示するため
-        isShownInterstitialAdController.state = false;
+        isShownInterstitialAdNotifier.state = false;
         await ad.dispose();
         await initInterstitialAd();
       },
@@ -68,7 +69,7 @@ class AdService {
 
     //TODO check repository層がriveropodに依存するのはおかしいのではないか？
     // 全画面広告を表示する際、アプリがinactiveになるが、その際はパスコードロックを表示したくないためflagをtrueに
-    isShownInterstitialAdController.state = true;
+    isShownInterstitialAdNotifier.state = true;
 
     await interstitialAd!.show();
     interstitialAd = null;
