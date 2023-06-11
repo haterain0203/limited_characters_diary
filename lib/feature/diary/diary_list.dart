@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/date/date_controller.dart';
-import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
 import '../../constant/constant_color.dart';
@@ -26,6 +24,7 @@ class DiaryList extends HookConsumerWidget {
     final diaryList = ref.watch(diaryStreamProvider);
     final isShowInputDiaryDialog =
         ref.watch(isShowInputDiaryDialogOnLaunchProvider);
+    final diaryController = ref.watch(diaryControllerProvider);
 
     /// バックグラウンド復帰時の日付でStateProviderを更新
     useOnAppLifecycleStateChange((previous, current) {
@@ -107,9 +106,8 @@ class DiaryList extends HookConsumerWidget {
                     SlidableAction(
                       onPressed: (_) {
                         //TODO check ダイアログを表示する処理はController側に書くべき？
-                        _showConfirmDeleteDialog(
+                        diaryController.showConfirmDeleteDialog(
                           context: context,
-                          diaryController: ref.read(diaryControllerProvider),
                           // enabled: diary != null を設定しているため、「!」
                           diary: diary!,
                         );
@@ -142,9 +140,8 @@ class DiaryList extends HookConsumerWidget {
                   onLongPress: diary == null
                       ? null
                       : () {
-                          _showConfirmDeleteDialog(
+                          diaryController.showConfirmDeleteDialog(
                             context: context,
-                            diaryController: ref.read(diaryControllerProvider),
                             diary: diary,
                           );
                         },
@@ -165,28 +162,5 @@ class DiaryList extends HookConsumerWidget {
         return InputDiaryDialog(diary: diary);
       },
     );
-  }
-
-  void _showConfirmDeleteDialog({
-    required BuildContext context,
-    required DiaryController diaryController,
-    required Diary diary,
-  }) {
-    final diaryDateStr =
-        '${diary.diaryDate.year}/${diary.diaryDate.month}/${diary.diaryDate.day}';
-    AwesomeDialog(
-      //TODO ボタンカラー再検討
-      context: context,
-      dialogType: DialogType.question,
-      title: '$diaryDateStrの\n日記を削除しますか？',
-      btnOkColor: Colors.grey,
-      btnOkText: 'キャンセル',
-      btnOkOnPress: () {},
-      btnCancelColor: Colors.red,
-      btnCancelText: '削除',
-      btnCancelOnPress: () {
-        diaryController.deleteDiary(diary: diary);
-      },
-    ).show();
   }
 }
