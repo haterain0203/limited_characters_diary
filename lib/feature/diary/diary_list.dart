@@ -9,7 +9,7 @@ import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
 import '../../constant/constant_color.dart';
 import 'diary_controller.dart';
-import 'diary_providers.dart';
+import 'diary_service.dart';
 
 class DiaryList extends HookConsumerWidget {
   const DiaryList({

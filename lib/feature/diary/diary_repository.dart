@@ -1,7 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import 'diary.dart';
+import 'diary_service.dart';
+
+final diaryRepoProvider = Provider(
+  (ref) => DiaryRepository(
+    //TODO check ref.watchが望ましいか？
+    diaryRef: ref.watch(diaryRefProvider),
+  ),
+);
 
 class DiaryRepository {
   DiaryRepository({required this.diaryRef});

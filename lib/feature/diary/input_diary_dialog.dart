@@ -11,7 +11,7 @@ import '../../constant/constant_num.dart';
 import '../admob/ad_providers.dart';
 import '../date/date_controller.dart';
 import 'diary.dart';
-import 'diary_providers.dart';
+import 'diary_service.dart';
 
 class InputDiaryDialog extends HookConsumerWidget {
   const InputDiaryDialog({
