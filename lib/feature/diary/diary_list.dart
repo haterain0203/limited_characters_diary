@@ -10,8 +10,6 @@ import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
 import '../../constant/constant_color.dart';
-import '../../constant/constant_num.dart';
-import '../date/date_providers.dart';
 import 'diary.dart';
 import 'diary_providers.dart';
 import 'input_diary_dialog.dart';
@@ -54,15 +52,9 @@ class DiaryList extends HookConsumerWidget {
       //煩雑になると考え、Stackとしたもの。
     });
 
-    /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
+    // 特定条件を満たした場合、「SizedListTileの高さ*（当日の日数-5）」分だけ自動スクロールする
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _autoJumpToAroundToday(
-        dateController: dateController,
-        scrollController: scrollController,
-        isJumpedToAroundTodayController: ref.read(
-          hasJumpedToAroundTodayProvider.notifier,
-        ),
-      );
+      ref.read(dateControllerProvider).jumpToAroundToday(scrollController);
     });
 
     return diaryList.when(
@@ -196,27 +188,5 @@ class DiaryList extends HookConsumerWidget {
         diaryController.deleteDiary(diary: diary);
       },
     ).show();
-  }
-
-  /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
-  ///
-  /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
-  /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
-  /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
-  void _autoJumpToAroundToday({
-    required DateController dateController,
-    required ScrollController scrollController,
-    required StateController<bool> isJumpedToAroundTodayController,
-  }) {
-    if (!dateController.shouldJumpToAroundToday()) {
-      return;
-    }
-    if (!scrollController.hasClients) {
-      return;
-    }
-    scrollController.jumpTo(
-      ConstantNum.sizedListTileHeight * (DateTime.now().day - 5),
-    );
-    isJumpedToAroundTodayController.state = true;
   }
 }
