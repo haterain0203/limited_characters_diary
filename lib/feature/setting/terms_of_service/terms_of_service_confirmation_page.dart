@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/first_launch/first_launch_providers.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_providers.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../admob/ad_controller.dart';
+import '../../first_launch/first_launch_controller.dart';
 
 class TermsOfServiceConfirmationPage extends HookConsumerWidget {
   const TermsOfServiceConfirmationPage({super.key});
