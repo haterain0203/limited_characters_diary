@@ -33,11 +33,4 @@ class DiaryController {
   Future<void> deleteDiary({required Diary diary}) async {
     await repo.deleteDiary(diary: diary);
   }
-
-  // Diary? getIndexDateDiary(DateTime indexDate) {
-  //   final indexDateDiary = diaryList?.firstWhereOrNull((diary) {
-  //     return diary.diaryDate == indexDate;
-  //   });
-  //   return indexDateDiary;
-  // }
 }
