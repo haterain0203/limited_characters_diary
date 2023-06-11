@@ -22,7 +22,6 @@ class DiaryList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedDateTime = ref.watch(selectedDateTimeProvider);
-    final dateController = ref.watch(dateControllerProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
     final isShowInputDiaryDialog =
