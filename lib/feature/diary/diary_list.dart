@@ -36,7 +36,8 @@ class DiaryList extends HookConsumerWidget {
       }
     });
 
-    //TODO check Build後に実行する & ダイアログ判定をFutureProviderに変更することで、Future.delayedを削除したが、対応としてどうか？
+    //TODO check Build後に実行する & ダイアログ判定をFutureProviderに変更することで、Future.delayedを削除したが、、、
+    //TODO check Controllerへの移行の仕方（Controllerに移管する場合、多くのProviderをControllerに注入する必要がある）
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (isShowInputDiaryDialog == const AsyncData(true)) {
