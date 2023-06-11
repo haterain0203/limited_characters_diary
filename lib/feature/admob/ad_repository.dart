@@ -5,8 +5,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/confidential.dart';
 
-class AdRepository {
-  AdRepository({
+class AdService {
+  AdService({
     required this.isShownInterstitialAdController,
   });
   final StateController<bool> isShownInterstitialAdController;
