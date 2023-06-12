@@ -7,13 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/local_notification/local_notification_service.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
 import 'package:limited_characters_diary/firebase_options_dev.dart' as dev;
 import 'package:limited_characters_diary/firebase_options_prod.dart' as prod;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'feature/local_notification/local_notification_providers.dart';
+import 'feature/local_notification/local_notification_repository.dart';
+import 'feature/local_notification/local_notification_service.dart';
 import 'my_app.dart';
 
 const flavor = String.fromEnvironment('FLAVOR');
@@ -50,15 +50,18 @@ Future<void> main() async {
   // Admobの初期化
   await MobileAds.instance.initialize();
 
-  // ローカル通知の初期設定
-  final localNotificationRepo = LocalNotificationRepository();
-  await localNotificationRepo.init();
-
   // SharedPreferencesのインスタンス
   final prefs = await SharedPreferences.getInstance();
   //TODO check ControllerやRepositoryに定義して実行すべきではないか？
   final isCompletedFirstLaunch =
       prefs.getBool('completed_first_launch') ?? false;
+
+  // ローカル通知の初期設定
+  final localNotificationRepo = LocalNotificationRepository(prefs: prefs);
+  final localNotificationService = LocalNotificationService(
+    repo: localNotificationRepo,
+  );
+  await localNotificationService.init();
 
   runApp(
     Phoenix(
@@ -66,6 +69,8 @@ Future<void> main() async {
         enabled: !kReleaseMode,
         builder: (_) => ProviderScope(
           overrides: [
+            localNotificationServiceProvider
+                .overrideWithValue(localNotificationService),
             localNotificationRepoProvider
                 .overrideWithValue(localNotificationRepo),
             sharedPreferencesInstanceProvider.overrideWithValue(prefs),

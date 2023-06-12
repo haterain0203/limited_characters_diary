@@ -18,12 +18,6 @@ final localNotificationServiceProvider = Provider<LocalNotificationService>(
   },
 );
 
-// final localNotificationServiceProvider = Provider(
-//   (ref) => LocalNotificationService(
-//     repo: ref.watch(localNotificationRepoProvider),
-//   ),
-// );
-
 class LocalNotificationService {
   LocalNotificationService({
     required this.repo,
@@ -34,19 +28,13 @@ class LocalNotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  //TODO エラーハンドリング
   Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
     await repo.saveNotificationTime(notificationTime);
   }
 
-  //TODO エラーハンドリング
   Future<void> deleteNotification() async {
     await flutterLocalNotificationsPlugin.cancelAll();
-
     await repo.deleteNotificationTimeStr();
-    // ローカル通知時間の再取得
-    // 通知をリセットした際にUIもリセットするため
-    invalidateLocalNotificationTimeFutureProvider();
   }
 
   Future<void> init() async {

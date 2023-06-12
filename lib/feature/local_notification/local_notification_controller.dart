@@ -22,7 +22,6 @@ class LocalNotificationController {
     required this.invalidateLocalNotificationTimeFutureProvider,
   });
 
-  //TODO check Repositoryが2つあるのはおかしい？
   final LocalNotificationService service;
   final void Function() invalidateLocalNotificationTimeFutureProvider;
 
@@ -41,6 +40,9 @@ class LocalNotificationController {
   //TODO エラーハンドリング
   Future<void> deleteNotification() async {
     await service.deleteNotification();
+    // ローカル通知時間の再取得
+    // 通知をリセットした際にUIもリセットするため
+    invalidateLocalNotificationTimeFutureProvider();
   }
 
   Future<void> showSetNotificationDialog(BuildContext context) async {
