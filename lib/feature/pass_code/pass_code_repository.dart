@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../shared_preferences/shared_preferences_providers.dart';
 import 'pass_code.dart';
+
+final passCodeRepositoryProvider = Provider(
+  (ref) {
+    return PassCodeRepository(
+      prefs: ref.watch(sharedPreferencesInstanceProvider),
+    );
+  },
+);
 
 class PassCodeRepository {
   PassCodeRepository({required this.prefs});
