@@ -28,15 +28,6 @@ class LocalNotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
-    await repo.saveNotificationTime(notificationTime);
-  }
-
-  Future<void> deleteNotification() async {
-    await flutterLocalNotificationsPlugin.cancelAll();
-    await repo.deleteNotificationTimeStr();
-  }
-
   Future<void> init() async {
     await _initialSetting();
     await _setTimeZone();
@@ -63,19 +54,6 @@ class LocalNotificationService {
     tz.initializeTimeZones();
     final timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(timeZoneName));
-  }
-
-  Future<void> _requestPermissions() async {
-    if (Platform.isIOS) {
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
-    }
   }
 
   Future<void> scheduledNotification({
@@ -108,6 +86,28 @@ class LocalNotificationService {
       //同じ時間に毎日通知
       matchDateTimeComponents: DateTimeComponents.time,
     );
+  }
+
+  Future<void> _requestPermissions() async {
+    if (Platform.isIOS) {
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+    }
+  }
+
+  Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
+    await repo.saveNotificationTime(notificationTime);
+  }
+
+  Future<void> deleteNotification() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+    await repo.deleteNotificationTimeStr();
   }
 }
 
