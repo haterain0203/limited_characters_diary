@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final localNotificationRepoProvider = Provider<LocalNotificationRepository>(
-  (_) {
-    //TODO check この方法で問題ないか？
-    //main.dartで上書きされる
-    throw UnimplementedError();
-  },
+  (ref) => LocalNotificationRepository(
+    prefs: ref.watch(sharedPreferencesInstanceProvider),
+  ),
 );
 
 class LocalNotificationRepository {
   LocalNotificationRepository({required this.prefs});
+
   final SharedPreferences prefs;
 
   final notificationTimeStrKey = 'notification_time';

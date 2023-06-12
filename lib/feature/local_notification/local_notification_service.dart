@@ -10,16 +10,44 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../../constant/constant_num.dart';
 
-final localNotificationServiceProvider = Provider((ref) => LocalNotificationService());
+final localNotificationServiceProvider = Provider<LocalNotificationService>(
+  (_) {
+    //TODO check この方法で問題ないか？
+    //main.dartで上書きされる
+    throw UnimplementedError();
+  },
+);
+
+// final localNotificationServiceProvider = Provider(
+//   (ref) => LocalNotificationService(
+//     repo: ref.watch(localNotificationRepoProvider),
+//   ),
+// );
 
 class LocalNotificationService {
   LocalNotificationService({
     required this.repo,
-  }};
-final LocalNotificationRepository repo;
+  });
+
+  final LocalNotificationRepository repo;
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
+  //TODO エラーハンドリング
+  Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
+    await repo.saveNotificationTime(notificationTime);
+  }
+
+  //TODO エラーハンドリング
+  Future<void> deleteNotification() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+
+    await repo.deleteNotificationTimeStr();
+    // ローカル通知時間の再取得
+    // 通知をリセットした際にUIもリセットするため
+    invalidateLocalNotificationTimeFutureProvider();
+  }
 
   Future<void> init() async {
     await _initialSetting();
@@ -93,8 +121,19 @@ final LocalNotificationRepository repo;
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
-
-  Future<void> deleteNotification() async {
-    await flutterLocalNotificationsPlugin.cancelAll();
-  }
 }
+
+// SharedPreferencesにアクセスし、記録された通知時間の文字列を取得
+// TimeOfDayに直して返す
+//TODO check autoDisposeの使い所
+final localNotificationTimeFutureProvider =
+    FutureProvider.autoDispose((ref) async {
+  final repo = ref.watch(localNotificationRepoProvider);
+  final notificationTimeStr = await repo.fetchNotificationTimeStr();
+  if (notificationTimeStr == null) {
+    return null;
+  }
+  final notificationTimeDateTime = DateTime.parse(notificationTimeStr);
+  final notificationTime = TimeOfDay.fromDateTime(notificationTimeDateTime);
+  return notificationTime;
+});
