@@ -4,26 +4,18 @@ import 'package:limited_characters_diary/feature/shared_preferences/shared_prefe
 
 import 'local_notification_controller.dart';
 import 'local_notification_repository.dart';
-import 'local_notification_shared_preferences_repository.dart';
+import 'local_notification_service.dart';
 
 final localNotificationControllerProvider = Provider(
   (ref) {
     //TODO check refごと渡さないことを意識し、invalidateを渡す形にしたが、不自然か？
     void invalidate() => ref.invalidate(localNotificationTimeFutureProvider);
     return LocalNotificationController(
-      localNotificationRepository: ref.watch(localNotificationRepoProvider),
+      localNotificationService: ref.watch(localNotificationRepoProvider),
       localNotificationSharedPreferencesRepository:
           ref.watch(localNotificationSharedRepoProvider),
       invalidateLocalNotificationTimeFutureProvider: invalidate,
     );
-  },
-);
-
-final localNotificationRepoProvider = Provider<LocalNotificationRepository>(
-  (_) {
-    //TODO check この方法で問題ないか？
-    //main.dartで上書きされる
-    throw UnimplementedError();
   },
 );
 

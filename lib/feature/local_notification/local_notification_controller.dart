@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
-import 'package:limited_characters_diary/feature/local_notification/local_notification_shared_preferences_repository.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_service.dart';
 
 import '../../constant/enum.dart';
 import 'local_notification_setting_dialog.dart';
 
 class LocalNotificationController {
   LocalNotificationController({
-    required this.localNotificationRepository,
+    required this.localNotificationService,
     required this.localNotificationSharedPreferencesRepository,
     required this.invalidateLocalNotificationTimeFutureProvider,
   });
 
   //TODO check Repositoryが2つあるのはおかしい？
-  final LocalNotificationRepository localNotificationRepository;
+  final LocalNotificationService localNotificationRepository;
   final LocalNotificationSharedPreferencesRepository
       localNotificationSharedPreferencesRepository;
   final void Function() invalidateLocalNotificationTimeFutureProvider;

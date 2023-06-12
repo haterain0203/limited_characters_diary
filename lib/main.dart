@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/local_notification/local_notification_repository.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_service.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_providers.dart';
 import 'package:limited_characters_diary/firebase_options_dev.dart' as dev;
 import 'package:limited_characters_diary/firebase_options_prod.dart' as prod;
