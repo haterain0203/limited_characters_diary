@@ -31,7 +31,7 @@ class LocalNotificationController {
   final void Function() invalidateLocalNotificationTimeFutureProvider;
   final StateController<bool> isInitialSetNotificationNotifier;
 
-  //TODO check ユーザーアクションなのでControllerに記述すべき？
+  //TODO check ユーザーアクションなのでControllerに記述したが、書き方について相談
   Future<void> setNotification({
     required BuildContext context,
     required TimeOfDay? savedNotificationTime,
