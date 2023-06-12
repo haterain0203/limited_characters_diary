@@ -3,14 +3,13 @@ import 'package:limited_characters_diary/feature/pass_code/pass_code_service.dar
 
 import '../admob/ad_controller.dart';
 import '../local_notification/local_notification_controller.dart';
-import 'pass_code_repository.dart';
 
 final passCodeControllerProvider = Provider(
   (ref) {
     //TODO check Controllerにinvalidateを渡すのは不自然か？渡し方に違和感ないか？
     void invalidate() => ref.invalidate(passCodeProvider);
     return PassCodeController(
-      repo: ref.watch(passCodeRepositoryProvider),
+      service: ref.watch(passCodeServiceProvider),
       invalidatePassCodeProvider: invalidate,
       //TODO check 以下3つはref.watchで良いのか？
       isSetPassCodeLock: ref.watch(isSetPassCodeLockProvider),
@@ -27,7 +26,7 @@ final passCodeControllerProvider = Provider(
 class PassCodeController {
   //TODO check Controllerの引数が肥大化する場合、何かしら改善すべきか？
   PassCodeController({
-    required this.repo,
+    required this.service,
     required this.invalidatePassCodeProvider,
     required this.isSetPassCodeLock,
     required this.isShownInterstitialAd,
@@ -36,7 +35,7 @@ class PassCodeController {
     required this.isInitialSetNotificationNotifier,
   });
 
-  final PassCodeRepository repo;
+  final PassCodeService service;
   final void Function() invalidatePassCodeProvider;
   final bool isSetPassCodeLock;
   final bool isShownInterstitialAd;
@@ -49,7 +48,7 @@ class PassCodeController {
     required bool isPassCodeLock,
   }) async {
     //TODO エラーハンドリング
-    await repo.savePassCode(
+    await service.savePassCode(
       passCode: passCode,
       isPassCodeLock: isPassCodeLock,
     );
