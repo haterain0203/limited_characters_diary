@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/pass_code/pass_code_providers.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_service.dart';
 
 import '../admob/ad_controller.dart';
 import '../local_notification/local_notification_controller.dart';

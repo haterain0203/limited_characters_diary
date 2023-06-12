@@ -8,8 +8,9 @@ import 'package:settings_ui/settings_ui.dart';
 
 import '../app_info/app_info_service.dart';
 import '../local_notification/local_notification_setting_dialog.dart';
+import '../pass_code/pass_code_controller.dart';
 import '../pass_code/pass_code_functions.dart';
-import '../pass_code/pass_code_providers.dart';
+import '../pass_code/pass_code_service.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});

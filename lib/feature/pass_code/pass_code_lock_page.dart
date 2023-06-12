@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/pass_code/pass_code_providers.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_controller.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_service.dart';
 
 class PassCodeLockPage extends HookConsumerWidget {
   const PassCodeLockPage({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_controller.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.dart';
-import 'package:limited_characters_diary/feature/pass_code/pass_code_providers.dart';
 import 'package:limited_characters_diary/home_page.dart';
 
 /// パスコードロック画面とListPageを切り替えるためのWidget
