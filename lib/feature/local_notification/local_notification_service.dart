@@ -57,7 +57,7 @@ class LocalNotificationService {
   }
 
   Future<void> scheduledNotification({
-    required TimeOfDay notificationTime,
+    required TimeOfDay setTime,
   }) async {
     await _requestPermissions();
     final now = tz.TZDateTime.now(tz.local);
@@ -65,8 +65,8 @@ class LocalNotificationService {
       now.year,
       now.month,
       now.day,
-      notificationTime.hour,
-      notificationTime.minute,
+      setTime.hour,
+      setTime.minute,
     );
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
@@ -101,8 +101,8 @@ class LocalNotificationService {
     }
   }
 
-  Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
-    await repo.saveNotificationTime(notificationTime);
+  Future<void> saveNotificationTime({required TimeOfDay setTime}) async {
+    await repo.saveNotificationTime(setTime);
   }
 
   Future<void> deleteNotification() async {

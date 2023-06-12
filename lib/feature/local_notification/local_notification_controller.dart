@@ -26,15 +26,9 @@ class LocalNotificationController {
   final void Function() invalidateLocalNotificationTimeFutureProvider;
 
   //TODO エラーハンドリング
-  Future<void> scheduledNotification(TimeOfDay setTime) async {
-    await service.scheduledNotification(
-      notificationTime: setTime,
-    );
-  }
-
-  //TODO エラーハンドリング
-  Future<void> saveNotificationTime(TimeOfDay notificationTime) async {
-    await service.saveNotificationTime(notificationTime);
+  Future<void> setNotification(TimeOfDay setTime) async {
+    await service.scheduledNotification(setTime: setTime);
+    await service.saveNotificationTime(setTime: setTime);
   }
 
   //TODO エラーハンドリング
