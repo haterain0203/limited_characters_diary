@@ -1,6 +1,28 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_providers.dart';
 
+import '../admob/ad_controller.dart';
+import '../local_notification/local_notification_controller.dart';
 import 'pass_code_repository.dart';
+
+final passCodeControllerProvider = Provider(
+  (ref) {
+    //TODO check Controllerにinvalidateを渡すのは不自然か？渡し方に違和感ないか？
+    void invalidate() => ref.invalidate(passCodeProvider);
+    return PassCodeController(
+      repo: ref.watch(passCodeRepositoryProvider),
+      invalidatePassCodeProvider: invalidate,
+      //TODO check 以下3つはref.watchで良いのか？
+      isSetPassCodeLock: ref.watch(isSetPassCodeLockProvider),
+      isShownInterstitialAd: ref.watch(isShownInterstitialAdProvider),
+      isInitialSetNotification: ref.watch(isInitialSetNotificationProvider),
+      isShownInterstitialAdNotifier:
+          ref.read(isShownInterstitialAdProvider.notifier),
+      isInitialSetNotificationNotifier:
+          ref.read(isInitialSetNotificationProvider.notifier),
+    );
+  },
+);
 
 class PassCodeController {
   //TODO check Controllerの引数が肥大化する場合、何かしら改善すべきか？
@@ -59,3 +81,11 @@ class PassCodeController {
     return true;
   }
 }
+
+//TODO isSetPassCodeLockProviderと役割が重複していないか？
+//TODO controller内のshouldShowPassCodeLockと役割が重複している
+/// パスコードロック画面を表示するかどうかを管理するProvider
+final isShowScreenLockProvider = StateProvider<bool>((ref) {
+  // 初期値は、パスコードロック設定の値
+  return ref.watch(isSetPassCodeLockProvider);
+});
