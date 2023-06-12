@@ -68,9 +68,10 @@ class LocalNotificationController {
     //設定された時間をSharedPreferencesに保存
     //TODO エラーハンドリング
     await service.saveNotificationTime(setTime: setTime);
-    if (context.mounted) {
-      await _showSetCompleteDialog(context, setTime.to24hours());
+    if (!context.mounted) {
+      return;
     }
+    await _showSetCompleteDialog(context, setTime.to24hours());
   }
 
   Future<void> _showSetCompleteDialog(
