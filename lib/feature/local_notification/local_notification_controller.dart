@@ -26,6 +26,7 @@ class LocalNotificationController {
   final void Function() invalidateLocalNotificationTimeFutureProvider;
 
   //TODO エラーハンドリング
+  //TODO check 2つのメソッドを呼び出しているが、ユーザー動作としては1つなので、1つのコントローラーのメソッドとしたが考え方として問題ないか？
   Future<void> setNotification(TimeOfDay setTime) async {
     await service.scheduledNotification(setTime: setTime);
     await service.saveNotificationTime(setTime: setTime);
