@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/stadium_border_button.dart';
@@ -20,6 +19,8 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notificationTime = ref.watch(localNotificationTimeFutureProvider);
+    final localNotificationController =
+        ref.watch(localNotificationControllerProvider);
     return notificationTime.when(
       loading: () => const Scaffold(
         body: Center(
@@ -66,11 +67,10 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
           children: [
             data == null
                 ? StadiumBorderButton(
-                    onPressed: () {
-                      _setNotification(
+                    onPressed: () async {
+                      await localNotificationController.setNotification(
                         context: context,
                         savedNotificationTime: data,
-                        ref: ref,
                       );
                     },
                     title: Padding(
@@ -83,10 +83,9 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                   )
                 : TextButton(
                     onPressed: () async {
-                      return _setNotification(
+                      await localNotificationController.setNotification(
                         context: context,
                         savedNotificationTime: data,
-                        ref: ref,
                       );
                     },
                     child: Text(
@@ -102,9 +101,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                 children: [
                   TextButton(
                     onPressed: () async {
-                      await ref
-                          .read(localNotificationControllerProvider)
-                          .deleteNotification();
+                      await localNotificationController.deleteNotification();
                     },
                     child: const Text('通知設定をリセットする'),
                   ),
@@ -123,61 +120,5 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
         ),
       ),
     );
-  }
-
-  //TODO check ユーザーアクションなのでControllerに記述すべき？
-  Future<void> _setNotification({
-    required BuildContext context,
-    required TimeOfDay? savedNotificationTime,
-    required WidgetRef ref,
-  }) async {
-    final setTime = await showTimePicker(
-      context: context,
-      initialTime:
-          savedNotificationTime ?? const TimeOfDay(hour: 21, minute: 00),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            alwaysUse24HourFormat: true,
-          ),
-          child: child!,
-        );
-      },
-    );
-    //入力がなければ早期リターン
-    if (setTime == null) {
-      return;
-    }
-    //DBに保存されている値と入力された値が同じ場合も早期リターン
-    if (setTime == savedNotificationTime) {
-      return;
-    }
-    //初めて通知設定する場合、trueに
-    if (savedNotificationTime == null) {
-      ref.read(isInitialSetNotificationProvider.notifier).state = true;
-    }
-    //通知設定
-    //設定された時間をSharedPreferencesに保存
-    await ref
-        .read(localNotificationControllerProvider)
-        .setNotification(setTime);
-    if (context.mounted) {
-      await _showSetCompleteDialog(context, setTime.to24hours());
-    }
-  }
-
-  Future<void> _showSetCompleteDialog(
-    BuildContext context,
-    String setTime,
-  ) async {
-    await AwesomeDialog(
-      context: context,
-      dialogType: DialogType.success,
-      title: '$setTimeに通知を設定しました',
-      btnOkText: '閉じる',
-      btnOkOnPress: () {
-        Navigator.pop(context);
-      },
-    ).show();
   }
 }
