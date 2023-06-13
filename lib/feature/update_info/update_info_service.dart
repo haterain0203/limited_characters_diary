@@ -21,17 +21,16 @@ class UpdateInfoService {
 
   final UpdateInfoRepository repo;
 
-  //TODO ここも向きが逆転しているかも
-  // 端末のアプリバージョンとfirebaseのバージョンを比較し、firebaseの方が新しい場合、
+  // 端末のアプリバージョンとfirestoreで指定されているバージョンを比較し、firebaseの方が新しい場合、
   // 強制アップデートを促すダイアログを表示するためのboolを返す
   Future<bool> shouldUpdate(UpdateInfo updateInfo) async {
     // firebaseのrequired_updateがfalseならfalseをリターンして終了
     if (!updateInfo.requiredUpdate) {
       return false;
     }
-    // firebaseのrequired_updateがtrueなら強制アップデート判定に進む
     final currentVersion = await getCurrentVersion();
-    final requiredVersion = await getRequiredVersion(updateInfo);
+    final requiredVersion =
+        await parseRequiredVersionFromUpdateInfo(updateInfo);
     final requiredUpdate = currentVersion < requiredVersion;
     return requiredUpdate;
   }
@@ -43,15 +42,17 @@ class UpdateInfoService {
     return currentVersion;
   }
 
-  // firebaseのバージョン情報を取得
-  Future<Version> getRequiredVersion(UpdateInfo updateInfo) async {
-    // iosかandroidかでfirebaseから取得するフィールド名を変更する
+  // UpdateInfoから必要なバージョン情報を解析する
+  Future<Version> parseRequiredVersionFromUpdateInfo(
+      UpdateInfo updateInfo) async {
+    // ユーザー端末がiosかandroidかでupdateInfoのフィールドを変更する
     final os = Platform.isIOS
         ? updateInfo.requiredIosVersion
         : updateInfo.requiredAndroidVersion;
-    //Firestoreからアップデートしたいバージョンを取得
-    final newVersion = Version.parse(os);
-    return newVersion;
+    // updateInfoのバージョン情報をVersionパッケージを使ってparse
+    // https://pub.dev/packages/version
+    final requiredVersion = Version.parse(os);
+    return requiredVersion;
   }
 }
 
