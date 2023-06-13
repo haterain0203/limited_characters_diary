@@ -24,7 +24,9 @@ class PageSwitcher extends HookConsumerWidget {
 
       //TODO check 常にパスコード画面を表示するか否かを監視する必要はなく、
       //TODO check inactive時に判定すれば良いので、ProviderではなくContollerのメソッドとしたがどうか？
-      if (ref.read(passCodeControllerProvider).shouldShowPassCodeLockPage()) {
+      if (ref
+          .read(passCodeControllerProvider)
+          .shouldShowPassCodeLockWhenInactive()) {
         ref.read(isShowPassCodeLockPageProvider.notifier).state = true;
       }
     });

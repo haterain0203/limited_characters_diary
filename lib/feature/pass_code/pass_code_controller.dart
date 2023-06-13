@@ -58,7 +58,7 @@ class PassCodeController {
     invalidatePassCodeProvider();
   }
 
-  bool shouldShowPassCodeLockPage() {
+  bool shouldShowPassCodeLockWhenInactive() {
     // パスコード設定がOFFなら処理終了
     if (!isSetPassCodeLock) {
       return false;
