@@ -12,7 +12,7 @@ final passCodeControllerProvider = Provider(
       service: ref.watch(passCodeServiceProvider),
       invalidatePassCodeProvider: invalidate,
       //TODO check 以下3つはref.watchで良いのか？
-      isSetPassCodeLock: ref.watch(passCodeLockToggleProvider),
+      passCodeToggle: ref.watch(passCodeLockToggleProvider),
       isShownInterstitialAd: ref.watch(isShownInterstitialAdProvider),
       isInitialSetNotification: ref.watch(isInitialSetNotificationProvider),
       isShownInterstitialAdNotifier:
@@ -28,7 +28,7 @@ class PassCodeController {
   PassCodeController({
     required this.service,
     required this.invalidatePassCodeProvider,
-    required this.isSetPassCodeLock,
+    required this.passCodeToggle,
     required this.isShownInterstitialAd,
     required this.isInitialSetNotification,
     required this.isShownInterstitialAdNotifier,
@@ -37,7 +37,7 @@ class PassCodeController {
 
   final PassCodeService service;
   final void Function() invalidatePassCodeProvider;
-  final bool isSetPassCodeLock;
+  final bool passCodeToggle;
   final bool isShownInterstitialAd;
   final bool isInitialSetNotification;
   StateController<bool> isShownInterstitialAdNotifier;
@@ -60,7 +60,7 @@ class PassCodeController {
 
   bool shouldShowPassCodeLockWhenInactive() {
     // パスコード設定がOFFなら処理終了（パスコードロックを表示しない）
-    if (!isSetPassCodeLock) {
+    if (!passCodeToggle) {
       return false;
     }
 
