@@ -30,8 +30,8 @@ class PassCodeController {
     required this.invalidatePassCodeProvider,
     required this.passCodeToggle,
     required this.isShownInterstitialAd,
-    required this.isInitialSetNotification,
     required this.isShownInterstitialAdNotifier,
+    required this.isInitialSetNotification,
     required this.isInitialSetNotificationNotifier,
   });
 
@@ -39,8 +39,8 @@ class PassCodeController {
   final void Function() invalidatePassCodeProvider;
   final bool passCodeToggle;
   final bool isShownInterstitialAd;
-  final bool isInitialSetNotification;
   StateController<bool> isShownInterstitialAdNotifier;
+  final bool isInitialSetNotification;
   StateController<bool> isInitialSetNotificationNotifier;
 
   Future<void> savePassCode({
