@@ -3,11 +3,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant_string.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
 import 'package:limited_characters_diary/web_view_page.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../app_info/app_info_service.dart';
-import '../local_notification/local_notification_setting_dialog.dart';
 import '../pass_code/pass_code_controller.dart';
 import '../pass_code/pass_code_service.dart';
 
@@ -45,7 +45,12 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {
-                      _showSetNotificationDialog(context);
+                      ref
+                          .read(localNotificationControllerProvider)
+                          .showSetNotificationDialog(
+                            context: context,
+                            trigger: NotificationDialogTrigger.userAction,
+                          );
                     },
                   ),
                   SettingsTile.switchTile(
@@ -188,17 +193,6 @@ class SettingPage extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  void _showSetNotificationDialog(BuildContext context) {
-    showDialog<LocalNotificationSettingDialog>(
-      context: context,
-      builder: (_) {
-        return const LocalNotificationSettingDialog(
-          trigger: NotificationDialogTrigger.userAction,
-        );
-      },
     );
   }
 

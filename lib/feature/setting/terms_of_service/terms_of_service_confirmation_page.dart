@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:sizer/sizer.dart';
 
@@ -51,7 +52,10 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
                 }
                 await ref
                     .read(localNotificationControllerProvider)
-                    .showSetNotificationDialog(context);
+                    .showSetNotificationDialog(
+                      context: context,
+                      trigger: NotificationDialogTrigger.onFirstLaunch,
+                    );
                 // 通知設定完了後（通知設定ダイアログが閉じたら）、AuthPageへ遷移する
                 // 当初は通知設定ダイアログ側でAuthPageへの遷移を記述していたが、それだとローカル通知時間が正しく反映されない
                 if (!context.mounted) {

@@ -97,12 +97,15 @@ class LocalNotificationController {
     invalidateLocalNotificationTimeFutureProvider();
   }
 
-  Future<void> showSetNotificationDialog(BuildContext context) async {
+  Future<void> showSetNotificationDialog({
+    required BuildContext context,
+    required NotificationDialogTrigger trigger,
+  }) async {
     await showDialog<LocalNotificationSettingDialog>(
       context: context,
       builder: (_) {
-        return const LocalNotificationSettingDialog(
-          trigger: NotificationDialogTrigger.onFirstLaunch,
+        return LocalNotificationSettingDialog(
+          trigger: trigger,
         );
       },
     );
