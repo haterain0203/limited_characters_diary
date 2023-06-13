@@ -45,7 +45,28 @@ class PassCodeController {
   final bool isInitialSetNotification;
   StateController<bool> isInitialSetNotificationNotifier;
 
-  Future<void> savePassCode({
+  /// 設定画面におけるパスコード設定のトグル切り替え
+  ///
+  /// トグルの値がtrue→falseならpassCodeを空文字、isPassCodeをfalse、パスコードロックOFF
+  /// false→trueならパスコード登録画面を表示、パスコードを登録、パスコードロックON
+  Future<void> onPassCodeToggle({
+    required bool isPassCodeLock,
+    required BuildContext context,
+  }) async {
+    if (!isPassCodeLock) {
+      await _savePassCode(
+        passCode: '',
+        isPassCodeLock: false,
+      );
+    } else {
+      await _showPassCodeLockCreate(
+        context: context,
+        isPassCodeLock: isPassCodeLock,
+      );
+    }
+  }
+
+  Future<void> _savePassCode({
     required String passCode,
     required bool isPassCodeLock,
   }) async {
@@ -61,7 +82,7 @@ class PassCodeController {
   }
 
   /// パスコード登録画面の表示とパスコードの登録
-  Future<void> showPassCodeLockCreate({
+  Future<void> _showPassCodeLockCreate({
     required BuildContext context,
     required bool isPassCodeLock,
   }) async {
@@ -69,7 +90,7 @@ class PassCodeController {
       context: context,
       onConfirmed: (passCode) async {
         // Confirmした値を保存する
-        await savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
+        await _savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
         // 画面を閉じる
         if (context.mounted) {
           Navigator.pop(context);

@@ -52,21 +52,12 @@ class SettingPage extends StatelessWidget {
                     // 初期値はSharedPreferencesの値が入る
                     initialValue: isPassCodeLock,
                     onToggle: (bool isPassCodeLock) async {
-                      // トグルの値がtrue→falseならpassCodeを空文字、isPassCodeをfalse、パスコードロックOFF
-                      // false→trueならパスコード登録画面を表示、パスコードを登録、パスコードロックON
-                      final passCodeController =
-                          ref.read(passCodeControllerProvider);
-                      if (!isPassCodeLock) {
-                        await passCodeController.savePassCode(
-                          passCode: '',
-                          isPassCodeLock: false,
-                        );
-                      } else {
-                        await passCodeController.showPassCodeLockCreate(
-                          context: context,
-                          isPassCodeLock: isPassCodeLock,
-                        );
-                      }
+                      await ref
+                          .read(passCodeControllerProvider)
+                          .onPassCodeToggle(
+                            isPassCodeLock: isPassCodeLock,
+                            context: context,
+                          );
                     },
                     leading: const Icon(Icons.security),
                     title: const Text(
