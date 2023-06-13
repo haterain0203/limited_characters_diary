@@ -24,7 +24,7 @@ class UpdateInfoService {
   //TODO ここも向きが逆転しているかも
   // 端末のアプリバージョンとfirebaseのバージョンを比較し、firebaseの方が新しい場合、
   // 強制アップデートを促すダイアログを表示するためのboolを返す
-  Future<bool> requiredUpdate(UpdateInfo updateInfo) async {
+  Future<bool> shouldUpdate(UpdateInfo updateInfo) async {
     // firebaseのrequired_updateがfalseならfalseをリターンして終了
     if (!updateInfo.requiredUpdate) {
       return false;
@@ -82,6 +82,5 @@ final shouldForcedUpdateProvider =
     return false;
   }
   final service = ref.watch(updateInfoServiceProvider);
-  final requiredUpdate = await service.requiredUpdate(updateInfo.value!);
-  return requiredUpdate;
+  return service.shouldUpdate(updateInfo.value!);
 });
