@@ -39,6 +39,7 @@ class PassCodeRepository {
     await prefs.setString(passCodeKey, passCode);
     await prefs.setBool(isPassCodeLockKey, isPassCodeLock);
     debugPrint(
-        'passCode = $passCode\nisPassCodeLock = $isPassCodeLock\nで登録しました');
+      'passCode = $passCode\nisPassCodeLock = $isPassCodeLock\nで登録しました',
+    );
   }
 }
