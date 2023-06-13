@@ -27,6 +27,30 @@ class RoutingController {
     );
   }
 
+  Future<void> goContactUsOnWebView() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute<WebViewPage>(
+        builder: (context) => const WebViewPage(
+          title: ConstantString.contactUsStr,
+          url: ConstantString.googleFormUrl,
+        ),
+      ),
+    );
+  }
+
+  Future<void> goPrivacyPolicyOnWebView() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute<WebViewPage>(
+        builder: (context) => const WebViewPage(
+          title: ConstantString.privacyPolicyStr,
+          url: ConstantString.privacyPolicyUrl,
+        ),
+      ),
+    );
+  }
+
   Future<void> goAuthPage() async {
     await Navigator.push(
       context,

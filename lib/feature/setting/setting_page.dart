@@ -4,7 +4,7 @@ import 'package:limited_characters_diary/constant/constant_string.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
-import 'package:limited_characters_diary/web_view_page.dart';
+import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../app_info/app_info_service.dart';
@@ -29,6 +29,8 @@ class SettingPage extends StatelessWidget {
             passCodeProvider.select((value) => value.isPassCodeEnabled),
           );
           final appInfo = ref.watch(appInfoProvider);
+          final routingController =
+              ref.watch(routingControllerProvider(context));
           return SettingsList(
             platform: DevicePlatform.iOS,
             sections: [
@@ -97,11 +99,7 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      _openWebViewPage(
-                        context: context,
-                        title: ConstantString.contactUsStr,
-                        url: ConstantString.googleFormUrl,
-                      );
+                      routingController.goContactUsOnWebView();
                     },
                   ),
                   SettingsTile.navigation(
@@ -111,11 +109,7 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      _openWebViewPage(
-                        context: context,
-                        title: ConstantString.termsOfServiceStr,
-                        url: ConstantString.termsOfServiceUrl,
-                      );
+                      routingController.goTermsOfServiceOnWebView();
                     },
                   ),
                   SettingsTile.navigation(
@@ -125,11 +119,7 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      _openWebViewPage(
-                        context: context,
-                        title: ConstantString.privacyPolicyStr,
-                        url: ConstantString.privacyPolicyUrl,
-                      );
+                      routingController.goPrivacyPolicyOnWebView();
                     },
                   ),
                   SettingsTile(
@@ -192,22 +182,6 @@ class SettingPage extends StatelessWidget {
             ],
           );
         },
-      ),
-    );
-  }
-
-  void _openWebViewPage({
-    required BuildContext context,
-    required String title,
-    required String url,
-  }) {
-    Navigator.push(
-      context,
-      MaterialPageRoute<WebViewPage>(
-        builder: (_) => WebViewPage(
-          title: title,
-          url: url,
-        ),
       ),
     );
   }
