@@ -7,7 +7,7 @@ import 'package:limited_characters_diary/feature/diary/diary_service.dart';
 import '../../constant/enum.dart';
 import '../auth/auth_controller.dart';
 import '../date/date_controller.dart';
-import '../update_info/update_info_providers.dart';
+import '../update_info/update_info_service.dart';
 import 'complete_dialog_content.dart';
 import 'diary.dart';
 import 'input_diary_dialog.dart';

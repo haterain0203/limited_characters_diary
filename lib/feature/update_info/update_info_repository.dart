@@ -1,9 +1,17 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/update_info/update_info.dart';
+import 'package:limited_characters_diary/feature/update_info/update_info_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
+
+final updateInfoRepoProvider = Provider(
+  (ref) => UpdateInfoRepository(
+    updateInfoRef: ref.watch(updateInfoRefProvider),
+  ),
+);
 
 class UpdateInfoRepository {
   UpdateInfoRepository({required this.updateInfoRef});

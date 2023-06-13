@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
+import 'package:limited_characters_diary/feature/update_info/update_info_service.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';

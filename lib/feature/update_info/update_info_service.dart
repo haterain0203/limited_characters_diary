@@ -4,12 +4,6 @@ import 'package:limited_characters_diary/feature/update_info/update_info_reposit
 
 import '../firestore/firestore_instance_provider.dart';
 
-final updateRepoProvider = Provider(
-  (ref) => UpdateInfoRepository(
-    updateInfoRef: ref.watch(updateInfoRefProvider),
-  ),
-);
-
 final updateInfoRefProvider = Provider((ref) {
   final firestore = ref.watch(firestoreInstanceProvider);
   final updateInfoRef = firestore
@@ -23,7 +17,7 @@ final updateInfoRefProvider = Provider((ref) {
 });
 
 final updateInfoProvider = StreamProvider.autoDispose<UpdateInfo>((ref) {
-  final repo = ref.watch(updateRepoProvider);
+  final repo = ref.watch(updateInfoRepoProvider);
   final updateInfo = repo.subscribedUpdateInfo();
   return updateInfo;
 });
@@ -35,7 +29,7 @@ final forcedUpdateProvider = FutureProvider.autoDispose<bool>((ref) async {
   if (updateInfo.value == null) {
     return false;
   }
-  final repo = ref.watch(updateRepoProvider);
+  final repo = ref.watch(updateInfoRepoProvider);
   final requiredUpdate = await repo.requiredUpdate(updateInfo.value!);
   return requiredUpdate;
 });
