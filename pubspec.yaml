@@ -43,8 +43,6 @@ dependencies:
   firebase_messaging: ^14.5.0
   flutter:
     sdk: flutter
-  font_awesome_flutter: ^10.4.0
-  freezed_annotation: ^2.2.0
   flutter_hooks: ^0.18.6
   flutter_launcher_icons: ^0.13.0
   flutter_local_notifications: ^13.0.0
@@ -52,6 +50,8 @@ dependencies:
   flutter_phoenix: ^1.1.1
   flutter_screen_lock: ^9.0.1
   flutter_slidable: ^3.0.0
+  font_awesome_flutter: ^10.4.0
+  freezed_annotation: ^2.2.0
   google_mobile_ads: ^2.4.0
   hooks_riverpod: ^2.3.0
   intl: ^0.17.0
