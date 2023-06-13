@@ -190,7 +190,7 @@ final isShowInputDiaryDialogOnLaunchProvider =
   }
 
   // 強制アップデート表示中の場合は日記ダイアログを自動表示しない
-  if (await ref.watch(forcedUpdateProvider.future)) {
+  if (await ref.watch(shouldForcedUpdateProvider.future)) {
     return false;
   }
 

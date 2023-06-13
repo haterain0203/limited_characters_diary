@@ -14,11 +14,11 @@ class ForcedUpdateDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isForcedUpdate = ref.watch(forcedUpdateProvider);
+    final shouldForcedUpdate = ref.watch(shouldForcedUpdateProvider);
 
     // このダイアログは、緊急時以外ユーザーに見せないもの
     // loadingおよびエラーハンドリングは不要と考え、.whenは使っていない
-    if (isForcedUpdate.value == null || !isForcedUpdate.value!) {
+    if (shouldForcedUpdate.value == null || !shouldForcedUpdate.value!) {
       //TODO check SizedBox()を返すこの方法は問題ないか？
       return const SizedBox();
     }
