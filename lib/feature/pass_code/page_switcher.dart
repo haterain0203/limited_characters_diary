@@ -6,8 +6,8 @@ import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.d
 import 'package:limited_characters_diary/home_page.dart';
 
 /// パスコードロック画面とListPageを切り替えるためのWidget
-class PassCodeLockOrListPageSwitcher extends HookConsumerWidget {
-  const PassCodeLockOrListPageSwitcher({
+class PageSwitcher extends HookConsumerWidget {
+  const PageSwitcher({
     super.key,
   });
 
