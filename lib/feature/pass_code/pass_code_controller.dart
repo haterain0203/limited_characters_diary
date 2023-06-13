@@ -58,7 +58,7 @@ class PassCodeController {
     invalidatePassCodeProvider();
   }
 
-  bool shouldShowPassCodeLock() {
+  bool shouldShowPassCodeLockPage() {
     // パスコード設定がOFFなら処理終了
     if (!isSetPassCodeLock) {
       return false;
@@ -84,7 +84,7 @@ class PassCodeController {
 //TODO isSetPassCodeLockProviderと役割が重複していないか？
 //TODO controller内のshouldShowPassCodeLockと役割が重複している
 /// パスコードロック画面を表示するかどうかを管理するProvider
-final isShowScreenLockProvider = StateProvider<bool>((ref) {
+final isShowPassCodeLockPageProvider = StateProvider<bool>((ref) {
   // 初期値は、パスコードロック設定の値
   return ref.watch(isSetPassCodeLockProvider);
 });
