@@ -9,7 +9,6 @@ import 'package:settings_ui/settings_ui.dart';
 import '../app_info/app_info_service.dart';
 import '../local_notification/local_notification_setting_dialog.dart';
 import '../pass_code/pass_code_controller.dart';
-import '../pass_code/pass_code_functions.dart';
 import '../pass_code/pass_code_service.dart';
 
 class SettingPage extends StatelessWidget {
@@ -55,15 +54,16 @@ class SettingPage extends StatelessWidget {
                     onToggle: (bool isPassCodeLock) async {
                       // トグルの値がtrue→falseならpassCodeを空文字、isPassCodeをfalse、パスコードロックOFF
                       // false→trueならパスコード登録画面を表示、パスコードを登録、パスコードロックON
+                      final passCodeController =
+                          ref.read(passCodeControllerProvider);
                       if (!isPassCodeLock) {
-                        await ref.read(passCodeControllerProvider).savePassCode(
-                              passCode: '',
-                              isPassCodeLock: false,
-                            );
+                        await passCodeController.savePassCode(
+                          passCode: '',
+                          isPassCodeLock: false,
+                        );
                       } else {
-                        await showPassCodeLockCreate(
+                        await passCodeController.showPassCodeLockCreate(
                           context: context,
-                          ref: ref,
                           isPassCodeLock: isPassCodeLock,
                         );
                       }
