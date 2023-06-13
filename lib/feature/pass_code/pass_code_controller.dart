@@ -59,18 +59,19 @@ class PassCodeController {
   }
 
   bool shouldShowPassCodeLockWhenInactive() {
-    // パスコード設定がOFFなら処理終了
+    // パスコード設定がOFFなら処理終了（パスコードロックを表示しない）
     if (!isSetPassCodeLock) {
       return false;
     }
 
-    // 全画面広告から復帰した際は処理終了
+    // 全画面広告から復帰した際は処理終了（パスコードロックを表示しない）
     // 全画面広告表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
     if (isShownInterstitialAd) {
       return false;
     }
 
-    // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、その際は処理終了
+    // 端末の通知設定ダイアログ表示した際は処理終了（パスコードロックを表示しない）
+    // 初めて通知設定した際は、端末の通知設定ダイアログによりinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
     if (isInitialSetNotification) {
       // falseに戻さないと、初めて通知設定した後にinactiveにした際にロック画面が表示されない
       isInitialSetNotificationNotifier.state = false;
