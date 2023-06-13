@@ -34,7 +34,7 @@ final passCodeProvider = Provider<PassCode>((ref) {
 });
 
 /// パスコードロック設定をOn/Off状態の取得
-final isSetPassCodeLockProvider = Provider<bool>((ref) {
+final passCodeLockToggleProvider = Provider<bool>((ref) {
   // 設定でのパスコードロックがOFFなら表示しない
   return ref.watch(passCodeProvider.select((value) => value.isPassCodeEnabled));
 });

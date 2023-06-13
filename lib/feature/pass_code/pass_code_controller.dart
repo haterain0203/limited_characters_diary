@@ -12,7 +12,7 @@ final passCodeControllerProvider = Provider(
       service: ref.watch(passCodeServiceProvider),
       invalidatePassCodeProvider: invalidate,
       //TODO check 以下3つはref.watchで良いのか？
-      isSetPassCodeLock: ref.watch(isSetPassCodeLockProvider),
+      isSetPassCodeLock: ref.watch(passCodeLockToggleProvider),
       isShownInterstitialAd: ref.watch(isShownInterstitialAdProvider),
       isInitialSetNotification: ref.watch(isInitialSetNotificationProvider),
       isShownInterstitialAdNotifier:
@@ -87,5 +87,5 @@ class PassCodeController {
 /// パスコードロック画面を表示するかどうかを管理するProvider
 final isShowPassCodeLockPageProvider = StateProvider<bool>((ref) {
   // 初期値は、パスコードロック設定の値
-  return ref.watch(isSetPassCodeLockProvider);
+  return ref.watch(passCodeLockToggleProvider);
 });
