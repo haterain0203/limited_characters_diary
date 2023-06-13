@@ -128,19 +128,14 @@ class SettingPage extends StatelessWidget {
                       'アプリ名',
                       style: textStyle,
                     ),
-                    trailing: HookConsumer(
-                      builder: (context, ref, child) {
-                        final appInfo = ref.watch(appInfoProvider);
-                        return appInfo.when(
-                          loading: () => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          error: (error, stack) {
-                            return const Text('エラーが発生しました');
-                          },
-                          data: (data) => Text(data.appName),
-                        );
+                    trailing: appInfo.when(
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      error: (error, stack) {
+                        return const Text('エラーが発生しました');
                       },
+                      data: (data) => Text(data.appName),
                     ),
                   ),
                   SettingsTile(
