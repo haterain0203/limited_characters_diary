@@ -82,8 +82,6 @@ class PassCodeController {
   }
 }
 
-//TODO isSetPassCodeLockProviderと役割が重複していないか？
-//TODO controller内のshouldShowPassCodeLockと役割が重複している
 /// パスコードロック画面を表示するかどうかを管理するProvider
 final isShowPassCodeLockPageProvider = StateProvider<bool>((ref) {
   // 初期値は、パスコードロック設定の値
