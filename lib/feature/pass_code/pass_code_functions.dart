@@ -3,9 +3,8 @@ import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_controller.dart';
 
-//TODO check グローバルな関数だが問題はあるか？
 /// パスコード登録画面の表示とパスコードの登録
-Future<void> showScreenLockCreate({
+Future<void> showPassCodeLockCreate({
   required BuildContext context,
   required WidgetRef ref,
   required bool isPassCodeLock,

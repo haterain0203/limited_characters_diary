@@ -61,7 +61,7 @@ class SettingPage extends StatelessWidget {
                               isPassCodeLock: false,
                             );
                       } else {
-                        await showScreenLockCreate(
+                        await showPassCodeLockCreate(
                           context: context,
                           ref: ref,
                           isPassCodeLock: isPassCodeLock,
