@@ -17,7 +17,11 @@ class AuthService {
   final AuthRepository repo;
 
   Future<void> signInAnonymouslyAndAddUser() async {
-    await repo.signInAnonymouslyAndAddUser();
+    final userCredential = await repo.signInAnonymously();
+    final user = userCredential.user;
+    if (user != null) {
+      await repo.addUser(user);
+    }
   }
 
 //TODO サインアウト

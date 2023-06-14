@@ -32,34 +32,38 @@ class AuthRepository {
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
   //TODO check 匿名認証とユーザー登録の2つの責務が入っているため、分割してServiceで2つのメソッドを呼ぶ方が良さそう
-  Future<void> signInAnonymouslyAndAddUser() async {
+  Future<UserCredential> signInAnonymously() async {
     //TODO check controllerでエラーハンドリンするならば、ここでは不要では？
     try {
       // 匿名認証
-      final userCredential = await auth.signInAnonymously();
-
-      // firestoreにUserを登録する
-      final user = userCredential.user;
-      if (user != null) {
-        final fcmToken = await fcm.getToken();
-        final uid = user.uid;
-        final userRef = firestore.collection('users').withConverter<AppUser>(
-              fromFirestore: (snapshot, _) =>
-                  AppUser.fromJson(snapshot.data()!),
-              toFirestore: (user, _) => user.toJson(),
-            );
-        await userRef.doc(uid).set(
-              AppUser(
-                uid: uid,
-                createdAt: DateTime.now(),
-                fcmToken: fcmToken,
-              ),
-            );
-      }
+      return await auth.signInAnonymously();
       //TODO check Controllerにエラーハンドリングを記述したので、ここでのcatchは不要では？
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       throw _convertToErrorMessageFromErrorCode(e.code);
+    }
+  }
+
+  Future<void> addUser(User user) async {
+    //TODO check controllerでエラーハンドリンするならば、ここでは不要では？
+    try {
+      // firestoreにUserを登録する
+      final fcmToken = await fcm.getToken();
+      final uid = user.uid;
+      final userRef = firestore.collection('users').withConverter<AppUser>(
+            fromFirestore: (snapshot, _) => AppUser.fromJson(snapshot.data()!),
+            toFirestore: (user, _) => user.toJson(),
+          );
+      await userRef.doc(uid).set(
+            AppUser(
+              uid: uid,
+              createdAt: DateTime.now(),
+              fcmToken: fcmToken,
+            ),
+          );
+      //TODO check Controllerにエラーハンドリングを記述したので、ここでのcatchは不要では？
+    } on FirebaseException catch (e) {
+      debugPrint(e.toString());
     }
   }
 
