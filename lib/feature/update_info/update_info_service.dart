@@ -45,7 +45,8 @@ class UpdateInfoService {
 
   /// 購読したupdateInfoから必要なバージョン情報を解析する
   Future<Version> _parseRequiredVersionFromUpdateInfo(
-      UpdateInfo updateInfo) async {
+    UpdateInfo updateInfo,
+  ) async {
     // ユーザー端末がiosかandroidかでupdateInfoのフィールドを変更する
     final os = Platform.isIOS
         ? updateInfo.requiredIosVersion

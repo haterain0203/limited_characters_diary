@@ -13,9 +13,11 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     //TODO isCompletedFirstLaunchが固定値になっている
-    await tester.pumpWidget(const MyApp(
-      isCompletedFirstLaunch: false,
-    ));
+    await tester.pumpWidget(
+      const MyApp(
+        isCompletedFirstLaunch: false,
+      ),
+    );
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

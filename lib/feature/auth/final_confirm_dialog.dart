@@ -27,6 +27,7 @@ class FinalConfirmDialog extends HookConsumerWidget {
             isLoading.value = true;
             // ユーザー情報および匿名認証アカウント削除処理
             await ref.read(authControllerProvider).deleteUser();
+            //TODO 以下のlintInfoは未解決の問題？https://github.com/dart-lang/linter/issues/4007
             if (!context.mounted) {
               return;
             }
@@ -47,27 +48,6 @@ class FinalConfirmDialog extends HookConsumerWidget {
           child: const Text('キャンセル'),
         ),
       ],
-    );
-  }
-
-  //TODO check 共通化
-  void _showErrorDialog(BuildContext context, String e) {
-    showDialog<AlertDialog>(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: const Text('エラーが発生しました'),
-          content: Text(e),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('閉じる'),
-            )
-          ],
-        );
-      },
     );
   }
 }
