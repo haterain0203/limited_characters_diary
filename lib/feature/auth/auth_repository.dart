@@ -31,8 +31,9 @@ class AuthRepository {
 
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
-  //TODO 匿名認証とユーザー登録の2つの責務が入っているため分割した方が良さそう
+  //TODO check 匿名認証とユーザー登録の2つの責務が入っているため、分割してServiceで2つのメソッドを呼ぶ方が良さそう
   Future<void> signInAnonymouslyAndAddUser() async {
+    //TODO check controllerでエラーハンドリンするならば、ここでは不要では？
     try {
       // 匿名認証
       final userCredential = await auth.signInAnonymously();
