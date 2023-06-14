@@ -11,29 +11,39 @@ import 'auth_controller.dart';
 
 final authRepoProvider = Provider(
   (ref) => AuthRepository(
-    //TODO check ref.watchにすべきか？
-    auth: ref.read(authInstanceProvider),
-    firestore: ref.read(firestoreInstanceProvider),
-    fcm: ref.read(fcmInstanceProvider),
-  ),
+      //TODO check ref.watchにすべきか？
+      auth: ref.read(authInstanceProvider),
+      firestore: ref.read(firestoreInstanceProvider),
+      fcm: ref.read(fcmInstanceProvider),
+      userRef: ref.watch(userRefProvider)),
 );
+
+final userRefProvider = Provider((ref) {
+  final firestore = ref.watch(firestoreInstanceProvider);
+  final userRef = firestore.collection('users').withConverter<AppUser>(
+        fromFirestore: (snapshot, _) => AppUser.fromJson(snapshot.data()!),
+        toFirestore: (user, _) => user.toJson(),
+      );
+  return userRef;
+});
 
 class AuthRepository {
   AuthRepository({
     required this.auth,
     required this.firestore,
     required this.fcm,
+    required this.userRef,
   });
 
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
   final FirebaseMessaging fcm;
+  final CollectionReference<AppUser> userRef;
 
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
-  //TODO check 匿名認証とユーザー登録の2つの責務が入っているため、分割してServiceで2つのメソッドを呼ぶ方が良さそう
+  //TODO check 匿名認証とユーザー登録の2つの責務が入っているため、分割してServiceで2つのメソッド呼ぶ形にしたが適切か？
   Future<UserCredential> signInAnonymously() async {
-    //TODO check controllerでエラーハンドリンするならば、ここでは不要では？
     try {
       // 匿名認証
       return await auth.signInAnonymously();
@@ -50,10 +60,6 @@ class AuthRepository {
       // firestoreにUserを登録する
       final fcmToken = await fcm.getToken();
       final uid = user.uid;
-      final userRef = firestore.collection('users').withConverter<AppUser>(
-            fromFirestore: (snapshot, _) => AppUser.fromJson(snapshot.data()!),
-            toFirestore: (user, _) => user.toJson(),
-          );
       await userRef.doc(uid).set(
             AppUser(
               uid: uid,
