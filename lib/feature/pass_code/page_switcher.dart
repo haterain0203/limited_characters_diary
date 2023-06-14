@@ -31,7 +31,6 @@ class PageSwitcher extends HookConsumerWidget {
       }
     });
 
-    //TODO check 日記画面が写らないようにこういった対応をしたが、適切か？
     final isShowPassCodeLockPage = ref.watch(isShowPassCodeLockPageProvider);
     if (isShowPassCodeLockPage) {
       return const PassCodeLockPage();

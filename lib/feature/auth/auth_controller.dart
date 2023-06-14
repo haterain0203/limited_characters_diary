@@ -25,7 +25,7 @@ class AuthController {
     try {
       await service.signInAnonymouslyAndAddUser();
     } on FirebaseAuthException catch (e) {
-      //TODO check dialogでエラーメッセージ表示
+      //TODO check dialogでエラーメッセージ表示する予定。エラーハンドリングを記述する箇所として適切か？
       debugPrint(e.toString());
     }
   }

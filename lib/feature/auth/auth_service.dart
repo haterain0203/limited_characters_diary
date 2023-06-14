@@ -32,7 +32,7 @@ class AuthService {
 
 final userStateProvider = StreamProvider<User?>(
   (ref) {
-    //TODO ref.watchに変更？
+    //TODO check ref.watchに変更？
     final repo = ref.read(authRepoProvider);
     return repo.authStateChanges();
   },

@@ -22,6 +22,7 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
             SizedBox(
               height: 20.h,
               width: 20.h,
+              //TODO flutter_genの導入
               child: Image.asset('assets/images/icon.png'),
             ),
             const SizedBox(
@@ -41,7 +42,8 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
                 child: Text('利用規約に同意してはじめる'),
               ),
               onPressed: () async {
-                //TODO check 複数のコントローラーのメソッドを呼び出しているのでこれらはこれ以上まとめづらいと考えるが問題ないか？
+                //TODO check 複数のコントローラーのメソッドを呼び出しているが、こういった場合もまとめるべきか？
+                //TODO chekc その場合どういったController名にすべきか？
                 await ref
                     .read(firstLaunchControllerProvider)
                     .completedFirstLaunch();
