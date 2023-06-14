@@ -4,12 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/diary/diary_list.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
+import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
 import 'feature/date/date_controller.dart';
-import 'feature/local_notification/local_notification_setting_dialog.dart';
-import 'feature/setting/setting_page.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({
@@ -28,7 +28,12 @@ class HomePage extends HookConsumerWidget {
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () {
-                  _showSetNotificationDialog(context);
+                  ref
+                      .read(localNotificationControllerProvider)
+                      .showSetNotificationDialog(
+                        context: context,
+                        trigger: NotificationDialogTrigger.userAction,
+                      );
                 },
                 icon: const Icon(Icons.add_alert),
               ),
@@ -75,12 +80,9 @@ class HomePage extends HookConsumerWidget {
               actions: [
                 IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) => const SettingPage(),
-                      ),
-                    );
+                    ref
+                        .read(routingControllerProvider(context))
+                        .goSettingPage();
                   },
                   icon: const Icon(Icons.settings),
                 ),
@@ -110,17 +112,6 @@ class HomePage extends HookConsumerWidget {
           const UnderRepairDialog(),
         ],
       ),
-    );
-  }
-
-  Future<void> _showSetNotificationDialog(BuildContext context) async {
-    await showDialog<LocalNotificationSettingDialog>(
-      context: context,
-      builder: (_) {
-        return const LocalNotificationSettingDialog(
-          trigger: NotificationDialogTrigger.userAction,
-        );
-      },
     );
   }
 }

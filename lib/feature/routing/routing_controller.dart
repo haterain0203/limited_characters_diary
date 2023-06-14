@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/setting/setting_page.dart';
 
 import '../../../constant/constant_string.dart';
 import '../../../web_view_page.dart';
@@ -56,6 +57,15 @@ class RoutingController {
       context,
       MaterialPageRoute<AuthPage>(
         builder: (_) => const AuthPage(),
+      ),
+    );
+  }
+
+  Future<void> goSettingPage() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute<SettingPage>(
+        builder: (_) => const SettingPage(),
       ),
     );
   }
