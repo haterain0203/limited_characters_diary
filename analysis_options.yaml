@@ -4,3 +4,14 @@ include: package:pedantic_mono/analysis_options.yaml
 linter:
   rules:
     flutter_style_todos: false # https://dart-lang.github.io/linter/lints/flutter_style_todos.html
+
+analyzer:
+  # 自動生成系を除外。auto importを利用したい時は手動で外す
+  # cf: https://github.com/dart-lang/sdk/issues/46224
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  errors:
+    # https://github.com/rrousselGit/freezed#disabling-invalid_annotation_target-warning-and-warning-in-generates-files
+    # https://github.com/rrousselGit/freezed/issues/481
+    invalid_annotation_target: ignore
