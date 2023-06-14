@@ -3,7 +3,6 @@ import 'package:limited_characters_diary/feature/diary/diary_repository.dart';
 
 import '../auth/auth_controller.dart';
 import '../date/date_controller.dart';
-import '../firestore/firestore_instance_provider.dart';
 import 'diary.dart';
 
 final diaryServiceProvider =
@@ -41,20 +40,6 @@ class DiaryService {
 final uidProvider = Provider(
   (ref) => ref.watch(authInstanceProvider).currentUser?.uid,
 );
-
-final diaryRefProvider = Provider((ref) {
-  final firestore = ref.watch(firestoreInstanceProvider);
-  final uid = ref.watch(uidProvider);
-  final diaryRef = firestore
-      .collection('users')
-      .doc(uid)
-      .collection('diaryList')
-      .withConverter<Diary>(
-        fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
-        toFirestore: (diary, _) => diary.toJson(),
-      );
-  return diaryRef;
-});
 
 final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   final repo = ref.watch(diaryRepoProvider);

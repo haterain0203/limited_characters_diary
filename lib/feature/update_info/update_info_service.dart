@@ -6,8 +6,6 @@ import 'package:limited_characters_diary/feature/update_info/update_info_reposit
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
-import '../firestore/firestore_instance_provider.dart';
-
 final updateInfoServiceProvider = Provider(
   (ref) => UpdateInfoService(
     repo: ref.watch(updateInfoRepoProvider),
@@ -55,18 +53,6 @@ class UpdateInfoService {
     return requiredVersion;
   }
 }
-
-final updateInfoRefProvider = Provider((ref) {
-  final firestore = ref.watch(firestoreInstanceProvider);
-  final updateInfoRef = firestore
-      .collection('update_info')
-      .doc('update_info')
-      .withConverter<UpdateInfo>(
-        fromFirestore: (snapshot, _) => UpdateInfo.fromJson(snapshot.data()!),
-        toFirestore: (updateInfo, _) => updateInfo.toJson(),
-      );
-  return updateInfoRef;
-});
 
 final updateInfoProvider = StreamProvider.autoDispose<UpdateInfo>((ref) {
   final repo = ref.watch(updateInfoRepoProvider);
