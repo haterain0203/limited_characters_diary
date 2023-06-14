@@ -21,27 +21,27 @@ class UpdateInfoService {
 
   // 端末のアプリバージョンとfirestoreで指定されているバージョンを比較し、firebaseの方が新しい場合、
   // 強制アップデートを促すダイアログを表示するためのboolを返す
-  Future<bool> shouldUpdate(UpdateInfo updateInfo) async {
+  Future<bool> _shouldUpdate(UpdateInfo updateInfo) async {
     // firebaseのrequired_updateがfalseならfalseをリターンして終了
     if (!updateInfo.requiredUpdate) {
       return false;
     }
-    final currentVersion = await getCurrentVersion();
+    final currentVersion = await _getCurrentVersion();
     final requiredVersion =
-        await parseRequiredVersionFromUpdateInfo(updateInfo);
+        await _parseRequiredVersionFromUpdateInfo(updateInfo);
     final requiredUpdate = currentVersion < requiredVersion;
     return requiredUpdate;
   }
 
   // Appのバージョン情報の取得
-  Future<Version> getCurrentVersion() async {
+  Future<Version> _getCurrentVersion() async {
     final info = await PackageInfo.fromPlatform();
     final currentVersion = Version.parse(info.version);
     return currentVersion;
   }
 
   // UpdateInfoから必要なバージョン情報を解析する
-  Future<Version> parseRequiredVersionFromUpdateInfo(
+  Future<Version> _parseRequiredVersionFromUpdateInfo(
       UpdateInfo updateInfo) async {
     // ユーザー端末がiosかandroidかでupdateInfoのフィールドを変更する
     final os = Platform.isIOS
@@ -54,12 +54,14 @@ class UpdateInfoService {
   }
 }
 
+/// Firestoreに保存されている「updateInfo」を購読する
 final updateInfoProvider = StreamProvider.autoDispose<UpdateInfo>((ref) {
   final repo = ref.watch(updateInfoRepoProvider);
   final updateInfo = repo.subscribedUpdateInfo();
   return updateInfo;
 });
 
+/// 購読した「updateInfo」を元に、強制アップデートを促すべきかどうか判定する
 final shouldForcedUpdateProvider =
     FutureProvider.autoDispose<bool>((ref) async {
   //TODO selectを使用すべきか？
@@ -69,5 +71,5 @@ final shouldForcedUpdateProvider =
     return false;
   }
   final service = ref.watch(updateInfoServiceProvider);
-  return service.shouldUpdate(updateInfo.value!);
+  return service._shouldUpdate(updateInfo.value!);
 });
