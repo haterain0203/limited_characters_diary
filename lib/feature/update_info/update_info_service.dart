@@ -19,8 +19,10 @@ class UpdateInfoService {
 
   final UpdateInfoRepository repo;
 
-  // 端末のアプリバージョンとfirestoreで指定されているバージョンを比較し、firebaseの方が新しい場合、
-  // 強制アップデートを促すダイアログを表示するためのboolを返す
+  /// 購読したupdateInfoを元に、強制アップデートを促すべきか判定する
+  ///
+  /// 端末のアプリバージョンとfirestoreで指定されているバージョンを比較し、firebaseの方が新しい場合、
+  /// 強制アップデートを促すダイアログを表示するためのboolを返す
   Future<bool> _shouldUpdate(UpdateInfo updateInfo) async {
     // firebaseのrequired_updateがfalseならfalseをリターンして終了
     if (!updateInfo.requiredUpdate) {
@@ -33,14 +35,14 @@ class UpdateInfoService {
     return requiredUpdate;
   }
 
-  // Appのバージョン情報の取得
+  /// Appバージョン情報の取得
   Future<Version> _getCurrentVersion() async {
     final info = await PackageInfo.fromPlatform();
     final currentVersion = Version.parse(info.version);
     return currentVersion;
   }
 
-  // UpdateInfoから必要なバージョン情報を解析する
+  /// 購読したupdateInfoから必要なバージョン情報を解析する
   Future<Version> _parseRequiredVersionFromUpdateInfo(
       UpdateInfo updateInfo) async {
     // ユーザー端末がiosかandroidかでupdateInfoのフィールドを変更する
@@ -61,11 +63,9 @@ final updateInfoProvider = StreamProvider.autoDispose<UpdateInfo>((ref) {
   return updateInfo;
 });
 
-/// 購読した「updateInfo」を元に、強制アップデートを促すべきかどうか判定する
+/// updateInfoを購読し、強制アップデートを促すべきかどうか判定する
 final shouldForcedUpdateProvider =
     FutureProvider.autoDispose<bool>((ref) async {
-  //TODO selectを使用すべきか？
-  //この書き方だと、FirestoreのUpdateInfoのforcedUpdate以外が更新された場合も処理が走ってしまうのでは？
   final updateInfo = ref.watch(updateInfoProvider);
   if (updateInfo.value == null) {
     return false;
