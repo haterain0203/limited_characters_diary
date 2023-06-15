@@ -19,7 +19,7 @@ class RoutingController {
   Future<void> goTermsOfServiceOnWebView() async {
     await Navigator.push(
       context,
-      MaterialPageRoute<WebViewPage>(
+      MaterialPageRoute<void>(
         builder: (context) => const WebViewPage(
           title: ConstantString.termsOfServiceStr,
           url: ConstantString.termsOfServiceUrl,
@@ -31,7 +31,7 @@ class RoutingController {
   Future<void> goContactUsOnWebView() async {
     await Navigator.push(
       context,
-      MaterialPageRoute<WebViewPage>(
+      MaterialPageRoute<void>(
         builder: (context) => const WebViewPage(
           title: ConstantString.contactUsStr,
           url: ConstantString.googleFormUrl,
@@ -43,7 +43,7 @@ class RoutingController {
   Future<void> goPrivacyPolicyOnWebView() async {
     await Navigator.push(
       context,
-      MaterialPageRoute<WebViewPage>(
+      MaterialPageRoute<void>(
         builder: (context) => const WebViewPage(
           title: ConstantString.privacyPolicyStr,
           url: ConstantString.privacyPolicyUrl,
@@ -55,7 +55,7 @@ class RoutingController {
   Future<void> goAuthPage() async {
     await Navigator.push(
       context,
-      MaterialPageRoute<AuthPage>(
+      MaterialPageRoute<void>(
         builder: (_) => const AuthPage(),
       ),
     );
@@ -64,7 +64,7 @@ class RoutingController {
   Future<void> goSettingPage() async {
     await Navigator.push(
       context,
-      MaterialPageRoute<SettingPage>(
+      MaterialPageRoute<void>(
         builder: (_) => const SettingPage(),
       ),
     );

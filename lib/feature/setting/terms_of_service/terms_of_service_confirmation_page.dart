@@ -13,6 +13,7 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //TODO 遷移処理をroutingControllerに集約したが違和感あるか？（追ってauto_routeに変更予定）
     final routingController = ref.watch(routingControllerProvider(context));
     return Scaffold(
       body: Center(
