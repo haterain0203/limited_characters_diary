@@ -47,9 +47,10 @@ class AuthRepository {
     try {
       // 匿名認証
       return await auth.signInAnonymously();
-      //TODO check Controllerにエラーハンドリングを記述したので、ここでのcatchは不要では？
+      //TODO check Controllerにエラーハンドリングを記述したので、ここでのcatchは不要？
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
+      //TODO 少なくとも以下の処理はControllerへ移行
       throw _convertToErrorMessageFromErrorCode(e.code);
     }
   }

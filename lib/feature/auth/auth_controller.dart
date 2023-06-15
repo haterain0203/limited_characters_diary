@@ -10,13 +10,17 @@ import 'confirm_delete_all_data_dialog.dart';
 
 final authControllerProvider = Provider(
   (ref) => AuthController(
+    //TODO check provider内で別のProviderを参照する場合も基本はref.watch？
     service: ref.read(authServiceProvider),
     isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier),
   ),
 );
 
 class AuthController {
-  AuthController({required this.service, required this.isUserDeletedNotifier});
+  AuthController({
+    required this.service,
+    required this.isUserDeletedNotifier,
+  });
 
   final AuthService service;
   final StateController<bool> isUserDeletedNotifier;
@@ -25,7 +29,9 @@ class AuthController {
     try {
       await service.signInAnonymouslyAndAddUser();
     } on FirebaseAuthException catch (e) {
-      //TODO check dialogでエラーメッセージ表示する予定。エラーハンドリングを記述する箇所として適切か？
+      //TODO check dialogでエラーメッセージ表示する予定。エラーハンドリングを記述する箇所としてControllerが適切か？
+      debugPrint(e.toString());
+    } on FirebaseException catch (e) {
       debugPrint(e.toString());
     }
   }

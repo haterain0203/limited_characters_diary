@@ -36,7 +36,6 @@ class AuthService {
 
 final userStateProvider = StreamProvider<User?>(
   (ref) {
-    //TODO check ref.watchに変更？
     final repo = ref.read(authRepoProvider);
     return repo.authStateChanges();
   },
