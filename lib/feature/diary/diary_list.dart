@@ -51,6 +51,17 @@ class DiaryList extends HookConsumerWidget {
       //煩雑になると考え、Stackとしたもの。
     });
 
+    //TODO check ref.listenの方が適切か？
+    // ref.listen(shouldShowInputDiaryDialogOnLaunchProvider, (previous, next) {
+    //   next.whenData((shouldShow) {
+    //     if (shouldShow) {
+    //       diaryController.showInputDiaryDialog(context, null);
+    //       // 日記入力ダイアログが表示済みであることを記録する
+    //       ref.read(hasInputDiaryDialogShownProvider.notifier).state = true;
+    //     }
+    //   });
+    // });
+
     // 特定条件を満たした場合、「SizedListTileの高さ*（当日の日数-5）」分だけ自動スクロールする
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //TODO check 条件次第ではjumpしないため、メソッド名として不適切か？
