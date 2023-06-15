@@ -34,15 +34,16 @@ class DiaryList extends HookConsumerWidget {
       }
     });
 
-    //TODO check Build後に実行する & ダイアログ判定をFutureProviderに変更することで、Future.delayedを削除したが、、、
-    //TODO check Controllerへの移行の仕方（Controllerに移管する場合、多くのProviderをControllerに注入する必要がある）
+    //TODO check Build後に実行する & ダイアログ判定をFutureProvider.whenDataに変更することで、Future.delayedを削除したが、違和感ないか
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (isShowInputDiaryDialog == const AsyncData(true)) {
-        await diaryController.showInputDiaryDialog(context, null);
-        // 日記入力ダイアログが表示済みであることを記録する
-        ref.read(isInputDiaryDialogShownProvider.notifier).state = true;
-      }
+      isShowInputDiaryDialog.whenData((isShow) {
+        if (isShow) {
+          diaryController.showInputDiaryDialog(context, null);
+          // 日記入力ダイアログが表示済みであることを記録する
+          ref.read(isInputDiaryDialogShownProvider.notifier).state = true;
+        }
+      });
 
       //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
       //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
