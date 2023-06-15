@@ -32,8 +32,8 @@ class UpdateInfoService {
     final currentVersion = await _getCurrentVersion();
     final requiredVersion =
         await _parseRequiredVersionFromUpdateInfo(updateInfo);
-    final requiredUpdate = currentVersion < requiredVersion;
-    return requiredUpdate;
+    final shouldUpdate = currentVersion < requiredVersion;
+    return shouldUpdate;
   }
 
   /// Appバージョン情報の取得
