@@ -79,7 +79,6 @@ class DiaryList extends HookConsumerWidget {
                 height: 0.5,
               );
             },
-            //TODO check extensionの使い方
             itemCount: selectedDateTime.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
               // indexに応じた日付
@@ -92,7 +91,6 @@ class DiaryList extends HookConsumerWidget {
               final diary = data.firstWhereOrNull((diary) {
                 return diary.diaryDate == indexDate;
               });
-              //TODO check extensionの使い方合ってるか？
               final dayOfWeekStr = indexDate.dayOfWeek();
               // indexに応じた日付の文字色（土日祝日の場合色がつく）
               final dayStrColor = indexDate.choiceDayStrColor();
@@ -106,7 +104,6 @@ class DiaryList extends HookConsumerWidget {
                     // 該当行をスライドすると削除ボタンが表示される
                     SlidableAction(
                       onPressed: (_) {
-                        //TODO check ダイアログを表示する処理はController側に書くべき？
                         diaryController.showConfirmDeleteDialog(
                           context: context,
                           // enabled: diary != null を設定しているため、「!」
@@ -121,7 +118,6 @@ class DiaryList extends HookConsumerWidget {
                 ),
                 child: SizedHeightListTile(
                   //本日はハイライト
-                  //TODO check extensionの使い方
                   tileColor:
                       indexDate.isToday() ? ConstantColor.accentColor : null,
                   leading: Text(
