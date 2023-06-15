@@ -5,9 +5,7 @@ import '../constant/contant_date.dart';
 extension DateTimeExtensions on DateTime {
   /// 曜日の文字列を返す
   String dayOfWeek() {
-    final dayOfWeekInt = weekday;
-    final dayOfWeekStr = '月火水木金土日'[dayOfWeekInt - 1];
-    return dayOfWeekStr;
+    return '月火水木金土日'[weekday - 1];
   }
 
   /// 土日祝日の場合なら色を、それ以外なら黒を返す
