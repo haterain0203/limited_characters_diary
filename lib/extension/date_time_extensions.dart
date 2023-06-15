@@ -31,9 +31,9 @@ extension DateTimeExtensions on DateTime {
     return daysInMonth;
   }
 
-  bool isToday(DateTime indexDate) {
+  bool isToday() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    return indexDate.isAtSameMomentAs(today);
+    return isAtSameMomentAs(today);
   }
 }

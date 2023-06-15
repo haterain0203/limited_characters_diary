@@ -122,9 +122,8 @@ class DiaryList extends HookConsumerWidget {
                 child: SizedHeightListTile(
                   //本日はハイライト
                   //TODO check extensionの使い方
-                  tileColor: DateTime.now().isToday(indexDate)
-                      ? ConstantColor.accentColor
-                      : null,
+                  tileColor:
+                      indexDate.isToday() ? ConstantColor.accentColor : null,
                   leading: Text(
                     '${indexDate.day}（$dayOfWeekStr）',
                     style: TextStyle(color: dayStrColor),
