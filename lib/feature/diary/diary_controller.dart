@@ -153,14 +153,14 @@ class DiaryController {
 }
 
 /// 既に日記入力ダイアログが表示済みかどうか
-final isInputDiaryDialogShownProvider = StateProvider((ref) => false);
+final hasInputDiaryDialogShownProvider = StateProvider((ref) => false);
 
 //TODO check 記述箇所/記述方法について確認
 /// 起動時に日記入力ダイアログを自動表示するかどうか
-final isShowInputDiaryDialogOnLaunchProvider =
+final shouldShowInputDiaryDialogOnLaunchProvider =
     FutureProvider.autoDispose<bool>((ref) async {
   // 既に日記入力ダイアログが表示済みなら日記ダイアログを自動表示しない
-  if (ref.watch(isInputDiaryDialogShownProvider)) {
+  if (ref.watch(hasInputDiaryDialogShownProvider)) {
     return false;
   }
 

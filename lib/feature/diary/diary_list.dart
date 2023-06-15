@@ -21,8 +21,8 @@ class DiaryList extends HookConsumerWidget {
     final selectedDateTime = ref.watch(selectedDateTimeProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
-    final isShowInputDiaryDialog =
-        ref.watch(isShowInputDiaryDialogOnLaunchProvider);
+    final shouldShowInputDiaryDialog =
+        ref.watch(shouldShowInputDiaryDialogOnLaunchProvider);
     final diaryController = ref.watch(diaryControllerProvider);
 
     /// バックグラウンド復帰時の日付でStateProviderを更新
@@ -37,11 +37,11 @@ class DiaryList extends HookConsumerWidget {
     //TODO check Build後に実行する & ダイアログ判定をFutureProvider.whenDataに変更することで、Future.delayedを削除したが、違和感ないか
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      isShowInputDiaryDialog.whenData((isShow) {
-        if (isShow) {
+      shouldShowInputDiaryDialog.whenData((shouldShow) {
+        if (shouldShow) {
           diaryController.showInputDiaryDialog(context, null);
           // 日記入力ダイアログが表示済みであることを記録する
-          ref.read(isInputDiaryDialogShownProvider.notifier).state = true;
+          ref.read(hasInputDiaryDialogShownProvider.notifier).state = true;
         }
       });
 
@@ -54,7 +54,7 @@ class DiaryList extends HookConsumerWidget {
     // 特定条件を満たした場合、「SizedListTileの高さ*（当日の日数-5）」分だけ自動スクロールする
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //TODO check 条件次第ではjumpしないため、メソッド名として不適切か？
-      //TODO chekc ここではjumpすべきかどうかのboolを返すメソッドにして、View側でjumpToメソッドを呼び出す方が適切か？
+      //TODO chekc jumpすべきかどうかのboolを返すメソッドにして、View側でjumpToメソッドを呼び出す方が適切か？
       ref.read(dateControllerProvider).jumpToAroundToday(scrollController);
     });
 
