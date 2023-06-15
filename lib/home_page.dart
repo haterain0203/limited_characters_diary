@@ -44,7 +44,10 @@ class HomePage extends HookConsumerWidget {
                     onPressed: () {
                       // 前の月へ
                       ref.read(selectedDateTimeProvider.notifier).update(
-                            (state) => DateTime(state.year, state.month - 1),
+                            (state) => DateTime(
+                              state.year,
+                              state.month - 1,
+                            ),
                           );
                     },
                     style: TextButton.styleFrom(
@@ -63,7 +66,10 @@ class HomePage extends HookConsumerWidget {
                     onPressed: () {
                       // 次の月へ
                       ref.read(selectedDateTimeProvider.notifier).update(
-                            (state) => DateTime(state.year, state.month + 1),
+                            (state) => DateTime(
+                              state.year,
+                              state.month + 1,
+                            ),
                           );
                     },
                     style: TextButton.styleFrom(

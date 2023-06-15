@@ -8,12 +8,10 @@ import '../local_notification/local_notification_controller.dart';
 
 final passCodeControllerProvider = Provider(
   (ref) {
-    //TODO check Controllerにinvalidateを渡すのは不自然か？渡し方に違和感ないか？
     void invalidate() => ref.invalidate(passCodeProvider);
     return PassCodeController(
       service: ref.watch(passCodeServiceProvider),
       invalidatePassCodeProvider: invalidate,
-      //TODO check 以下3つはref.watchで良いのか？
       passCodeToggle: ref.watch(passCodeLockToggleProvider),
       isShownInterstitialAd: ref.watch(isShownInterstitialAdProvider),
       isInitialSetNotification: ref.watch(isInitialSetNotificationProvider),
