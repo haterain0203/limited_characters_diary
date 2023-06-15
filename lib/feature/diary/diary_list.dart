@@ -93,7 +93,7 @@ class DiaryList extends HookConsumerWidget {
                 return diary.diaryDate == indexDate;
               });
               //TODO check extensionの使い方合ってるか？
-              final dayOfWeekStr = indexDate.searchDayOfWeek();
+              final dayOfWeekStr = indexDate.dayOfWeek();
               // indexに応じた日付の文字色（土日祝日の場合色がつく）
               final dayStrColor = DateTime.now().choiceDayStrColor(indexDate);
               return Slidable(
