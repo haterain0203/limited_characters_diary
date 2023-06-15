@@ -6,7 +6,6 @@ import 'package:limited_characters_diary/feature/diary/diary_service.dart';
 
 import '../../constant/enum.dart';
 import '../auth/auth_controller.dart';
-import '../date/date_controller.dart';
 import '../update_info/update_info_service.dart';
 import 'complete_dialog_content.dart';
 import 'diary.dart';
@@ -164,14 +163,6 @@ final shouldShowInputDiaryDialogOnLaunchProvider =
     return false;
   }
 
-  // 当月以外の月を表示した際は表示しない
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final selectedDate = ref.watch(selectedDateTimeProvider);
-  if (today.month != selectedDate.month) {
-    return false;
-  }
-
   // 日記情報がnullの場合=日記情報取得中の場合は、日記入力ダイアログを表示しない
   final diaryList = ref.watch(diaryStreamProvider).value;
   if (diaryList == null) {
@@ -179,6 +170,8 @@ final shouldShowInputDiaryDialogOnLaunchProvider =
   }
 
   // 既に当日の日記が入力済みの場合は、日記入力ダイアログを表示しない
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
   final todayDiary =
       diaryList.firstWhereOrNull((element) => element.diaryDate == today);
   if (todayDiary != null) {
