@@ -80,7 +80,7 @@ class DiaryList extends HookConsumerWidget {
               );
             },
             //TODO check extensionの使い方
-            itemCount: DateTime.now().daysInMonth(selectedDateTime),
+            itemCount: selectedDateTime.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
               // indexに応じた日付
               final indexDate = DateTime(
