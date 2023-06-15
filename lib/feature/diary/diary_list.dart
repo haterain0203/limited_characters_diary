@@ -95,7 +95,7 @@ class DiaryList extends HookConsumerWidget {
               //TODO check extensionの使い方合ってるか？
               final dayOfWeekStr = indexDate.dayOfWeek();
               // indexに応じた日付の文字色（土日祝日の場合色がつく）
-              final dayStrColor = DateTime.now().choiceDayStrColor(indexDate);
+              final dayStrColor = indexDate.choiceDayStrColor();
               return Slidable(
                 // 該当日に日記がある場合のみ動作
                 enabled: diary != null,

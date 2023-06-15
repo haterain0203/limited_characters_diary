@@ -11,15 +11,14 @@ extension DateTimeExtensions on DateTime {
   }
 
   /// 土日祝日の場合なら色を、それ以外なら黒を返す
-  Color choiceDayStrColor(DateTime indexDate) {
-    final dayOfWeekInt = indexDate.weekday;
-    if (dayOfWeekInt == DateTime.saturday) {
+  Color choiceDayStrColor() {
+    if (weekday == DateTime.saturday) {
       return Colors.blue;
     }
-    if (dayOfWeekInt == DateTime.sunday) {
+    if (weekday == DateTime.sunday) {
       return Colors.red;
     }
-    if (ConstantDate.jpHolidayMap.containsKey(indexDate)) {
+    if (ConstantDate.jpHolidayMap.containsKey(this)) {
       return Colors.red;
     }
     return Colors.black;
