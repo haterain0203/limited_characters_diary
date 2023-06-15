@@ -4,8 +4,8 @@ import '../constant/contant_date.dart';
 
 extension DateTimeExtensions on DateTime {
   /// 曜日の文字列を返す
-  String searchDayOfWeek(DateTime indexDate) {
-    final dayOfWeekInt = indexDate.weekday;
+  String searchDayOfWeek() {
+    final dayOfWeekInt = weekday;
     final dayOfWeekStr = '月火水木金土日'[dayOfWeekInt - 1];
     return dayOfWeekStr;
   }
