@@ -2,15 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../auth/auth_repository.dart';
 import '../firestore/firestore_instance_provider.dart';
 import 'diary.dart';
-import 'diary_service.dart';
 
 final diaryRepoProvider = Provider(
   (ref) => DiaryRepository(
     //TODO check ref.watchが望ましいか？
     diaryRef: ref.watch(diaryRefProvider),
   ),
+);
+
+final uidProvider = Provider(
+  (ref) => ref.watch(authInstanceProvider).currentUser?.uid,
 );
 
 final diaryRefProvider = Provider((ref) {

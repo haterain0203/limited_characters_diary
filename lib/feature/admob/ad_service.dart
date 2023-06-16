@@ -55,6 +55,7 @@ class AdService {
     interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (InterstitialAd ad) async {
         //TODO check serbvice層がriveropodに依存するのはおかしいのではないか？
+        //TODO check だが、全画面広告表示前と表示後にフラグを更新したいので、ここでやるしかないように思える
         // 全画面広告を閉じて以降、アプリをバックグラウンドに移動させた際、パスコードロックを正しく表示するため
         isShownInterstitialAdNotifier.state = false;
         await ad.dispose();
@@ -68,6 +69,7 @@ class AdService {
     );
 
     //TODO check service層がriveropodに依存するのはおかしいのではないか？
+    //TODO check だが、全画面広告表示前と表示後にフラグを更新したいので、ここでやるしかないように思える
     // 全画面広告を表示する際、アプリがinactiveになるが、その際はパスコードロックを表示したくないためflagをtrueに
     isShownInterstitialAdNotifier.state = true;
 

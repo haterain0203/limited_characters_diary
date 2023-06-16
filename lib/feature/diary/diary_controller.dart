@@ -14,19 +14,15 @@ import 'input_diary_dialog.dart';
 final diaryControllerProvider = Provider(
   (ref) => DiaryController(
     service: ref.watch(diaryServiceProvider),
-    // diaryList: ref.watch(diaryStreamProvider).value,
   ),
 );
 
 class DiaryController {
   DiaryController({
     required this.service,
-    // this.diaryList,
   });
 
   final DiaryService service;
-
-  // final List<Diary>? diaryList;
 
   //TODO エラーハンドリング
   Future<void> _addDiary({
@@ -61,7 +57,7 @@ class DiaryController {
     );
   }
 
-  //TODO ユーザーアクションなのでDiaryControllerに記述すべきか？その場合、どう移行するか確認したい。
+  //TODO check 肥大化しているが、もっと分割すべきか？
   Future<void> inputDiary({
     required BuildContext context,
     required Diary? diary,
@@ -100,7 +96,6 @@ class DiaryController {
     if (!context.mounted) {
       return;
     }
-    //TODO check Dialogを呼び出す際は漏れなくawaitすべきか？他に実行する処理がない場合はawait不要では？
     await _showCompleteDialog(
       context,
       diary == null ? InputDiaryType.add : InputDiaryType.update,
@@ -136,6 +131,7 @@ class DiaryController {
     required BuildContext context,
     required Diary diary,
   }) async {
+    //TODO 曜日も表示する
     final diaryDateStr =
         '${diary.diaryDate.year}/${diary.diaryDate.month}/${diary.diaryDate.day}';
     await AwesomeDialog(

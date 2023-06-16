@@ -1,7 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/diary/diary_repository.dart';
 
-import '../auth/auth_controller.dart';
 import '../date/date_controller.dart';
 import 'diary.dart';
 
@@ -37,10 +36,6 @@ class DiaryService {
   }
 }
 
-final uidProvider = Provider(
-  (ref) => ref.watch(authInstanceProvider).currentUser?.uid,
-);
-
 final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   final repo = ref.watch(diaryRepoProvider);
   final selectedDate = ref.watch(selectedDateTimeProvider);
@@ -48,8 +43,6 @@ final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   return diaryList;
 });
 
-//TODO 日記の数は日記入力完了後のダイアログ表示時にのみ使用するため、常に監視する必要はないが、Controller側に記述した方が良いか？
-//TODO ただしその場合、Future<int>を返すことになるので、UI側で待機する処理を別途実装しなければ行けなくなるのでは？
 final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
   final repo = ref.watch(diaryRepoProvider);
   final count = await repo.getDiaryCount();

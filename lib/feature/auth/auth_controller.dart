@@ -94,5 +94,3 @@ class AuthController {
 
 /// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため
 final isUserDeletedProvider = StateProvider((ref) => false);
-
-final authInstanceProvider = Provider((ref) => FirebaseAuth.instance);

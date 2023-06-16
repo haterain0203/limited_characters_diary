@@ -7,7 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../app_user/app_user.dart';
 import '../fcm/fcm_providers.dart';
 import '../firestore/firestore_instance_provider.dart';
-import 'auth_controller.dart';
+
+final authInstanceProvider = Provider((ref) => FirebaseAuth.instance);
 
 final authRepoProvider = Provider(
   (ref) => AuthRepository(
