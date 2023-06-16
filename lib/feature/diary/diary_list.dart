@@ -35,7 +35,7 @@ class DiaryList extends HookConsumerWidget {
     });
 
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
-    //TODO check
+    //TODO check 処理内容および記述箇所について確認
     ref.listen(shouldShowInputDiaryDialogOnLaunchProvider,
         (previous, next) async {
       if (next) {
@@ -49,6 +49,8 @@ class DiaryList extends HookConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //TODO check 条件次第ではjumpしないため、メソッド名として不適切か？
       //TODO chekc jumpすべきかどうかのboolを返すメソッドにして、View側でjumpToメソッドを呼び出す方が適切か？
+      //TODO そもそもController内で処理を完了すべきではない？
+      //TODO Controller内のメソッドではなく、Service内でProviderとして定義して、ref.listenした方が良いか？
       ref.read(dateControllerProvider).jumpToAroundToday(scrollController);
     });
 
