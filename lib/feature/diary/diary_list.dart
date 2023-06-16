@@ -76,7 +76,6 @@ class DiaryList extends HookConsumerWidget {
             },
             itemCount: selectedDateTime.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
-              //TODO check この辺りはもう少し整理すべき？
               // indexに応じた日付
               final indexDate = DateTime(
                 selectedDateTime.year,
@@ -87,9 +86,6 @@ class DiaryList extends HookConsumerWidget {
               final diary = data.firstWhereOrNull((diary) {
                 return diary.diaryDate == indexDate;
               });
-              final dayOfWeekStr = indexDate.dayOfWeek();
-              // indexに応じた日付の文字色（土日祝日の場合色がつく）
-              final dayStrColor = indexDate.choiceDayStrColor();
               return Slidable(
                 // 該当日に日記がある場合のみ動作
                 enabled: diary != null,
@@ -117,8 +113,9 @@ class DiaryList extends HookConsumerWidget {
                   tileColor:
                       indexDate.isToday() ? ConstantColor.accentColor : null,
                   leading: Text(
-                    '${indexDate.day}（$dayOfWeekStr）',
-                    style: TextStyle(color: dayStrColor),
+                    '${indexDate.day}（${indexDate.dayOfWeek()}）',
+                    // indexに応じた日付の文字色（土日祝日の場合色がつく）
+                    style: TextStyle(color: indexDate.choiceDayStrColor()),
                   ),
                   title: Text(
                     diary?.content ?? '',
