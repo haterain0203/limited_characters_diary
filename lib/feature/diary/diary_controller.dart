@@ -23,7 +23,9 @@ class DiaryController {
     required this.service,
     // this.diaryList,
   });
+
   final DiaryService service;
+
   // final List<Diary>? diaryList;
 
   //TODO エラーハンドリング
@@ -157,48 +159,45 @@ final hasInputDiaryDialogShownProvider = StateProvider((ref) => false);
 //TODO check 記述箇所/記述方法について確認
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final shouldShowInputDiaryDialogOnLaunchProvider =
-    FutureProvider.autoDispose<bool>((ref) async {
+    Provider.autoDispose<bool>((ref) {
   // 既に日記入力ダイアログが表示済みなら日記ダイアログを自動表示しない
   if (ref.watch(hasInputDiaryDialogShownProvider)) {
     return false;
   }
 
+  if (ref.watch(isUserDeletedProvider)) {
+    return false;
+  }
+
   // 日記情報がnullの場合=日記情報取得中の場合は、日記入力ダイアログを表示しない
-  final diaryList = ref.watch(diaryStreamProvider).value;
-  if (diaryList == null) {
+  final diaryList = ref.watch(diaryStreamProvider);
+  final shouldForcedUpdate = ref.watch(shouldForcedUpdateProvider);
+  final updateInfo = ref.watch(updateInfoProvider);
+
+  if (diaryList is! AsyncData ||
+      shouldForcedUpdate is! AsyncData ||
+      updateInfo is! AsyncData) {
     return false;
   }
 
   // 既に当日の日記が入力済みの場合は、日記入力ダイアログを表示しない
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
-  final todayDiary =
-      diaryList.firstWhereOrNull((element) => element.diaryDate == today);
+  final todayDiary = diaryList.value
+      ?.firstWhereOrNull((element) => element.diaryDate == today);
   if (todayDiary != null) {
     return false;
   }
 
   // メンテナンス中なら日記ダイアログを自動表示しない
-  if (ref.watch(updateInfoProvider).value?.isUnderRepair == true) {
+  if (updateInfo.value?.isUnderRepair == true) {
     return false;
   }
 
   // 強制アップデート表示中の場合は日記ダイアログを自動表示しない
-  if (await ref.watch(shouldForcedUpdateProvider.future)) {
+  if (shouldForcedUpdate.value == true) {
     return false;
   }
 
-  // ユーザーデータ削除時には表示しない
-  //TODO check このフラグが必要になる構造自体に問題がありそう
-  // ユーザーデータ削除 → userがnullになる → AuthPageがリビルドする
-  // → ListPageがreturnされる → ListPageのuseEffectが実行 → 日記入力ダイアログが表示される
-  // という流れだが、ユーザー削除は設定画面から行われ、
-  // 削除時にはListPageが表示されないため（Phoenixによって再起動されるために最終的にはListPageが呼ばれるが）、
-  // ListPageが呼び出される流れ自体に問題がありそう
-  if (ref.watch(isUserDeletedProvider)) {
-    return false;
-  }
-
-  //上記条件をクリアしている場合は、ダイアログを表示させる
   return true;
 });

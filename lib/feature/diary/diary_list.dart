@@ -34,33 +34,16 @@ class DiaryList extends HookConsumerWidget {
       }
     });
 
-    //TODO check Build後に実行する & ダイアログ判定をFutureProvider.whenDataに変更することで、Future.delayedを削除したが、違和感ないか
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      shouldShowInputDiaryDialog.whenData((shouldShow) {
-        if (shouldShow) {
-          diaryController.showInputDiaryDialog(context, null);
-          // 日記入力ダイアログが表示済みであることを記録する
-          ref.read(hasInputDiaryDialogShownProvider.notifier).state = true;
-        }
-      });
-
-      //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
-      //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
-      //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
-      //煩雑になると考え、Stackとしたもの。
+    //TODO check
+    ref.listen(shouldShowInputDiaryDialogOnLaunchProvider,
+        (previous, next) async {
+      if (next) {
+        await diaryController.showInputDiaryDialog(context, null);
+        // 日記入力ダイアログが表示済みであることを記録する
+        ref.read(hasInputDiaryDialogShownProvider.notifier).state = true;
+      }
     });
-
-    //TODO check ref.listenの方が適切か？
-    // ref.listen(shouldShowInputDiaryDialogOnLaunchProvider, (previous, next) {
-    //   next.whenData((shouldShow) {
-    //     if (shouldShow) {
-    //       diaryController.showInputDiaryDialog(context, null);
-    //       // 日記入力ダイアログが表示済みであることを記録する
-    //       ref.read(hasInputDiaryDialogShownProvider.notifier).state = true;
-    //     }
-    //   });
-    // });
 
     // 特定条件を満たした場合、「SizedListTileの高さ*（当日の日数-5）」分だけ自動スクロールする
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -93,6 +76,7 @@ class DiaryList extends HookConsumerWidget {
             },
             itemCount: selectedDateTime.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
+              //TODO check この辺りはもう少し整理すべき？
               // indexに応じた日付
               final indexDate = DateTime(
                 selectedDateTime.year,
