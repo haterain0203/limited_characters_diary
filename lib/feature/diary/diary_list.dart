@@ -35,7 +35,6 @@ class DiaryList extends HookConsumerWidget {
     });
 
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
-    //TODO check 処理内容および記述箇所について確認
     ref.listen(shouldShowInputDiaryDialogOnLaunchProvider,
         (previous, next) async {
       if (next) {
@@ -47,10 +46,7 @@ class DiaryList extends HookConsumerWidget {
 
     // 特定条件を満たした場合、「SizedListTileの高さ*（当日の日数-5）」分だけ自動スクロールする
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      //TODO check 条件次第ではjumpしないため、メソッド名として不適切か？
-      //TODO chekc jumpすべきかどうかのboolを返すメソッドにして、View側でjumpToメソッドを呼び出す方が適切か？
-      //TODO そもそもController内で処理を完了すべきではない？
-      //TODO Controller内のメソッドではなく、Service内でProviderとして定義して、ref.listenした方が良いか？
+      //TODO メソッド名にmaybeを付与する
       ref.read(dateControllerProvider).jumpToAroundToday(scrollController);
     });
 
@@ -125,7 +121,7 @@ class DiaryList extends HookConsumerWidget {
                     diary?.content ?? '',
                   ),
                   onTap: () async {
-                    //TODO check selectedDateTimeProviderを更新するため、DiaryListが再描画され、カレンダーの一番上が表示されてしまう
+                    //TODO selectedDateTimeProviderを更新するため、DiaryListが再描画され、カレンダーの一番上が表示されてしまう
                     ref.read(selectedDateTimeProvider.notifier).state =
                         indexDate;
                     await diaryController.showInputDiaryDialog(context, diary);

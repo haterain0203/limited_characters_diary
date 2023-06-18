@@ -9,7 +9,6 @@ import 'ad_controller.dart';
 
 final adServiceProvider = Provider(
   (ref) => AdService(
-    //TODO check controllerに依存するのはおかしい
     isShownInterstitialAdNotifier:
         ref.read(isShownInterstitialAdProvider.notifier),
   ),
@@ -26,6 +25,7 @@ class AdService {
   int maxFailedToAttempt = 3;
   int _numInterstitialLoadAttempt = 0;
 
+  //TODO .showはダイアログ同様にUIに関することなので、Controller層へ移管しても良さそう
   // 公式のexampleを参照して作成
   // https://pub.dev/packages/google_mobile_ads/example
   Future<void> initInterstitialAd() async {
@@ -54,8 +54,6 @@ class AdService {
     }
     interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (InterstitialAd ad) async {
-        //TODO check serbvice層がriveropodに依存するのはおかしいのではないか？
-        //TODO check だが、全画面広告表示前と表示後にフラグを更新したいので、ここでやるしかないように思える
         // 全画面広告を閉じて以降、アプリをバックグラウンドに移動させた際、パスコードロックを正しく表示するため
         isShownInterstitialAdNotifier.state = false;
         await ad.dispose();
@@ -68,8 +66,6 @@ class AdService {
       },
     );
 
-    //TODO check service層がriveropodに依存するのはおかしいのではないか？
-    //TODO check だが、全画面広告表示前と表示後にフラグを更新したいので、ここでやるしかないように思える
     // 全画面広告を表示する際、アプリがinactiveになるが、その際はパスコードロックを表示したくないためflagをtrueに
     isShownInterstitialAdNotifier.state = true;
 

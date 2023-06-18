@@ -9,7 +9,6 @@ import 'local_notification_setting_dialog.dart';
 
 final localNotificationControllerProvider = Provider(
   (ref) {
-    //TODO check refごと渡さないことを意識し、invalidateを渡す形にしたが、不自然か？
     void invalidate() => ref.invalidate(localNotificationTimeFutureProvider);
     return LocalNotificationController(
       service: ref.watch(localNotificationServiceProvider),
@@ -31,7 +30,6 @@ class LocalNotificationController {
   final void Function() invalidateLocalNotificationTimeFutureProvider;
   final StateController<bool> isInitialSetNotificationNotifier;
 
-  //TODO check ユーザーアクションなのでControllerに記述したが、書き方について相談
   Future<void> setNotification({
     required BuildContext context,
     required TimeOfDay? savedNotificationTime,

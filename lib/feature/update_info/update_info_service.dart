@@ -6,7 +6,6 @@ import 'package:limited_characters_diary/feature/update_info/update_info_reposit
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:version/version.dart';
 
-//TODO check updateInfoにはControllerがないか違和感ないか？（User側からの操作はないため問題ないと考えるが）
 final updateInfoServiceProvider = Provider(
   (ref) => UpdateInfoService(
     repo: ref.watch(updateInfoRepoProvider),

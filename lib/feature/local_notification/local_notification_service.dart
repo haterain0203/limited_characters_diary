@@ -12,7 +12,6 @@ import '../../constant/constant_num.dart';
 
 final localNotificationServiceProvider = Provider<LocalNotificationService>(
   (_) {
-    //TODO check この方法で問題ないか？
     //main.dartで上書きされる
     throw UnimplementedError();
   },
@@ -113,7 +112,6 @@ class LocalNotificationService {
 
 // SharedPreferencesにアクセスし、記録された通知時間の文字列を取得
 // TimeOfDayに直して返す
-//TODO check autoDisposeの使い所
 final localNotificationTimeFutureProvider =
     FutureProvider.autoDispose((ref) async {
   final repo = ref.watch(localNotificationRepoProvider);

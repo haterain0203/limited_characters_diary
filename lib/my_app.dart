@@ -10,7 +10,6 @@ import 'feature/auth/auth_page.dart';
 import 'feature/setting/terms_of_service/terms_of_service_confirmation_page.dart';
 
 class MyApp extends HookConsumerWidget {
-  //TODO check 引数を受けることに問題はないか？（constつけられなくなるが特に気にするほどでもないか？）
   const MyApp({required this.isCompletedFirstLaunch, super.key});
 
   final bool isCompletedFirstLaunch;

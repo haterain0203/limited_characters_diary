@@ -43,12 +43,10 @@ class AuthRepository {
 
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
-  //TODO check 匿名認証とユーザー登録の2つの責務が入っているため、分割してServiceで2つのメソッド呼ぶ形にしたが適切か？
   Future<UserCredential> signInAnonymously() async {
     try {
       // 匿名認証
       return await auth.signInAnonymously();
-      //TODO check Controllerにエラーハンドリングを記述したので、ここでのcatchは不要？
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       //TODO 少なくとも以下の処理はControllerへ移行
@@ -69,7 +67,7 @@ class AuthRepository {
               fcmToken: fcmToken,
             ),
           );
-      //TODO check Controllerにエラーハンドリングを記述したので、ここでのcatchは不要では？
+      //TODO Controllerにエラーハンドリングを記述したので、ここでのcatchは不要
     } on FirebaseException catch (e) {
       debugPrint(e.toString());
     }

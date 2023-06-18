@@ -54,7 +54,7 @@ class DiaryController {
     );
   }
 
-  //TODO check 肥大化しているが、もっと分割すべきか？
+  //TODO 分割して見通しを改善する
   Future<void> inputDiary({
     required BuildContext context,
     required Diary? diary,

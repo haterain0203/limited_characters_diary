@@ -10,7 +10,6 @@ import 'confirm_delete_all_data_dialog.dart';
 
 final authControllerProvider = Provider(
   (ref) => AuthController(
-    //TODO check provider内で別のProviderを参照する場合も基本はref.watch？
     service: ref.read(authServiceProvider),
     isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier),
   ),
@@ -29,9 +28,10 @@ class AuthController {
     try {
       await service.signInAnonymouslyAndAddUser();
     } on FirebaseAuthException catch (e) {
-      //TODO check dialogでエラーメッセージ表示する予定。エラーハンドリングを記述する箇所としてControllerが適切か？
+      //TODO エラーハンドリング
       debugPrint(e.toString());
     } on FirebaseException catch (e) {
+      //TODO エラーハンドリング
       debugPrint(e.toString());
     }
   }
@@ -53,7 +53,6 @@ class AuthController {
     }
   }
 
-  //TODO check 似たようなダイアログ呼び出し処理が重複しているのでまとめるべきか？
   Future<void> showConfirmDeleteAllDataDialog(BuildContext context) async {
     await showDialog<ConfirmDeleteAllDataDialog>(
       context: context,

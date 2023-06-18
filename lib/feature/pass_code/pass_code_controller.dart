@@ -24,7 +24,6 @@ final passCodeControllerProvider = Provider(
 );
 
 class PassCodeController {
-  //TODO check Controllerの引数が肥大化する場合、何かしら改善すべきか？
   PassCodeController({
     required this.service,
     required this.invalidatePassCodeProvider,
