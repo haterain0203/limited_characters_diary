@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
 import 'package:sizer/sizer.dart';
 
@@ -29,8 +30,7 @@ class InputDiaryDialog extends HookConsumerWidget {
         ),
       ),
       title: Text(
-        //TODO 曜日も表示する
-        '${selectedDate.year}年${selectedDate.month}月${selectedDate.day}日',
+        '${selectedDate.year}年${selectedDate.month}月${selectedDate.day}日(${selectedDate.dayOfWeek()})',
       ),
       content: TextField(
         autofocus: true,
