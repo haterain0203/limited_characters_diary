@@ -14,6 +14,7 @@ class ForcedUpdateDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    //TODO check forceでOK
     final shouldForcedUpdate = ref.watch(shouldForcedUpdateProvider);
 
     // このダイアログは、緊急時以外ユーザーに見せないもの

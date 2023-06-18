@@ -54,6 +54,8 @@ class DiaryList extends HookConsumerWidget {
       ref.read(dateControllerProvider).jumpToAroundToday(scrollController);
     });
 
+    //TODO maybe
+
     return diaryList.when(
       loading: () => const Center(
         child: CircularProgressIndicator(),

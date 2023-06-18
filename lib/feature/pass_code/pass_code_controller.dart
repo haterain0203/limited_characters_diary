@@ -39,9 +39,9 @@ class PassCodeController {
   final void Function() invalidatePassCodeProvider;
   final bool passCodeToggle;
   final bool isShownInterstitialAd;
-  StateController<bool> isShownInterstitialAdNotifier;
+  final StateController<bool> isShownInterstitialAdNotifier;
   final bool isInitialSetNotification;
-  StateController<bool> isInitialSetNotificationNotifier;
+  final StateController<bool> isInitialSetNotificationNotifier;
 
   /// 設定画面におけるパスコード設定のトグル切り替え
   ///
