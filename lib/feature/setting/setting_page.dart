@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/constant/constant.dart';
+import 'package:limited_characters_diary/constant/constant_string.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
-import 'package:limited_characters_diary/feature/auth/confirm_delete_all_data_dialog.dart';
-import 'package:limited_characters_diary/web_view_page.dart';
+import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
+import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../app_info/app_info_providers.dart';
-import '../local_notification/local_notification_setting_dialog.dart';
-import '../pass_code/pass_code_functions.dart';
-import '../pass_code/pass_code_providers.dart';
+import '../app_info/app_info_service.dart';
+import '../pass_code/pass_code_controller.dart';
+import '../pass_code/pass_code_service.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key});
@@ -28,6 +28,9 @@ class SettingPage extends StatelessWidget {
           final isPassCodeLock = ref.watch(
             passCodeProvider.select((value) => value.isPassCodeEnabled),
           );
+          final appInfo = ref.watch(appInfoProvider);
+          final routingController =
+              ref.watch(routingControllerProvider(context));
           return SettingsList(
             platform: DevicePlatform.iOS,
             sections: [
@@ -44,27 +47,24 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {
-                      _showSetNotificationDialog(context);
+                      ref
+                          .read(localNotificationControllerProvider)
+                          .showSetNotificationDialog(
+                            context: context,
+                            trigger: NotificationDialogTrigger.userAction,
+                          );
                     },
                   ),
                   SettingsTile.switchTile(
                     // 初期値はSharedPreferencesの値が入る
                     initialValue: isPassCodeLock,
                     onToggle: (bool isPassCodeLock) async {
-                      // トグルの値がtrue→falseならpassCodeを空文字、isPassCodeをfalse、パスコードロックOFF
-                      // false→trueならパスコード登録画面を表示、パスコードを登録、パスコードロックON
-                      if (!isPassCodeLock) {
-                        await ref.read(passCodeControllerProvider).savePassCode(
-                              passCode: '',
-                              isPassCodeLock: false,
-                            );
-                      } else {
-                        await showScreenLockCreate(
-                          context: context,
-                          ref: ref,
-                          isPassCodeLock: isPassCodeLock,
-                        );
-                      }
+                      await ref
+                          .read(passCodeControllerProvider)
+                          .onPassCodeToggle(
+                            isPassCodeLock: isPassCodeLock,
+                            context: context,
+                          );
                     },
                     leading: const Icon(Icons.security),
                     title: const Text(
@@ -79,7 +79,9 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {
-                      _showConfirmDeleteAllDataDialog(context);
+                      ref
+                          .read(authControllerProvider)
+                          .showConfirmDeleteAllDataDialog(context);
                     },
                   ),
                 ],
@@ -93,55 +95,31 @@ class SettingPage extends StatelessWidget {
                   SettingsTile.navigation(
                     leading: const Icon(Icons.mail),
                     title: const Text(
-                      Constant.contactUsStr,
+                      ConstantString.contactUsStr,
                       style: textStyle,
                     ),
-                    onPressed: (BuildContext context) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (_) => const WebViewPage(
-                            title: Constant.contactUsStr,
-                            url: Constant.googleFormUrl,
-                          ),
-                        ),
-                      );
+                    onPressed: (_) {
+                      routingController.goContactUsOnWebView();
                     },
                   ),
                   SettingsTile.navigation(
                     leading: const Icon(Icons.text_snippet),
                     title: const Text(
-                      Constant.termsOfServiceStr,
+                      ConstantString.termsOfServiceStr,
                       style: textStyle,
                     ),
-                    onPressed: (BuildContext context) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (_) => const WebViewPage(
-                            title: Constant.termsOfServiceStr,
-                            url: Constant.termsOfServiceUrl,
-                          ),
-                        ),
-                      );
+                    onPressed: (_) {
+                      routingController.goTermsOfServiceOnWebView();
                     },
                   ),
                   SettingsTile.navigation(
                     leading: const Icon(Icons.text_snippet),
                     title: const Text(
-                      Constant.privacyPolicyStr,
+                      ConstantString.privacyPolicyStr,
                       style: textStyle,
                     ),
-                    onPressed: (BuildContext context) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<dynamic>(
-                          builder: (_) => const WebViewPage(
-                            title: Constant.privacyPolicyStr,
-                            url: Constant.privacyPolicyUrl,
-                          ),
-                        ),
-                      );
+                    onPressed: (_) {
+                      routingController.goPrivacyPolicyOnWebView();
                     },
                   ),
                   SettingsTile(
@@ -150,19 +128,14 @@ class SettingPage extends StatelessWidget {
                       'アプリ名',
                       style: textStyle,
                     ),
-                    trailing: HookConsumer(
-                      builder: (context, ref, child) {
-                        final appInfo = ref.watch(appInfoProvider);
-                        return appInfo.when(
-                          loading: () => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          error: (error, stack) {
-                            return const Text('エラーが発生しました');
-                          },
-                          data: (data) => Text(data.appName),
-                        );
+                    trailing: appInfo.when(
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      error: (error, stack) {
+                        return const Text('エラーが発生しました');
                       },
+                      data: (data) => Text(data.appName),
                     ),
                   ),
                   SettingsTile(
@@ -171,20 +144,15 @@ class SettingPage extends StatelessWidget {
                       'アプリバージョン',
                       style: textStyle,
                     ),
-                    trailing: HookConsumer(
-                      builder: (context, ref, child) {
-                        final appInfo = ref.watch(appInfoProvider);
-                        return appInfo.when(
-                          loading: () => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          error: (error, stack) {
-                            return const Text('エラーが発生しました');
-                          },
-                          data: (data) =>
-                              Text('${data.version}（${data.buildNumber}）'),
-                        );
+                    trailing: appInfo.when(
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      error: (error, stack) {
+                        return const Text('エラーが発生しました');
                       },
+                      data: (data) =>
+                          Text('${data.version}（${data.buildNumber}）'),
                     ),
                   ),
                   // SettingsTile(
@@ -210,26 +178,6 @@ class SettingPage extends StatelessWidget {
           );
         },
       ),
-    );
-  }
-
-  void _showSetNotificationDialog(BuildContext context) {
-    showDialog<LocalNotificationSettingDialog>(
-      context: context,
-      builder: (_) {
-        return const LocalNotificationSettingDialog(
-          trigger: NotificationDialogTrigger.userAction,
-        );
-      },
-    );
-  }
-
-  void _showConfirmDeleteAllDataDialog(BuildContext context) {
-    showDialog<ConfirmDeleteAllDataDialog>(
-      context: context,
-      builder: (_) {
-        return const ConfirmDeleteAllDataDialog();
-      },
     );
   }
 }

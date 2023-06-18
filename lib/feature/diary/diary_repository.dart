@@ -1,7 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../auth/auth_repository.dart';
+import '../firestore/firestore_instance_provider.dart';
 import 'diary.dart';
+
+final diaryRepoProvider = Provider(
+  (ref) => DiaryRepository(
+    //TODO check ref.watchが望ましいか？
+    diaryRef: ref.watch(diaryRefProvider),
+  ),
+);
+
+final uidProvider = Provider(
+  (ref) => ref.watch(authInstanceProvider).currentUser?.uid,
+);
+
+final diaryRefProvider = Provider((ref) {
+  final firestore = ref.watch(firestoreInstanceProvider);
+  final uid = ref.watch(uidProvider);
+  final diaryRef = firestore
+      .collection('users')
+      .doc(uid)
+      .collection('diaryList')
+      .withConverter<Diary>(
+        fromFirestore: (snapshot, _) => Diary.fromJson(snapshot.data()!),
+        toFirestore: (diary, _) => diary.toJson(),
+      );
+  return diaryRef;
+});
 
 class DiaryRepository {
   DiaryRepository({required this.diaryRef});

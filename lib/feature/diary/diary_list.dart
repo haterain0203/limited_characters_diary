@@ -1,16 +1,15 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/diary/diary_controller.dart';
+import 'package:limited_characters_diary/extension/date_time_extensions.dart';
+import 'package:limited_characters_diary/feature/date/date_controller.dart';
 import 'package:limited_characters_diary/feature/diary/sized_list_tile.dart';
 
-import '../../constant/constant.dart';
-import '../date/data_providers.dart';
-import 'diary.dart';
-import 'diary_providers.dart';
-import 'input_diary_dialog.dart';
+import '../../constant/constant_color.dart';
+import 'diary_controller.dart';
+import 'diary_service.dart';
 
 class DiaryList extends HookConsumerWidget {
   const DiaryList({
@@ -19,72 +18,39 @@ class DiaryList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final selectedDateTime = ref.watch(selectedDateTimeProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
+    final shouldShowInputDiaryDialog =
+        ref.watch(shouldShowInputDiaryDialogOnLaunchProvider);
+    final diaryController = ref.watch(diaryControllerProvider);
 
-    useOnAppLifecycleStateChange((previous, current) async {
-      /// バックグラウンドから復帰時した点の日付とバックグラウンド移行時の日付が異なる場合、値を更新する
-      ///
-      /// 本日の日付をハイライトさせているが、
-      /// アプリをバックグラウンド→翌日にフォアグラウンドに復帰（resume）→アプリは再起動しない場合がある（端末依存）→日付が更新されずにハイライト箇所が正しくならない
-      /// 上記の事象へ対応するもの
+    /// バックグラウンド復帰時の日付でStateProviderを更新
+    useOnAppLifecycleStateChange((previous, current) {
       if (current == AppLifecycleState.resumed) {
-        final dateController = ref.read(dateControllerProvider);
-        final now = DateTime.now();
-        final nowDate = DateTime(now.year, now.month, now.day);
-        // バックグラウンド移行時の日と復帰時の日が一緒の場合は処理終了
-        if (dateController.isToday(nowDate)) {
-          return;
-        }
-        // バックグラウンド復帰時の日付でStateProviderを更新
-        dateController.updateToday(nowDate);
+        ref
+            .read(selectedDateTimeProvider.notifier)
+            .update((_) => DateTime.now());
       }
     });
 
-    useEffect(
-      () {
-        Future(() async {
-          /// 0.5秒待機
-          ///
-          /// [scrollController.hasClients]と[ref.read(isShowEditDialogOnLaunchProvider]内の
-          /// 今日の日付の日記が記録済みかどうか？の判定に少し時間がかかるため、少し待ってから処理を行う
-          /// 待つ処理を挟まないと、jumpToの条件判定と、isShowEditDialogOnLaunchProviderの判定が適切に動作しない
-          //TODO [milliseconds: 500]と固定値でしているが改善できないか？
-          await Future<void>.delayed(const Duration(milliseconds: 500));
+    /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
+    ref.listen(shouldShowInputDiaryDialogOnLaunchProvider,
+        (previous, next) async {
+      if (next) {
+        await diaryController.showInputDiaryDialog(context, null);
+        // 日記入力ダイアログが表示済みであることを記録する
+        ref.read(hasInputDiaryDialogShownProvider.notifier).state = true;
+      }
+    });
 
-          if (!context.mounted) {
-            return;
-          }
+    // 特定条件を満たした場合、「SizedListTileの高さ*（当日の日数-5）」分だけ自動スクロールする
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      //TODO メソッド名にmaybeを付与する
+      ref.read(dateControllerProvider).jumpToAroundToday(scrollController);
+    });
 
-          /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
-          ///
-          /// 当月の場合のみ、「SizedListTileの高さ*（当日の日数-5）」分だけスクロールする
-          /// -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
-          /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
-          final dateController = ref.read(dateControllerProvider);
-          if (dateController.isJumpToAroundToday()) {
-            if (scrollController.hasClients) {
-              scrollController.jumpTo(
-                Constant.sizedListTileHeight * (dateController.today.day - 5),
-              );
-            }
-          }
-
-          /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示する
-          if (ref.read(isShowEditDialogOnLaunchProvider)) {
-            await _showEditDialog(context, null);
-            return;
-          }
-
-          //当初は、ForcedUpdateDialog及びUnderRepairDialogもここで表現していたが、
-          //これらは、Firestore上のtrue/falseで表示非表示を切り替えたく、Stackで対応することとした
-          //ここでも「trueになったら表示」はできるが、「falseになったら非表示」をするには別途変数が必要になりそうで、
-          //煩雑になると考え、Stackとしたもの。
-        });
-        return null;
-      },
-      const [],
-    );
+    //TODO maybe
 
     return diaryList.when(
       loading: () => const Center(
@@ -99,7 +65,6 @@ class DiaryList extends HookConsumerWidget {
         );
       },
       data: (data) {
-        final dateController = ref.read(dateControllerProvider);
         return Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 8),
           child: ListView.separated(
@@ -109,16 +74,18 @@ class DiaryList extends HookConsumerWidget {
                 height: 0.5,
               );
             },
-            itemCount: dateController.daysInMonth(),
+            itemCount: selectedDateTime.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
               // indexに応じた日付
-              final indexDate = dateController.indexToDateTime(index);
-              // indexに応じた日記データ
-              final diary = dateController.getIndexDateDiary(data, indexDate);
-              // indexに応じた曜日文字列
-              final dayOfWeekStr = dateController.searchDayOfWeek(indexDate);
-              // indexに応じた日付の文字色（土日祝日の場合色がつく）
-              final dayStrColor = dateController.choiceDayStrColor(indexDate);
+              final indexDate = DateTime(
+                selectedDateTime.year,
+                selectedDateTime.month,
+                index + 1,
+              );
+              // indexの日付に応じた日記
+              final diary = data.firstWhereOrNull((diary) {
+                return diary.diaryDate == indexDate;
+              });
               return Slidable(
                 // 該当日に日記がある場合のみ動作
                 enabled: diary != null,
@@ -129,9 +96,8 @@ class DiaryList extends HookConsumerWidget {
                     // 該当行をスライドすると削除ボタンが表示される
                     SlidableAction(
                       onPressed: (_) {
-                        _showConfirmDeleteDialog(
+                        diaryController.showConfirmDeleteDialog(
                           context: context,
-                          diaryController: ref.read(diaryControllerProvider),
                           // enabled: diary != null を設定しているため、「!」
                           diary: diary!,
                         );
@@ -144,26 +110,27 @@ class DiaryList extends HookConsumerWidget {
                 ),
                 child: SizedHeightListTile(
                   //本日はハイライト
-                  tileColor: dateController.isToday(indexDate)
-                      ? Constant.accentColor
-                      : null,
+                  tileColor:
+                      indexDate.isToday() ? ConstantColor.accentColor : null,
                   leading: Text(
-                    '${indexDate.day}（$dayOfWeekStr）',
-                    style: TextStyle(color: dayStrColor),
+                    '${indexDate.day}（${indexDate.dayOfWeek()}）',
+                    // indexに応じた日付の文字色（土日祝日の場合色がつく）
+                    style: TextStyle(color: indexDate.choiceDayStrColor()),
                   ),
                   title: Text(
                     diary?.content ?? '',
                   ),
                   onTap: () async {
-                    ref.read(selectedDateProvider.notifier).state = indexDate;
-                    await _showEditDialog(context, diary);
+                    //TODO selectedDateTimeProviderを更新するため、DiaryListが再描画され、カレンダーの一番上が表示されてしまう
+                    ref.read(selectedDateTimeProvider.notifier).state =
+                        indexDate;
+                    await diaryController.showInputDiaryDialog(context, diary);
                   },
                   onLongPress: diary == null
                       ? null
                       : () {
-                          _showConfirmDeleteDialog(
+                          diaryController.showConfirmDeleteDialog(
                             context: context,
-                            diaryController: ref.read(diaryControllerProvider),
                             diary: diary,
                           );
                         },
@@ -174,37 +141,5 @@ class DiaryList extends HookConsumerWidget {
         );
       },
     );
-  }
-
-  Future<void> _showEditDialog(BuildContext context, Diary? diary) async {
-    await showDialog<AlertDialog>(
-      context: context,
-      builder: (_) {
-        return InputDiaryDialog(diary: diary);
-      },
-    );
-  }
-
-  void _showConfirmDeleteDialog({
-    required BuildContext context,
-    required DiaryController diaryController,
-    required Diary diary,
-  }) {
-    final diaryDateStr =
-        '${diary.diaryDate.year}/${diary.diaryDate.month}/${diary.diaryDate.day}';
-    AwesomeDialog(
-      //TODO ボタンカラー再検討
-      context: context,
-      dialogType: DialogType.question,
-      title: '$diaryDateStrの\n日記を削除しますか？',
-      btnOkColor: Colors.grey,
-      btnOkText: 'キャンセル',
-      btnOkOnPress: () {},
-      btnCancelColor: Colors.red,
-      btnCancelText: '削除',
-      btnCancelOnPress: () {
-        diaryController.deleteDiary(diary: diary);
-      },
-    ).show();
   }
 }

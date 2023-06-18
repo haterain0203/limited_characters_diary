@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:limited_characters_diary/constant/constant.dart';
+
+import '../../constant/constant_num.dart';
 
 class SizedHeightListTile extends StatelessWidget {
   const SizedHeightListTile({
@@ -23,7 +24,7 @@ class SizedHeightListTile extends StatelessWidget {
       onLongPress: onLongPress,
       child: SizedBox(
         width: double.infinity,
-        height: Constant.sizedListTileHeight,
+        height: ConstantNum.sizedListTileHeight,
         child: ColoredBox(
           color: tileColor ?? Colors.transparent,
           child: Row(

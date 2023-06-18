@@ -1,247 +1,60 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../diary/diary.dart';
+import '../../constant/constant_num.dart';
+
+final dateControllerProvider = Provider.autoDispose(
+  (ref) => DateController(
+    selectedDateTime: ref.watch(selectedDateTimeProvider),
+    hasJumpedToAroundToday: ref.watch(hasJumpedToAroundTodayProvider),
+    hasJumpedToAroundTodayNotifier:
+        ref.read(hasJumpedToAroundTodayProvider.notifier),
+  ),
+);
 
 class DateController {
   DateController({
-    required this.today,
-    required this.selectedDate,
-    required this.selectedMonth,
-    required this.todayNotifier,
-    required this.selectedMonthNotifier,
+    required this.selectedDateTime,
+    required this.hasJumpedToAroundToday,
+    required this.hasJumpedToAroundTodayNotifier,
   });
 
-  final DateTime today;
-  final DateTime selectedDate;
-  final DateTime selectedMonth;
-  final StateController<DateTime> todayNotifier;
-  final StateController<DateTime> selectedMonthNotifier;
+  final DateTime selectedDateTime;
+  final bool hasJumpedToAroundToday;
+  final StateController<bool> hasJumpedToAroundTodayNotifier;
 
-  void nextMonth() {
-    selectedMonthNotifier.update((state) {
-      return DateTime(
-        selectedMonth.year,
-        selectedMonth.month + 1,
-      );
-    });
-  }
-
-  void previousMonth() {
-    selectedMonthNotifier.update((state) {
-      return DateTime(
-        selectedMonth.year,
-        selectedMonth.month - 1,
-      );
-    });
-  }
-
-  String searchDayOfWeek(DateTime indexDate) {
-    final dayOfWeekInt = indexDate.weekday;
-    final dayOfWeekStr = '月火水木金土日'[dayOfWeekInt - 1];
-    return dayOfWeekStr;
-  }
-
-  //当月の日数を返す
-  int daysInMonth() {
-    //https://note.com/hatchoutschool/n/ne95862d50623
-    final daysInMonth = DateTime(
-      selectedMonth.year,
-      selectedMonth.month + 1,
-    ).add(const Duration(days: -1)).day;
-    return daysInMonth;
-  }
-
-  //土日祝日の場合なら色を、それ以外なら黒を返す
-  Color choiceDayStrColor(DateTime indexDate) {
-    //TODO 重複しているためリファクタリングしたい
-    final dayOfWeekInt = indexDate.weekday;
-    if (dayOfWeekInt == DateTime.saturday) {
-      return Colors.blue;
+  /// 特定条件をクリアした場合、今日-5日に自動で画面スクロールする
+  ///
+  /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
+  /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
+  void jumpToAroundToday(ScrollController scrollController) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    // 既にスクロール済みなら処理終了
+    if (hasJumpedToAroundToday) {
+      return;
     }
-    if (dayOfWeekInt == DateTime.sunday) {
-      return Colors.red;
+    if (!scrollController.hasClients) {
+      return;
     }
-    if (jpHolidayMap.containsKey(indexDate)) {
-      return Colors.red;
+    // 今月以外を表示している場合は処理終了
+    if (selectedDateTime.month != today.month) {
+      return;
     }
-    return Colors.black;
-  }
-
-  bool isToday(DateTime indexDate) {
-    //TODO 重複しているためリファクタリングしたい
-    return indexDate.isAtSameMomentAs(today);
-  }
-
-  void updateToday(DateTime now) {
-    todayNotifier.update((state) {
-      return DateTime(now.year, now.month, now.day);
-    });
-  }
-
-  bool isThisMonth() {
-    return selectedMonth.month == today.month;
-  }
-
-  // 今日-5日に自動で画面スクロールするかどうか
-  bool isJumpToAroundToday() {
-    if (!isThisMonth()) {
-      return false;
-    }
+    // アプリ起動日が10日未満なら処理終了
     if (today.day <= 10) {
-      return false;
+      return;
     }
-    return true;
-  }
-
-  /// ListViewのindexに該当する日付を返す
-  DateTime indexToDateTime(int index) {
-    return DateTime(
-      selectedMonth.year,
-      selectedMonth.month,
-      index + 1,
+    // スクロール済みであることをフラグ管理
+    hasJumpedToAroundTodayNotifier.state = true;
+    // 自動スクロール
+    // -5としているのは、当日を一番上にするよりも当日の4日前まで見れた方が良いと考えたため
+    return scrollController.jumpTo(
+      ConstantNum.sizedListTileHeight * (today.day - 5),
     );
   }
-
-  /// ListViewのindexに該当する日記を返す
-  Diary? getIndexDateDiary(List<Diary> diaryList, DateTime indexDate) {
-    final indexDateDiary = diaryList.firstWhereOrNull((diary) {
-      return diary.diaryDate == indexDate;
-    });
-    return indexDateDiary;
-  }
-
-  //2029年までの日本の祝日 20230324時点
-  //以下のデータを加工
-  //https://github.com/holiday-jp/holiday_jp/blob/master/holidays.yml
-  final Map<DateTime, String> jpHolidayMap = {
-    DateTime(2023, 01, 01): '元日',
-    DateTime(2023, 01, 02): '元日振替休日',
-    DateTime(2023, 01, 09): '成人の日',
-    DateTime(2023, 02, 11): '建国記念の日',
-    DateTime(2023, 02, 23): '天皇誕生日',
-    DateTime(2023, 03, 21): '春分の日',
-    DateTime(2023, 04, 29): '昭和の日',
-    DateTime(2023, 05, 03): '憲法記念日',
-    DateTime(2023, 05, 04): 'みどりの日',
-    DateTime(2023, 05, 05): 'こどもの日',
-    DateTime(2023, 07, 17): '海の日',
-    DateTime(2023, 08, 11): '山の日',
-    DateTime(2023, 09, 18): '敬老の日',
-    DateTime(2023, 09, 23): '秋の分の日',
-    DateTime(2023, 10, 09): 'スポーツの日',
-    DateTime(2023, 11, 03): '文化の日',
-    DateTime(2023, 11, 23): '勤労感謝の日',
-    DateTime(2024, 01, 01): '元日',
-    DateTime(2024, 01, 08): '成人の日',
-    DateTime(2024, 02, 11): '建国記念の日',
-    DateTime(2024, 02, 12): '建国記念の日 振替休日',
-    DateTime(2024, 02, 23): '天皇誕生日',
-    DateTime(2024, 03, 20): '春分の日',
-    DateTime(2024, 04, 29): '昭和の日',
-    DateTime(2024, 05, 03): '憲法記念日',
-    DateTime(2024, 05, 04): 'みどりの日',
-    DateTime(2024, 05, 05): 'こどもの日',
-    DateTime(2024, 05, 06): 'こどもの日振替休日',
-    DateTime(2024, 07, 15): '海の日',
-    DateTime(2024, 08, 11): '山の日',
-    DateTime(2024, 08, 12): '山の日振替休日',
-    DateTime(2024, 09, 16): '敬老の日',
-    DateTime(2024, 09, 22): '秋の分の日',
-    DateTime(2024, 09, 23): '秋の分の日振替休日',
-    DateTime(2024, 10, 14): 'スポーツの日',
-    DateTime(2024, 11, 03): '文化の日',
-    DateTime(2024, 11, 04): '文化の日振替休日',
-    DateTime(2024, 11, 23): '勤労感謝の日',
-    DateTime(2025, 01, 01): '元日',
-    DateTime(2025, 01, 13): '成人の日',
-    DateTime(2025, 02, 11): '建国記念の日',
-    DateTime(2025, 02, 23): '天皇誕生日',
-    DateTime(2025, 02, 24): '天皇誕生日振替休日',
-    DateTime(2025, 03, 20): '春分の日',
-    DateTime(2025, 04, 29): '昭和の日',
-    DateTime(2025, 05, 03): '憲法記念日',
-    DateTime(2025, 05, 04): 'みどりの日',
-    DateTime(2025, 05, 05): 'こどもの日',
-    DateTime(2025, 05, 06): 'こどもの日振替休日',
-    DateTime(2025, 07, 21): '海の日',
-    DateTime(2025, 08, 11): '山の日',
-    DateTime(2025, 09, 15): '敬老の日',
-    DateTime(2025, 09, 23): '秋の分の日',
-    DateTime(2025, 10, 13): 'スポーツの日',
-    DateTime(2025, 11, 03): '文化の日',
-    DateTime(2025, 11, 23): '勤労感謝の日',
-    DateTime(2025, 11, 24): '勤労感謝の日振替休日',
-    DateTime(2026, 01, 01): '元日',
-    DateTime(2026, 01, 12): '成人の日',
-    DateTime(2026, 02, 11): '建国記念の日',
-    DateTime(2026, 02, 23): '天皇誕生日',
-    DateTime(2026, 03, 20): '春分の日',
-    DateTime(2026, 04, 29): '昭和の日',
-    DateTime(2026, 05, 03): '憲法記念日',
-    DateTime(2026, 05, 04): 'みどりの日',
-    DateTime(2026, 05, 05): 'こどもの日',
-    DateTime(2026, 05, 06): 'こどもの日振替休日',
-    DateTime(2026, 07, 20): '海の日',
-    DateTime(2026, 08, 11): '山の日',
-    DateTime(2026, 09, 21): '敬老の日',
-    DateTime(2026, 09, 22): '休日',
-    DateTime(2026, 09, 23): '秋の分の日',
-    DateTime(2026, 10, 12): 'スポーツの日',
-    DateTime(2026, 11, 03): '文化の日',
-    DateTime(2026, 11, 23): '勤労感謝の日',
-    DateTime(2027, 01, 01): '元日',
-    DateTime(2027, 01, 11): '成人の日',
-    DateTime(2027, 02, 11): '建国記念の日',
-    DateTime(2027, 02, 23): '天皇誕生日',
-    DateTime(2027, 03, 21): '春分の日',
-    DateTime(2027, 03, 22): '春分の日振替休日',
-    DateTime(2027, 04, 29): '昭和の日',
-    DateTime(2027, 05, 03): '憲法記念日',
-    DateTime(2027, 05, 04): 'みどりの日',
-    DateTime(2027, 05, 05): 'こどもの日',
-    DateTime(2027, 07, 19): '海の日',
-    DateTime(2027, 08, 11): '山の日',
-    DateTime(2027, 09, 20): '敬老の日',
-    DateTime(2027, 09, 23): '秋の分の日',
-    DateTime(2027, 10, 11): 'スポーツの日',
-    DateTime(2027, 11, 03): '文化の日',
-    DateTime(2027, 11, 23): '勤労感謝の日',
-    DateTime(2028, 01, 01): '元日',
-    DateTime(2028, 01, 10): '成人の日',
-    DateTime(2028, 02, 11): '建国記念の日',
-    DateTime(2028, 02, 23): '天皇誕生日',
-    DateTime(2028, 03, 20): '春分の日',
-    DateTime(2028, 04, 29): '昭和の日',
-    DateTime(2028, 05, 03): '憲法記念日',
-    DateTime(2028, 05, 04): 'みどりの日',
-    DateTime(2028, 05, 05): 'こどもの日',
-    DateTime(2028, 07, 17): '海の日',
-    DateTime(2028, 08, 11): '山の日',
-    DateTime(2028, 09, 18): '敬老の日',
-    DateTime(2028, 09, 22): '秋の分の日',
-    DateTime(2028, 10, 09): 'スポーツの日',
-    DateTime(2028, 11, 03): '文化の日',
-    DateTime(2028, 11, 23): '勤労感謝の日',
-    DateTime(2029, 01, 01): '元日',
-    DateTime(2029, 01, 08): '成人の日',
-    DateTime(2029, 02, 11): '建国記念の日',
-    DateTime(2029, 02, 12): '建国記念の日 振替休日',
-    DateTime(2029, 02, 23): '天皇誕生日',
-    DateTime(2029, 03, 20): '春分の日',
-    DateTime(2029, 04, 29): '昭和の日',
-    DateTime(2029, 04, 30): '昭和の日振替休日',
-    DateTime(2029, 05, 03): '憲法記念日',
-    DateTime(2029, 05, 04): 'みどりの日',
-    DateTime(2029, 05, 05): 'こどもの日',
-    DateTime(2029, 07, 16): '海の日',
-    DateTime(2029, 08, 11): '山の日',
-    DateTime(2029, 09, 17): '敬老の日',
-    DateTime(2029, 09, 23): '秋の分の日',
-    DateTime(2029, 09, 24): '秋の分の日振替休日',
-    DateTime(2029, 10, 08): 'スポーツの日',
-    DateTime(2029, 11, 03): '文化の日',
-    DateTime(2029, 11, 23): '勤労感謝の日',
-  };
 }
+
+final selectedDateTimeProvider = StateProvider((ref) => DateTime.now());
+
+final hasJumpedToAroundTodayProvider = StateProvider((ref) => false);

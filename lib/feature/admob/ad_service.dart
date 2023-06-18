@@ -2,14 +2,30 @@ import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/confidential.dart';
 
-class AdRepository {
+import 'ad_controller.dart';
+
+final adServiceProvider = Provider(
+  (ref) => AdService(
+    isShownInterstitialAdNotifier:
+        ref.read(isShownInterstitialAdProvider.notifier),
+  ),
+);
+
+class AdService {
+  AdService({
+    required this.isShownInterstitialAdNotifier,
+  });
+  final StateController<bool> isShownInterstitialAdNotifier;
+
   BannerAd? bannerAd;
   InterstitialAd? interstitialAd;
   int maxFailedToAttempt = 3;
   int _numInterstitialLoadAttempt = 0;
 
+  //TODO .showはダイアログ同様にUIに関することなので、Controller層へ移管しても良さそう
   // 公式のexampleを参照して作成
   // https://pub.dev/packages/google_mobile_ads/example
   Future<void> initInterstitialAd() async {
@@ -38,6 +54,8 @@ class AdRepository {
     }
     interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (InterstitialAd ad) async {
+        // 全画面広告を閉じて以降、アプリをバックグラウンドに移動させた際、パスコードロックを正しく表示するため
+        isShownInterstitialAdNotifier.state = false;
         await ad.dispose();
         await initInterstitialAd();
       },
@@ -47,6 +65,10 @@ class AdRepository {
         await initInterstitialAd();
       },
     );
+
+    // 全画面広告を表示する際、アプリがinactiveになるが、その際はパスコードロックを表示したくないためflagをtrueに
+    isShownInterstitialAdNotifier.state = true;
+
     await interstitialAd!.show();
     interstitialAd = null;
   }
@@ -90,5 +112,4 @@ class AdRepository {
       await AppTrackingTransparency.requestTrackingAuthorization();
     }
   }
-
 }

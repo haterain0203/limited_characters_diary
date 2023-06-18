@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_or_list_page_switcher.dart';
-import 'auth_providers.dart';
+import 'package:limited_characters_diary/feature/pass_code/page_switcher.dart';
+
+import 'auth_controller.dart';
+import 'auth_service.dart';
 
 class AuthPage extends HookConsumerWidget {
   const AuthPage({
@@ -26,16 +28,7 @@ class AuthPage extends HookConsumerWidget {
       ),
       data: (data) {
         if (data == null) {
-          Future(() async {
-            try {
-              await ref
-                  .read(authControllerProvider)
-                  .signInAnonymouslyAndAddUser();
-            } catch (e) {
-              //TODO
-              debugPrint(e.toString());
-            }
-          });
+          ref.read(authControllerProvider).signInAnonymouslyAndAddUser();
           return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
@@ -45,7 +38,7 @@ class AuthPage extends HookConsumerWidget {
         debugPrint('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
         debugPrint(data.uid);
         debugPrint('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
-        return const PassCodeLockOrListPageSwitcher();
+        return const PageSwitcher();
       },
     );
   }

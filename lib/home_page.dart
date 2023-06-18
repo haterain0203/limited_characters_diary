@@ -4,12 +4,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/admob/ad_banner.dart';
 import 'package:limited_characters_diary/feature/diary/diary_list.dart';
+import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
+import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:limited_characters_diary/feature/update_info/forced_update_dialog.dart';
 import 'package:limited_characters_diary/feature/update_info/under_repair_dialog.dart';
 
-import 'feature/date/data_providers.dart';
-import 'feature/local_notification/local_notification_setting_dialog.dart';
-import 'feature/setting/setting_page.dart';
+import 'feature/date/date_controller.dart';
 
 class HomePage extends HookConsumerWidget {
   const HomePage({
@@ -18,7 +18,7 @@ class HomePage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dateController = ref.watch(dateControllerProvider);
+    final selectedDateTime = ref.watch(selectedDateTimeProvider);
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -28,7 +28,12 @@ class HomePage extends HookConsumerWidget {
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () {
-                  _showSetNotificationDialog(context);
+                  ref
+                      .read(localNotificationControllerProvider)
+                      .showSetNotificationDialog(
+                        context: context,
+                        trigger: NotificationDialogTrigger.userAction,
+                      );
                 },
                 icon: const Icon(Icons.add_alert),
               ),
@@ -36,7 +41,15 @@ class HomePage extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextButton(
-                    onPressed: dateController.previousMonth,
+                    onPressed: () {
+                      // 前の月へ
+                      ref.read(selectedDateTimeProvider.notifier).update(
+                            (state) => DateTime(
+                              state.year,
+                              state.month - 1,
+                            ),
+                          );
+                    },
                     style: TextButton.styleFrom(
                       minimumSize: Size.zero,
                       padding: EdgeInsets.zero,
@@ -47,10 +60,18 @@ class HomePage extends HookConsumerWidget {
                     ),
                   ),
                   Text(
-                    '${dateController.selectedMonth.year}年${dateController.selectedMonth.month}月',
+                    '${selectedDateTime.year}年${selectedDateTime.month}月',
                   ),
                   TextButton(
-                    onPressed: dateController.nextMonth,
+                    onPressed: () {
+                      // 次の月へ
+                      ref.read(selectedDateTimeProvider.notifier).update(
+                            (state) => DateTime(
+                              state.year,
+                              state.month + 1,
+                            ),
+                          );
+                    },
                     style: TextButton.styleFrom(
                       minimumSize: Size.zero,
                       padding: EdgeInsets.zero,
@@ -65,12 +86,9 @@ class HomePage extends HookConsumerWidget {
               actions: [
                 IconButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<dynamic>(
-                        builder: (_) => const SettingPage(),
-                      ),
-                    );
+                    ref
+                        .read(routingControllerProvider(context))
+                        .goSettingPage();
                   },
                   icon: const Icon(Icons.settings),
                 ),
@@ -100,17 +118,6 @@ class HomePage extends HookConsumerWidget {
           const UnderRepairDialog(),
         ],
       ),
-    );
-  }
-
-  Future<void> _showSetNotificationDialog(BuildContext context) async {
-    await showDialog<LocalNotificationSettingDialog>(
-      context: context,
-      builder: (_) {
-        return const LocalNotificationSettingDialog(
-          trigger: NotificationDialogTrigger.userAction,
-        );
-      },
     );
   }
 }

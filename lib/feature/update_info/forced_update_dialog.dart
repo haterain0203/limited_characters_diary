@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/update_info/update_info_providers.dart';
+import 'package:limited_characters_diary/feature/update_info/update_info_service.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
-import '../../constant/constant.dart';
+import '../../constant/constant_string.dart';
 import '../link_to_app_or_web/link_to_app_or_web.dart';
 
 class ForcedUpdateDialog extends HookConsumerWidget {
@@ -14,11 +14,13 @@ class ForcedUpdateDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isForcedUpdate = ref.watch(forcedUpdateProvider);
+    //TODO shouldは助動詞なのでforceでOK
+    final shouldForcedUpdate = ref.watch(shouldForcedUpdateProvider);
 
     // このダイアログは、緊急時以外ユーザーに見せないもの
     // loadingおよびエラーハンドリングは不要と考え、.whenは使っていない
-    if (isForcedUpdate.value == null || !isForcedUpdate.value!) {
+    if (shouldForcedUpdate.value == null || !shouldForcedUpdate.value!) {
+      //TODO SizedBox.shrink()に修正
       return const SizedBox();
     }
 
@@ -46,8 +48,8 @@ class ForcedUpdateDialog extends HookConsumerWidget {
           content: StadiumBorderButton(
             onPressed: () async {
               final url = Platform.isAndroid
-                  ? Constant.playStoreUrl
-                  : Constant.appStoreUrl;
+                  ? ConstantString.playStoreUrl
+                  : ConstantString.appStoreUrl;
               await linkToAppOrWeb(url);
             },
             title: const Text('アプリストアへ'),

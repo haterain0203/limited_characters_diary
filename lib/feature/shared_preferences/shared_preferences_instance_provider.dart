@@ -3,5 +3,5 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // main.dartで上書き処理するため、初期値はUnimplementedError
 final sharedPreferencesInstanceProvider = Provider<SharedPreferences>(
-  (ref) => throw UnimplementedError(),
+  (_) => throw UnimplementedError(),
 );
