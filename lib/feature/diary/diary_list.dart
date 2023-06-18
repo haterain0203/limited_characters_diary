@@ -46,8 +46,7 @@ class DiaryList extends HookConsumerWidget {
 
     // 特定条件を満たした場合、「SizedListTileの高さ*（当日の日数-5）」分だけ自動スクロールする
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      //TODO メソッド名にmaybeを付与する
-      ref.read(dateControllerProvider).jumpToAroundToday(scrollController);
+      ref.read(dateControllerProvider).maybeJumpToAroundToday(scrollController);
     });
 
     return diaryList.when(

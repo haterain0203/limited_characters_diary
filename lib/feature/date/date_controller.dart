@@ -27,7 +27,7 @@ class DateController {
   ///
   /// 月の後半になると、初期起動画面で該当日が表示されないことへの対応
   /// ほとんどの端末で15日程度は表示できると考えるため、当日が10日以下の場合はスクロールしない
-  void jumpToAroundToday(ScrollController scrollController) {
+  void maybeJumpToAroundToday(ScrollController scrollController) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     // 既にスクロール済みなら処理終了
