@@ -67,7 +67,7 @@ final shouldShowInputDiaryDialogOnLaunchProvider =
   }
 
   final diaryList = ref.watch(diaryStreamProvider);
-  final shouldForcedUpdate = ref.watch(shouldForcedUpdateProvider);
+  final shouldForcedUpdate = ref.watch(shouldForceUpdateProvider);
   final updateInfo = ref.watch(updateInfoProvider);
 
   // FutureProvider/StreamProviderがAsyncDataではない場合（AsyncLoading or AsyncErrorの場合）、falseを返して処理終了
