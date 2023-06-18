@@ -14,14 +14,12 @@ class ForcedUpdateDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //TODO shouldは助動詞なのでforceでOK
     final shouldForceUpdate = ref.watch(shouldForceUpdateProvider);
 
     // このダイアログは、緊急時以外ユーザーに見せないもの
     // loadingおよびエラーハンドリングは不要と考え、.whenは使っていない
     if (shouldForceUpdate.value == null || !shouldForceUpdate.value!) {
-      //TODO SizedBox.shrink()に修正
-      return const SizedBox();
+      return const SizedBox.shrink();
     }
 
     return Stack(
