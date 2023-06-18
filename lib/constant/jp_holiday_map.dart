@@ -1,10 +1,7 @@
-class ConstantDate {
-//TODO check DateTimeがあるため、static constできないが、static finalで問題ないか？
-//TODO check DateTimeではない別の持ち方にしてstatic constにすべきか？
 //2029年までの日本の祝日 20230324時点
 //以下のデータを加工
 //https://github.com/holiday-jp/holiday_jp/blob/master/holidays.yml
-  static final Map<DateTime, String> jpHolidayMap = {
+  final Map<DateTime, String> jpHolidayMap = {
     DateTime(2023, 01, 01): '元日',
     DateTime(2023, 01, 02): '元日振替休日',
     DateTime(2023, 01, 09): '成人の日',
@@ -133,4 +130,3 @@ class ConstantDate {
     DateTime(2029, 11, 03): '文化の日',
     DateTime(2029, 11, 23): '勤労感謝の日',
   };
-}

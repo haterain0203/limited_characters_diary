@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constant/contant_date.dart';
+import '../constant/jp_holiday_map.dart';
 
 extension DateTimeExtensions on DateTime {
   /// 曜日の文字列を返す
@@ -16,7 +16,7 @@ extension DateTimeExtensions on DateTime {
     if (weekday == DateTime.sunday) {
       return Colors.red;
     }
-    if (ConstantDate.jpHolidayMap.containsKey(this)) {
+    if (jpHolidayMap.containsKey(this)) {
       return Colors.red;
     }
     return Colors.black;
