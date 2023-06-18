@@ -53,9 +53,6 @@ final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
   return count;
 });
 
-//TODO check 記述箇所/記述方法について確認
-//TODO check 自動処理とはいえユーザーアクションに紐づくものと考えられるのでControllerに記述すべき？
-//TODO check 一方で、アプリの振る舞いに関するロジックなのでServiceが適当？
 /// 起動時に日記入力ダイアログを自動表示するかどうか
 final shouldShowInputDiaryDialogOnLaunchProvider =
     Provider.autoDispose<bool>((ref) {

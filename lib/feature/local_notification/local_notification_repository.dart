@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final localNotificationRepoProvider = Provider<LocalNotificationRepository>(
   (_) {
-    //TODO check この方法で問題ないか？
     //main.dartで上書きされる
     throw UnimplementedError();
   },

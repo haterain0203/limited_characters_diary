@@ -12,7 +12,7 @@ final authInstanceProvider = Provider((ref) => FirebaseAuth.instance);
 
 final authRepoProvider = Provider(
   (ref) => AuthRepository(
-      //TODO check ref.watchにすべきか？
+      //TODO check ref.watchに修正
       auth: ref.read(authInstanceProvider),
       firestore: ref.read(firestoreInstanceProvider),
       fcm: ref.read(fcmInstanceProvider),
@@ -44,18 +44,17 @@ class AuthRepository {
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
   Future<UserCredential> signInAnonymously() async {
+    //TODO エラーハンドリングはControllerへ
     try {
       // 匿名認証
       return await auth.signInAnonymously();
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
-      //TODO 少なくとも以下の処理はControllerへ移行
       throw _convertToErrorMessageFromErrorCode(e.code);
     }
   }
 
   Future<void> addUser(User user) async {
-    //TODO check controllerでエラーハンドリンするならば、ここでは不要では？
     try {
       // firestoreにUserを登録する
       final fcmToken = await fcm.getToken();
@@ -122,7 +121,7 @@ class AuthRepository {
     await user.delete();
   }
 
-  //TODO controllerへ移行すべきでは？
+  //TODO controllerへ移行
   String _convertToErrorMessageFromErrorCode(String errorCode) {
     switch (errorCode) {
       case 'email-already-exists':
