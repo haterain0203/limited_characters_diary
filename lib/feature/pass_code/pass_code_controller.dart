@@ -67,7 +67,7 @@ class PassCodeController {
     required String passCode,
     required bool isPassCodeLock,
   }) async {
-    //TODO エラーハンドリング
+    //TODO エラーハンドリング（SharedPreferencesもエラーハンドリング必要か？）
     await service.savePassCode(
       passCode: passCode,
       isPassCodeLock: isPassCodeLock,

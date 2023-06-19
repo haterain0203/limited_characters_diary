@@ -11,7 +11,7 @@ class FirstLaunchController {
   FirstLaunchController({required this.service});
   final FirstLaunchService service;
 
-  //TODO エラーハンドリング
+  //TODO エラーハンドリング（SharedPreferencesもエラーハンドリング必要か？）
   Future<void> completedFirstLaunch() async {
     await service.completedFirstLaunch();
   }
