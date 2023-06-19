@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
 
@@ -12,6 +13,7 @@ final authControllerProvider = Provider(
   (ref) => AuthController(
     service: ref.watch(authServiceProvider),
     isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier),
+    dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
   ),
 );
 
@@ -19,20 +21,24 @@ class AuthController {
   AuthController({
     required this.service,
     required this.isUserDeletedNotifier,
+    required this.dialogUtilsController,
   });
 
   final AuthService service;
   final StateController<bool> isUserDeletedNotifier;
+  final DialogUtilsController dialogUtilsController;
 
   Future<void> signInAnonymouslyAndAddUser() async {
     try {
       await service.signInAnonymouslyAndAddUser();
     } on FirebaseAuthException catch (e) {
-      //TODO エラーハンドリング
       debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: _convertToErrorMessageFromErrorCode(e.code),
+      );
     } on FirebaseException catch (e) {
-      //TODO エラーハンドリング
       debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog();
     }
   }
 
@@ -45,11 +51,13 @@ class AuthController {
     try {
       await service.deleteUser();
     } on FirebaseAuthException catch (e) {
-      //TODO dialogでエラーメッセージ表示
       debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: _convertToErrorMessageFromErrorCode(e.code),
+      );
     } on FirebaseException catch (e) {
-      //TODO dialogでエラーメッセージ表示
       debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog();
     }
   }
 
@@ -110,7 +118,6 @@ class AuthController {
         return '不明なエラーが発生しました。';
     }
   }
-
 }
 
 /// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため
