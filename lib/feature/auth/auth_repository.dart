@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../app_user/app_user.dart';
@@ -12,10 +11,11 @@ final authInstanceProvider = Provider((ref) => FirebaseAuth.instance);
 
 final authRepoProvider = Provider(
   (ref) => AuthRepository(
-      auth: ref.watch(authInstanceProvider),
-      firestore: ref.watch(firestoreInstanceProvider),
-      fcm: ref.watch(fcmInstanceProvider),
-      userRef: ref.watch(userRefProvider)),
+    auth: ref.watch(authInstanceProvider),
+    firestore: ref.watch(firestoreInstanceProvider),
+    fcm: ref.watch(fcmInstanceProvider),
+    userRef: ref.watch(userRefProvider),
+  ),
 );
 
 final userRefProvider = Provider((ref) {
@@ -43,32 +43,21 @@ class AuthRepository {
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
   Future<UserCredential> signInAnonymously() async {
-    //TODO エラーハンドリングはControllerへ
-    try {
-      // 匿名認証
-      return await auth.signInAnonymously();
-    } on FirebaseAuthException catch (e) {
-      debugPrint(e.toString());
-      throw _convertToErrorMessageFromErrorCode(e.code);
-    }
+    // 匿名認証
+    return auth.signInAnonymously();
   }
 
   Future<void> addUser(User user) async {
-    try {
-      // firestoreにUserを登録する
-      final fcmToken = await fcm.getToken();
-      final uid = user.uid;
-      await userRef.doc(uid).set(
-            AppUser(
-              uid: uid,
-              createdAt: DateTime.now(),
-              fcmToken: fcmToken,
-            ),
-          );
-      //TODO Controllerにエラーハンドリングを記述したので、ここでのcatchは不要
-    } on FirebaseException catch (e) {
-      debugPrint(e.toString());
-    }
+    // firestoreにUserを登録する
+    final fcmToken = await fcm.getToken();
+    final uid = user.uid;
+    await userRef.doc(uid).set(
+          AppUser(
+            uid: uid,
+            createdAt: DateTime.now(),
+            fcmToken: fcmToken,
+          ),
+        );
   }
 
   // Future<void> signOut() async {
@@ -118,27 +107,5 @@ class AuthRepository {
     // セキュリティルールの「isUserAuthenticated(userId)」で引っかかりエラーが発生する
     // そのため、アカウント削除は最後に実行する
     await user.delete();
-  }
-
-  //TODO controllerへ移行
-  String _convertToErrorMessageFromErrorCode(String errorCode) {
-    switch (errorCode) {
-      case 'email-already-exists':
-        return '指定されたメールアドレスは既に使用されています。';
-      case 'wrong-password':
-        return 'パスワードが違います。';
-      case 'invalid-email':
-        return 'メールアドレスが不正です。';
-      case 'user-not-found':
-        return '指定されたユーザーは存在しません。';
-      case 'user-disabled':
-        return '指定されたユーザーは無効です。';
-      case 'operation-not-allowed':
-        return '指定されたユーザーはこの操作を許可していません。';
-      case 'too-many-requests':
-        return '指定されたユーザーはこの操作を許可していません。';
-      default:
-        return '不明なエラーが発生しました。';
-    }
   }
 }

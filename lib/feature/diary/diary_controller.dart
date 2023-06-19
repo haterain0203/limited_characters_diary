@@ -1,6 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/diary/diary_service.dart';
 
@@ -12,17 +14,19 @@ import 'input_diary_dialog.dart';
 final diaryControllerProvider = Provider(
   (ref) => DiaryController(
     service: ref.watch(diaryServiceProvider),
+    dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
   ),
 );
 
 class DiaryController {
   DiaryController({
     required this.service,
+    required this.dialogUtilsController,
   });
 
   final DiaryService service;
+  final DialogUtilsController dialogUtilsController;
 
-  //TODO エラーハンドリング
   Future<void> _addDiary({
     required String content,
     required DateTime selectedDate,
@@ -33,7 +37,6 @@ class DiaryController {
     );
   }
 
-  //TODO エラーハンドリング
   Future<void> _updateDiary({
     required Diary diary,
     required String content,
@@ -41,7 +44,6 @@ class DiaryController {
     await service.updateDiary(diary: diary, content: content);
   }
 
-  //TODO エラーハンドリング
   Future<void> _deleteDiary({required Diary diary}) async {
     await service.deleteDiary(diary: diary);
   }
@@ -63,27 +65,41 @@ class DiaryController {
     required DateTime selectedDate,
   }) async {
     if (diaryInputController.text.isEmpty) {
-      _showErrorDialog(context, '文字が入力されていません');
-      return;
+      return dialogUtilsController.showErrorDialog(errorTitle: '文字が入力されていません');
     }
     if (diaryInputController.text.length > 16) {
-      _showErrorDialog(context, '16文字以内に修正してください');
-      return;
+      return dialogUtilsController.showErrorDialog(
+        errorTitle: '16文字以内に修正してください',
+      );
     }
     if (diary?.content == diaryInputController.text) {
-      _showErrorDialog(context, '内容が変更されていません');
-      return;
+      return dialogUtilsController.showErrorDialog(
+        errorTitle: '内容が変更されていません',
+      );
     }
     // 新規登録(diary == null)なら、新規登録処理を、そうでなければupdate処理を
-    if (diary == null) {
-      await _addDiary(
-        content: diaryInputController.text,
-        selectedDate: selectedDate,
+    try {
+      if (diary == null) {
+        await _addDiary(
+          content: diaryInputController.text,
+          selectedDate: selectedDate,
+        );
+      } else {
+        await _updateDiary(
+          diary: diary,
+          content: diaryInputController.text,
+        );
+      }
+    } on FirebaseException catch (e) {
+      debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: e.message,
       );
-    } else {
-      await _updateDiary(
-        diary: diary,
-        content: diaryInputController.text,
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      // FirebaseException以外の例外
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: e.toString(),
       );
     }
     diaryInputController.clear();
@@ -98,20 +114,6 @@ class DiaryController {
       context,
       diary == null ? InputDiaryType.add : InputDiaryType.update,
     );
-  }
-
-  //TODO 共通化
-  void _showErrorDialog(
-    BuildContext context,
-    String errorMessage,
-  ) {
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.error,
-      title: errorMessage,
-      btnCancelText: '閉じる',
-      btnCancelOnPress: () {},
-    ).show();
   }
 
   Future<void> _showCompleteDialog(
@@ -141,7 +143,22 @@ class DiaryController {
       btnOkOnPress: () {},
       btnCancelColor: Colors.red,
       btnCancelText: '削除',
-      btnCancelOnPress: () => _deleteDiary(diary: diary),
+      btnCancelOnPress: () async {
+        try {
+          await _deleteDiary(diary: diary);
+        } on FirebaseException catch (e) {
+          debugPrint(e.toString());
+          return dialogUtilsController.showErrorDialog(
+            errorDetail: e.message,
+          );
+        } on Exception catch (e) {
+          debugPrint(e.toString());
+          // FirebaseException以外の例外
+          return dialogUtilsController.showErrorDialog(
+            errorDetail: e.toString(),
+          );
+        }
+      },
     ).show();
   }
 }

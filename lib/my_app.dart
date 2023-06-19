@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sizer/sizer.dart';
 
+import 'component/dialog_utils.dart';
 import 'constant/constant_color.dart';
 import 'feature/admob/ad_controller.dart';
 import 'feature/auth/auth_page.dart';
@@ -30,6 +31,7 @@ class MyApp extends HookConsumerWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
+          navigatorKey: ref.watch(navigatorKeyProvider),
           useInheritedMediaQuery: true,
           locale: DevicePreview.locale(context),
           builder: DevicePreview.appBuilder,

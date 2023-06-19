@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
 
@@ -12,6 +13,7 @@ final authControllerProvider = Provider(
   (ref) => AuthController(
     service: ref.watch(authServiceProvider),
     isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier),
+    dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
   ),
 );
 
@@ -19,20 +21,29 @@ class AuthController {
   AuthController({
     required this.service,
     required this.isUserDeletedNotifier,
+    required this.dialogUtilsController,
   });
 
   final AuthService service;
   final StateController<bool> isUserDeletedNotifier;
+  final DialogUtilsController dialogUtilsController;
 
   Future<void> signInAnonymouslyAndAddUser() async {
     try {
       await service.signInAnonymouslyAndAddUser();
     } on FirebaseAuthException catch (e) {
-      //TODO エラーハンドリング
       debugPrint(e.toString());
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: _convertToErrorMessageFromErrorCode(e.code),
+        );
+      });
     } on FirebaseException catch (e) {
-      //TODO エラーハンドリング
-      debugPrint(e.toString());
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: e.message,
+        );
+      });
     }
   }
 
@@ -45,11 +56,19 @@ class AuthController {
     try {
       await service.deleteUser();
     } on FirebaseAuthException catch (e) {
-      //TODO dialogでエラーメッセージ表示
       debugPrint(e.toString());
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: _convertToErrorMessageFromErrorCode(e.code),
+        );
+      });
     } on FirebaseException catch (e) {
-      //TODO dialogでエラーメッセージ表示
       debugPrint(e.toString());
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: e.message,
+        );
+      });
     }
   }
 
@@ -88,6 +107,27 @@ class AuthController {
         isUserDeletedNotifier.state = false;
       },
     ).show();
+  }
+
+  String _convertToErrorMessageFromErrorCode(String errorCode) {
+    switch (errorCode) {
+      case 'email-already-exists':
+        return '指定されたメールアドレスは既に使用されています。';
+      case 'wrong-password':
+        return 'パスワードが違います。';
+      case 'invalid-email':
+        return 'メールアドレスが不正です。';
+      case 'user-not-found':
+        return '指定されたユーザーは存在しません。';
+      case 'user-disabled':
+        return '指定されたユーザーは無効です。';
+      case 'operation-not-allowed':
+        return '指定されたユーザーはこの操作を許可していません。';
+      case 'too-many-requests':
+        return '指定されたユーザーはこの操作を許可していません。';
+      default:
+        return '不明なエラーが発生しました。';
+    }
   }
 }
 

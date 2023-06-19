@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_service.dart';
 
@@ -15,6 +16,7 @@ final localNotificationControllerProvider = Provider(
       invalidateLocalNotificationTimeFutureProvider: invalidate,
       isInitialSetNotificationNotifier:
           ref.read(isInitialSetNotificationProvider.notifier),
+      dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
     );
   },
 );
@@ -24,11 +26,13 @@ class LocalNotificationController {
     required this.service,
     required this.invalidateLocalNotificationTimeFutureProvider,
     required this.isInitialSetNotificationNotifier,
+    required this.dialogUtilsController,
   });
 
   final LocalNotificationService service;
   final void Function() invalidateLocalNotificationTimeFutureProvider;
   final StateController<bool> isInitialSetNotificationNotifier;
+  final DialogUtilsController dialogUtilsController;
 
   Future<void> setNotification({
     required BuildContext context,
@@ -61,11 +65,23 @@ class LocalNotificationController {
       isInitialSetNotificationNotifier.state = true;
     }
     //通知設定
-    //TODO エラーハンドリング
-    await service.scheduledNotification(setTime: setTime);
+    try {
+      await service.scheduledNotification(setTime: setTime);
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: e.toString(),
+      );
+    }
     //設定された時間をSharedPreferencesに保存
-    //TODO エラーハンドリング
-    await service.saveNotificationTime(setTime: setTime);
+    try {
+      await service.saveNotificationTime(setTime: setTime);
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: e.toString(),
+      );
+    }
     if (!context.mounted) {
       return;
     }
@@ -87,12 +103,18 @@ class LocalNotificationController {
     ).show();
   }
 
-  //TODO エラーハンドリング
   Future<void> deleteNotification() async {
-    await service.deleteNotification();
-    // ローカル通知時間の再取得
-    // 通知をリセットした際にUIもリセットするため
-    invalidateLocalNotificationTimeFutureProvider();
+    try {
+      await service.deleteNotification();
+      // ローカル通知時間の再取得
+      // 通知をリセットした際にUIもリセットするため
+      invalidateLocalNotificationTimeFutureProvider();
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: e.toString(),
+      );
+    }
   }
 
   Future<void> showSetNotificationDialog({
