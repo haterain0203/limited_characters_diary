@@ -27,7 +27,6 @@ class DiaryController {
   final DiaryService service;
   final DialogUtilsController dialogUtilsController;
 
-  //TODO エラーハンドリング
   Future<void> _addDiary({
     required String content,
     required DateTime selectedDate,
@@ -38,7 +37,6 @@ class DiaryController {
     );
   }
 
-  //TODO エラーハンドリング
   Future<void> _updateDiary({
     required Diary diary,
     required String content,
@@ -46,7 +44,6 @@ class DiaryController {
     await service.updateDiary(diary: diary, content: content);
   }
 
-  //TODO エラーハンドリング
   Future<void> _deleteDiary({required Diary diary}) async {
     await service.deleteDiary(diary: diary);
   }
@@ -117,20 +114,6 @@ class DiaryController {
       context,
       diary == null ? InputDiaryType.add : InputDiaryType.update,
     );
-  }
-
-  //TODO 共通化
-  void _showErrorDialog(
-    BuildContext context,
-    String errorMessage,
-  ) {
-    AwesomeDialog(
-      context: context,
-      dialogType: DialogType.error,
-      title: errorMessage,
-      btnCancelText: '閉じる',
-      btnCancelOnPress: () {},
-    ).show();
   }
 
   Future<void> _showCompleteDialog(
