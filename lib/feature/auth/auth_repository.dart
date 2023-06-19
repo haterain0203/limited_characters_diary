@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../app_user/app_user.dart';
@@ -49,21 +48,17 @@ class AuthRepository {
   }
 
   Future<void> addUser(User user) async {
-    try {
-      // firestoreにUserを登録する
-      final fcmToken = await fcm.getToken();
-      final uid = user.uid;
-      await userRef.doc(uid).set(
-            AppUser(
-              uid: uid,
-              createdAt: DateTime.now(),
-              fcmToken: fcmToken,
-            ),
-          );
-      //TODO Controllerにエラーハンドリングを記述したので、ここでのcatchは不要
-    } on FirebaseException catch (e) {
-      debugPrint(e.toString());
-    }
+    // firestoreにUserを登録する
+    final fcmToken = await fcm.getToken();
+    final uid = user.uid;
+    await userRef.doc(uid).set(
+          AppUser(
+            uid: uid,
+            createdAt: DateTime.now(),
+            fcmToken: fcmToken,
+          ),
+        );
+    //TODO Controllerにエラーハンドリングを記述したので、ここでのcatchは不要
   }
 
   // Future<void> signOut() async {
