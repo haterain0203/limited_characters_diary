@@ -160,7 +160,22 @@ class DiaryController {
       btnOkOnPress: () {},
       btnCancelColor: Colors.red,
       btnCancelText: '削除',
-      btnCancelOnPress: () => _deleteDiary(diary: diary),
+      btnCancelOnPress: () async {
+        try {
+          await _deleteDiary(diary: diary);
+        } on FirebaseException catch (e) {
+          debugPrint(e.toString());
+          return dialogUtilsController.showErrorDialog(
+            errorDetail: e.message,
+          );
+        } on Exception catch (e) {
+          debugPrint(e.toString());
+          // FirebaseException以外の例外
+          return dialogUtilsController.showErrorDialog(
+            errorDetail: e.toString(),
+          );
+        }
+      },
     ).show();
   }
 }
