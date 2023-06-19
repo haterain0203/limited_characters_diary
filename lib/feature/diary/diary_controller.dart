@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
@@ -80,15 +81,28 @@ class DiaryController {
       );
     }
     // 新規登録(diary == null)なら、新規登録処理を、そうでなければupdate処理を
-    if (diary == null) {
-      await _addDiary(
-        content: diaryInputController.text,
-        selectedDate: selectedDate,
+    try {
+      if (diary == null) {
+        await _addDiary(
+          content: diaryInputController.text,
+          selectedDate: selectedDate,
+        );
+      } else {
+        await _updateDiary(
+          diary: diary,
+          content: diaryInputController.text,
+        );
+      }
+    } on FirebaseException catch (e) {
+      debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: e.message,
       );
-    } else {
-      await _updateDiary(
-        diary: diary,
-        content: diaryInputController.text,
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      // FirebaseException以外の例外
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: e.toString(),
       );
     }
     diaryInputController.clear();
