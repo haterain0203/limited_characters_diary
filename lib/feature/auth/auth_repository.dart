@@ -12,10 +12,11 @@ final authInstanceProvider = Provider((ref) => FirebaseAuth.instance);
 
 final authRepoProvider = Provider(
   (ref) => AuthRepository(
-      auth: ref.watch(authInstanceProvider),
-      firestore: ref.watch(firestoreInstanceProvider),
-      fcm: ref.watch(fcmInstanceProvider),
-      userRef: ref.watch(userRefProvider)),
+    auth: ref.watch(authInstanceProvider),
+    firestore: ref.watch(firestoreInstanceProvider),
+    fcm: ref.watch(fcmInstanceProvider),
+    userRef: ref.watch(userRefProvider),
+  ),
 );
 
 final userRefProvider = Provider((ref) {
@@ -43,14 +44,8 @@ class AuthRepository {
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
   Future<UserCredential> signInAnonymously() async {
-    //TODO エラーハンドリングはControllerへ
-    try {
-      // 匿名認証
-      return await auth.signInAnonymously();
-    } on FirebaseAuthException catch (e) {
-      debugPrint(e.toString());
-      throw _convertToErrorMessageFromErrorCode(e.code);
-    }
+    // 匿名認証
+    return auth.signInAnonymously();
   }
 
   Future<void> addUser(User user) async {
@@ -119,5 +114,4 @@ class AuthRepository {
     // そのため、アカウント削除は最後に実行する
     await user.delete();
   }
-
 }
