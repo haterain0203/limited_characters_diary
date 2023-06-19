@@ -30,6 +30,12 @@ class DialogUtilsController {
       desc: errorDetail,
       btnCancelText: '閉じる',
       btnCancelOnPress: () {},
+      //TODO
+      // btnOkText: '問い合わせる',
+      //TODO 
+      // btnOkOnPress: () {
+
+      // }
     ).show();
   }
 }

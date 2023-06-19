@@ -33,12 +33,17 @@ class AuthController {
       await service.signInAnonymouslyAndAddUser();
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
-      return dialogUtilsController.showErrorDialog(
-        errorDetail: _convertToErrorMessageFromErrorCode(e.code),
-      );
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: _convertToErrorMessageFromErrorCode(e.code),
+        );
+      });
     } on FirebaseException catch (e) {
-      debugPrint(e.toString());
-      return dialogUtilsController.showErrorDialog();
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: e.message,
+        );
+      });
     }
   }
 
@@ -52,12 +57,18 @@ class AuthController {
       await service.deleteUser();
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
-      return dialogUtilsController.showErrorDialog(
-        errorDetail: _convertToErrorMessageFromErrorCode(e.code),
-      );
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: _convertToErrorMessageFromErrorCode(e.code),
+        );
+      });
     } on FirebaseException catch (e) {
       debugPrint(e.toString());
-      return dialogUtilsController.showErrorDialog();
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: e.message,
+        );
+      });
     }
   }
 
