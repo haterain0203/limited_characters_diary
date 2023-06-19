@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/diary/diary_service.dart';
 
@@ -12,15 +13,18 @@ import 'input_diary_dialog.dart';
 final diaryControllerProvider = Provider(
   (ref) => DiaryController(
     service: ref.watch(diaryServiceProvider),
+    dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
   ),
 );
 
 class DiaryController {
   DiaryController({
     required this.service,
+    required this.dialogUtilsController,
   });
 
   final DiaryService service;
+  final DialogUtilsController dialogUtilsController;
 
   //TODO エラーハンドリング
   Future<void> _addDiary({
@@ -63,16 +67,17 @@ class DiaryController {
     required DateTime selectedDate,
   }) async {
     if (diaryInputController.text.isEmpty) {
-      _showErrorDialog(context, '文字が入力されていません');
-      return;
+      return dialogUtilsController.showErrorDialog(errorTitle: '文字が入力されていません');
     }
     if (diaryInputController.text.length > 16) {
-      _showErrorDialog(context, '16文字以内に修正してください');
-      return;
+      return dialogUtilsController.showErrorDialog(
+        errorTitle: '16文字以内に修正してください',
+      );
     }
     if (diary?.content == diaryInputController.text) {
-      _showErrorDialog(context, '内容が変更されていません');
-      return;
+      return dialogUtilsController.showErrorDialog(
+        errorTitle: '内容が変更されていません',
+      );
     }
     // 新規登録(diary == null)なら、新規登録処理を、そうでなければupdate処理を
     if (diary == null) {

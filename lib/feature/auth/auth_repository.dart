@@ -58,7 +58,6 @@ class AuthRepository {
             fcmToken: fcmToken,
           ),
         );
-    //TODO Controllerにエラーハンドリングを記述したので、ここでのcatchは不要
   }
 
   // Future<void> signOut() async {
