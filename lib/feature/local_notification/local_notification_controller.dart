@@ -103,12 +103,18 @@ class LocalNotificationController {
     ).show();
   }
 
-  //TODO エラーハンドリング
   Future<void> deleteNotification() async {
-    await service.deleteNotification();
-    // ローカル通知時間の再取得
-    // 通知をリセットした際にUIもリセットするため
-    invalidateLocalNotificationTimeFutureProvider();
+    try {
+      await service.deleteNotification();
+      // ローカル通知時間の再取得
+      // 通知をリセットした際にUIもリセットするため
+      invalidateLocalNotificationTimeFutureProvider();
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+      return dialogUtilsController.showErrorDialog(
+        errorDetail: e.toString(),
+      );
+    }
   }
 
   Future<void> showSetNotificationDialog({
