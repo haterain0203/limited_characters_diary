@@ -8,7 +8,6 @@ import 'diary.dart';
 
 final diaryRepoProvider = Provider(
   (ref) => DiaryRepository(
-    //TODO check ref.watchが望ましいか？
     diaryRef: ref.watch(diaryRefProvider),
   ),
 );

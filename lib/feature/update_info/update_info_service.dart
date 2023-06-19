@@ -65,7 +65,7 @@ final updateInfoProvider = StreamProvider.autoDispose<UpdateInfo>((ref) {
 });
 
 /// updateInfoを購読し、強制アップデートを促すべきかどうか判定する
-final shouldForcedUpdateProvider =
+final shouldForceUpdateProvider =
     FutureProvider.autoDispose<bool>((ref) async {
   final updateInfo = ref.watch(updateInfoProvider);
   if (updateInfo.value == null) {

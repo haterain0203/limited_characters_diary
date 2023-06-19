@@ -52,7 +52,6 @@ Future<void> main() async {
 
   // SharedPreferencesのインスタンス
   final prefs = await SharedPreferences.getInstance();
-  //TODO check ControllerやRepositoryに定義して実行していないが問題ないか？
   final isCompletedFirstLaunch =
       prefs.getBool('completed_first_launch') ?? false;
 

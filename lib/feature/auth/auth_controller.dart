@@ -10,7 +10,7 @@ import 'confirm_delete_all_data_dialog.dart';
 
 final authControllerProvider = Provider(
   (ref) => AuthController(
-    service: ref.read(authServiceProvider),
+    service: ref.watch(authServiceProvider),
     isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier),
   ),
 );

@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/diary/diary_service.dart';
 
 import '../../constant/enum.dart';
@@ -128,9 +129,8 @@ class DiaryController {
     required BuildContext context,
     required Diary diary,
   }) async {
-    //TODO 曜日も表示する
     final diaryDateStr =
-        '${diary.diaryDate.year}/${diary.diaryDate.month}/${diary.diaryDate.day}';
+        '${diary.diaryDate.year}/${diary.diaryDate.month}/${diary.diaryDate.day}(${diary.diaryDate.dayOfWeek()})';
     await AwesomeDialog(
       //TODO ボタンカラー再検討
       context: context,
