@@ -120,25 +120,4 @@ class AuthRepository {
     await user.delete();
   }
 
-  //TODO controllerへ移行
-  String _convertToErrorMessageFromErrorCode(String errorCode) {
-    switch (errorCode) {
-      case 'email-already-exists':
-        return '指定されたメールアドレスは既に使用されています。';
-      case 'wrong-password':
-        return 'パスワードが違います。';
-      case 'invalid-email':
-        return 'メールアドレスが不正です。';
-      case 'user-not-found':
-        return '指定されたユーザーは存在しません。';
-      case 'user-disabled':
-        return '指定されたユーザーは無効です。';
-      case 'operation-not-allowed':
-        return '指定されたユーザーはこの操作を許可していません。';
-      case 'too-many-requests':
-        return '指定されたユーザーはこの操作を許可していません。';
-      default:
-        return '不明なエラーが発生しました。';
-    }
-  }
 }
