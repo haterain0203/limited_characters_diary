@@ -19,6 +19,9 @@ class ConstantString {
   static const appStoreUrl =
       'https://apps.apple.com/us/app/16%E6%96%87%E5%AD%97%E6%97%A5%E8%A8%98/id6448646374';
 
+  static const appStoreId = '6448646374';
+
   static const playStoreUrl =
       'https://play.google.com/store/apps/details?id=com.futtaro.limited_characters_diary';
+
 }
