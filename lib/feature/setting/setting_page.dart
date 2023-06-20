@@ -44,7 +44,10 @@ class SettingPage extends StatelessWidget {
                 ),
                 tiles: <SettingsTile>[
                   SettingsTile.navigation(
-                    leading: const Icon(Icons.notification_add),
+                    leading: Icon(
+                      Icons.notification_add,
+                      color: Theme.of(context).primaryColor,
+                    ),
                     title: const Text(
                       '通知設定',
                       style: textStyle,
@@ -69,14 +72,20 @@ class SettingPage extends StatelessWidget {
                             context: context,
                           );
                     },
-                    leading: const Icon(Icons.security),
+                    leading: const Icon(
+                      Icons.security,
+                      color: Colors.green,
+                    ),
                     title: const Text(
                       'パスコード設定',
                       style: textStyle,
                     ),
                   ),
                   SettingsTile.navigation(
-                    leading: const Icon(Icons.delete_forever),
+                    leading: const Icon(
+                      Icons.delete_forever,
+                      color: Colors.red,
+                    ),
                     title: const Text(
                       '退会する（全データ削除）',
                       style: textStyle,
@@ -106,7 +115,10 @@ class SettingPage extends StatelessWidget {
                     },
                   ),
                   SettingsTile.navigation(
-                    leading: const Icon(Icons.star),
+                    leading: const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
