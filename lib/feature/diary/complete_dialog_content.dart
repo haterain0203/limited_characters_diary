@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/in_app_review/in_app_review_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';
@@ -50,9 +51,13 @@ class CompleteDialogContent extends HookConsumerWidget {
                     if (inputDiaryType == InputDiaryType.update) {
                       return;
                     }
+                    // 9日目 or 51日目の記録の場合、アプリのレビューを依頼する(全画面広告は表示しない)
+                    if (data == 9 || data == 51) {
+                      return ref.read(inAppReviewController).requestReview();
+                    }
                     // 日記の記録数が3の倍数の場合、全画面広告を出す
                     if (data % 3 == 0) {
-                      await ref
+                      return ref
                           .read(adControllerProvider)
                           .showInterstitialAdd();
                     }
