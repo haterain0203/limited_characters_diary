@@ -36,11 +36,11 @@ class DiaryRepository {
   final CollectionReference<Diary> diaryRef;
 
   Stream<List<Diary>> subscribedDiaryList({
-    required DateTime selectedMonthDate,
+    required DateTime selectedMonthDateTime,
   }) {
-    final startDate = DateTime(selectedMonthDate.year, selectedMonthDate.month);
+    final startDate = DateTime(selectedMonthDateTime.year, selectedMonthDateTime.month);
     final endDate =
-        DateTime(selectedMonthDate.year, selectedMonthDate.month + 1, 0);
+        DateTime(selectedMonthDateTime.year, selectedMonthDateTime.month + 1, 0);
     final snapshots = diaryRef
         .where('diaryDate', isGreaterThanOrEqualTo: startDate)
         .where('diaryDate', isLessThanOrEqualTo: endDate)

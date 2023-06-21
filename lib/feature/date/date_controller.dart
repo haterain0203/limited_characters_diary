@@ -5,7 +5,7 @@ import '../../constant/constant_num.dart';
 
 final dateControllerProvider = Provider.autoDispose(
   (ref) => DateController(
-    selectedDateTime: ref.watch(selectedDateTimeProvider),
+    selectedMonthDateTime: ref.watch(selectedMonthDateTimeProvider),
     hasJumpedToAroundToday: ref.watch(hasJumpedToAroundTodayProvider),
     hasJumpedToAroundTodayNotifier:
         ref.read(hasJumpedToAroundTodayProvider.notifier),
@@ -14,12 +14,12 @@ final dateControllerProvider = Provider.autoDispose(
 
 class DateController {
   DateController({
-    required this.selectedDateTime,
+    required this.selectedMonthDateTime,
     required this.hasJumpedToAroundToday,
     required this.hasJumpedToAroundTodayNotifier,
   });
 
-  final DateTime selectedDateTime;
+  final DateTime selectedMonthDateTime;
   final bool hasJumpedToAroundToday;
   final StateController<bool> hasJumpedToAroundTodayNotifier;
 
@@ -38,7 +38,7 @@ class DateController {
       return;
     }
     // 今月以外を表示している場合は処理終了
-    if (selectedDateTime.month != today.month) {
+    if (selectedMonthDateTime.month != today.month) {
       return;
     }
     // アプリ起動日が10日未満なら処理終了
@@ -55,6 +55,6 @@ class DateController {
   }
 }
 
-final selectedDateTimeProvider = StateProvider((ref) => DateTime.now());
+final selectedMonthDateTimeProvider = StateProvider((ref) => DateTime.now());
 
 final hasJumpedToAroundTodayProvider = StateProvider((ref) => false);

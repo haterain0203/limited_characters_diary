@@ -18,7 +18,7 @@ class DiaryList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedDateTime = ref.watch(selectedDateTimeProvider);
+    final selectedMonthDateTime = ref.watch(selectedMonthDateTimeProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
     final shouldShowInputDiaryDialog =
@@ -27,6 +27,7 @@ class DiaryList extends HookConsumerWidget {
 
     /// バックグラウンド復帰時の日付でStateProviderを更新
     useOnAppLifecycleStateChange((previous, current) {
+      //TODO
       if (current == AppLifecycleState.resumed) {
         ref
             .read(selectedDateTimeProvider.notifier)
@@ -71,12 +72,12 @@ class DiaryList extends HookConsumerWidget {
                 height: 0.5,
               );
             },
-            itemCount: selectedDateTime.daysInMonth(),
+            itemCount: selectedMonthDateTime.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
               // indexに応じた日付
               final indexDate = DateTime(
-                selectedDateTime.year,
-                selectedDateTime.month,
+                selectedMonthDateTime.year,
+                selectedMonthDateTime.month,
                 index + 1,
               );
               // indexの日付に応じた日記
