@@ -5,6 +5,7 @@ import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
+import 'package:limited_characters_diary/in_app_review/in_app_review_controller.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../app_info/app_info_service.dart';
@@ -17,7 +18,9 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //なぜかSettingsList内のText（title/tilesともに）にはMyAppに指定したfontFamilyが適用されなかったため、個別で設定
-    const textStyle = TextStyle(fontFamily: 'M_PLUS_Rounded_1c');
+    const textStyle = TextStyle(
+      fontFamily: 'M_PLUS_Rounded_1c',
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('設定'),
@@ -41,7 +44,10 @@ class SettingPage extends StatelessWidget {
                 ),
                 tiles: <SettingsTile>[
                   SettingsTile.navigation(
-                    leading: const Icon(Icons.notification_add),
+                    leading: Icon(
+                      Icons.notification_add,
+                      color: Theme.of(context).primaryColor,
+                    ),
                     title: const Text(
                       '通知設定',
                       style: textStyle,
@@ -66,14 +72,20 @@ class SettingPage extends StatelessWidget {
                             context: context,
                           );
                     },
-                    leading: const Icon(Icons.security),
+                    leading: const Icon(
+                      Icons.security,
+                      color: Colors.green,
+                    ),
                     title: const Text(
                       'パスコード設定',
                       style: textStyle,
                     ),
                   ),
                   SettingsTile.navigation(
-                    leading: const Icon(Icons.delete_forever),
+                    leading: const Icon(
+                      Icons.delete_forever,
+                      color: Colors.red,
+                    ),
                     title: const Text(
                       '退会する（全データ削除）',
                       style: textStyle,
@@ -100,6 +112,30 @@ class SettingPage extends StatelessWidget {
                     ),
                     onPressed: (_) {
                       routingController.goContactUsOnWebView();
+                    },
+                  ),
+                  SettingsTile.navigation(
+                    leading: const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'アプリを評価/レビューする',
+                          style: textStyle,
+                        ),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            'レビューいただけると開発の励みになります！',
+                          ),
+                        ),
+                      ],
+                    ),
+                    onPressed: (_) {
+                      ref.read(inAppReviewController).openStore();
                     },
                   ),
                   SettingsTile.navigation(
