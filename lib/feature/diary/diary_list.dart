@@ -18,21 +18,10 @@ class DiaryList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedDateTime = ref.watch(selectedDateTimeProvider);
+    final selectedMonthDateTime = ref.watch(selectedMonthDateTimeProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
-    final shouldShowInputDiaryDialog =
-        ref.watch(shouldShowInputDiaryDialogOnLaunchProvider);
     final diaryController = ref.watch(diaryControllerProvider);
-
-    /// バックグラウンド復帰時の日付でStateProviderを更新
-    useOnAppLifecycleStateChange((previous, current) {
-      if (current == AppLifecycleState.resumed) {
-        ref
-            .read(selectedDateTimeProvider.notifier)
-            .update((_) => DateTime.now());
-      }
-    });
 
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     ref.listen(shouldShowInputDiaryDialogOnLaunchProvider,
@@ -71,12 +60,12 @@ class DiaryList extends HookConsumerWidget {
                 height: 0.5,
               );
             },
-            itemCount: selectedDateTime.daysInMonth(),
+            itemCount: selectedMonthDateTime.daysInMonth(),
             itemBuilder: (BuildContext context, int index) {
               // indexに応じた日付
               final indexDate = DateTime(
-                selectedDateTime.year,
-                selectedDateTime.month,
+                selectedMonthDateTime.year,
+                selectedMonthDateTime.month,
                 index + 1,
               );
               // indexの日付に応じた日記
@@ -118,7 +107,6 @@ class DiaryList extends HookConsumerWidget {
                     diary?.content ?? '',
                   ),
                   onTap: () async {
-                    //TODO selectedDateTimeProviderを更新するため、DiaryListが再描画され、カレンダーの一番上が表示されてしまう
                     ref.read(selectedDateTimeProvider.notifier).state =
                         indexDate;
                     await diaryController.showInputDiaryDialog(context, diary);

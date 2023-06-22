@@ -5,7 +5,7 @@ import '../../constant/constant_num.dart';
 
 final dateControllerProvider = Provider.autoDispose(
   (ref) => DateController(
-    selectedDateTime: ref.watch(selectedDateTimeProvider),
+    selectedMonthDateTime: ref.watch(selectedMonthDateTimeProvider),
     hasJumpedToAroundToday: ref.watch(hasJumpedToAroundTodayProvider),
     hasJumpedToAroundTodayNotifier:
         ref.read(hasJumpedToAroundTodayProvider.notifier),
@@ -14,12 +14,12 @@ final dateControllerProvider = Provider.autoDispose(
 
 class DateController {
   DateController({
-    required this.selectedDateTime,
+    required this.selectedMonthDateTime,
     required this.hasJumpedToAroundToday,
     required this.hasJumpedToAroundTodayNotifier,
   });
 
-  final DateTime selectedDateTime;
+  final DateTime selectedMonthDateTime;
   final bool hasJumpedToAroundToday;
   final StateController<bool> hasJumpedToAroundTodayNotifier;
 
@@ -38,7 +38,7 @@ class DateController {
       return;
     }
     // 今月以外を表示している場合は処理終了
-    if (selectedDateTime.month != today.month) {
+    if (selectedMonthDateTime.month != today.month) {
       return;
     }
     // アプリ起動日が10日未満なら処理終了
@@ -55,6 +55,21 @@ class DateController {
   }
 }
 
-final selectedDateTimeProvider = StateProvider((ref) => DateTime.now());
+// このProviderは現在選択されている「月」を管理する。
+// 'DateTime'型を使用しているが、これは年と月の計算（例：12月の次の月が翌年の1月になる）を容易にするため。
+// このProviderの主な目的は「月」の管理であり、日付や時刻の情報は基本的には使用されない。
+// 時間以下は確実に使用しないため、年月日以下のDateTimeを返す。
+// 'selectedMonthDateTimeProvider'という名前は、この事実を明示的に示すために使用。
+final selectedMonthDateTimeProvider = StateProvider((ref) {
+  final now = DateTime.now();
+  return DateTime(now.year, now.month, now.day);
+});
+
+// 日記入力する際に選択された日付を管理する。
+// 時間以下は確実に使用しないため、年月日だけのDateTimeを返す。
+final selectedDateTimeProvider = StateProvider((ref) {
+    final now = DateTime.now();
+  return DateTime(now.year, now.month, now.day);
+});
 
 final hasJumpedToAroundTodayProvider = StateProvider((ref) => false);
