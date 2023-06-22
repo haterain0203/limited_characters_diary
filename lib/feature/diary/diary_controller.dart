@@ -123,6 +123,8 @@ class DiaryController {
     await AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
+      dismissOnTouchOutside: false,
+      dismissOnBackKeyPress: false,
       body: CompleteDialogContent(inputDiaryType: inputDiaryType),
     ).show();
   }

@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../component/stadium_border_button.dart';
 import '../../constant/enum.dart';
 import '../admob/ad_controller.dart';
+import '../local_notification/local_notification_controller.dart';
 import 'diary_service.dart';
 
 class CompleteDialogContent extends HookConsumerWidget {
@@ -47,9 +48,18 @@ class CompleteDialogContent extends HookConsumerWidget {
                   onPressed: () async {
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    // 更新の場合全画面広告は表示しない
+                    // 更新の場合は処理終了
                     if (inputDiaryType == InputDiaryType.update) {
                       return;
+                    }
+                    // 初めて日記登録した直後にリマインダー設定を促す
+                    if (data == 1) {
+                      return ref
+                          .read(localNotificationControllerProvider)
+                          .showSetNotificationDialog(
+                            context: context,
+                            trigger: NotificationDialogTrigger.onFirstLaunch,
+                          );
                     }
                     // 9日目 or 51日目の記録の場合、アプリのレビューを依頼する(全画面広告は表示しない)
                     if (data == 9 || data == 51) {
