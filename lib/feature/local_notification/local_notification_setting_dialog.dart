@@ -18,10 +18,10 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notificationTime = ref.watch(localNotificationTimeFutureProvider);
+    final savedNotificationTime = ref.watch(localNotificationTimeFutureProvider);
     final localNotificationController =
         ref.watch(localNotificationControllerProvider);
-    return notificationTime.when(
+    return savedNotificationTime.when(
       loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
@@ -51,7 +51,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
           ),
         );
       },
-      data: (data) => AlertDialog(
+      data: (savedNotificationTime) => AlertDialog(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(20),
@@ -94,14 +94,14 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                 '設定された時間に毎日通知！\n継続をサポートします',
                 textAlign: TextAlign.center,
               ),
-              data == null
+              savedNotificationTime == null
                   ? Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: StadiumBorderButton(
                         onPressed: () async {
                           await localNotificationController.setNotification(
                             context: context,
-                            savedNotificationTime: data,
+                            savedNotificationTime: null,
                           );
                         },
                         title: Padding(
@@ -117,18 +117,18 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                       onPressed: () async {
                         await localNotificationController.setNotification(
                           context: context,
-                          savedNotificationTime: data,
+                          savedNotificationTime: savedNotificationTime,
                         );
                       },
                       child: Text(
-                        data.to24hours(),
+                        savedNotificationTime.to24hours(),
                         style: TextStyle(
                           fontSize: 48.sp,
                         ),
                       ),
                     ),
               Visibility(
-                visible: data != null,
+                visible: savedNotificationTime != null,
                 child: Column(
                   children: [
                     TextButton(
