@@ -47,20 +47,6 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
                     .completedFirstLaunch();
                 // 広告トラッキング許可ダイアログ表示
                 await ref.read(adControllerProvider).requestATT();
-                if (!context.mounted) {
-                  return;
-                }
-                await ref
-                    .read(localNotificationControllerProvider)
-                    .showSetNotificationDialog(
-                      context: context,
-                      trigger: NotificationDialogTrigger.onFirstLaunch,
-                    );
-                // 通知設定完了後（通知設定ダイアログが閉じたら）、AuthPageへ遷移する
-                // 当初は通知設定ダイアログ側でAuthPageへの遷移を記述していたが、それだとローカル通知時間が正しく反映されない
-                if (!context.mounted) {
-                  return;
-                }
                 await routingController.goAuthPage();
               },
             ),
