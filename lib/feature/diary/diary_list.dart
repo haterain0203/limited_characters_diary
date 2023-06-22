@@ -25,17 +25,6 @@ class DiaryList extends HookConsumerWidget {
         ref.watch(shouldShowInputDiaryDialogOnLaunchProvider);
     final diaryController = ref.watch(diaryControllerProvider);
 
-    /// バックグラウンド復帰時の日付でStateProviderを更新
-    useOnAppLifecycleStateChange((previous, current) {
-      //TODO
-      if (current == AppLifecycleState.resumed) {
-        ref
-            .read(selectedMonthDateTimeProvider.notifier)
-            .update((_) => DateTime.now());
-        ref.read(hasJumpedToAroundTodayProvider.notifier).state = false;
-      }
-    });
-
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
     ref.listen(shouldShowInputDiaryDialogOnLaunchProvider,
         (previous, next) async {
