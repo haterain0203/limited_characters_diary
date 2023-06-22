@@ -65,8 +65,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
           ),
           child: ColoredBox(
             // color: Theme.of(context).primaryColor,
-            // color: Colors.black,
-            color: const Color(0xFF000000),
+            color: Colors.black,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: FittedBox(
