@@ -58,10 +58,18 @@ class DateController {
 // このProviderは現在選択されている「月」を管理する。
 // 'DateTime'型を使用しているが、これは年と月の計算（例：12月の次の月が翌年の1月になる）を容易にするため。
 // このProviderの主な目的は「月」の管理であり、日付や時刻の情報は基本的には使用されない。
+// 時間以下は確実に使用しないため、年月日以下のDateTimeを返す。
 // 'selectedMonthDateTimeProvider'という名前は、この事実を明示的に示すために使用。
-final selectedMonthDateTimeProvider = StateProvider((ref) => DateTime.now());
+final selectedMonthDateTimeProvider = StateProvider((ref) {
+  final now = DateTime.now();
+  return DateTime(now.year, now.month, now.day);
+});
 
 // 日記入力する際に選択された日付を管理する。
-final selectedDateTimeProvider = StateProvider((ref) => DateTime.now());
+// 時間以下は確実に使用しないため、年月日だけのDateTimeを返す。
+final selectedDateTimeProvider = StateProvider((ref) {
+    final now = DateTime.now();
+  return DateTime(now.year, now.month, now.day);
+});
 
 final hasJumpedToAroundTodayProvider = StateProvider((ref) => false);
