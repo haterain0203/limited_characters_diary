@@ -21,8 +21,6 @@ class DiaryList extends HookConsumerWidget {
     final selectedMonthDateTime = ref.watch(selectedMonthDateTimeProvider);
     final scrollController = useScrollController();
     final diaryList = ref.watch(diaryStreamProvider);
-    final shouldShowInputDiaryDialog =
-        ref.watch(shouldShowInputDiaryDialogOnLaunchProvider);
     final diaryController = ref.watch(diaryControllerProvider);
 
     /// 所定条件をクリアしている場合、起動時に日記入力ダイアログを自動表示
@@ -109,7 +107,6 @@ class DiaryList extends HookConsumerWidget {
                     diary?.content ?? '',
                   ),
                   onTap: () async {
-                    //TODO selectedDateTimeProviderを更新するため、DiaryListが再描画され、カレンダーの一番上が表示されてしまう
                     ref.read(selectedDateTimeProvider.notifier).state =
                         indexDate;
                     await diaryController.showInputDiaryDialog(context, diary);

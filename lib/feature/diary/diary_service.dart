@@ -43,7 +43,8 @@ class DiaryService {
 final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
   final repo = ref.watch(diaryRepoProvider);
   final selectedMonthDateTime = ref.watch(selectedMonthDateTimeProvider);
-  final diaryList = repo.subscribedDiaryList(selectedMonthDateTime: selectedMonthDateTime);
+  final diaryList =
+      repo.subscribedDiaryList(selectedMonthDateTime: selectedMonthDateTime);
   return diaryList;
 });
 
