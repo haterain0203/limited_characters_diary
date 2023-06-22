@@ -95,20 +95,22 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                 '設定された時間に毎日通知！\n継続をサポートします',
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
               data == null
-                  ? StadiumBorderButton(
-                      onPressed: () async {
-                        await localNotificationController.setNotification(
-                          context: context,
-                          savedNotificationTime: data,
-                        );
-                      },
-                      title: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Text(
-                          '通知時間を設定する',
-                          style: TextStyle(fontSize: 14.sp),
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: StadiumBorderButton(
+                        onPressed: () async {
+                          await localNotificationController.setNotification(
+                            context: context,
+                            savedNotificationTime: data,
+                          );
+                        },
+                        title: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            '通知時間を設定する',
+                            style: TextStyle(fontSize: 14.sp),
+                          ),
                         ),
                       ),
                     )
@@ -128,22 +130,27 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                     ),
               Visibility(
                 visible: data != null,
-                child: TextButton(
-                  onPressed: () async {
-                    await localNotificationController.deleteNotification();
-                  },
-                  child: const Text('通知設定をリセットする'),
+                child: Column(
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        await localNotificationController.deleteNotification();
+                      },
+                      child: const Text('通知設定をリセットする'),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: trigger == NotificationDialogTrigger.onFirstLaunch
-                      ? const Text('あとで設定する')
-                      : const Text('閉じる'),
+              Visibility(
+                visible: trigger == NotificationDialogTrigger.userAction,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('閉じる'),
+                  ),
                 ),
               ),
             ],
