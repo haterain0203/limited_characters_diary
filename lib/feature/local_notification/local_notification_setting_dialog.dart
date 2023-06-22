@@ -52,6 +52,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
         );
       },
       data: (savedNotificationTime) => AlertDialog(
+        //TODO Theme設定でまとめた方が良さそう
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(20),
