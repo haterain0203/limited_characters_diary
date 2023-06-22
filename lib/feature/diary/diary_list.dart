@@ -30,8 +30,9 @@ class DiaryList extends HookConsumerWidget {
       //TODO
       if (current == AppLifecycleState.resumed) {
         ref
-            .read(selectedDateTimeProvider.notifier)
+            .read(selectedMonthDateTimeProvider.notifier)
             .update((_) => DateTime.now());
+        ref.read(hasJumpedToAroundTodayProvider.notifier).state = false;
       }
     });
 

@@ -61,4 +61,7 @@ class DateController {
 // 'selectedMonthDateTimeProvider'という名前は、この事実を明示的に示すために使用。
 final selectedMonthDateTimeProvider = StateProvider((ref) => DateTime.now());
 
+// 日記入力する際に選択された日付を管理する。
+final selectedDateTimeProvider = StateProvider((ref) => DateTime.now());
+
 final hasJumpedToAroundTodayProvider = StateProvider((ref) => false);
