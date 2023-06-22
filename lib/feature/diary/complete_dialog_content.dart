@@ -47,7 +47,7 @@ class CompleteDialogContent extends HookConsumerWidget {
                   onPressed: () async {
                     Navigator.pop(context);
                     Navigator.pop(context);
-                    // 更新の場合全画面広告は表示しない
+                    // 更新の場合は処理終了
                     if (inputDiaryType == InputDiaryType.update) {
                       return;
                     }
