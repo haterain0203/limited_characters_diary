@@ -57,66 +57,97 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
             Radius.circular(20),
           ),
         ),
-        title: Text(
-          '設定時間に毎日通知して\n継続をサポートします',
-          style: TextStyle(fontSize: 14.sp),
-          textAlign: TextAlign.center,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            data == null
-                ? StadiumBorderButton(
-                    onPressed: () async {
-                      await localNotificationController.setNotification(
-                        context: context,
-                        savedNotificationTime: data,
-                      );
-                    },
-                    title: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        '通知時間を設定する',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                  )
-                : TextButton(
-                    onPressed: () async {
-                      await localNotificationController.setNotification(
-                        context: context,
-                        savedNotificationTime: data,
-                      );
-                    },
-                    child: Text(
-                      data.to24hours(),
-                      style: TextStyle(
-                        fontSize: 48.sp,
-                      ),
-                    ),
+        titlePadding: EdgeInsets.zero,
+        title: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          child: ColoredBox(
+            // color: Theme.of(context).primaryColor,
+            // color: Colors.black,
+            color: const Color(0xFF000000),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  trigger == NotificationDialogTrigger.onFirstLaunch
+                      ? 'リマインダーを設定しましょう！'
+                      : 'リマインダー設定',
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-            Visibility(
-              visible: data != null,
-              child: Column(
-                children: [
-                  TextButton(
-                    onPressed: () async {
-                      await localNotificationController.deleteNotification();
-                    },
-                    child: const Text('通知設定をリセットする'),
-                  ),
-                ],
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: trigger == NotificationDialogTrigger.onFirstLaunch
-                  ? const Text('あとで設定する')
-                  : const Text('閉じる'),
-            ),
-          ],
+          ),
+        ),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                '設定された時間に毎日通知！\n継続をサポートします',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              data == null
+                  ? StadiumBorderButton(
+                      onPressed: () async {
+                        await localNotificationController.setNotification(
+                          context: context,
+                          savedNotificationTime: data,
+                        );
+                      },
+                      title: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          '通知時間を設定する',
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                      ),
+                    )
+                  : TextButton(
+                      onPressed: () async {
+                        await localNotificationController.setNotification(
+                          context: context,
+                          savedNotificationTime: data,
+                        );
+                      },
+                      child: Text(
+                        data.to24hours(),
+                        style: TextStyle(
+                          fontSize: 48.sp,
+                        ),
+                      ),
+                    ),
+              Visibility(
+                visible: data != null,
+                child: TextButton(
+                  onPressed: () async {
+                    await localNotificationController.deleteNotification();
+                  },
+                  child: const Text('通知設定をリセットする'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: trigger == NotificationDialogTrigger.onFirstLaunch
+                      ? const Text('あとで設定する')
+                      : const Text('閉じる'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
