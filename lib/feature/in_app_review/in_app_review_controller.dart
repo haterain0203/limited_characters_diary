@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
-import 'package:limited_characters_diary/in_app_review/in_app_review_service.dart';
+import 'package:limited_characters_diary/feature/in_app_review/in_app_review_service.dart';
 
 final inAppReviewController = Provider.autoDispose(
   (ref) {
