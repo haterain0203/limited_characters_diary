@@ -18,7 +18,8 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedNotificationTime = ref.watch(localNotificationTimeFutureProvider);
+    final savedNotificationTime =
+        ref.watch(localNotificationTimeFutureProvider);
     final localNotificationController =
         ref.watch(localNotificationControllerProvider);
     return savedNotificationTime.when(
@@ -135,7 +136,7 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                       onPressed: () async {
                         await localNotificationController.deleteNotification();
                       },
-                      child: const Text('通知設定をリセットする'),
+                      child: const Text('リセットする'),
                     ),
                   ],
                 ),
