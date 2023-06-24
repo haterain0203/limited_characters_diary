@@ -24,14 +24,14 @@ class AnalyticsService {
   }
 }
 
-final routeObserverProvider = Provider<MyRouteObserver>((ref) {
+final routeObserverProvider = Provider<FirebaseAnalyticsObserver>((ref) {
   final service = ref.watch(analyticsServiceProvider);
-  return MyRouteObserver(service);
+  return FirebaseAnalyticsObserver(service);
 });
 
-/// 既存のRouteObserverのdidPushメソッドをカスタマイズするためのクラス
-class MyRouteObserver extends RouteObserver<PageRoute<dynamic>> {
-  MyRouteObserver(this.service);
+/// FirebaseAnalyticsよに既存のRouteObserverのdidPushメソッドをカスタマイズするためのクラス
+class FirebaseAnalyticsObserver extends RouteObserver<PageRoute<dynamic>> {
+  FirebaseAnalyticsObserver(this.service);
   final AnalyticsService service;
 
   @override
