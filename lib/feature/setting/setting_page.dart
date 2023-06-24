@@ -49,7 +49,7 @@ class SettingPage extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                     ),
                     title: const Text(
-                      '通知設定',
+                      'リマインダー設定',
                       style: textStyle,
                     ),
                     onPressed: (BuildContext context) {

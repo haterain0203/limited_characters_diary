@@ -35,7 +35,7 @@ class HomePage extends HookConsumerWidget {
                         trigger: NotificationDialogTrigger.userAction,
                       );
                 },
-                icon: const Icon(Icons.add_alert),
+                icon: const Icon(Icons.notification_add),
               ),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
