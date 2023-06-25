@@ -155,6 +155,7 @@ class DiaryController {
       btnCancelOnPress: () async {
         try {
           await _deleteDiary(diary: diary);
+          await analyticsController.sendLogEvent(ConstantEventName.deleteDiary);
         } on FirebaseException catch (e) {
           debugPrint(e.toString());
           return dialogUtilsController.showErrorDialog(
