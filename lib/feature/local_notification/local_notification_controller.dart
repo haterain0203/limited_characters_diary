@@ -43,19 +43,8 @@ class LocalNotificationController {
     required BuildContext context,
     required TimeOfDay? savedNotificationTime,
   }) async {
-    final setTime = await showTimePicker(
-      context: context,
-      initialTime:
-          savedNotificationTime ?? const TimeOfDay(hour: 21, minute: 00),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            alwaysUse24HourFormat: true,
-          ),
-          child: child!,
-        );
-      },
-    );
+    final setTime = await _promptUserForTime(context, savedNotificationTime);
+
     //入力がなければ早期リターン
     if (setTime == null) {
       return;
@@ -69,18 +58,8 @@ class LocalNotificationController {
     if (savedNotificationTime == null) {
       isInitialSetNotificationNotifier.state = true;
     }
-    // Future.waitには通知のスケジューリングと時間の保存を含めています。これらは互いに依存関係がないため、
-    // 並列に実行することで全体のパフォーマンスを向上させます。
-    // 一方、ログイベントの送信はFuture.waitから外しています。これは、ログイベントの送信が失敗した場合、
-    // そのエラーがユーザーに表示され、通知の設定が成功したにもかかわらずエラーダイアログが表示されることを防ぐためです。
-    // したがって、これらの非同期タスクがすべて成功した後にログイベントを送信します。
     try {
-      await Future.wait([
-        //通知設定
-        service.scheduledNotification(setTime: setTime),
-        //設定された時間をSharedPreferencesに保存
-        service.saveNotificationTime(setTime: setTime),
-      ]);
+      await _scheduleAndSaveNotification(setTime);
       await analyticsController
           .sendLogEvent(ConstantLogEventName.setNotification);
     } on Exception catch (e) {
@@ -93,6 +72,41 @@ class LocalNotificationController {
       return;
     }
     await _showSetCompleteDialog(context, setTime.to24hours());
+  }
+
+  /// TimePickerを表示し、ユーザーにリマインダー時間を設定させる
+  Future<TimeOfDay?> _promptUserForTime(
+    BuildContext context,
+    TimeOfDay? savedNotificationTime,
+  ) {
+    return showTimePicker(
+      context: context,
+      initialTime:
+          savedNotificationTime ?? const TimeOfDay(hour: 21, minute: 00),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: true,
+          ),
+          child: child!,
+        );
+      },
+    );
+  }
+
+  /// リマインダー通知の設定と設定時間の保存
+  Future<void> _scheduleAndSaveNotification(TimeOfDay setTime) async {
+    // Future.waitには通知のスケジューリングと時間の保存を含めています。これらは互いに依存関係がないため、
+    // 並列に実行することで全体のパフォーマンスを向上させます。
+    // 一方、ログイベントの送信はFuture.waitから外しています。これは、ログイベントの送信が失敗した場合、
+    // そのエラーがユーザーに表示され、通知の設定が成功したにもかかわらずエラーダイアログが表示されることを防ぐためです。
+    // したがって、これらの非同期タスクがすべて成功した後にログイベントを送信します。
+    await Future.wait([
+      //通知設定
+      service.scheduledNotification(setTime: setTime),
+      //設定された時間をSharedPreferencesに保存
+      service.saveNotificationTime(setTime: setTime),
+    ]);
   }
 
   Future<void> _showSetCompleteDialog(
