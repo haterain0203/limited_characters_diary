@@ -3,7 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
+import 'package:limited_characters_diary/constant/constant_evnet_name.dart';
 import 'package:limited_characters_diary/extension/date_time_extensions.dart';
+import 'package:limited_characters_diary/feature/analytics/analytics_controller.dart';
 import 'package:limited_characters_diary/feature/diary/diary_service.dart';
 
 import '../../constant/enum.dart';
@@ -15,6 +17,7 @@ final diaryControllerProvider = Provider(
   (ref) => DiaryController(
     service: ref.watch(diaryServiceProvider),
     dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
+    analyticsController: ref.watch(analyticsContollerProvider),
   ),
 );
 
@@ -22,10 +25,12 @@ class DiaryController {
   DiaryController({
     required this.service,
     required this.dialogUtilsController,
+    required this.analyticsController,
   });
 
   final DiaryService service;
   final DialogUtilsController dialogUtilsController;
+  final AnalyticsController analyticsController;
 
   Future<void> _addDiary({
     required String content,
@@ -84,11 +89,13 @@ class DiaryController {
           content: diaryInputController.text,
           selectedDate: selectedDate,
         );
+        await analyticsController.sendLogEvent(ConstantEventName.inputDiary);
       } else {
         await _updateDiary(
           diary: diary,
           content: diaryInputController.text,
         );
+        await analyticsController.sendLogEvent(ConstantEventName.updateDiary);
       }
     } on FirebaseException catch (e) {
       debugPrint(e.toString());
