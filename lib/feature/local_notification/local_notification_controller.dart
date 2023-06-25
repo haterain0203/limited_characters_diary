@@ -2,7 +2,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
+import 'package:limited_characters_diary/constant/constant_log_event_name.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
+import 'package:limited_characters_diary/feature/analytics/analytics_controller.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_service.dart';
 
 import '../../constant/enum.dart';
@@ -17,6 +19,7 @@ final localNotificationControllerProvider = Provider(
       isInitialSetNotificationNotifier:
           ref.read(isInitialSetNotificationProvider.notifier),
       dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
+      analyticsController: ref.watch(analyticsContollerProvider),
     );
   },
 );
@@ -27,14 +30,16 @@ class LocalNotificationController {
     required this.invalidateLocalNotificationTimeFutureProvider,
     required this.isInitialSetNotificationNotifier,
     required this.dialogUtilsController,
+    required this.analyticsController,
   });
 
   final LocalNotificationService service;
   final void Function() invalidateLocalNotificationTimeFutureProvider;
   final StateController<bool> isInitialSetNotificationNotifier;
   final DialogUtilsController dialogUtilsController;
+  final AnalyticsController analyticsController;
 
-  Future<void> setNotification({
+  Future<void> promptUserAndSetNotification({
     required BuildContext context,
     required TimeOfDay? savedNotificationTime,
   }) async {
@@ -64,18 +69,20 @@ class LocalNotificationController {
     if (savedNotificationTime == null) {
       isInitialSetNotificationNotifier.state = true;
     }
-    //通知設定
+    // Future.waitには通知のスケジューリングと時間の保存を含めています。これらは互いに依存関係がないため、
+    // 並列に実行することで全体のパフォーマンスを向上させます。
+    // 一方、ログイベントの送信はFuture.waitから外しています。これは、ログイベントの送信が失敗した場合、
+    // そのエラーがユーザーに表示され、通知の設定が成功したにもかかわらずエラーダイアログが表示されることを防ぐためです。
+    // したがって、これらの非同期タスクがすべて成功した後にログイベントを送信します。
     try {
-      await service.scheduledNotification(setTime: setTime);
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-      return dialogUtilsController.showErrorDialog(
-        errorDetail: e.toString(),
-      );
-    }
-    //設定された時間をSharedPreferencesに保存
-    try {
-      await service.saveNotificationTime(setTime: setTime);
+      await Future.wait([
+        //通知設定
+        service.scheduledNotification(setTime: setTime),
+        //設定された時間をSharedPreferencesに保存
+        service.saveNotificationTime(setTime: setTime),
+      ]);
+      await analyticsController
+          .sendLogEvent(ConstantLogEventName.setNotification);
     } on Exception catch (e) {
       debugPrint(e.toString());
       return dialogUtilsController.showErrorDialog(
