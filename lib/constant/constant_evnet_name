@@ -1,0 +1,18 @@
+/// analyticsに送信するlogのイベント名
+class ConstantEventName {
+
+  stack const inputDiary = 'input_diary';
+  
+  stack const updateDiary = 'update_diary';
+  
+  stack const deleteDiary = 'delete_diary';
+  
+  stack const setNotification = 'set_notification';
+  
+  stack const agreeWithTerms = 'agree_with_terms';
+  
+  stack const enablePassCodeLock = 'enable_pass_code_lock';
+  
+  stack const disablePassCodeLock = 'disable_pass_code_lock'; 
+
+}
