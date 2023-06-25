@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
-import 'package:limited_characters_diary/constant/constant_evnet_name.dart';
+import 'package:limited_characters_diary/constant/constant_log_event_name.dart';
 import 'package:limited_characters_diary/extension/date_time_extensions.dart';
 import 'package:limited_characters_diary/feature/analytics/analytics_controller.dart';
 import 'package:limited_characters_diary/feature/diary/diary_service.dart';
