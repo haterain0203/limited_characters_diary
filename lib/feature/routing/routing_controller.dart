@@ -24,6 +24,7 @@ class RoutingController {
           title: ConstantString.termsOfServiceStr,
           url: ConstantString.termsOfServiceUrl,
         ),
+        settings: const RouteSettings(name: '/termsOfService'),
       ),
     );
   }
@@ -36,6 +37,7 @@ class RoutingController {
           title: ConstantString.contactUsStr,
           url: ConstantString.googleFormUrl,
         ),
+        settings: const RouteSettings(name: '/contactUs'),
       ),
     );
   }
@@ -48,6 +50,7 @@ class RoutingController {
           title: ConstantString.privacyPolicyStr,
           url: ConstantString.privacyPolicyUrl,
         ),
+        settings: const RouteSettings(name: '/privacyPolicy'),
       ),
     );
   }
@@ -57,6 +60,7 @@ class RoutingController {
       context,
       MaterialPageRoute<void>(
         builder: (_) => const AuthPage(),
+        settings: const RouteSettings(name: '/auth'),
       ),
     );
   }
@@ -66,6 +70,7 @@ class RoutingController {
       context,
       MaterialPageRoute<void>(
         builder: (_) => const SettingPage(),
+        settings: const RouteSettings(name: '/settings'),
       ),
     );
   }
