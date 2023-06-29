@@ -59,10 +59,6 @@ class PassCodeController {
       await _disablePassCodeLock();
       await analyticsController
           .sendLogEvent(ConstantLogEventName.disablePassCodeLock);
-      // passCodeProviderの値を再取得
-      // パスコード登録orOFFした際、設定を即時反映させるため
-      // ここで再取得しないと、次にアプリが新たに起動されるまでパスコードON/OFFが反映されない
-      invalidatePassCodeProvider();
     } else {
       await _showPassCodeLockCreate(
         context: context,
@@ -80,6 +76,10 @@ class PassCodeController {
       passCode: passCode,
       isPassCodeLock: isPassCodeLock,
     );
+    // passCodeProviderの値を再取得
+    // パスコード登録orOFFした際、設定を即時反映させるため
+    // ここで再取得しないと、次にアプリが新たに起動されるまでパスコードON/OFFが反映されない
+    invalidatePassCodeProvider();
   }
 
   /// パスコードロック設定をOFFにし、パスコードには空文字にして登録する
@@ -89,6 +89,10 @@ class PassCodeController {
       passCode: '',
       isPassCodeLock: false,
     );
+    // passCodeProviderの値を再取得
+    // パスコード登録orOFFした際、設定を即時反映させるため
+    // ここで再取得しないと、次にアプリが新たに起動されるまでパスコードON/OFFが反映されない
+    invalidatePassCodeProvider();
   }
 
   /// パスコード登録画面の表示とパスコードの登録
@@ -101,7 +105,9 @@ class PassCodeController {
       onConfirmed: (passCode) async {
         // Confirmした値を保存する
         await _enablePassCodeLock(
-            passCode: passCode, isPassCodeLock: isPassCodeLock);
+          passCode: passCode,
+          isPassCodeLock: isPassCodeLock,
+        );
         // analyticsへイベント送信
         await analyticsController
             .sendLogEvent(ConstantLogEventName.enablePassCodeLock);
@@ -109,10 +115,6 @@ class PassCodeController {
         if (context.mounted) {
           Navigator.pop(context);
         }
-        // passCodeProviderの値を再取得
-        // パスコード登録orOFFした際、設定を即時反映させるため
-        // ここで再取得しないと、次にアプリが新たに起動されるまでパスコードON/OFFが反映されない
-        invalidatePassCodeProvider();
       },
       onCancelled: () {
         Navigator.pop(context);
