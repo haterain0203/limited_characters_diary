@@ -56,7 +56,7 @@ class PassCodeController {
     required BuildContext context,
   }) async {
     if (!isPassCodeLock) {
-      await _clearPassCode();
+      await _disablePassCodeLock();
       await analyticsController
           .sendLogEvent(ConstantLogEventName.disablePassCodeLock);
       // passCodeProviderの値を再取得
@@ -71,7 +71,7 @@ class PassCodeController {
     }
   }
 
-  Future<void> _savePassCode({
+  Future<void> _enablePassCodeLock({
     required String passCode,
     required bool isPassCodeLock,
   }) async {
@@ -83,7 +83,7 @@ class PassCodeController {
   }
 
   /// パスコードロック設定をOFFにし、パスコードには空文字にして登録する
-  Future<void> _clearPassCode() async {
+  Future<void> _disablePassCodeLock() async {
     //TODO エラーハンドリング（SharedPreferencesもエラーハンドリング必要か？）
     await service.savePassCode(
       passCode: '',
@@ -100,7 +100,8 @@ class PassCodeController {
       context: context,
       onConfirmed: (passCode) async {
         // Confirmした値を保存する
-        await _savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
+        await _enablePassCodeLock(
+            passCode: passCode, isPassCodeLock: isPassCodeLock);
         // analyticsへイベント送信
         await analyticsController
             .sendLogEvent(ConstantLogEventName.enablePassCodeLock);
