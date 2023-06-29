@@ -71,23 +71,28 @@ class PassCodeController {
     required String passCode,
     required bool isPassCodeLock,
   }) async {
-    //TODO エラーハンドリング（SharedPreferencesもエラーハンドリング必要か？）
-    await service.savePassCode(
+    await _savePassCodeAndInvalidate(
       passCode: passCode,
       isPassCodeLock: isPassCodeLock,
     );
-    // passCodeProviderの値を再取得
-    // パスコード登録orOFFした際、設定を即時反映させるため
-    // ここで再取得しないと、次にアプリが新たに起動されるまでパスコードON/OFFが反映されない
-    invalidatePassCodeProvider();
   }
 
   /// パスコードロック設定をOFFにし、パスコードには空文字にして登録する
   Future<void> _disablePassCodeLock() async {
-    //TODO エラーハンドリング（SharedPreferencesもエラーハンドリング必要か？）
-    await service.savePassCode(
+    await _savePassCodeAndInvalidate(
       passCode: '',
       isPassCodeLock: false,
+    );
+  }
+
+  Future<void> _savePassCodeAndInvalidate({
+    required String passCode,
+    required bool isPassCodeLock,
+  }) async {
+    //TODO エラーハンドリング（SharedPreferencesもエラーハンドリング必要か？）
+    await service.savePassCode(
+      passCode: passCode,
+      isPassCodeLock: isPassCodeLock,
     );
     // passCodeProviderの値を再取得
     // パスコード登録orOFFした際、設定を即時反映させるため
