@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/constant/constant_log_event_name.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_service.dart';
 
 import '../admob/ad_controller.dart';
+import '../analytics/analytics_controller.dart';
 import '../local_notification/local_notification_controller.dart';
 
 final passCodeControllerProvider = Provider(
@@ -19,6 +21,7 @@ final passCodeControllerProvider = Provider(
           ref.read(isShownInterstitialAdProvider.notifier),
       isInitialSetNotificationNotifier:
           ref.read(isInitialSetNotificationProvider.notifier),
+      analyticsController: ref.watch(analyticsContollerProvider),
     );
   },
 );
@@ -32,6 +35,7 @@ class PassCodeController {
     required this.isShownInterstitialAdNotifier,
     required this.isInitialSetNotification,
     required this.isInitialSetNotificationNotifier,
+    required this.analyticsController,
   });
 
   final PassCodeService service;
@@ -41,6 +45,7 @@ class PassCodeController {
   final StateController<bool> isShownInterstitialAdNotifier;
   final bool isInitialSetNotification;
   final StateController<bool> isInitialSetNotificationNotifier;
+  final AnalyticsController analyticsController;
 
   /// 設定画面におけるパスコード設定のトグル切り替え
   ///
@@ -52,6 +57,8 @@ class PassCodeController {
   }) async {
     if (!isPassCodeLock) {
       await _clearPassCode();
+      await analyticsController
+          .sendLogEvent(ConstantLogEventName.disablePassCodeLock);
       // passCodeProviderの値を再取得
       // パスコード登録orOFFした際、設定を即時反映させるため
       // ここで再取得しないと、次にアプリが新たに起動されるまでパスコードON/OFFが反映されない
@@ -94,6 +101,9 @@ class PassCodeController {
       onConfirmed: (passCode) async {
         // Confirmした値を保存する
         await _savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
+        // analyticsへイベント送信
+        await analyticsController
+            .sendLogEvent(ConstantLogEventName.enablePassCodeLock);
         // 画面を閉じる
         if (context.mounted) {
           Navigator.pop(context);
