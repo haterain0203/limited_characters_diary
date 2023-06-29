@@ -99,7 +99,6 @@ class PassCodeController {
         // Confirmした値を保存する
         await _enablePassCodeLock(
           passCode: passCode,
-          isPassCodeLock: true,
         );
         // analyticsへイベント送信
         await analyticsController
@@ -119,11 +118,10 @@ class PassCodeController {
 
   Future<void> _enablePassCodeLock({
     required String passCode,
-    required bool isPassCodeLock,
   }) async {
     await _savePassCodeAndInvalidate(
       passCode: passCode,
-      isPassCodeLock: isPassCodeLock,
+      isPassCodeLock: true,
     );
   }
 
