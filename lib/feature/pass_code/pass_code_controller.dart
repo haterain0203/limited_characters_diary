@@ -67,16 +67,6 @@ class PassCodeController {
     }
   }
 
-  Future<void> _enablePassCodeLock({
-    required String passCode,
-    required bool isPassCodeLock,
-  }) async {
-    await _savePassCodeAndInvalidate(
-      passCode: passCode,
-      isPassCodeLock: isPassCodeLock,
-    );
-  }
-
   /// パスコードロック設定をOFFにし、パスコードには空文字にして登録する
   Future<void> _disablePassCodeLock() async {
     await _savePassCodeAndInvalidate(
@@ -126,6 +116,16 @@ class PassCodeController {
       },
       title: const Text('パスコードを登録'),
       confirmTitle: const Text('パスコードの再確認'),
+    );
+  }
+
+  Future<void> _enablePassCodeLock({
+    required String passCode,
+    required bool isPassCodeLock,
+  }) async {
+    await _savePassCodeAndInvalidate(
+      passCode: passCode,
+      isPassCodeLock: isPassCodeLock,
     );
   }
 
