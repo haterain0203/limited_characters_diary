@@ -62,7 +62,6 @@ class PassCodeController {
     } else {
       await _showPassCodeLockCreate(
         context: context,
-        isPassCodeLock: isPassCodeLock,
       );
     }
   }
@@ -93,7 +92,6 @@ class PassCodeController {
   /// パスコード登録画面の表示とパスコードの登録
   Future<void> _showPassCodeLockCreate({
     required BuildContext context,
-    required bool isPassCodeLock,
   }) async {
     await screenLockCreate(
       context: context,
@@ -101,7 +99,7 @@ class PassCodeController {
         // Confirmした値を保存する
         await _enablePassCodeLock(
           passCode: passCode,
-          isPassCodeLock: isPassCodeLock,
+          isPassCodeLock: true,
         );
         // analyticsへイベント送信
         await analyticsController
