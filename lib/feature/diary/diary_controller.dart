@@ -89,13 +89,14 @@ class DiaryController {
           content: diaryInputController.text,
           selectedDate: selectedDate,
         );
-        await analyticsController.sendLogEvent(ConstantLogEventName.inputDiary);
+        await analyticsController.sendLogEvent(ConstantLogEventName.addDiary);
       } else {
         await _updateDiary(
           diary: diary,
           content: diaryInputController.text,
         );
-        await analyticsController.sendLogEvent(ConstantLogEventName.updateDiary);
+        await analyticsController
+            .sendLogEvent(ConstantLogEventName.updateDiary);
       }
     } on FirebaseException catch (e) {
       debugPrint(e.toString());
@@ -155,7 +156,8 @@ class DiaryController {
       btnCancelOnPress: () async {
         try {
           await _deleteDiary(diary: diary);
-          await analyticsController.sendLogEvent(ConstantLogEventName.deleteDiary);
+          await analyticsController
+              .sendLogEvent(ConstantLogEventName.deleteDiary);
         } on FirebaseException catch (e) {
           debugPrint(e.toString());
           return dialogUtilsController.showErrorDialog(

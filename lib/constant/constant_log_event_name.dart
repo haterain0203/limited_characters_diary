@@ -1,7 +1,7 @@
 /// analyticsに送信するlogのイベント名
 class ConstantLogEventName {
 
-  static const inputDiary = 'input_diary';
+  static const addDiary = 'add_diary';
   
   static const updateDiary = 'update_diary';
   
