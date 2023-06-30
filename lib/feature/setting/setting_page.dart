@@ -5,7 +5,7 @@ import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
-import 'package:limited_characters_diary/in_app_review/in_app_review_controller.dart';
+import 'package:limited_characters_diary/feature/in_app_review/in_app_review_controller.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../app_info/app_info_service.dart';

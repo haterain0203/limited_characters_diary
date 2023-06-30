@@ -100,7 +100,8 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                       padding: const EdgeInsets.only(top: 16),
                       child: StadiumBorderButton(
                         onPressed: () async {
-                          await localNotificationController.setNotification(
+                          await localNotificationController
+                              .promptUserAndSetNotification(
                             context: context,
                             savedNotificationTime: null,
                           );
@@ -116,7 +117,8 @@ class LocalNotificationSettingDialog extends HookConsumerWidget {
                     )
                   : TextButton(
                       onPressed: () async {
-                        await localNotificationController.setNotification(
+                        await localNotificationController
+                            .promptUserAndSetNotification(
                           context: context,
                           savedNotificationTime: savedNotificationTime,
                         );

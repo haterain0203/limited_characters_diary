@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/in_app_review/in_app_review_controller.dart';
+import 'package:limited_characters_diary/feature/in_app_review/in_app_review_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../component/stadium_border_button.dart';

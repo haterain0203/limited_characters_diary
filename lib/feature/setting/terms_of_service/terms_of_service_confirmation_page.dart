@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/constant/enum.dart';
+import 'package:limited_characters_diary/constant/constant_log_event_name.dart';
+import 'package:limited_characters_diary/feature/analytics/analytics_controller.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../admob/ad_controller.dart';
 import '../../first_launch/first_launch_controller.dart';
-import '../../local_notification/local_notification_controller.dart';
 
 class TermsOfServiceConfirmationPage extends HookConsumerWidget {
   const TermsOfServiceConfirmationPage({super.key});
@@ -45,6 +45,10 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
                 await ref
                     .read(firstLaunchControllerProvider)
                     .completedFirstLaunch();
+                // analyticsにイベント送信
+                await ref
+                    .read(analyticsContollerProvider)
+                    .sendLogEvent(ConstantLogEventName.agreeWithTerms);
                 // 広告トラッキング許可ダイアログ表示
                 await ref.read(adControllerProvider).requestATT();
                 await routingController.goAuthPage();

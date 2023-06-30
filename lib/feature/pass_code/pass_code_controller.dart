@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/constant/constant_log_event_name.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_service.dart';
 
 import '../admob/ad_controller.dart';
+import '../analytics/analytics_controller.dart';
 import '../local_notification/local_notification_controller.dart';
 
 final passCodeControllerProvider = Provider(
@@ -19,6 +21,7 @@ final passCodeControllerProvider = Provider(
           ref.read(isShownInterstitialAdProvider.notifier),
       isInitialSetNotificationNotifier:
           ref.read(isInitialSetNotificationProvider.notifier),
+      analyticsController: ref.watch(analyticsContollerProvider),
     );
   },
 );
@@ -32,6 +35,7 @@ class PassCodeController {
     required this.isShownInterstitialAdNotifier,
     required this.isInitialSetNotification,
     required this.isInitialSetNotificationNotifier,
+    required this.analyticsController,
   });
 
   final PassCodeService service;
@@ -41,6 +45,7 @@ class PassCodeController {
   final StateController<bool> isShownInterstitialAdNotifier;
   final bool isInitialSetNotification;
   final StateController<bool> isInitialSetNotificationNotifier;
+  final AnalyticsController analyticsController;
 
   /// 設定画面におけるパスコード設定のトグル切り替え
   ///
@@ -51,19 +56,25 @@ class PassCodeController {
     required BuildContext context,
   }) async {
     if (!isPassCodeLock) {
-      await _savePassCode(
-        passCode: '',
-        isPassCodeLock: false,
-      );
+      await _disablePassCodeLock();
+      await analyticsController
+          .sendLogEvent(ConstantLogEventName.disablePassCodeLock);
     } else {
       await _showPassCodeLockCreate(
         context: context,
-        isPassCodeLock: isPassCodeLock,
       );
     }
   }
 
-  Future<void> _savePassCode({
+  /// パスコードロック設定をOFFにし、パスコードには空文字にして登録する
+  Future<void> _disablePassCodeLock() async {
+    await _savePassCodeAndInvalidate(
+      passCode: '',
+      isPassCodeLock: false,
+    );
+  }
+
+  Future<void> _savePassCodeAndInvalidate({
     required String passCode,
     required bool isPassCodeLock,
   }) async {
@@ -81,13 +92,17 @@ class PassCodeController {
   /// パスコード登録画面の表示とパスコードの登録
   Future<void> _showPassCodeLockCreate({
     required BuildContext context,
-    required bool isPassCodeLock,
   }) async {
     await screenLockCreate(
       context: context,
       onConfirmed: (passCode) async {
         // Confirmした値を保存する
-        await _savePassCode(passCode: passCode, isPassCodeLock: isPassCodeLock);
+        await _enablePassCodeLock(
+          passCode: passCode,
+        );
+        // analyticsへイベント送信
+        await analyticsController
+            .sendLogEvent(ConstantLogEventName.enablePassCodeLock);
         // 画面を閉じる
         if (context.mounted) {
           Navigator.pop(context);
@@ -98,6 +113,15 @@ class PassCodeController {
       },
       title: const Text('パスコードを登録'),
       confirmTitle: const Text('パスコードの再確認'),
+    );
+  }
+
+  Future<void> _enablePassCodeLock({
+    required String passCode,
+  }) async {
+    await _savePassCodeAndInvalidate(
+      passCode: passCode,
+      isPassCodeLock: true,
     );
   }
 

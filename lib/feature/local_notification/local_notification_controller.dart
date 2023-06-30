@@ -2,7 +2,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
+import 'package:limited_characters_diary/constant/constant_log_event_name.dart';
 import 'package:limited_characters_diary/extension/time_of_day_converter.dart';
+import 'package:limited_characters_diary/feature/analytics/analytics_controller.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_service.dart';
 
 import '../../constant/enum.dart';
@@ -17,6 +19,7 @@ final localNotificationControllerProvider = Provider(
       isInitialSetNotificationNotifier:
           ref.read(isInitialSetNotificationProvider.notifier),
       dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
+      analyticsController: ref.watch(analyticsContollerProvider),
     );
   },
 );
@@ -27,30 +30,21 @@ class LocalNotificationController {
     required this.invalidateLocalNotificationTimeFutureProvider,
     required this.isInitialSetNotificationNotifier,
     required this.dialogUtilsController,
+    required this.analyticsController,
   });
 
   final LocalNotificationService service;
   final void Function() invalidateLocalNotificationTimeFutureProvider;
   final StateController<bool> isInitialSetNotificationNotifier;
   final DialogUtilsController dialogUtilsController;
+  final AnalyticsController analyticsController;
 
-  Future<void> setNotification({
+  Future<void> promptUserAndSetNotification({
     required BuildContext context,
     required TimeOfDay? savedNotificationTime,
   }) async {
-    final setTime = await showTimePicker(
-      context: context,
-      initialTime:
-          savedNotificationTime ?? const TimeOfDay(hour: 21, minute: 00),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            alwaysUse24HourFormat: true,
-          ),
-          child: child!,
-        );
-      },
-    );
+    final setTime = await _promptUserForTime(context, savedNotificationTime);
+
     //入力がなければ早期リターン
     if (setTime == null) {
       return;
@@ -64,18 +58,10 @@ class LocalNotificationController {
     if (savedNotificationTime == null) {
       isInitialSetNotificationNotifier.state = true;
     }
-    //通知設定
     try {
-      await service.scheduledNotification(setTime: setTime);
-    } on Exception catch (e) {
-      debugPrint(e.toString());
-      return dialogUtilsController.showErrorDialog(
-        errorDetail: e.toString(),
-      );
-    }
-    //設定された時間をSharedPreferencesに保存
-    try {
-      await service.saveNotificationTime(setTime: setTime);
+      await _scheduleAndSaveNotification(setTime);
+      await analyticsController
+          .sendLogEvent(ConstantLogEventName.setNotification);
     } on Exception catch (e) {
       debugPrint(e.toString());
       return dialogUtilsController.showErrorDialog(
@@ -86,6 +72,41 @@ class LocalNotificationController {
       return;
     }
     await _showSetCompleteDialog(context, setTime.to24hours());
+  }
+
+  /// TimePickerを表示し、ユーザーにリマインダー時間を設定させる
+  Future<TimeOfDay?> _promptUserForTime(
+    BuildContext context,
+    TimeOfDay? savedNotificationTime,
+  ) {
+    return showTimePicker(
+      context: context,
+      initialTime:
+          savedNotificationTime ?? const TimeOfDay(hour: 21, minute: 00),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(
+            alwaysUse24HourFormat: true,
+          ),
+          child: child!,
+        );
+      },
+    );
+  }
+
+  /// リマインダー通知の設定と設定時間の保存
+  Future<void> _scheduleAndSaveNotification(TimeOfDay setTime) async {
+    // Future.waitには通知のスケジューリングと時間の保存を含めています。これらは互いに依存関係がないため、
+    // 並列に実行することで全体のパフォーマンスを向上させます。
+    // 一方、ログイベントの送信はFuture.waitから外しています。これは、ログイベントの送信が失敗した場合、
+    // そのエラーがユーザーに表示され、通知の設定が成功したにもかかわらずエラーダイアログが表示されることを防ぐためです。
+    // したがって、これらの非同期タスクがすべて成功した後にログイベントを送信します。
+    await Future.wait([
+      //通知設定
+      service.scheduledNotification(setTime: setTime),
+      //設定された時間をSharedPreferencesに保存
+      service.saveNotificationTime(setTime: setTime),
+    ]);
   }
 
   Future<void> _showSetCompleteDialog(
