@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/analytics/analytics_service.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.dart';
 import 'package:sizer/sizer.dart';
 
 import 'component/dialog_utils.dart';
 import 'constant/constant_color.dart';
 import 'feature/admob/ad_controller.dart';
 import 'feature/auth/auth_page.dart';
+import 'feature/pass_code/pass_code_controller.dart';
 import 'feature/setting/terms_of_service/terms_of_service_confirmation_page.dart';
 
 class MyApp extends HookConsumerWidget {
@@ -18,7 +20,6 @@ class MyApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final observer = ref.watch(routeObserverProvider);
 
     useEffect(
@@ -32,6 +33,24 @@ class MyApp extends HookConsumerWidget {
       const [],
     );
 
+    // バックグラウンドになったタイミングで、ScreenLockを表示を管理するフラグをtrueにする
+    //
+    // 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
+    // inactiveのタイミングで呼び出すこととしたもの
+    useOnAppLifecycleStateChange((previous, current) async {
+      if (current != AppLifecycleState.inactive) {
+        return;
+      }
+
+      if (!ref
+          .read(passCodeControllerProvider)
+          .shouldShowPassCodeLockWhenInactive()) {
+        return;
+      }
+
+      ref.read(isShowPassCodeLockPageProvider.notifier).state = true;
+    });
+
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -39,7 +58,19 @@ class MyApp extends HookConsumerWidget {
           navigatorKey: ref.watch(navigatorKeyProvider),
           useInheritedMediaQuery: true,
           locale: DevicePreview.locale(context),
-          builder: DevicePreview.appBuilder,
+          builder: (context, child) {
+            final isShowPassCodeLockPage =
+                ref.watch(isShowPassCodeLockPageProvider);
+            return DevicePreview.appBuilder(
+              context,
+              Stack(
+                children: [
+                  child!,
+                  if (isShowPassCodeLockPage) const PassCodeLockPage()
+                ],
+              ),
+            );
+          },
           title: 'limited_characters_diary',
           theme: ThemeData(
             primarySwatch: ConstantColor.colorSwatch,

@@ -11,14 +11,17 @@ class PassCodeLockPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: ScreenLock(
-        correctString: ref.watch(
-          passCodeProvider.select((value) => value.passCode),
+      child: ColoredBox(
+        color: Colors.black87,
+        child: ScreenLock(
+          correctString: ref.watch(
+            passCodeProvider.select((value) => value.passCode),
+          ),
+          onUnlocked: () {
+            ref.read(isShowPassCodeLockPageProvider.notifier).state = false;
+          },
+          title: const Text('パスコードを入力してください'),
         ),
-        onUnlocked: () {
-          ref.read(isShowPassCodeLockPageProvider.notifier).state = false;
-        },
-        title: const Text('パスコードを入力してください'),
       ),
     );
   }
