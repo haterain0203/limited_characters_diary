@@ -59,14 +59,14 @@ class MyApp extends HookConsumerWidget {
           useInheritedMediaQuery: true,
           locale: DevicePreview.locale(context),
           builder: (context, child) {
-            final isShowPassCodeLockPage =
+            final shouldShowPassCodeLockPage =
                 ref.watch(isShowPassCodeLockPageProvider);
             return DevicePreview.appBuilder(
               context,
               Stack(
                 children: [
                   child!,
-                  if (isShowPassCodeLockPage) const PassCodeLockPage()
+                  if (shouldShowPassCodeLockPage) const PassCodeLockPage()
                 ],
               ),
             );
