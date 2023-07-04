@@ -33,7 +33,7 @@ class MyApp extends HookConsumerWidget {
       const [],
     );
 
-    // バックグラウンドになったタイミングで、ScreenLockを表示を管理するフラグをtrueにする
+    // バックグラウンドになったタイミングで、ScreenLock表示管理フラグをtrueにする
     //
     // 最初はresumedのタイミングで呼び出そうとしたが、一瞬ListPageが表示されてしまうため、
     // inactiveのタイミングで呼び出すこととしたもの
@@ -66,6 +66,7 @@ class MyApp extends HookConsumerWidget {
               Stack(
                 children: [
                   child!,
+                  // 必要な時のみパスコードロック画面を重ねて表示
                   if (shouldShowPassCodeLockPage) const PassCodeLockPage()
                 ],
               ),
