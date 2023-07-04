@@ -48,7 +48,7 @@ class MyApp extends HookConsumerWidget {
         return;
       }
 
-      ref.read(isShowPassCodeLockPageProvider.notifier).state = true;
+      ref.read(shouldShowPassCodeLockPageProvider.notifier).state = true;
     });
 
     return Sizer(
@@ -60,7 +60,7 @@ class MyApp extends HookConsumerWidget {
           locale: DevicePreview.locale(context),
           builder: (context, child) {
             final shouldShowPassCodeLockPage =
-                ref.watch(isShowPassCodeLockPageProvider);
+                ref.watch(shouldShowPassCodeLockPageProvider);
             return DevicePreview.appBuilder(
               context,
               Stack(

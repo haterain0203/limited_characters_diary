@@ -18,7 +18,7 @@ class PassCodeLockPage extends HookConsumerWidget {
             passCodeProvider.select((value) => value.passCode),
           ),
           onUnlocked: () {
-            ref.read(isShowPassCodeLockPageProvider.notifier).state = false;
+            ref.read(shouldShowPassCodeLockPageProvider.notifier).state = false;
           },
           title: const Text('パスコードを入力してください'),
         ),

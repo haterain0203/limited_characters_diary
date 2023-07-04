@@ -150,7 +150,7 @@ class PassCodeController {
 }
 
 /// パスコードロック画面を表示するかどうかを管理するProvider
-final isShowPassCodeLockPageProvider = StateProvider<bool>((ref) {
+final shouldShowPassCodeLockPageProvider = StateProvider<bool>((ref) {
   // 初期値は、パスコードロック設定の値
   return ref.watch(passCodeLockToggleProvider);
 });
