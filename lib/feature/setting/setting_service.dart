@@ -35,6 +35,7 @@ class SettingService {
     final platform = Platform.operatingSystem;
     final platformParam = '${Confidential.entryIdOfPlatform}=$platform';
 
+    // TODO: main.dartで分岐してplatformごとのdeviceInfoを取得すべきか？
     final osVersion = await switch (platform) {
       'ios' => deviceInfo.data['systemVersion'],
       'android' => deviceInfo.data['version']['release'],
