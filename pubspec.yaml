@@ -34,7 +34,7 @@ dependencies:
   google_mobile_ads: ^2.4.0
   hooks_riverpod: ^2.3.0
   in_app_review: ^2.0.6
-  intl: ^0.17.0
+  intl: ^0.18.1
   json_annotation: ^4.8.0
   package_info_plus: ^3.0.3
   settings_ui: ^2.0.2
