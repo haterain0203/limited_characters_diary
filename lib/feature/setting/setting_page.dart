@@ -6,6 +6,7 @@ import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/in_app_review/in_app_review_controller.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
+import 'package:limited_characters_diary/feature/setting/setting_service.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../app_info/app_info_service.dart';
@@ -110,8 +111,13 @@ class SettingPage extends StatelessWidget {
                       ConstantString.contactUsStr,
                       style: textStyle,
                     ),
-                    onPressed: (_) {
-                      routingController.goContactUsOnWebView();
+                    onPressed: (_) async {
+                      final contactUsUrl = await ref
+                          .read(settingServiceProvider)
+                          .createContactUsUrl();
+                      await routingController.goContactUsOnWebView(
+                        url: contactUsUrl,
+                      );
                     },
                   ),
                   SettingsTile.navigation(
