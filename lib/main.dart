@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,9 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/app_info/app_info_service.dart';
 import 'package:limited_characters_diary/feature/shared_preferences/shared_preferences_instance_provider.dart';
 import 'package:limited_characters_diary/firebase_options_dev.dart' as dev;
 import 'package:limited_characters_diary/firebase_options_prod.dart' as prod;
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'feature/local_notification/local_notification_repository.dart';
@@ -62,6 +65,9 @@ Future<void> main() async {
   );
   await localNotificationService.init();
 
+  final appInfo = await PackageInfo.fromPlatform();
+  final deviceInfo = await DeviceInfoPlugin().deviceInfo;
+  
   runApp(
     Phoenix(
       child: DevicePreview(
@@ -73,6 +79,8 @@ Future<void> main() async {
             localNotificationRepoProvider
                 .overrideWithValue(localNotificationRepo),
             sharedPreferencesInstanceProvider.overrideWithValue(prefs),
+            appInfoProvider.overrideWithValue(appInfo),
+            deviceInfoProvider.overrideWithValue(deviceInfo),
           ],
           child: MyApp(
             isCompletedFirstLaunch: isCompletedFirstLaunch,

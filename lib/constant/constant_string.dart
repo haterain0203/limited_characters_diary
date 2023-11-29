@@ -1,5 +1,5 @@
 class ConstantString {
-  static const googleFormUrl =
+  static const googleFormBaseUrl =
       'https://docs.google.com/forms/d/e/1FAIpQLSd0PX7sqCV1MU6BW740N9TVnyn-NblQWBlureYeuFfFZI7LhQ/viewform?usp=sf_link';
 
   static const privacyPolicyUrl =

@@ -29,13 +29,13 @@ class RoutingController {
     );
   }
 
-  Future<void> goContactUsOnWebView() async {
+  Future<void> goContactUsOnWebView({required String url}) async {
     await Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => const WebViewPage(
+        builder: (context) => WebViewPage(
           title: ConstantString.contactUsStr,
-          url: ConstantString.googleFormUrl,
+          url: url,
         ),
         settings: const RouteSettings(name: '/contactUs'),
       ),

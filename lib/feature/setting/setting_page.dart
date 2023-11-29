@@ -6,6 +6,7 @@ import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/in_app_review/in_app_review_controller.dart';
 import 'package:limited_characters_diary/feature/local_notification/local_notification_controller.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
+import 'package:limited_characters_diary/feature/setting/setting_controller.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../app_info/app_info_service.dart';
@@ -110,8 +111,13 @@ class SettingPage extends StatelessWidget {
                       ConstantString.contactUsStr,
                       style: textStyle,
                     ),
-                    onPressed: (_) {
-                      routingController.goContactUsOnWebView();
+                    onPressed: (_) async {
+                      final contactUsUrl = await ref
+                          .read(settingControllerProvider)
+                          .createContactUsUrl();
+                      await routingController.goContactUsOnWebView(
+                        url: contactUsUrl,
+                      );
                     },
                   ),
                   SettingsTile.navigation(
@@ -164,15 +170,7 @@ class SettingPage extends StatelessWidget {
                       'アプリ名',
                       style: textStyle,
                     ),
-                    trailing: appInfo.when(
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      error: (error, stack) {
-                        return const Text('エラーが発生しました');
-                      },
-                      data: (data) => Text(data.appName),
-                    ),
+                    trailing: Text(appInfo.appName),
                   ),
                   SettingsTile(
                     leading: const Icon(Icons.info),
@@ -180,16 +178,8 @@ class SettingPage extends StatelessWidget {
                       'アプリバージョン',
                       style: textStyle,
                     ),
-                    trailing: appInfo.when(
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      error: (error, stack) {
-                        return const Text('エラーが発生しました');
-                      },
-                      data: (data) =>
-                          Text('${data.version}（${data.buildNumber}）'),
-                    ),
+                    trailing:
+                        Text('${appInfo.version}（${appInfo.buildNumber}）'),
                   ),
                   // SettingsTile(
                   //   leading: const Icon(Icons.info),
