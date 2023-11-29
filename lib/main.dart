@@ -66,8 +66,7 @@ Future<void> main() async {
   await localNotificationService.init();
 
   final appInfo = await PackageInfo.fromPlatform();
-  final deviceInfoPlugin = DeviceInfoPlugin();
-  final deviceInfo = await deviceInfoPlugin.deviceInfo;
+  final deviceInfo = await DeviceInfoPlugin().deviceInfo;
   
   runApp(
     Phoenix(
