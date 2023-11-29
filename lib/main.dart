@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -65,7 +66,9 @@ Future<void> main() async {
   await localNotificationService.init();
 
   final appInfo = await PackageInfo.fromPlatform();
-
+  final deviceInfoPlugin = DeviceInfoPlugin();
+  final deviceInfo = await deviceInfoPlugin.deviceInfo;
+  
   runApp(
     Phoenix(
       child: DevicePreview(
@@ -78,6 +81,7 @@ Future<void> main() async {
                 .overrideWithValue(localNotificationRepo),
             sharedPreferencesInstanceProvider.overrideWithValue(prefs),
             appInfoProvider.overrideWithValue(appInfo),
+            deviceInfoProvider.overrideWithValue(deviceInfo),
           ],
           child: MyApp(
             isCompletedFirstLaunch: isCompletedFirstLaunch,
