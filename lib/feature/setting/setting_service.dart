@@ -35,10 +35,18 @@ class SettingService {
     final platform = Platform.operatingSystem;
     final platformParam = '${Confidential.entryIdOfPlatform}=$platform';
 
-    final osVersion = await deviceInfo.data['systemVersion'];
+    final osVersion = await switch (platform) {
+      'ios' => deviceInfo.data['systemVersion'],
+      'android' => deviceInfo.data['version']['release'],
+      _ => 'unknown',
+    };
     final osVersionParam = '${Confidential.entryIdOfOsVersion}=$osVersion';
 
-    final deviceName = await deviceInfo.data['name'];
+    final deviceName = await switch (platform) {
+      'ios' => deviceInfo.data['name'],
+      'android' => deviceInfo.data['model'],
+      _ => 'unknown',
+    };
     final deviceNameParam = '${Confidential.entryIdOfDeviceName}=$deviceName';
 
     final uuid = user?.uid ?? 'null';
