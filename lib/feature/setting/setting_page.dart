@@ -170,15 +170,7 @@ class SettingPage extends StatelessWidget {
                       'アプリ名',
                       style: textStyle,
                     ),
-                    trailing: appInfo.when(
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      error: (error, stack) {
-                        return const Text('エラーが発生しました');
-                      },
-                      data: (data) => Text(data.appName),
-                    ),
+                    trailing: Text(appInfo.appName),
                   ),
                   SettingsTile(
                     leading: const Icon(Icons.info),
@@ -186,16 +178,8 @@ class SettingPage extends StatelessWidget {
                       'アプリバージョン',
                       style: textStyle,
                     ),
-                    trailing: appInfo.when(
-                      loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      error: (error, stack) {
-                        return const Text('エラーが発生しました');
-                      },
-                      data: (data) =>
-                          Text('${data.version}（${data.buildNumber}）'),
-                    ),
+                    trailing:
+                        Text('${appInfo.version}（${appInfo.buildNumber}）'),
                   ),
                   // SettingsTile(
                   //   leading: const Icon(Icons.info),
