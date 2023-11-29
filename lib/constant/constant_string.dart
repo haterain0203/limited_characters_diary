@@ -23,5 +23,4 @@ class ConstantString {
 
   static const playStoreUrl =
       'https://play.google.com/store/apps/details?id=com.futtaro.limited_characters_diary';
-
 }
