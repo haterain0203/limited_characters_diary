@@ -39,6 +39,7 @@ dependencies:
   package_info_plus: ^3.0.3
   settings_ui: ^2.0.2
   shared_preferences: ^2.1.0
+  sign_in_button: ^3.2.0
   sizer: ^2.0.15
   timezone: ^0.9.1
   url_launcher: ^6.1.10
