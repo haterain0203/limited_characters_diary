@@ -7,9 +7,9 @@
  * 2. プロジェクトの選択
  *    - 作業するFirebaseプロジェクトを選択します。以下のコマンドを使用して、プロジェクトを指定します。
  *      ```
- *      firebase use limited-characters-diary-prod
+ *      firebase use [プロジェクトID]
  *      ```
- *      ここで 'limited-characters-diary-prod' は使用するプロジェクトのIDに置き換えてください。
+ *      ここで '[プロジェクトID]' は使用するプロジェクトのIDに置き換えてください。
  *
  * 3. プロジェクトディレクトリに移動
  *    - Firebaseプロジェクトのルートディレクトリに移動します。ここにはfunctionsディレクトリが含まれている必要があります。
