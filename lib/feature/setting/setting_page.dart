@@ -45,6 +45,21 @@ class SettingPage extends StatelessWidget {
                 ),
                 tiles: <SettingsTile>[
                   SettingsTile.navigation(
+                    leading: const Icon(
+                      Icons.account_circle,
+                      color: Colors.black,
+                    ),
+                    title: const Text(
+                      'アカウント連携',
+                      style: textStyle,
+                    ),
+                    onPressed: (BuildContext context) {
+                      ref
+                          .read(routingControllerProvider(context))
+                          .goLinkWithSocialAccountPage();
+                    },
+                  ),
+                  SettingsTile.navigation(
                     leading: Icon(
                       Icons.notification_add,
                       color: Theme.of(context).primaryColor,
@@ -125,9 +140,9 @@ class SettingPage extends StatelessWidget {
                       Icons.star,
                       color: Colors.amber,
                     ),
-                    title: Column(
+                    title: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'アプリを評価/レビューする',
                           style: textStyle,
