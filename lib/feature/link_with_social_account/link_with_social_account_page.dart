@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/constant/enum.dart';
+import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
-class LinkWithSocialAccountPage extends StatelessWidget {
+class LinkWithSocialAccountPage extends HookConsumerWidget {
   const LinkWithSocialAccountPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('アカウント連携'),
@@ -48,6 +51,9 @@ class LinkWithSocialAccountPage extends StatelessWidget {
                 shape: const StadiumBorder(),
                 onPressed: () {
                   // TODO: Google連携
+                  ref
+                      .read(authControllerProvider)
+                      .linkUserSocialLogin(signInMethod: SignInMethod.google);
                 },
               ),
             ),
