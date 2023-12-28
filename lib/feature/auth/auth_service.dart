@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../constant/enum.dart';
 import 'auth_repository.dart';
 
 final authServiceProvider = Provider(
@@ -25,12 +26,16 @@ class AuthService {
   }
 
 //TODO サインアウト
-//   Future<void> signOut() async {
-//     await repo.signOut();
-//   }
+  Future<void> signOut() async {
+    await repo.signOut();
+  }
 
   Future<void> deleteUser() async {
     await repo.deleteUserAccountAndUserData();
+  }
+
+  Future<void> linkUserSocialLogin({required SignInMethod signInMethod}) async {
+    await repo.linkUserSocialLogin(signInMethod: signInMethod);
   }
 }
 

@@ -1,9 +1,17 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../constant/enum.dart';
 import '../app_user/app_user.dart';
+import '../exception/exception.dart';
 import '../fcm/fcm_providers.dart';
 import '../firestore/firestore_instance_provider.dart';
 
@@ -60,9 +68,9 @@ class AuthRepository {
         );
   }
 
-  // Future<void> signOut() async {
-  //   await auth.signOut();
-  // }
+  Future<void> signOut() async {
+    await auth.signOut();
+  }
 
   Future<void> deleteUserAccountAndUserData() async {
     final user = auth.currentUser;
@@ -107,5 +115,95 @@ class AuthRepository {
     // セキュリティルールの「isUserAuthenticated(userId)」で引っかかりエラーが発生する
     // そのため、アカウント削除は最後に実行する
     await user.delete();
+  }
+
+  /// 指定されたソーシャル認証情報をアカウントにリンクする。
+  ///
+  /// 指定された [SignInMethod] のソーシャル認証情報をアカウントにリンクする。
+  Future<void> linkUserSocialLogin({
+    required SignInMethod signInMethod,
+    // required String userId,
+  }) async {
+    await _linkWithCredential(signInMethod: signInMethod);
+    // TODO: Userドキュメントに連携情報を追加する
+    // await _updateUserSocialLoginSignInMethodStatus(
+    //   signInMethod: signInMethod,
+    //   userId: userId,
+    //   value: true,
+    // );
+  }
+
+  /// ログイン時に取得される [AuthCredential] を元に、ユーザーアカウントにソーシャル認証情報をリンクする
+  Future<void> _linkWithCredential({required SignInMethod signInMethod}) async {
+    final credential = switch (signInMethod) {
+      SignInMethod.google => await _getGoogleAuthCredential(),
+      SignInMethod.apple => await _getAppleAuthCredential(),
+    };
+    await auth.currentUser?.linkWithCredential(credential);
+  }
+
+  /// Google認証から [AuthCredential] を取得する
+  ///
+  /// [GoogleSignIn] ライブラリを使用してユーザーにGoogleでのログインを求め、
+  /// 成功した場合はその認証情報からFirebase用の [AuthCredential] オブジェクトを生成して返す
+  Future<AuthCredential> _getGoogleAuthCredential() async {
+    try {
+      final googleUser = await GoogleSignIn().signIn(); // サインインダイアログの表示
+
+      // サインインダイアログでキャンセルが選択された場合には、AppException をスローし、キャンセルされたことを通知する
+      if (googleUser == null) {
+        throw const AppException(message: 'キャンセルされました。');
+      }
+
+      final googleAuth = await googleUser.authentication; // アカウントからトークン生成
+
+      return GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+    } on PlatformException catch (e) {
+      if (e.code == 'network_error') {
+        throw const AppException(message: '接続できませんでした。\nネットワーク状況を確認してください。');
+      }
+      print(e.code);
+      throw const AppException(message: 'Google 認証に失敗しました。');
+    }
+  }
+
+  /// Apple認証から [AuthCredential] を取得する
+  ///
+  /// Appleでのログインを求め、
+  /// 成功した場合はその認証情報からFirebase用の [AuthCredential] オブジェクトを生成して返す。
+  Future<AuthCredential> _getAppleAuthCredential() async {
+    try {
+      final rawNonce = generateNonce();
+      final nonce = _sha256ofString(rawNonce);
+
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: nonce,
+      );
+
+      return OAuthProvider('apple.com').credential(
+        idToken: appleCredential.identityToken,
+        rawNonce: rawNonce,
+      );
+    } on SignInWithAppleAuthorizationException catch (e) {
+      // サインインダイアログでキャンセルが選択された場合には、AppException をスローし、キャンセルされたことを通知する
+      if (e.code == AuthorizationErrorCode.canceled) {
+        throw const AppException(message: 'キャンセルされました');
+      }
+      throw const AppException(message: 'Apple 認証に失敗しました。');
+    }
+  }
+
+  /// 文字列から SHA-256 ハッシュを作成する。
+  String _sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 }

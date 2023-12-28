@@ -6,14 +6,18 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
+import 'package:limited_characters_diary/scaffold_messanger_controller.dart';
 
+import '../../constant/enum.dart';
+import '../exception/exception.dart';
 import 'confirm_delete_all_data_dialog.dart';
 
-final authControllerProvider = Provider(
+final authControllerProvider = Provider.autoDispose(
   (ref) => AuthController(
     service: ref.watch(authServiceProvider),
     isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier),
     dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
+    scaffoldMessengerController: ref.watch(scaffoldMessengerControllerProvider),
   ),
 );
 
@@ -22,11 +26,13 @@ class AuthController {
     required this.service,
     required this.isUserDeletedNotifier,
     required this.dialogUtilsController,
+    required this.scaffoldMessengerController,
   });
 
   final AuthService service;
   final StateController<bool> isUserDeletedNotifier;
   final DialogUtilsController dialogUtilsController;
+  final ScaffoldMessengerController scaffoldMessengerController;
 
   Future<void> signInAnonymouslyAndAddUser() async {
     try {
@@ -47,10 +53,10 @@ class AuthController {
     }
   }
 
-//TODO サインアウト
-//   Future<void> signOut() async {
-//     await repo.signOut();
-//   }
+// TODO サインアウト
+  Future<void> signOut() async {
+    await service.signOut();
+  }
 
   Future<void> deleteUser() async {
     try {
@@ -127,6 +133,25 @@ class AuthController {
         return '指定されたユーザーはこの操作を許可していません。';
       default:
         return '不明なエラーが発生しました。';
+    }
+  }
+
+  /// [SignInMethod] に基づいて、[AuthService] に定義されたソーシャルログインのリンク処理を実行する。
+  ///
+  /// - `signInMethod` : リンクまたはリンク解除を行うソーシャルログインの方法。
+  /// - `userId` : 操作対象のユーザーID。
+  Future<void> linkUserSocialLogin({
+    required SignInMethod signInMethod,
+    // required String userId,
+  }) async {
+    try {
+      await service.linkUserSocialLogin(
+        signInMethod: signInMethod,
+      );
+    } on FirebaseException catch (e) {
+      scaffoldMessengerController.showSnackBarByFirebaseException(e);
+    } on AppException catch (e) {
+      scaffoldMessengerController.showSnackBarByException(e);
     }
   }
 }
