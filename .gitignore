@@ -46,3 +46,6 @@ app.*.map.json
 /lib/confidential.dart
 /lib/firebase_options_dev.dart
 /lib/firebase_options_prod.dart
+
+/dart_defines/dev.json
+/dart_defines/prod.json
