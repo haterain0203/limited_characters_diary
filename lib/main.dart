@@ -19,7 +19,7 @@ import 'feature/local_notification/local_notification_repository.dart';
 import 'feature/local_notification/local_notification_service.dart';
 import 'my_app.dart';
 
-const flavor = String.fromEnvironment('FLAVOR');
+const flavor = String.fromEnvironment('flavor');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

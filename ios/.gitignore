@@ -33,5 +33,4 @@ Runner/GeneratedPluginRegistrant.*
 !default.pbxuser
 !default.perspectivev3
 
-Flutter/dev.xcconfig
-Flutter/prod.xcconfig
+GoogleService-Info.plist
