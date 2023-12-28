@@ -2,7 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../scaffold_messanger_controller.dart';
+import '../scaffold_messenger_controller.dart';
 
 final dialogUtilsControllerProvider = Provider(
   (ref) => DialogUtilsController(

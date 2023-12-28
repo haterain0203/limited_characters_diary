@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
-import 'package:limited_characters_diary/scaffold_messanger_controller.dart';
+import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
 
 import '../../constant/enum.dart';
 import '../exception/exception.dart';
