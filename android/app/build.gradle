@@ -21,6 +21,17 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+task selectGoogleServicesJson(type: Copy) {
+    from "src/$flavor/google-services.json"
+    into './'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'processDebugGoogleServices' || task.name == 'processReleaseGoogleServices') {
+        task.dependsOn selectGoogleServicesJson
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -63,6 +74,8 @@ android {
         ndk {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
         }
+        applicationIdSuffix appIdSuffix
+        resValue "string", "app_name", appName
     }
 
     signingConfigs {
@@ -82,19 +95,6 @@ android {
         }
     }
 
-    flavorDimensions 'flavor'
-    productFlavors {
-        dev {
-            dimension 'flavor'
-            applicationIdSuffix '.dev'
-            manifestPlaceholders = [appName: '(d)16文字日記']
-        }
-        prod {
-            dimension 'flavor'
-            applicationIdSuffix ''
-            manifestPlaceholders = [appName: '16文字日記']
-        }
-    }
 }
 
 flutter {
