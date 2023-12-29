@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
@@ -28,19 +30,25 @@ class LinkWithSocialAccountPage extends HookConsumerWidget {
             ),
             const SizedBox(height: 32),
             // Appleで続けるボタン
-            SizedBox(
-              width: double.infinity,
-              height: 45,
-              child: SignInButton(
-                Buttons.appleDark,
-                text: 'Appleで続ける',
-                shape: const StadiumBorder(),
-                onPressed: () {
-                  // TODO: Apple連携
-                },
+            if (Platform.isIOS)
+              Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 45,
+                    child: SignInButton(
+                      Buttons.appleDark,
+                      text: 'Appleで続ける',
+                      shape: const StadiumBorder(),
+                      onPressed: () {
+                        // TODO: Apple連携
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
               ),
-            ),
-            const SizedBox(height: 16),
+
             // Googleで続けるボタン
             SizedBox(
               width: double.infinity,
