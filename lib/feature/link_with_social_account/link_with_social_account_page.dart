@@ -29,35 +29,13 @@ class LinkWithSocialAccountPage extends HookConsumerWidget {
               ),
             ),
             const SizedBox(height: 32),
-            // Appleで続けるボタン
-            if (Platform.isIOS)
-              Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 45,
-                    child: SignInButton(
-                      Buttons.appleDark,
-                      text: 'Appleで続ける',
-                      shape: const StadiumBorder(),
-                      onPressed: () {
-                        ref.read(authControllerProvider).linkUserSocialLogin(
-                              signInMethod: SignInMethod.apple,
-                            );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-
             // Googleで続けるボタン
             SizedBox(
               width: double.infinity,
               height: 45,
               child: SignInButton(
                 Buttons.google,
-                text: 'Googleで続ける',
+                text: 'Googleアカウントで続ける',
                 shape: const StadiumBorder(),
                 onPressed: () {
                   ref.read(authControllerProvider).linkUserSocialLogin(
@@ -66,6 +44,27 @@ class LinkWithSocialAccountPage extends HookConsumerWidget {
                 },
               ),
             ),
+            // Appleで続けるボタン
+            if (Platform.isIOS)
+              Column(
+                children: [
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 45,
+                    child: SignInButton(
+                      Buttons.appleDark,
+                      text: 'Appleアカウントで続ける',
+                      shape: const StadiumBorder(),
+                      onPressed: () {
+                        ref.read(authControllerProvider).linkUserSocialLogin(
+                              signInMethod: SignInMethod.apple,
+                            );
+                      },
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
