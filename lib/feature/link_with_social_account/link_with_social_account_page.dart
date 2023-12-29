@@ -41,7 +41,9 @@ class LinkWithSocialAccountPage extends HookConsumerWidget {
                       text: 'Appleで続ける',
                       shape: const StadiumBorder(),
                       onPressed: () {
-                        // TODO: Apple連携
+                        ref.read(authControllerProvider).linkUserSocialLogin(
+                              signInMethod: SignInMethod.apple,
+                            );
                       },
                     ),
                   ),
@@ -58,10 +60,9 @@ class LinkWithSocialAccountPage extends HookConsumerWidget {
                 text: 'Googleで続ける',
                 shape: const StadiumBorder(),
                 onPressed: () {
-                  // TODO: Google連携
-                  ref
-                      .read(authControllerProvider)
-                      .linkUserSocialLogin(signInMethod: SignInMethod.google);
+                  ref.read(authControllerProvider).linkUserSocialLogin(
+                        signInMethod: SignInMethod.google,
+                      );
                 },
               ),
             ),
