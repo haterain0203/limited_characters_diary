@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/auth/widget/login_button_apple.dart';
 import 'package:limited_characters_diary/feature/auth/widget/login_button_google.dart';
+import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:sizer/sizer.dart';
 
 class LoginPage extends HookConsumerWidget {
@@ -26,7 +28,7 @@ class LoginPage extends HookConsumerWidget {
               const SizedBox(
                 height: 120,
               ),
-              LoginButtonApple.login(
+              LoginButtonGoogle.login(
                 onPressed: () {
                   // TODO: ログイン処理
                 },
@@ -34,7 +36,7 @@ class LoginPage extends HookConsumerWidget {
               const SizedBox(
                 height: 16,
               ),
-              LoginButtonGoogle.login(
+              LoginButtonApple.login(
                 onPressed: () {
                   // TODO: ログイン処理
                 },
@@ -44,7 +46,43 @@ class LoginPage extends HookConsumerWidget {
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text('ゲストで始める'),
+                child: const Text('アカウントなしで利用開始する'),
+              ),
+              const SizedBox(
+                height: 32,
+              ),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.bodySmall,
+                  children: <TextSpan>[
+                    const TextSpan(text: '本アプリを利用開始することで、'),
+                    TextSpan(
+                      text: 'プライバシーポリシー',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => ref
+                            .read(routingControllerProvider(context))
+                            .goPrivacyPolicyOnWebView(),
+                    ),
+                    const TextSpan(text: 'と'),
+                    TextSpan(
+                      text: '利用規約',
+                      style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => ref
+                            .read(routingControllerProvider(context))
+                            .goTermsOfServiceOnWebView(),
+                    ),
+                    const TextSpan(text: 'に同意したものといたします。'),
+                  ],
+                ),
               ),
             ],
           ),
