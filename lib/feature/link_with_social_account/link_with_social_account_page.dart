@@ -5,9 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
-import 'package:sign_in_button/sign_in_button.dart';
+import 'package:limited_characters_diary/feature/auth/widget/login_button_google.dart';
 
 import '../auth/auth_service.dart';
+import '../auth/widget/login_button_apple.dart';
 
 class LinkWithSocialAccountPage extends HookConsumerWidget {
   const LinkWithSocialAccountPage({super.key});
@@ -48,42 +49,26 @@ class _NotLinked extends HookConsumerWidget {
           ),
           const SizedBox(height: 32),
           // Googleで続けるボタン
-          SizedBox(
-            width: double.infinity,
-            height: 45,
-            child: SignInButton(
-              Buttons.google,
-              text: 'Googleアカウントで続ける',
-              shape: const StadiumBorder(),
-              onPressed: () async {
-                await ref.read(authControllerProvider).linkUserSocialLogin(
-                      signInMethod: SignInMethod.google,
-                    );
-                ref.invalidate(linkedProvidersProvider);
-              },
-            ),
+          LoginButtonGoogle.link(
+            onPressed: () async {
+              await ref.read(authControllerProvider).linkUserSocialLogin(
+                    signInMethod: SignInMethod.google,
+                  );
+              ref.invalidate(linkedProvidersProvider);
+            },
           ),
           // Appleで続けるボタン
           if (Platform.isIOS)
             Column(
               children: [
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  height: 45,
-                  child: SignInButton(
-                    Buttons.appleDark,
-                    text: 'Appleアカウントで続ける',
-                    shape: const StadiumBorder(),
-                    onPressed: () async {
-                      await ref
-                          .read(authControllerProvider)
-                          .linkUserSocialLogin(
-                            signInMethod: SignInMethod.apple,
-                          );
-                      ref.invalidate(linkedProvidersProvider);
-                    },
-                  ),
+                LoginButtonApple.link(
+                  onPressed: () async {
+                    await ref.read(authControllerProvider).linkUserSocialLogin(
+                          signInMethod: SignInMethod.apple,
+                        );
+                    ref.invalidate(linkedProvidersProvider);
+                  },
                 ),
               ],
             ),

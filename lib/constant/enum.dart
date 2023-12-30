@@ -14,3 +14,9 @@ enum SignInMethod {
   apple,
   ;
 }
+
+enum SignInType {
+  login,
+  link,
+  ;
+}
