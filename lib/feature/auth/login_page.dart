@@ -13,78 +13,82 @@ class LoginPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 20.h,
-                width: 20.h,
-                //TODO flutter_genの導入
-                child: Image.asset('assets/images/icon.png'),
-              ),
-              const SizedBox(
-                height: 120,
-              ),
-              LoginButtonGoogle.login(
-                onPressed: () {
-                  // TODO: ログイン処理
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              LoginButtonApple.login(
-                onPressed: () {
-                  // TODO: ログイン処理
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('アカウントなしで利用開始する'),
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: Theme.of(context).textTheme.bodySmall,
-                  children: <TextSpan>[
-                    const TextSpan(text: '本アプリを利用開始することで、'),
-                    TextSpan(
-                      text: 'プライバシーポリシー',
-                      style: const TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => ref
-                            .read(routingControllerProvider(context))
-                            .goPrivacyPolicyOnWebView(),
+      child: SafeArea(
+        child: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 100),
+                    child: SizedBox(
+                      height: 20.h,
+                      width: 20.h,
+                      //TODO flutter_genの導入
+                      child: Image.asset('assets/images/icon.png'),
                     ),
-                    const TextSpan(text: 'と'),
-                    TextSpan(
-                      text: '利用規約',
-                      style: const TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () => ref
-                            .read(routingControllerProvider(context))
-                            .goTermsOfServiceOnWebView(),
+                  ),
+                  LoginButtonGoogle.login(
+                    onPressed: () {
+                      // TODO: ログイン処理
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  LoginButtonApple.login(
+                    onPressed: () {
+                      // TODO: ログイン処理
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: const Text('アカウントなしで利用開始する'),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.bodySmall,
+                      children: <TextSpan>[
+                        const TextSpan(text: '本アプリを利用開始することで、'),
+                        TextSpan(
+                          text: 'プライバシーポリシー',
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => ref
+                                .read(routingControllerProvider(context))
+                                .goPrivacyPolicyOnWebView(),
+                        ),
+                        const TextSpan(text: 'と'),
+                        TextSpan(
+                          text: '利用規約',
+                          style: const TextStyle(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => ref
+                                .read(routingControllerProvider(context))
+                                .goTermsOfServiceOnWebView(),
+                        ),
+                        const TextSpan(text: 'に同意したものといたします。'),
+                      ],
                     ),
-                    const TextSpan(text: 'に同意したものといたします。'),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
