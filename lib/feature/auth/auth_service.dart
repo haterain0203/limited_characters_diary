@@ -65,7 +65,23 @@ class AuthService {
     }
   }
 
-//TODO サインアウト
+  /// Google認証を行い、認証されたユーザーをデータベースに追加します。
+  Future<void> signInGoogleAndAddUser() async {
+    final userCredential = await repo.signInWithGoogle();
+    final user = userCredential.user;
+    if (user != null) {
+      await repo.addUser(user);
+    }
+  }
+
+  /// Apple認証を行い、認証されたユーザーをデータベースに追加します。
+  Future<void> signInAppleAndAddUser() async {
+    final userCredential = await repo.signInWithApple();
+    final user = userCredential.user;
+    if (user != null) {
+      await repo.addUser(user);
+    }
+  }
   Future<void> signOut() async {
     await repo.signOut();
   }
