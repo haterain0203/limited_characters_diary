@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/feature/setting/setting_page.dart';
 import 'package:limited_characters_diary/feature/link_with_social_account/link_with_social_account_page.dart';
+import 'package:limited_characters_diary/feature/setting/setting_page.dart';
 
 import '../../../constant/constant_string.dart';
 import '../../../web_view_page.dart';
 import '../auth/auth_page.dart';
+import '../auth/login_page.dart';
 
 final routingControllerProvider =
     Provider.autoDispose.family<RoutingController, BuildContext>(
@@ -62,6 +63,16 @@ class RoutingController {
       MaterialPageRoute<void>(
         builder: (_) => const AuthPage(),
         settings: const RouteSettings(name: '/auth'),
+      ),
+    );
+  }
+
+  Future<void> goLoginPage() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => const LoginPage(),
+        settings: const RouteSettings(name: '/login'),
       ),
     );
   }
