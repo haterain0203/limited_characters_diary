@@ -44,12 +44,20 @@ final linkedProvidersProvider = Provider<List<SignInMethod>>((ref) {
   return linkedProviders;
 });
 
+/// 認証サービスを提供するProvider。
+///
+/// このProviderは [AuthService] インスタンスを提供します。
+/// [authRepoProvider]を使用して、認証リポジトリへの参照を取得し、それを [AuthService] に渡します。
 final authServiceProvider = Provider(
   (ref) => AuthService(
     repo: ref.watch(authRepoProvider),
   ),
 );
 
+/// 認証サービスクラス。
+///
+/// このクラスは、Firebase Authenticationを用いた認証処理を担当します。
+/// 匿名認証、Google認証、Apple認証、ユーザーの削除、サインアウトなどの機能を提供します。
 class AuthService {
   AuthService({
     required this.repo,
@@ -57,6 +65,7 @@ class AuthService {
 
   final AuthRepository repo;
 
+  /// 匿名認証を行い、認証されたユーザーをデータベースに追加します。
   Future<void> signInAnonymouslyAndAddUser() async {
     final userCredential = await repo.signInAnonymously();
     final user = userCredential.user;
@@ -82,19 +91,30 @@ class AuthService {
       await repo.addUser(user);
     }
   }
+
+  /// 現在のユーザーをサインアウトします。
   Future<void> signOut() async {
     await repo.signOut();
   }
 
+  /// 現在のユーザーアカウントとそのユーザーのデータを削除します。
   Future<void> deleteUser() async {
     await repo.deleteUserAccountAndUserData();
   }
 
+  /// ユーザーを指定されたソーシャルログインとリンクします。
   Future<void> linkUserSocialLogin({required SignInMethod signInMethod}) async {
     await repo.linkUserSocialLogin(signInMethod: signInMethod);
   }
 }
 
+/// ユーザーの認証状態を監視するStreamProvider。
+///
+/// このProviderは、Firebase Authenticationの認証状態の変化を監視します。
+/// [authRepoProvider]を使用して、認証リポジトリから認証状態の変化をストリームとして取得します。
+///
+/// 返り値:
+///   - 現在サインインしているユーザー、またはサインインしていない場合は`null`を返します。
 final userStateProvider = StreamProvider<User?>(
   (ref) {
     final repo = ref.watch(authRepoProvider);
