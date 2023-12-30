@@ -55,6 +55,30 @@ class AuthRepository {
     return auth.signInAnonymously();
   }
 
+  /// [FirebaseAuth] に Google でサインインする。
+  ///
+  /// https://firebase.flutter.dev/docs/auth/social/#google に従っているが、
+  /// [AuthCredential] を取得するまでの処理は、
+  /// [_linkWithCredential] でも使用するため、別メソッドして定義している
+  Future<UserCredential> signInWithGoogle() async {
+    final credential = await _getGoogleAuthCredential();
+
+    final userCredential = await auth.signInWithCredential(credential);
+    return userCredential;
+  }
+
+  /// [FirebaseAuth] に Apple でサインインする。
+  ///
+  /// https://firebase.flutter.dev/docs/auth/social/#apple に従っているが、
+  /// [AuthCredential] を取得するまでの処理は、
+  /// [_linkWithCredential] でも使用するため、別メソッドして定義している
+  Future<UserCredential> signInWithApple() async {
+    final oauthCredential = await _getAppleAuthCredential();
+
+    final userCredential = await auth.signInWithCredential(oauthCredential);
+    return userCredential;
+  }
+
   Future<void> addUser(User user) async {
     // firestoreにUserを登録する
     final fcmToken = await fcm.getToken();
