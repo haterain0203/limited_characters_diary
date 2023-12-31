@@ -53,6 +53,50 @@ class AuthController {
     }
   }
 
+  Future<void> signInGoogleAndAddUser() async {
+    try {
+      await service.signInGoogleAndAddUser();
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.toString());
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: _convertToErrorMessageFromErrorCode(e.code),
+        );
+      });
+    } on FirebaseException catch (e) {
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: e.message,
+        );
+      });
+    } on AppException catch (e) {
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: e.message,
+        );
+      });
+    }
+  }
+
+  Future<void> signInAppleAndAddUser() async {
+    try {
+      await service.signInAppleAndAddUser();
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.toString());
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: _convertToErrorMessageFromErrorCode(e.code),
+        );
+      });
+    } on FirebaseException catch (e) {
+      return WidgetsBinding.instance.addPostFrameCallback((_) {
+        dialogUtilsController.showErrorDialog(
+          errorDetail: e.message,
+        );
+      });
+    }
+  }
+
 // TODO サインアウト
   Future<void> signOut() async {
     await service.signOut();
