@@ -16,6 +16,28 @@ class DialogUtilsController {
   });
   final BuildContext context;
 
+  Future<void> showYesNoDialog({
+    String? title,
+    String? desc,
+    String? buttonYesText = 'はい',
+    String? buttonNoText = 'いいえ',
+    required VoidCallback yesButtonOnPress,
+    VoidCallback? noButtonOnPress,
+  }) async {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      title: title,
+      desc: desc,
+      btnCancelText: buttonNoText,
+      btnCancelOnPress: noButtonOnPress ?? () {},
+      btnCancelColor: Colors.grey,
+      btnOkText: buttonYesText,
+      btnOkOnPress: yesButtonOnPress,
+      btnOkColor: Theme.of(context).primaryColor,
+    ).show();
+  }
+
   Future<void> showErrorDialog({
     String? errorTitle,
     String? errorDetail,
@@ -29,7 +51,7 @@ class DialogUtilsController {
       btnCancelOnPress: () {},
       //TODO
       // btnOkText: '問い合わせる',
-      //TODO 
+      //TODO
       // btnOkOnPress: () {
 
       // }
