@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/auth/widget/login_button_apple.dart';
 import 'package:limited_characters_diary/feature/auth/widget/login_button_google.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
@@ -32,7 +33,7 @@ class LoginPage extends HookConsumerWidget {
                   ),
                   LoginButtonGoogle.login(
                     onPressed: () {
-                      // TODO: ログイン処理
+                      ref.read(authControllerProvider).signInGoogleAndAddUser();
                     },
                   ),
                   const SizedBox(
@@ -40,7 +41,7 @@ class LoginPage extends HookConsumerWidget {
                   ),
                   LoginButtonApple.login(
                     onPressed: () {
-                      // TODO: ログイン処理
+                      ref.read(authControllerProvider).signInAppleAndAddUser();
                     },
                   ),
                   const SizedBox(
