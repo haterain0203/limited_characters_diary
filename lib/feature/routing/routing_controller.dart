@@ -13,11 +13,17 @@ final routingControllerProvider =
   (ref, context) => RoutingController(context: context),
 );
 
+/// `RoutingController` はアプリ内のナビゲーションを管理するクラスです。
+/// 
+/// このクラスは、さまざまなページへの遷移を担当し、ナビゲーションロジックを集約します。
 class RoutingController {
   RoutingController({required this.context});
 
   final BuildContext context;
 
+  /// 利用規約ページへ遷移します。
+  /// 
+  /// WebViewを使用して利用規約の内容を表示します。
   Future<void> goTermsOfServiceOnWebView() async {
     await Navigator.push(
       context,
@@ -31,6 +37,9 @@ class RoutingController {
     );
   }
 
+  /// お問い合わせページへ遷移します。
+  /// 
+  /// 引数 `url` で指定されたURLをWebViewで表示します。
   Future<void> goContactUsOnWebView({required String url}) async {
     await Navigator.push(
       context,
@@ -44,6 +53,9 @@ class RoutingController {
     );
   }
 
+  /// プライバシーポリシーページへ遷移します。
+  /// 
+  /// WebViewを使用してプライバシーポリシーの内容を表示します。
   Future<void> goPrivacyPolicyOnWebView() async {
     await Navigator.push(
       context,
@@ -57,6 +69,7 @@ class RoutingController {
     );
   }
 
+  /// 認証ページへ遷移します。
   Future<void> goAuthPage() async {
     await Navigator.push(
       context,
@@ -67,6 +80,7 @@ class RoutingController {
     );
   }
 
+  /// ログインページへ遷移します。
   Future<void> goLoginPage() async {
     await Navigator.push(
       context,
@@ -78,6 +92,7 @@ class RoutingController {
   }
 
   /// ログインページへ遷移し、ナビゲーションスタック上のすべてのルートを削除します。
+  /// 
   /// これはユーザーがログアウトした後に使用され、以前のページに戻ることができないようにします。
   Future<void> goAndRemoveUntilLoginPage() async {
     await Navigator.of(context).pushAndRemoveUntil(
@@ -89,6 +104,7 @@ class RoutingController {
     );
   }
 
+  /// 設定ページへ遷移します。
   Future<void> goSettingPage() async {
     await Navigator.push(
       context,
@@ -99,6 +115,7 @@ class RoutingController {
     );
   }
 
+  /// ソーシャルアカウントとのリンクページへ遷移します。
   Future<void> goLinkWithSocialAccountPage() async {
     await Navigator.push(
       context,
