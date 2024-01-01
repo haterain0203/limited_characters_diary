@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/auth/widget/login_button_google.dart';
+import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 
 import '../auth/auth_service.dart';
 import '../auth/widget/login_button_apple.dart';
@@ -104,8 +106,18 @@ class _Linked extends HookConsumerWidget {
           ),
           InkWell(
             onTap: () async {
-              await ref.read(authControllerProvider).signOut();
-              ref.invalidate(linkedProvidersProvider);
+              await ref.read(dialogUtilsControllerProvider).showYesNoDialog(
+                    yesButtonOnPress: () async {
+                      await ref.read(authControllerProvider).signOut();
+                      if (!context.mounted) {
+                        return;
+                      }
+                      await ref
+                          .read(routingControllerProvider(context))
+                          .goAndRemoveUntilLoginPage();
+                    },
+                    buttonYesText: 'ログアウト',
+                  );
             },
             child: const ListTile(
               leading: FaIcon(FontAwesomeIcons.arrowRightFromBracket),

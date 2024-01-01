@@ -77,6 +77,18 @@ class RoutingController {
     );
   }
 
+  /// ログインページへ遷移し、ナビゲーションスタック上のすべてのルートを削除します。
+  /// これはユーザーがログアウトした後に使用され、以前のページに戻ることができないようにします。
+  Future<void> goAndRemoveUntilLoginPage() async {
+    await Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute<void>(
+        builder: (_) => const LoginPage(),
+        settings: const RouteSettings(name: '/login'),
+      ),
+      (Route<dynamic> route) => false, // すべてのルートを削除する条件
+    );
+  }
+
   Future<void> goSettingPage() async {
     await Navigator.push(
       context,
