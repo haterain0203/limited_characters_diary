@@ -34,62 +34,64 @@ class AuthController {
   final DialogUtilsController dialogUtilsController;
   final ScaffoldMessengerController scaffoldMessengerController;
 
+  /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
+  ///
+  /// この関数は、Firebaseの匿名認証を使用してサインインし、
+  /// 成功した場合にユーザー情報を追加する処理を行います。
+  ///
+  /// エラーが発生した場合は、エラーダイアログを表示します。
   Future<void> signInAnonymouslyAndAddUser() async {
-    try {
-      await service.signInAnonymouslyAndAddUser();
-    } on FirebaseAuthException catch (e) {
-      debugPrint(e.toString());
-      return WidgetsBinding.instance.addPostFrameCallback((_) {
-        dialogUtilsController.showErrorDialog(
-          errorDetail: _convertToErrorMessageFromErrorCode(e.code),
-        );
-      });
-    } on FirebaseException catch (e) {
-      return WidgetsBinding.instance.addPostFrameCallback((_) {
-        dialogUtilsController.showErrorDialog(
-          errorDetail: e.message,
-        );
-      });
-    }
+    await _signInAndAddUser(service.signInAnonymouslyAndAddUser);
   }
 
+  /// Googleアカウントを使用してサインインし、ユーザー情報を追加します。
+  ///
+  /// この関数は、Googleアカウントを使用してFirebaseにサインインし、
+  /// 成功した場合にユーザー情報を追加する処理を行います。
+  ///
+  /// エラーが発生した場合は、エラーダイアログを表示します。
   Future<void> signInGoogleAndAddUser() async {
+    await _signInAndAddUser(service.signInGoogleAndAddUser);
+  }
+
+  /// Apple IDを使用してサインインし、ユーザー情報を追加します。
+  ///
+  /// この関数は、Apple IDを使用してFirebaseにサインインし、
+  /// 成功した場合にユーザー情報を追加する処理を行います。
+  ///
+  /// エラーが発生した場合は、エラーダイアログを表示します。
+  Future<void> signInAppleAndAddUser() async {
+    await _signInAndAddUser(service.signInAppleAndAddUser);
+  }
+
+  /// 指定されたサインインメソッドを使用してユーザーをサインインし、情報を追加します。
+  ///
+  /// [signInMethod] は、サインイン処理を実行する関数です。
+  ///
+  /// サインイン処理中に発生したエラーは、FirebaseAuthException、
+  /// FirebaseException、AppExceptionの各種例外として処理され、
+  /// 適切なエラーダイアログが表示されます。
+  ///
+  /// - Parameters:
+  ///   - signInMethod: サインイン処理を行う関数。
+  Future<void> _signInAndAddUser(Future<void> Function() signInMethod) async {
     try {
-      await service.signInGoogleAndAddUser();
+      await signInMethod();
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
-      return WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         dialogUtilsController.showErrorDialog(
           errorDetail: _convertToErrorMessageFromErrorCode(e.code),
         );
       });
     } on FirebaseException catch (e) {
-      return WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         dialogUtilsController.showErrorDialog(
           errorDetail: e.message,
         );
       });
     } on AppException catch (e) {
-      return WidgetsBinding.instance.addPostFrameCallback((_) {
-        dialogUtilsController.showErrorDialog(
-          errorDetail: e.message,
-        );
-      });
-    }
-  }
-
-  Future<void> signInAppleAndAddUser() async {
-    try {
-      await service.signInAppleAndAddUser();
-    } on FirebaseAuthException catch (e) {
-      debugPrint(e.toString());
-      return WidgetsBinding.instance.addPostFrameCallback((_) {
-        dialogUtilsController.showErrorDialog(
-          errorDetail: _convertToErrorMessageFromErrorCode(e.code),
-        );
-      });
-    } on FirebaseException catch (e) {
-      return WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         dialogUtilsController.showErrorDialog(
           errorDetail: e.message,
         );
