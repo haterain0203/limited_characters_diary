@@ -107,6 +107,7 @@ class _Linked extends HookConsumerWidget {
           InkWell(
             onTap: () async {
               await ref.read(dialogUtilsControllerProvider).showYesNoDialog(
+                desc: 'ログアウトしてよろしいですか？',
                     yesButtonOnPress: () async {
                       await ref.read(authControllerProvider).signOut();
                       if (!context.mounted) {
