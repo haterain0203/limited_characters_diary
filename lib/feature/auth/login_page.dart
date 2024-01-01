@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/auth/widget/login_button_apple.dart';
 import 'package:limited_characters_diary/feature/auth/widget/login_button_google.dart';
@@ -48,7 +49,20 @@ class LoginPage extends HookConsumerWidget {
                     height: 16,
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      ref.read(dialogUtilsControllerProvider).showYesNoDialog(
+                            title: '注意事項',
+                            desc: '機種変更後にデータを引き続き利用するには、ログインが必要です。'
+                                'ログインは、利用開始後の設定画面から可能です。',
+                            buttonNoText: '戻る',
+                            buttonYesText: '利用開始',
+                            yesButtonOnPress: () {
+                              ref
+                                  .read(authControllerProvider)
+                                  .signInAnonymouslyAndAddUser();
+                            },
+                          );
+                    },
                     child: const Text('アカウントなしで利用開始する'),
                   ),
                   const SizedBox(
