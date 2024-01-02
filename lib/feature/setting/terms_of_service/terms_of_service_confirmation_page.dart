@@ -13,7 +13,6 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final routingController = ref.watch(routingControllerProvider);
     return Scaffold(
       body: Center(
         child: Column(
@@ -30,7 +29,8 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
             ),
             const Text('アプリを始めるには利用規約の同意が必要です。'),
             TextButton(
-              onPressed: routingController.goTermsOfServiceOnWebView,
+              onPressed:
+                  ref.read(routingControllerProvider).goTermsOfServiceOnWebView,
               child: const Text('利用規約を確認する'),
             ),
             ElevatedButton(
@@ -51,7 +51,7 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
                     .sendLogEvent(ConstantLogEventName.agreeWithTerms);
                 // 広告トラッキング許可ダイアログ表示
                 await ref.read(adControllerProvider).requestATT();
-                await routingController.goAuthPage();
+                await ref.read(routingControllerProvider).goAuthPage();
               },
             ),
           ],

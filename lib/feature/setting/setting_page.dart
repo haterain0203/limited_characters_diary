@@ -33,8 +33,6 @@ class SettingPage extends StatelessWidget {
             passCodeProvider.select((value) => value.isPassCodeEnabled),
           );
           final appInfo = ref.watch(appInfoProvider);
-          final routingController =
-              ref.watch(routingControllerProvider);
           return SettingsList(
             platform: DevicePlatform.iOS,
             sections: [
@@ -130,9 +128,11 @@ class SettingPage extends StatelessWidget {
                       final contactUsUrl = await ref
                           .read(settingControllerProvider)
                           .createContactUsUrl();
-                      await routingController.goContactUsOnWebView(
-                        url: contactUsUrl,
-                      );
+                      await ref
+                          .read(routingControllerProvider)
+                          .goContactUsOnWebView(
+                            url: contactUsUrl,
+                          );
                     },
                   ),
                   SettingsTile.navigation(
@@ -166,7 +166,9 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      routingController.goTermsOfServiceOnWebView();
+                      ref
+                          .read(routingControllerProvider)
+                          .goTermsOfServiceOnWebView();
                     },
                   ),
                   SettingsTile.navigation(
@@ -176,7 +178,9 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      routingController.goPrivacyPolicyOnWebView();
+                      ref
+                          .read(routingControllerProvider)
+                          .goPrivacyPolicyOnWebView();
                     },
                   ),
                   SettingsTile(
