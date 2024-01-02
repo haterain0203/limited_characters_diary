@@ -182,7 +182,10 @@ class AuthController {
     }
   }
 
+  /// ソーシャル認証の連携処理を行う。
+  /// 
   /// [SignInMethod] に基づいて、[AuthService] に定義されたソーシャルログインのリンク処理を実行する。
+  /// 処理が完了した際は、ユーザーにその旨を通知する。
   ///
   /// - `signInMethod` : リンクまたはリンク解除を行うソーシャルログインの方法。
   /// - `userId` : 操作対象のユーザーID。
@@ -194,6 +197,7 @@ class AuthController {
       await service.linkUserSocialLogin(
         signInMethod: signInMethod,
       );
+      scaffoldMessengerController.showSnackBar('連携されました');
     } on FirebaseException catch (e) {
       scaffoldMessengerController.showSnackBarByFirebaseException(e);
     } on AppException catch (e) {
