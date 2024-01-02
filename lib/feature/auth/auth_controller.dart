@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
+import 'package:limited_characters_diary/feature/admob/ad_controller.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
@@ -20,6 +21,7 @@ final authControllerProvider = Provider.autoDispose(
     dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
     scaffoldMessengerController: ref.watch(scaffoldMessengerControllerProvider),
     routingController: ref.watch(routingControllerProvider),
+    adController: ref.watch(adControllerProvider),
   ),
 );
 
@@ -30,6 +32,7 @@ class AuthController {
     required this.dialogUtilsController,
     required this.scaffoldMessengerController,
     required this.routingController,
+    required this.adController,
   });
 
   final AuthService service;
@@ -37,6 +40,7 @@ class AuthController {
   final DialogUtilsController dialogUtilsController;
   final ScaffoldMessengerController scaffoldMessengerController;
   final RoutingController routingController;
+  final AdController adController;
 
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
@@ -81,6 +85,8 @@ class AuthController {
   Future<void> _signInAndAddUser(Future<void> Function() signInMethod) async {
     try {
       await signInMethod();
+      // 広告トラッキング許可ダイアログ表示
+      await adController.requestATT();
       await routingController.goAndRemoveUntilHomePage();
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
@@ -188,7 +194,7 @@ class AuthController {
   }
 
   /// ソーシャル認証の連携処理を行う。
-  /// 
+  ///
   /// [SignInMethod] に基づいて、[AuthService] に定義されたソーシャルログインのリンク処理を実行する。
   /// 処理が完了した際は、ユーザーにその旨を通知する。
   ///
@@ -211,7 +217,7 @@ class AuthController {
   }
 
   /// ソーシャル認証連携の解除処理を行う。
-  /// 
+  ///
   /// ソーシャル認証連携が有効化されている場合、指定された [SignInMethod] に基づいて、
   /// [AuthService] に定義されたソーシャルログインのリンク解除処理を実行する。
   /// 処理が完了した際は、ユーザーにその旨を通知する。
