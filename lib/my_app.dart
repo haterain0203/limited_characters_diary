@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/analytics/analytics_service.dart';
+import 'package:limited_characters_diary/feature/auth/login_page.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.dart';
 import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import 'constant/constant_color.dart';
 import 'feature/admob/ad_controller.dart';
-import 'feature/auth/auth_page.dart';
 import 'feature/pass_code/pass_code_controller.dart';
-import 'feature/setting/terms_of_service/terms_of_service_confirmation_page.dart';
 
 class MyApp extends HookConsumerWidget {
   const MyApp({required this.isCompletedFirstLaunch, super.key});
@@ -86,9 +85,7 @@ class MyApp extends HookConsumerWidget {
               ),
             ),
           ),
-          home: isCompletedFirstLaunch
-              ? const AuthPage()
-              : const TermsOfServiceConfirmationPage(),
+          home: const LoginPage(),
         );
       },
     );
