@@ -33,16 +33,20 @@ class LoginPage extends HookConsumerWidget {
                     ),
                   ),
                   LoginButtonGoogle.login(
-                    onPressed: () {
-                      ref.read(authControllerProvider).signInGoogleAndAddUser();
+                    onPressed: () async {
+                      await ref
+                          .read(authControllerProvider)
+                          .signInGoogleAndAddUser();
                     },
                   ),
                   const SizedBox(
                     height: 16,
                   ),
                   LoginButtonApple.login(
-                    onPressed: () {
-                      ref.read(authControllerProvider).signInAppleAndAddUser();
+                    onPressed: () async {
+                      await ref
+                          .read(authControllerProvider)
+                          .signInAppleAndAddUser();
                     },
                   ),
                   const SizedBox(
@@ -56,8 +60,8 @@ class LoginPage extends HookConsumerWidget {
                                 'ログインは、利用開始後の設定画面から可能です。',
                             buttonNoText: '戻る',
                             buttonYesText: '利用開始',
-                            yesButtonOnPress: () {
-                              ref
+                            yesButtonOnPress: () async {
+                              await ref
                                   .read(authControllerProvider)
                                   .signInAnonymouslyAndAddUser();
                             },
