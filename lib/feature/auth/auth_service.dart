@@ -106,6 +106,12 @@ class AuthService {
   Future<void> linkUserSocialLogin({required SignInMethod signInMethod}) async {
     await repo.linkUserSocialLogin(signInMethod: signInMethod);
   }
+
+  Future<void> unLinkUserSocialLogin({
+    required SignInMethod signInMethod,
+  }) async {
+    await repo.unLinkUserSocialLogin(signInMethod: signInMethod);
+  }
 }
 
 /// ユーザーの認証状態を監視するStreamProvider。

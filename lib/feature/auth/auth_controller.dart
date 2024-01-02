@@ -200,6 +200,26 @@ class AuthController {
       scaffoldMessengerController.showSnackBarByException(e);
     }
   }
+
+  /// ソーシャル認証連携の解除処理を行う。
+  /// 
+  /// ソーシャル認証連携が有効化されている場合、指定された [SignInMethod] に基づいて、
+  /// [AuthService] に定義されたソーシャルログインのリンク解除処理を実行する。
+  /// 処理が完了した際は、ユーザーにその旨を通知する。
+  ///
+  /// - [signInMethod] : リンクまたはリンク解除を行うソーシャルログインの方法。
+  Future<void> unLinkUserSocialLogin({
+    required SignInMethod signInMethod,
+  }) async {
+    try {
+      await service.unLinkUserSocialLogin(
+        signInMethod: signInMethod,
+      );
+      scaffoldMessengerController.showSnackBar('連携が解除されました');
+    } on FirebaseException catch (e) {
+      scaffoldMessengerController.showSnackBarByFirebaseException(e);
+    }
+  }
 }
 
 /// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため

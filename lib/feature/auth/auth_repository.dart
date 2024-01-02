@@ -230,4 +230,39 @@ class AuthRepository {
     final digest = sha256.convert(bytes);
     return digest.toString();
   }
+
+  /// 指定されたソーシャル認証情報のリンクを解除する
+  ///
+  /// 指定された [SignInMethod] のソーシャル認証情報のリンクを解除する。
+  Future<void> unLinkUserSocialLogin({
+    required SignInMethod signInMethod,
+  }) async {
+    await _unlinkWithProviderId(signInMethod: signInMethod);
+  }
+
+  /// ログインユーザーが持つ `providerId` を元に、指定された [SignInMethod] のリンクを解除する
+  Future<void> _unlinkWithProviderId({
+    required SignInMethod signInMethod,
+  }) async {
+    const googleProviderId = 'google.com';
+    const appleProviderId = 'apple.com';
+
+    final user = auth.currentUser;
+
+    if (user == null) {
+      return;
+    }
+
+    final providerIdToUnlink = switch (signInMethod) {
+      SignInMethod.google => googleProviderId,
+      SignInMethod.apple => appleProviderId,
+    };
+
+    for (final userInfo in user.providerData) {
+      if (userInfo.providerId == providerIdToUnlink) {
+        await user.unlink(providerIdToUnlink);
+        return;
+      }
+    }
+  }
 }

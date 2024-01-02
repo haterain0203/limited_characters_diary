@@ -7,7 +7,6 @@ import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/auth/widget/login_button_google.dart';
-import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 
 import '../auth/auth_service.dart';
 import '../auth/widget/login_button_apple.dart';
@@ -99,7 +98,7 @@ class _Linked extends HookConsumerWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 tileColor: Colors.white,
-                title: const Text('ログイン済み'),
+                title: const Text('連携済み'),
                 trailing: _getIcon(signedInMethod: signedInMethod),
               );
             }),
@@ -107,22 +106,22 @@ class _Linked extends HookConsumerWidget {
           InkWell(
             onTap: () async {
               await ref.read(dialogUtilsControllerProvider).showYesNoDialog(
-                desc: 'ログアウトしてよろしいですか？',
+                    desc: '連携解除してよろしいですか？',
                     yesButtonOnPress: () async {
-                      await ref.read(authControllerProvider).signOut();
-                      if (!context.mounted) {
-                        return;
-                      }
                       await ref
-                          .read(routingControllerProvider(context))
-                          .goAndRemoveUntilLoginPage();
+                          .read(authControllerProvider)
+                          .unLinkUserSocialLogin(
+                            // TODO: 複数の認証を連携できるようにする場合、要改善
+                            signInMethod: signedInMethodList.first,
+                          );
+                      ref.invalidate(linkedProvidersProvider);
                     },
-                    buttonYesText: 'ログアウト',
+                    buttonYesText: '連携解除',
                   );
             },
             child: const ListTile(
               leading: FaIcon(FontAwesomeIcons.arrowRightFromBracket),
-              title: Text('ログアウト'),
+              title: Text('連携を解除する'),
             ),
           ),
         ],
