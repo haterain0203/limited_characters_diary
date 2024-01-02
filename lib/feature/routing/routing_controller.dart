@@ -7,7 +7,6 @@ import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
 
 import '../../../constant/constant_string.dart';
 import '../../../web_view_page.dart';
-import '../auth/auth_page.dart';
 import '../auth/login_page.dart';
 
 final routingControllerProvider =
@@ -93,17 +92,6 @@ class RoutingController {
         settings: const RouteSettings(name: '/'),
       ),
       (Route<dynamic> route) => false, // すべてのルートを削除する条件
-    );
-  }
-
-  /// 認証ページへ遷移します。
-  Future<void> goAuthPage() async {
-    await Navigator.push(
-      navigatorKey.currentContext!,
-      MaterialPageRoute<void>(
-        builder: (_) => const AuthPage(),
-        settings: const RouteSettings(name: '/auth'),
-      ),
     );
   }
 
