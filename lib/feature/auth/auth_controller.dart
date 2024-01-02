@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
+import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
 
 import '../../constant/enum.dart';
@@ -18,6 +19,7 @@ final authControllerProvider = Provider.autoDispose(
     isUserDeletedNotifier: ref.read(isUserDeletedProvider.notifier),
     dialogUtilsController: ref.watch(dialogUtilsControllerProvider),
     scaffoldMessengerController: ref.watch(scaffoldMessengerControllerProvider),
+    routingController: ref.watch(routingControllerProvider),
   ),
 );
 
@@ -27,12 +29,14 @@ class AuthController {
     required this.isUserDeletedNotifier,
     required this.dialogUtilsController,
     required this.scaffoldMessengerController,
+    required this.routingController,
   });
 
   final AuthService service;
   final StateController<bool> isUserDeletedNotifier;
   final DialogUtilsController dialogUtilsController;
   final ScaffoldMessengerController scaffoldMessengerController;
+  final RoutingController routingController;
 
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
@@ -77,6 +81,7 @@ class AuthController {
   Future<void> _signInAndAddUser(Future<void> Function() signInMethod) async {
     try {
       await signInMethod();
+      await routingController.goAndRemoveUntilHomePage();
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       WidgetsBinding.instance.addPostFrameCallback((_) {
