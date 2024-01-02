@@ -13,7 +13,7 @@ class TermsOfServiceConfirmationPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final routingController = ref.watch(routingControllerProvider(context));
+    final routingController = ref.watch(routingControllerProvider);
     return Scaffold(
       body: Center(
         child: Column(

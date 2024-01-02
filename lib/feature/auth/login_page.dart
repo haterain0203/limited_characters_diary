@@ -82,7 +82,7 @@ class LoginPage extends HookConsumerWidget {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => ref
-                                .read(routingControllerProvider(context))
+                                .read(routingControllerProvider)
                                 .goPrivacyPolicyOnWebView(),
                         ),
                         const TextSpan(text: 'と'),
@@ -94,7 +94,7 @@ class LoginPage extends HookConsumerWidget {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => ref
-                                .read(routingControllerProvider(context))
+                                .read(routingControllerProvider)
                                 .goTermsOfServiceOnWebView(),
                         ),
                         const TextSpan(text: 'に同意したものといたします。'),

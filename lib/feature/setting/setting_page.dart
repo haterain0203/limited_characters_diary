@@ -34,7 +34,7 @@ class SettingPage extends StatelessWidget {
           );
           final appInfo = ref.watch(appInfoProvider);
           final routingController =
-              ref.watch(routingControllerProvider(context));
+              ref.watch(routingControllerProvider);
           return SettingsList(
             platform: DevicePlatform.iOS,
             sections: [
@@ -55,7 +55,7 @@ class SettingPage extends StatelessWidget {
                     ),
                     onPressed: (BuildContext context) {
                       ref
-                          .read(routingControllerProvider(context))
+                          .read(routingControllerProvider)
                           .goLinkWithSocialAccountPage();
                     },
                   ),
