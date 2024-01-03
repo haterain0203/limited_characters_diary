@@ -263,9 +263,6 @@ class AuthRepository {
   Future<void> _unlinkWithProviderId({
     required SignInMethod signInMethod,
   }) async {
-    const googleProviderId = 'google.com';
-    const appleProviderId = 'apple.com';
-
     final user = auth.currentUser;
 
     if (user == null) {
@@ -273,18 +270,22 @@ class AuthRepository {
     }
 
     final providerIdToUnlink = switch (signInMethod) {
-      SignInMethod.google => googleProviderId,
-      SignInMethod.apple => appleProviderId,
+      SignInMethod.google => _googleProviderId,
+      SignInMethod.apple => _appleProviderId,
     };
 
-    for (final userInfo in user.providerData) {
-      if (userInfo.providerId == providerIdToUnlink) {
-        await user.unlink(providerIdToUnlink);
+    final signedInProviderId = _getSignedInProviderId(user);
+
+    if (signedInProviderId == providerIdToUnlink) {
+      await user.unlink(providerIdToUnlink);
+    }
+  }
+
   String _getSignedInProviderId(User user) {
     final providerData = user.providerData;
     if (providerData.isEmpty) {
       return '';
-      }
+    }
     // TODO: 複数の認証連携を許可する場合は、要改善。現状では Google or Apple どちらか一つのみ連携できるようになっている。
     return user.providerData.first.providerId;
   }
