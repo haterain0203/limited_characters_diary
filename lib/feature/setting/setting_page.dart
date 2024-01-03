@@ -33,8 +33,6 @@ class SettingPage extends StatelessWidget {
             passCodeProvider.select((value) => value.isPassCodeEnabled),
           );
           final appInfo = ref.watch(appInfoProvider);
-          final routingController =
-              ref.watch(routingControllerProvider(context));
           return SettingsList(
             platform: DevicePlatform.iOS,
             sections: [
@@ -44,6 +42,21 @@ class SettingPage extends StatelessWidget {
                   style: textStyle,
                 ),
                 tiles: <SettingsTile>[
+                  SettingsTile.navigation(
+                    leading: const Icon(
+                      Icons.account_circle,
+                      color: Colors.black,
+                    ),
+                    title: const Text(
+                      'アカウント連携',
+                      style: textStyle,
+                    ),
+                    onPressed: (BuildContext context) {
+                      ref
+                          .read(routingControllerProvider)
+                          .goLinkWithSocialAccountPage();
+                    },
+                  ),
                   SettingsTile.navigation(
                     leading: Icon(
                       Icons.notification_add,
@@ -115,9 +128,11 @@ class SettingPage extends StatelessWidget {
                       final contactUsUrl = await ref
                           .read(settingControllerProvider)
                           .createContactUsUrl();
-                      await routingController.goContactUsOnWebView(
-                        url: contactUsUrl,
-                      );
+                      await ref
+                          .read(routingControllerProvider)
+                          .goContactUsOnWebView(
+                            url: contactUsUrl,
+                          );
                     },
                   ),
                   SettingsTile.navigation(
@@ -125,9 +140,9 @@ class SettingPage extends StatelessWidget {
                       Icons.star,
                       color: Colors.amber,
                     ),
-                    title: Column(
+                    title: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'アプリを評価/レビューする',
                           style: textStyle,
@@ -151,7 +166,9 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      routingController.goTermsOfServiceOnWebView();
+                      ref
+                          .read(routingControllerProvider)
+                          .goTermsOfServiceOnWebView();
                     },
                   ),
                   SettingsTile.navigation(
@@ -161,7 +178,9 @@ class SettingPage extends StatelessWidget {
                       style: textStyle,
                     ),
                     onPressed: (_) {
-                      routingController.goPrivacyPolicyOnWebView();
+                      ref
+                          .read(routingControllerProvider)
+                          .goPrivacyPolicyOnWebView();
                     },
                   ),
                   SettingsTile(

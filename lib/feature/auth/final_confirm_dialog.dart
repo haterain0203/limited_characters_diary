@@ -20,23 +20,17 @@ class FinalConfirmDialog extends HookConsumerWidget {
     }
     return AlertDialog(
       title: const Text('最終確認'),
-      content: const Text('全てのデータを削除します。\n本当によろしいですか？'),
+      content: const Text(
+        '全てのデータを削除します。\n本当によろしいですか？\n\n'
+        '※ソーシャル連携済みの場合、最初に再ログインが要求されます。再ログイン後、全てのデータが削除されます。',
+      ),
       actions: [
         StadiumBorderButton(
           onPressed: () async {
             isLoading.value = true;
             // ユーザー情報および匿名認証アカウント削除処理
-            await ref.read(authControllerProvider).deleteUser();
-            //TODO 以下のlintInfoは未解決の問題？https://github.com/dart-lang/linter/issues/4007
-            if (!context.mounted) {
-              return;
-            }
-            // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
-            ref.read(isUserDeletedProvider.notifier).state = true;
-            // 削除が完了したことをダイアログ表示
-            await ref
-                .read(authControllerProvider)
-                .showDeleteCompletedDialog(context: context);
+            await ref.read(authControllerProvider).deleteUser(context: context);
+            isLoading.value = false;
           },
           backgroundColor: Colors.red,
           title: const Text('退会する'),

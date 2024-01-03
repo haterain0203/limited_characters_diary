@@ -11,7 +11,10 @@ class ConfirmDeleteAllDataDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('退会する（全データ削除）'),
-      content: const Text('退会すると、全てのデータが削除されます。よろしいですか？'),
+      content: const Text(
+        '退会すると、全てのデータが削除されます。よろしいですか？\n\n'
+        '※ソーシャル連携済みの場合、最初に再ログインが要求されます。再ログイン後、全てのデータが削除されます。',
+      ),
       actions: [
         HookConsumer(
           builder: (context, ref, child) => StadiumBorderButton(

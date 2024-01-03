@@ -87,7 +87,7 @@ class HomePage extends HookConsumerWidget {
                 IconButton(
                   onPressed: () {
                     ref
-                        .read(routingControllerProvider(context))
+                        .read(routingControllerProvider)
                         .goSettingPage();
                   },
                   icon: const Icon(Icons.settings),

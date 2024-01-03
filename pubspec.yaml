@@ -12,6 +12,7 @@ dependencies:
   awesome_dialog: ^3.0.2
   cloud_firestore: ^4.13.3
   collection: ^1.17.0
+  crypto: ^3.0.3
   cupertino_icons: ^1.0.2
   device_info_plus: ^9.1.1
   device_preview: ^1.1.0
@@ -32,6 +33,7 @@ dependencies:
   font_awesome_flutter: ^10.4.0
   freezed_annotation: ^2.2.0
   google_mobile_ads: ^2.4.0
+  google_sign_in: ^6.1.6
   hooks_riverpod: ^2.3.0
   in_app_review: ^2.0.6
   intl: ^0.18.1
@@ -39,6 +41,8 @@ dependencies:
   package_info_plus: ^3.0.3
   settings_ui: ^2.0.2
   shared_preferences: ^2.1.0
+  sign_in_button: ^3.2.0
+  sign_in_with_apple: ^5.0.0
   sizer: ^2.0.15
   timezone: ^0.9.1
   url_launcher: ^6.1.10
