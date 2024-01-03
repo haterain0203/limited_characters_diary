@@ -99,16 +99,27 @@ class AuthRepository {
     await auth.signOut();
   }
 
+  /// ユーザーアカウントと関連データを削除する。
+  ///
+  /// この関数は、認証されたユーザーのFirebase Authアカウントと、Firestoreに保存されている
+  /// ユーザー関連データを削除します。Firestoreのバッチ処理を使用してサブコレクションのデータも削除します。
+  /// セキュリティのため、特定の条件下ではユーザーに再認証が求められます。
   Future<void> deleteUserAccountAndUserData() async {
     final user = auth.currentUser;
+    // currentUserがnullの場合、処理を中断する。
     // このメソッドを呼べるのは認証後なので、
-    // currentUserがnullになることは基本ないはずだが、念の為nullチェック
+    // currentUserがnullになることは基本ないはずだが。
     if (user == null) {
       return;
     }
 
+    // 現在の認証プロバイダを確認する。
     final signedInProviderId = _getSignedInProviderId(user);
-
+    // ソーシャル連携（Google or Apple）済みの場合、セキュリティの観点から再ログインを促す。
+    // ログインから一定時間が経過している場合、以下のエラーが発生することへの対応。
+    // [firebase_auth/requires-recent-login]
+    // This operation is sensitive and requires recent authentication.
+    // Log in again before retrying this request.
     if (signedInProviderId == _googleProviderId) {
       final credential = await _getGoogleAuthCredential();
       await user.reauthenticateWithCredential(credential);
@@ -120,11 +131,11 @@ class AuthRepository {
     final uid = user.uid;
     final userRef = firestore.collection('users').doc(uid);
 
-    //TODO サブコレクションをすべて削除する処理は、CloudFunctionsに変更すべき？
-    // サブコレクションのdiaryListをすべて削除
+    // Firestoreのサブコレクション「diaryList」を削除。
+    // Cloud Functionsへの移行を検討中（TODO）。
     final diaryListSnapshot = await userRef.collection('diaryList').get();
 
-    // Initialize a new WriteBatch
+    // Firestoreのバッチ処理を初期化。
     var batch = firestore.batch();
 
     var counter = 0;
@@ -133,7 +144,7 @@ class AuthRepository {
         batch.delete(doc.reference);
         counter++;
 
-        // Firestoreのバッチ処理には500の操作の制限があるため、diaryListのドキュメントの数が500を超える場合を考慮
+        // Firestoreのバッチ処理には500の操作の制限があるため、diaryListのドキュメントの数が500を超える場合を考慮。
         if (counter == 500) {
           await batch.commit();
           batch = firestore.batch();
@@ -144,13 +155,12 @@ class AuthRepository {
     // Commit the batch
     await batch.commit();
 
-    // users情報の削除
+    // Firestore上のユーザー情報を削除。
     await userRef.delete();
 
-    // Authアカウントの削除
+    // Firebase Authアカウントを削除。
     // データ削除よりも前にアカウント削除してしまうと、
-    // セキュリティルールの「isUserAuthenticated(userId)」で引っかかりエラーが発生する
-    // そのため、アカウント削除は最後に実行する
+    // セキュリティルールの「isUserAuthenticated(userId)」で引っかかりエラーが発生する。
     await user.delete();
 
     // サインアウト処理。
@@ -281,8 +291,16 @@ class AuthRepository {
     }
   }
 
+  /// 現在サインインしているユーザーの認証プロバイダIDを取得する。
+  ///
+  /// 現在のFirebase Authユーザーから、利用している認証プロバイダ（Google, Appleなど）のIDを返します。
+  ///
+  /// [user] 現在サインインしているFirebase Authユーザー。
+  ///
+  /// 返り値: 認証プロバイダIDを表す文字列。プロバイダデータが存在しない場合は空文字列を返す。
   String _getSignedInProviderId(User user) {
     final providerData = user.providerData;
+    // プロバイダデータが存在しない場合（＝匿名認証）は空文字を返す。
     if (providerData.isEmpty) {
       return '';
     }
