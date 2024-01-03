@@ -70,50 +70,15 @@ class RoutingController {
     );
   }
 
-  /// Homeページ（縦型カレンダーページ）へ遷移します。
-  Future<void> goHomePage() async {
-    await Navigator.push(
-      navigatorKey.currentContext!,
-      MaterialPageRoute<void>(
-        builder: (_) => const HomePage(),
-        settings: const RouteSettings(name: '/'),
-      ),
-    );
-  }
-
   /// Homeページ（縦型カレンダーページ）へ遷移し、ナビゲーションスタック上のすべてのルートを削除します。
   ///
-  /// これはユーザーがログアウトした後に使用され、以前のページに戻ることができないようにします。
+  /// これはユーザーがログインした後に使用され、以前のページに戻ることができないようにします。
   Future<void> goAndRemoveUntilHomePage() async {
     await Navigator.pushAndRemoveUntil(
       navigatorKey.currentContext!,
       MaterialPageRoute<void>(
         builder: (_) => const HomePage(),
         settings: const RouteSettings(name: '/'),
-      ),
-      (Route<dynamic> route) => false, // すべてのルートを削除する条件
-    );
-  }
-
-  /// ログインページへ遷移します。
-  Future<void> goLoginPage() async {
-    await Navigator.push(
-      navigatorKey.currentContext!,
-      MaterialPageRoute<void>(
-        builder: (_) => const LoginPage(),
-        settings: const RouteSettings(name: '/login'),
-      ),
-    );
-  }
-
-  /// ログインページへ遷移し、ナビゲーションスタック上のすべてのルートを削除します。
-  ///
-  /// これはユーザーがログアウトした後に使用され、以前のページに戻ることができないようにします。
-  Future<void> goAndRemoveUntilLoginPage() async {
-    await Navigator.of(navigatorKey.currentContext!).pushAndRemoveUntil(
-      MaterialPageRoute<void>(
-        builder: (_) => const LoginPage(),
-        settings: const RouteSettings(name: '/login'),
       ),
       (Route<dynamic> route) => false, // すべてのルートを削除する条件
     );
