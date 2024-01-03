@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/analytics/analytics_service.dart';
+import 'package:limited_characters_diary/feature/auth/auth_page.dart';
 import 'package:limited_characters_diary/feature/auth/login_page.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_lock_page.dart';
 import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
@@ -85,7 +86,7 @@ class MyApp extends HookConsumerWidget {
               ),
             ),
           ),
-          home: const LoginPage(),
+          home: const AuthPage(),
         );
       },
     );
