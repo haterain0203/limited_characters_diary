@@ -20,7 +20,10 @@ class FinalConfirmDialog extends HookConsumerWidget {
     }
     return AlertDialog(
       title: const Text('最終確認'),
-      content: const Text('全てのデータを削除します。\n本当によろしいですか？'),
+      content: const Text(
+        '全てのデータを削除します。\n本当によろしいですか？\n\n'
+        '※ソーシャル連携済みの場合、最初に再ログインが要求されます。再ログイン後、全てのデータが削除されます。',
+      ),
       actions: [
         StadiumBorderButton(
           onPressed: () async {
