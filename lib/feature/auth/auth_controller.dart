@@ -84,6 +84,7 @@ class AuthController {
   ///   - signInMethod: サインイン処理を行う関数。
   Future<void> _signInAndAddUser(Future<void> Function() signInMethod) async {
     try {
+      // TODO: ローディング
       await signInMethod();
       // 広告トラッキング許可ダイアログ表示
       await adController.requestATT();
@@ -115,9 +116,18 @@ class AuthController {
     await service.signOut();
   }
 
-  Future<void> deleteUser() async {
+  Future<void> deleteUser({required BuildContext context}) async {
     try {
       await service.deleteUser();
+
+      // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
+      isUserDeletedNotifier.state = true;
+
+      // 削除が完了したことをダイアログ表示
+      if (!context.mounted) {
+        return;
+      }
+      await showDeleteCompletedDialog(context: context);
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       return WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -132,6 +142,8 @@ class AuthController {
           errorDetail: e.message,
         );
       });
+    } on AppException catch (e) {
+      scaffoldMessengerController.showSnackBarByException(e);
     }
   }
 
