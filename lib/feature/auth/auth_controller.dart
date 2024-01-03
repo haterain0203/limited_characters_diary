@@ -211,10 +211,8 @@ class AuthController {
   /// 処理が完了した際は、ユーザーにその旨を通知する。
   ///
   /// - `signInMethod` : リンクまたはリンク解除を行うソーシャルログインの方法。
-  /// - `userId` : 操作対象のユーザーID。
   Future<void> linkUserSocialLogin({
     required SignInMethod signInMethod,
-    // required String userId,
   }) async {
     try {
       await service.linkUserSocialLogin(
