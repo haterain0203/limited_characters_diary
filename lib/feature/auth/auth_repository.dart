@@ -50,6 +50,9 @@ class AuthRepository {
 
   Stream<User?> authStateChanges() => auth.authStateChanges();
 
+  static const _googleProviderId = 'google.com';
+  static const _appleProviderId = 'apple.com';
+
   Future<UserCredential> signInAnonymously() async {
     // 匿名認証
     return auth.signInAnonymously();
@@ -104,6 +107,16 @@ class AuthRepository {
       return;
     }
 
+    final signedInProviderId = _getSignedInProviderId(user);
+
+    if (signedInProviderId == _googleProviderId) {
+      final credential = await _getGoogleAuthCredential();
+      await user.reauthenticateWithCredential(credential);
+    } else if (signedInProviderId == _appleProviderId) {
+      final credential = await _getAppleAuthCredential();
+      await user.reauthenticateWithCredential(credential);
+    }
+
     final uid = user.uid;
     final userRef = firestore.collection('users').doc(uid);
 
@@ -139,6 +152,12 @@ class AuthRepository {
     // セキュリティルールの「isUserAuthenticated(userId)」で引っかかりエラーが発生する
     // そのため、アカウント削除は最後に実行する
     await user.delete();
+
+    // サインアウト処理。
+    // ソーシャル認証済みのアカウントの場合、これをしないとエラーになる。
+    // また、`user.delete` 以前に実行すると以下エラーが発生するため、最後に記述するもの。
+    // [firebase_auth/no-current-user] No user currently signed in.
+    await signOut();
   }
 
   /// 指定されたソーシャル認証情報をアカウントにリンクする。
@@ -261,8 +280,12 @@ class AuthRepository {
     for (final userInfo in user.providerData) {
       if (userInfo.providerId == providerIdToUnlink) {
         await user.unlink(providerIdToUnlink);
-        return;
+  String _getSignedInProviderId(User user) {
+    final providerData = user.providerData;
+    if (providerData.isEmpty) {
+      return '';
       }
-    }
+    // TODO: 複数の認証連携を許可する場合は、要改善。現状では Google or Apple どちらか一つのみ連携できるようになっている。
+    return user.providerData.first.providerId;
   }
 }
