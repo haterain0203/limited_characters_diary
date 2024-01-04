@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -42,16 +44,22 @@ class LoginPage extends HookConsumerWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  LoginButtonApple.login(
-                    onPressed: () async {
-                      await ref
-                          .read(authControllerProvider)
-                          .signInAppleAndAddUser();
-                    },
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
+                  // iOSの場合のみ、Appleサインインを表示
+                  if (Platform.isIOS)
+                    Column(
+                      children: [
+                        LoginButtonApple.login(
+                          onPressed: () async {
+                            await ref
+                                .read(authControllerProvider)
+                                .signInAppleAndAddUser();
+                          },
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                      ],
+                    ),
                   TextButton(
                     onPressed: () {
                       ref.read(dialogUtilsControllerProvider).showYesNoDialog(
