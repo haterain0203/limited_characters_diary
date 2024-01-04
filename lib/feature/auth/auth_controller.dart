@@ -7,6 +7,7 @@ import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/admob/ad_controller.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
+import 'package:limited_characters_diary/feature/loading/loading_notifier.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
 
@@ -22,6 +23,7 @@ final authControllerProvider = Provider.autoDispose(
     scaffoldMessengerController: ref.watch(scaffoldMessengerControllerProvider),
     routingController: ref.watch(routingControllerProvider),
     adController: ref.watch(adControllerProvider),
+    loadingNotifier: ref.read(loadingNotifierProvider.notifier),
   ),
 );
 
@@ -33,6 +35,7 @@ class AuthController {
     required this.scaffoldMessengerController,
     required this.routingController,
     required this.adController,
+    required this.loadingNotifier,
   });
 
   final AuthService service;
@@ -41,6 +44,7 @@ class AuthController {
   final ScaffoldMessengerController scaffoldMessengerController;
   final RoutingController routingController;
   final AdController adController;
+  final LoadingNotifier loadingNotifier;
 
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
@@ -84,11 +88,10 @@ class AuthController {
   ///   - signInMethod: サインイン処理を行う関数。
   Future<void> _signInAndAddUser(Future<void> Function() signInMethod) async {
     try {
-      // TODO: ローディング
+      loadingNotifier.startLoading();
       await signInMethod();
       // 広告トラッキング許可ダイアログ表示
       await adController.requestATT();
-      await routingController.goAndRemoveUntilHomePage();
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -108,6 +111,8 @@ class AuthController {
           errorDetail: e.message,
         );
       });
+    } finally {
+      loadingNotifier.endLoading();
     }
   }
 
@@ -118,7 +123,14 @@ class AuthController {
 
   Future<void> deleteUser({required BuildContext context}) async {
     try {
+      loadingNotifier.startLoading();
+
       await service.deleteUser();
+
+      // `showDeleteCompletedDialog` の前にローディングを止めないと、
+      // `showDeleteCompletedDialog` の上にローディングが表示され続けてしまい、
+      // `showDeleteCompletedDialog` の「閉じる」を押下させられない
+      loadingNotifier.endLoading();
 
       // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
       isUserDeletedNotifier.state = true;
@@ -144,6 +156,8 @@ class AuthController {
       });
     } on AppException catch (e) {
       scaffoldMessengerController.showSnackBarByException(e);
+    } finally {
+      loadingNotifier.endLoading();
     }
   }
 
@@ -215,6 +229,7 @@ class AuthController {
     required SignInMethod signInMethod,
   }) async {
     try {
+      loadingNotifier.startLoading();
       await service.linkUserSocialLogin(
         signInMethod: signInMethod,
       );
@@ -223,6 +238,8 @@ class AuthController {
       scaffoldMessengerController.showSnackBarByFirebaseException(e);
     } on AppException catch (e) {
       scaffoldMessengerController.showSnackBarByException(e);
+    } finally {
+      loadingNotifier.endLoading();
     }
   }
 
@@ -237,12 +254,15 @@ class AuthController {
     required SignInMethod signInMethod,
   }) async {
     try {
+      loadingNotifier.startLoading();
       await service.unLinkUserSocialLogin(
         signInMethod: signInMethod,
       );
       scaffoldMessengerController.showSnackBar('連携が解除されました');
     } on FirebaseException catch (e) {
       scaffoldMessengerController.showSnackBarByFirebaseException(e);
+    } finally {
+      loadingNotifier.endLoading();
     }
   }
 }

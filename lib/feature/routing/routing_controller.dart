@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/feature/link_with_social_account/link_with_social_account_page.dart';
 import 'package:limited_characters_diary/feature/setting/setting_page.dart';
-import 'package:limited_characters_diary/home_page.dart';
 import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
 
 import '../../../constant/constant_string.dart';
 import '../../../web_view_page.dart';
-import '../auth/login_page.dart';
 
-final routingControllerProvider =
-    Provider.autoDispose<RoutingController>(
+final routingControllerProvider = Provider.autoDispose<RoutingController>(
   (ref) => RoutingController(navigatorKey: ref.watch(navigatorKeyProvider)),
 );
 
@@ -67,20 +64,6 @@ class RoutingController {
         ),
         settings: const RouteSettings(name: '/privacyPolicy'),
       ),
-    );
-  }
-
-  /// Homeページ（縦型カレンダーページ）へ遷移し、ナビゲーションスタック上のすべてのルートを削除します。
-  ///
-  /// これはユーザーがログインした後に使用され、以前のページに戻ることができないようにします。
-  Future<void> goAndRemoveUntilHomePage() async {
-    await Navigator.pushAndRemoveUntil(
-      navigatorKey.currentContext!,
-      MaterialPageRoute<void>(
-        builder: (_) => const HomePage(),
-        settings: const RouteSettings(name: '/'),
-      ),
-      (Route<dynamic> route) => false, // すべてのルートを削除する条件
     );
   }
 
