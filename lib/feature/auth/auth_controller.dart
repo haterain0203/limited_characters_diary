@@ -7,6 +7,7 @@ import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/admob/ad_controller.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
+import 'package:limited_characters_diary/feature/loading/loading_notifier.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
 
@@ -22,6 +23,7 @@ final authControllerProvider = Provider.autoDispose(
     scaffoldMessengerController: ref.watch(scaffoldMessengerControllerProvider),
     routingController: ref.watch(routingControllerProvider),
     adController: ref.watch(adControllerProvider),
+    loadingNotifier: ref.read(loadingNotifierProvider.notifier),
   ),
 );
 
@@ -33,6 +35,7 @@ class AuthController {
     required this.scaffoldMessengerController,
     required this.routingController,
     required this.adController,
+    required this.loadingNotifier,
   });
 
   final AuthService service;
@@ -41,6 +44,7 @@ class AuthController {
   final ScaffoldMessengerController scaffoldMessengerController;
   final RoutingController routingController;
   final AdController adController;
+  final LoadingNotifier loadingNotifier;
 
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
@@ -84,7 +88,7 @@ class AuthController {
   ///   - signInMethod: サインイン処理を行う関数。
   Future<void> _signInAndAddUser(Future<void> Function() signInMethod) async {
     try {
-      // TODO: ローディング
+      loadingNotifier.startLoading();
       await signInMethod();
       // 広告トラッキング許可ダイアログ表示
       await adController.requestATT();
@@ -108,6 +112,8 @@ class AuthController {
           errorDetail: e.message,
         );
       });
+    } finally {
+      loadingNotifier.endLoading();
     }
   }
 
