@@ -92,7 +92,6 @@ class AuthController {
       await signInMethod();
       // 広告トラッキング許可ダイアログ表示
       await adController.requestATT();
-      await routingController.goAndRemoveUntilHomePage();
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());
       WidgetsBinding.instance.addPostFrameCallback((_) {
