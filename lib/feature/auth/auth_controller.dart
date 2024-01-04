@@ -127,7 +127,7 @@ class AuthController {
 
       await service.deleteUser();
 
-      // ここでローディングを止めないと、
+      // `showDeleteCompletedDialog` の前にローディングを止めないと、
       // `showDeleteCompletedDialog` の上にローディングが表示され続けてしまい、
       // `showDeleteCompletedDialog` の「閉じる」を押下させられない
       loadingNotifier.endLoading();
