@@ -123,7 +123,14 @@ class AuthController {
 
   Future<void> deleteUser({required BuildContext context}) async {
     try {
+      loadingNotifier.startLoading();
+
       await service.deleteUser();
+
+      // ここでローディングを止めないと、
+      // `showDeleteCompletedDialog` の上にローディングが表示され続けてしまい、
+      // `showDeleteCompletedDialog` の「閉じる」を押下させられない
+      loadingNotifier.endLoading();
 
       // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
       isUserDeletedNotifier.state = true;
@@ -149,6 +156,8 @@ class AuthController {
       });
     } on AppException catch (e) {
       scaffoldMessengerController.showSnackBarByException(e);
+    } finally {
+      loadingNotifier.endLoading();
     }
   }
 
