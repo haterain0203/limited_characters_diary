@@ -229,6 +229,7 @@ class AuthController {
     required SignInMethod signInMethod,
   }) async {
     try {
+      loadingNotifier.startLoading();
       await service.linkUserSocialLogin(
         signInMethod: signInMethod,
       );
@@ -237,6 +238,8 @@ class AuthController {
       scaffoldMessengerController.showSnackBarByFirebaseException(e);
     } on AppException catch (e) {
       scaffoldMessengerController.showSnackBarByException(e);
+    } finally {
+      loadingNotifier.endLoading();
     }
   }
 
@@ -251,12 +254,15 @@ class AuthController {
     required SignInMethod signInMethod,
   }) async {
     try {
+      loadingNotifier.startLoading();
       await service.unLinkUserSocialLogin(
         signInMethod: signInMethod,
       );
       scaffoldMessengerController.showSnackBar('連携が解除されました');
     } on FirebaseException catch (e) {
       scaffoldMessengerController.showSnackBarByFirebaseException(e);
+    } finally {
+      loadingNotifier.endLoading();
     }
   }
 }
