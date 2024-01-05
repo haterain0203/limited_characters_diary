@@ -10,13 +10,18 @@ enum NotificationDialogTrigger {
 
 /// Firebase Console の Authentication で設定できるサインイン方法の種別。
 enum SignInMethod {
-  google,
-  apple,
+  google(displayName: 'Google'),
+  apple(displayName: 'Apple'),
   ;
+
+  const SignInMethod({required this.displayName});
+  final String displayName;
 }
 
-enum SignInType {
+/// ソーシャル認証の種別。
+enum SocialAuthType {
   login,
   link,
+  unLink,
   ;
 }
