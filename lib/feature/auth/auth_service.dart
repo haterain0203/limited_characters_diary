@@ -20,7 +20,7 @@ import 'auth_repository.dart';
 ///
 /// 例外:
 ///   - 未知のサインイン方法（`providerId`がサポートされていない値）が検出された場合、`AppException`がスローされます。
-final linkedProvidersProvider = Provider<List<SignInMethod>>((ref) {
+final linkedProvidersProvider = Provider.autoDispose<List<SignInMethod>>((ref) {
   final auth = ref.watch(authInstanceProvider);
   final user = auth.currentUser;
   if (user == null) {

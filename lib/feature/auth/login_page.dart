@@ -3,10 +3,8 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:limited_characters_diary/component/dialog_utils.dart';
 import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
-import 'package:limited_characters_diary/feature/auth/widget/login_button_apple.dart';
-import 'package:limited_characters_diary/feature/auth/widget/login_button_google.dart';
+import 'package:limited_characters_diary/feature/auth/widget/auth_button.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:sizer/sizer.dart';
 
@@ -34,46 +32,25 @@ class LoginPage extends HookConsumerWidget {
                       child: Image.asset('assets/images/icon.png'),
                     ),
                   ),
-                  LoginButtonGoogle.login(
-                    onPressed: () async {
-                      await ref
-                          .read(authControllerProvider)
-                          .signInGoogleAndAddUser();
-                    },
-                  ),
+                  const AuthButton.googleLogin(),
                   const SizedBox(
                     height: 16,
                   ),
                   // iOSの場合のみ、Appleサインインを表示
                   if (Platform.isIOS)
-                    Column(
+                    const Column(
                       children: [
-                        LoginButtonApple.login(
-                          onPressed: () async {
-                            await ref
-                                .read(authControllerProvider)
-                                .signInAppleAndAddUser();
-                          },
-                        ),
-                        const SizedBox(
+                        AuthButton.appleLogin(),
+                        SizedBox(
                           height: 16,
                         ),
                       ],
                     ),
                   TextButton(
-                    onPressed: () {
-                      ref.read(dialogUtilsControllerProvider).showYesNoDialog(
-                            title: '注意事項',
-                            desc: '機種変更後にデータを引き続き利用するには、ログインが必要です。'
-                                'ログインは、利用開始後の設定画面から可能です。',
-                            buttonNoText: '戻る',
-                            buttonYesText: '利用開始',
-                            yesButtonOnPress: () async {
-                              await ref
-                                  .read(authControllerProvider)
-                                  .signInAnonymouslyAndAddUser();
-                            },
-                          );
+                    onPressed: () async {
+                      await ref
+                          .read(authControllerProvider)
+                          .signInAnonymouslyAndAddUser();
                     },
                     child: const Text('アカウントなしで利用開始する'),
                   ),

@@ -24,6 +24,7 @@ final authControllerProvider = Provider.autoDispose(
     routingController: ref.watch(routingControllerProvider),
     adController: ref.watch(adControllerProvider),
     loadingNotifier: ref.read(loadingNotifierProvider.notifier),
+    linkedProviders: ref.watch(linkedProvidersProvider),
   ),
 );
 
@@ -36,6 +37,7 @@ class AuthController {
     required this.routingController,
     required this.adController,
     required this.loadingNotifier,
+    required this.linkedProviders,
   });
 
   final AuthService service;
@@ -45,14 +47,25 @@ class AuthController {
   final RoutingController routingController;
   final AdController adController;
   final LoadingNotifier loadingNotifier;
+  final List<SignInMethod> linkedProviders;
 
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
-  /// この関数は、Firebaseの匿名認証を使用してサインインし、
+  /// ユーザーに匿名認証における注意事項を示した上で、
+  /// Firebaseの匿名認証を使用してサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
-  ///
-  /// エラーが発生した場合は、エラーダイアログを表示します。
   Future<void> signInAnonymouslyAndAddUser() async {
+    final result =
+        await dialogUtilsController.showYesNoDialog(
+              title: '注意事項',
+              desc: '機種変更後にデータを引き続き利用するには、ログインが必要です。'
+                  'ログインは、利用開始後の設定画面から可能です。',
+              buttonNoText: '戻る',
+              buttonYesText: '利用開始',
+            );
+    if (!result) {
+      return;
+    }
     await _signInAndAddUser(service.signInAnonymouslyAndAddUser);
   }
 
@@ -60,8 +73,6 @@ class AuthController {
   ///
   /// この関数は、Googleアカウントを使用してFirebaseにサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
-  ///
-  /// エラーが発生した場合は、エラーダイアログを表示します。
   Future<void> signInGoogleAndAddUser() async {
     await _signInAndAddUser(service.signInGoogleAndAddUser);
   }
@@ -70,8 +81,6 @@ class AuthController {
   ///
   /// この関数は、Apple IDを使用してFirebaseにサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
-  ///
-  /// エラーが発生した場合は、エラーダイアログを表示します。
   Future<void> signInAppleAndAddUser() async {
     await _signInAndAddUser(service.signInAppleAndAddUser);
   }
@@ -106,6 +115,10 @@ class AuthController {
         );
       });
     } on AppException catch (e) {
+      if(e.message == 'キャンセルされました。') {
+        scaffoldMessengerController.showSnackBarByException(e);
+        return;
+      }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         dialogUtilsController.showErrorDialog(
           errorDetail: e.message,
@@ -254,6 +267,23 @@ class AuthController {
     required SignInMethod signInMethod,
   }) async {
     try {
+      // 解除しようとしている連携が唯一のものである場合、解除不可の旨を通知し、処理を終了する。
+      if (linkedProviders.length == 1) {
+        return dialogUtilsController.showErrorDialog(
+          errorDetail: '唯一の認証連携のため解除できません。\n少なくとも1つの連携が必要です。',
+        );
+      }
+
+      // ユーザーに連携解除の確認を求める。
+      final result = await dialogUtilsController.showYesNoDialog(
+        desc: '${signInMethod.displayName}連携を解除しますか？',
+        buttonYesText: '連携解除',
+      );
+      // 回答がNOなら処理終了。
+      if (!result) {
+        return;
+      }
+
       loadingNotifier.startLoading();
       await service.unLinkUserSocialLogin(
         signInMethod: signInMethod,
