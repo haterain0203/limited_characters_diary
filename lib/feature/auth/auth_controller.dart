@@ -15,6 +15,16 @@ import '../../constant/enum.dart';
 import '../exception/exception.dart';
 import 'confirm_delete_all_data_dialog.dart';
 
+/// ソーシャル認証用のダイアログを表示したか否かを管理する。
+///
+/// ソーシャル認証（連携・連携解除）時に、ソーシャル認証のダイアログが表示されるが、
+/// その際、アプリがinactiveになりパスコードロック画面が表示されてしまうため、
+/// ソーシャル認証用のダイアログ表示にはパスコードロック画面を表示しないようにするために使用するもの。
+final isShownSocialAuthDialog = StateProvider((ref) => false);
+
+/// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため
+final isUserDeletedProvider = StateProvider((ref) => false);
+
 final authControllerProvider = Provider.autoDispose(
   (ref) => AuthController(
     service: ref.watch(authServiceProvider),
@@ -25,6 +35,7 @@ final authControllerProvider = Provider.autoDispose(
     adController: ref.watch(adControllerProvider),
     loadingNotifier: ref.read(loadingNotifierProvider.notifier),
     linkedProviders: ref.watch(linkedProvidersProvider),
+    isShownSocialAuthDialog: ref.read(isShownSocialAuthDialog.notifier),
   ),
 );
 
@@ -38,6 +49,7 @@ class AuthController {
     required this.adController,
     required this.loadingNotifier,
     required this.linkedProviders,
+    required this.isShownSocialAuthDialog,
   });
 
   final AuthService service;
@@ -49,20 +61,22 @@ class AuthController {
   final LoadingNotifier loadingNotifier;
   final List<SignInMethod> linkedProviders;
 
+  /// ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないよう制御するために使用。
+  final StateController<bool> isShownSocialAuthDialog;
+
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
   /// ユーザーに匿名認証における注意事項を示した上で、
   /// Firebaseの匿名認証を使用してサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
   Future<void> signInAnonymouslyAndAddUser() async {
-    final result =
-        await dialogUtilsController.showYesNoDialog(
-              title: '注意事項',
-              desc: '機種変更後にデータを引き続き利用するには、ログインが必要です。'
-                  'ログインは、利用開始後の設定画面から可能です。',
-              buttonNoText: '戻る',
-              buttonYesText: '利用開始',
-            );
+    final result = await dialogUtilsController.showYesNoDialog(
+      title: '注意事項',
+      desc: '機種変更後にデータを引き続き利用するには、ログインが必要です。'
+          'ログインは、利用開始後の設定画面から可能です。',
+      buttonNoText: '戻る',
+      buttonYesText: '利用開始',
+    );
     if (!result) {
       return;
     }
@@ -115,7 +129,7 @@ class AuthController {
         );
       });
     } on AppException catch (e) {
-      if(e.message == 'キャンセルされました。') {
+      if (e.message == 'キャンセルされました。') {
         scaffoldMessengerController.showSnackBarByException(e);
         return;
       }
@@ -137,6 +151,10 @@ class AuthController {
   Future<void> deleteUser({required BuildContext context}) async {
     try {
       loadingNotifier.startLoading();
+
+      // ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないよう制御
+      // TODO: 直書きではなく、Notifierなどを活用して関数化すべき（他の箇所も同様）
+      isShownSocialAuthDialog.state = true;
 
       await service.deleteUser();
 
@@ -170,6 +188,8 @@ class AuthController {
     } on AppException catch (e) {
       scaffoldMessengerController.showSnackBarByException(e);
     } finally {
+      // ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないための制御を解除
+      isShownSocialAuthDialog.state = false;
       loadingNotifier.endLoading();
     }
   }
@@ -243,6 +263,8 @@ class AuthController {
   }) async {
     try {
       loadingNotifier.startLoading();
+      // ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないよう制御
+      isShownSocialAuthDialog.state = true;
       await service.linkUserSocialLogin(
         signInMethod: signInMethod,
       );
@@ -252,6 +274,8 @@ class AuthController {
     } on AppException catch (e) {
       scaffoldMessengerController.showSnackBarByException(e);
     } finally {
+      // ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないための制御を解除
+      isShownSocialAuthDialog.state = false;
       loadingNotifier.endLoading();
     }
   }
@@ -285,6 +309,8 @@ class AuthController {
       }
 
       loadingNotifier.startLoading();
+      // ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないよう制御
+      isShownSocialAuthDialog.state = true;
       await service.unLinkUserSocialLogin(
         signInMethod: signInMethod,
       );
@@ -292,10 +318,9 @@ class AuthController {
     } on FirebaseException catch (e) {
       scaffoldMessengerController.showSnackBarByFirebaseException(e);
     } finally {
+      // ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないための制御を解除
+      isShownSocialAuthDialog.state = false;
       loadingNotifier.endLoading();
     }
   }
 }
-
-/// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため
-final isUserDeletedProvider = StateProvider((ref) => false);
