@@ -153,6 +153,7 @@ class AuthController {
       loadingNotifier.startLoading();
 
       // ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないよう制御
+      // TODO: 直書きではなく、Notifierなどを活用して関数化すべき（他の箇所も同様）
       isShownSocialAuthDialog.state = true;
 
       await service.deleteUser();
