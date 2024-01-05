@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:limited_characters_diary/constant/constant_string.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import '../../constant/enum.dart';
@@ -49,9 +50,6 @@ class AuthRepository {
   final CollectionReference<AppUser> userRef;
 
   Stream<User?> authStateChanges() => auth.authStateChanges();
-
-  static const _googleProviderId = 'google.com';
-  static const _appleProviderId = 'apple.com';
 
   Future<UserCredential> signInAnonymously() async {
     // 匿名認証
@@ -120,10 +118,10 @@ class AuthRepository {
     // [firebase_auth/requires-recent-login]
     // This operation is sensitive and requires recent authentication.
     // Log in again before retrying this request.
-    if (signedInProviderId == _googleProviderId) {
+    if (signedInProviderId == ConstantString.googleProviderId) {
       final credential = await _getGoogleAuthCredential();
       await user.reauthenticateWithCredential(credential);
-    } else if (signedInProviderId == _appleProviderId) {
+    } else if (signedInProviderId == ConstantString.appleProviderId) {
       final credential = await _getAppleAuthCredential();
       await user.reauthenticateWithCredential(credential);
     }
@@ -280,8 +278,8 @@ class AuthRepository {
     }
 
     final providerIdToUnlink = switch (signInMethod) {
-      SignInMethod.google => _googleProviderId,
-      SignInMethod.apple => _appleProviderId,
+      SignInMethod.google => ConstantString.googleProviderId,
+      SignInMethod.apple => ConstantString.appleProviderId,
     };
 
     final signedInProviderId = _getSignedInProviderId(user);
