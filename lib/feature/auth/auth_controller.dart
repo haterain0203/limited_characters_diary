@@ -8,6 +8,7 @@ import 'package:limited_characters_diary/feature/admob/ad_controller.dart';
 import 'package:limited_characters_diary/feature/auth/auth_service.dart';
 import 'package:limited_characters_diary/feature/auth/final_confirm_dialog.dart';
 import 'package:limited_characters_diary/feature/loading/loading_notifier.dart';
+import 'package:limited_characters_diary/feature/pass_code/pass_code_controller.dart';
 import 'package:limited_characters_diary/feature/routing/routing_controller.dart';
 import 'package:limited_characters_diary/scaffold_messenger_controller.dart';
 
@@ -36,6 +37,7 @@ final authControllerProvider = Provider.autoDispose(
     loadingNotifier: ref.read(loadingNotifierProvider.notifier),
     linkedProviders: ref.watch(linkedProvidersProvider),
     isShownSocialAuthDialog: ref.read(isShownSocialAuthDialog.notifier),
+    passCodeController: ref.read(passCodeControllerProvider),
   ),
 );
 
@@ -50,6 +52,7 @@ class AuthController {
     required this.loadingNotifier,
     required this.linkedProviders,
     required this.isShownSocialAuthDialog,
+    required this.passCodeController,
   });
 
   final AuthService service;
@@ -63,6 +66,9 @@ class AuthController {
 
   /// ソーシャル認証ダイアログ表示時にパスコードロック画面が表示されないよう制御するために使用。
   final StateController<bool> isShownSocialAuthDialog;
+
+  /// [deleteUser] で退会処理時に、パスコードロックをOFFにするために使用する。
+  final PassCodeController passCodeController;
 
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
@@ -162,6 +168,11 @@ class AuthController {
       // `showDeleteCompletedDialog` の上にローディングが表示され続けてしまい、
       // `showDeleteCompletedDialog` の「閉じる」を押下させられない
       loadingNotifier.endLoading();
+
+      // 退会処理完了後、パスコードロックをOFFにする。
+      // これをしない場合、退会処理後しばらくしてからそのユーザーが再度アプリを使用しようとした際に、パスコードロックがかかってしまう。
+      // もしパスコードロック番号を忘れていた場合アプリが使用できないため、退会処理時にOFFにするもの。
+      await passCodeController.disablePassCodeLock();
 
       // ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するためにtrueに
       isUserDeletedNotifier.state = true;
