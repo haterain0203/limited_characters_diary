@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/enum.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
-import '../../../component/dialog_utils.dart';
 import '../auth_controller.dart';
 import '../auth_service.dart';
 
