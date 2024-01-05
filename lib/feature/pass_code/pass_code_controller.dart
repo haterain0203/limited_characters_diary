@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:limited_characters_diary/constant/constant_log_event_name.dart';
+import 'package:limited_characters_diary/feature/auth/auth_controller.dart';
 import 'package:limited_characters_diary/feature/pass_code/pass_code_service.dart';
 
 import '../admob/ad_controller.dart';
@@ -22,6 +23,7 @@ final passCodeControllerProvider = Provider(
       isInitialSetNotificationNotifier:
           ref.read(isInitialSetNotificationProvider.notifier),
       analyticsController: ref.watch(analyticsContollerProvider),
+      isShownSocialAuthDialog: ref.watch(isShownSocialAuthDialog),
     );
   },
 );
@@ -36,6 +38,7 @@ class PassCodeController {
     required this.isInitialSetNotification,
     required this.isInitialSetNotificationNotifier,
     required this.analyticsController,
+    required this.isShownSocialAuthDialog,
   });
 
   final PassCodeService service;
@@ -46,6 +49,7 @@ class PassCodeController {
   final bool isInitialSetNotification;
   final StateController<bool> isInitialSetNotificationNotifier;
   final AnalyticsController analyticsController;
+  final bool isShownSocialAuthDialog;
 
   /// 設定画面におけるパスコード設定のトグル切り替え
   ///
@@ -142,6 +146,12 @@ class PassCodeController {
     if (isInitialSetNotification) {
       // falseに戻さないと、初めて通知設定した後にinactiveにした際にロック画面が表示されない
       isInitialSetNotificationNotifier.state = false;
+      return false;
+    }
+
+    // ソーシャル認証ダイアログが表示されている場合は処理終了（パスコードロックを表示しない）
+    // ソーシャル認証ダイアログ表示時にinactiveになるが、そのタイミングではパスコードロック画面を表示したくないため
+    if (isShownSocialAuthDialog) {
       return false;
     }
 
