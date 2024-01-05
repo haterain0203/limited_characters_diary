@@ -24,6 +24,7 @@ final authControllerProvider = Provider.autoDispose(
     routingController: ref.watch(routingControllerProvider),
     adController: ref.watch(adControllerProvider),
     loadingNotifier: ref.read(loadingNotifierProvider.notifier),
+    linkedProviders: ref.watch(linkedProvidersProvider),
   ),
 );
 
@@ -36,6 +37,7 @@ class AuthController {
     required this.routingController,
     required this.adController,
     required this.loadingNotifier,
+    required this.linkedProviders,
   });
 
   final AuthService service;
@@ -45,6 +47,7 @@ class AuthController {
   final RoutingController routingController;
   final AdController adController;
   final LoadingNotifier loadingNotifier;
+  final List<SignInMethod> linkedProviders;
 
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
@@ -254,6 +257,24 @@ class AuthController {
     required SignInMethod signInMethod,
   }) async {
     try {
+
+      // 解除しようとしている連携が唯一のものである場合、解除不可の旨を通知し、処理を終了する。
+      if (linkedProviders.length == 1) {
+        return dialogUtilsController.showErrorDialog(
+          errorDetail: '唯一の認証連携のため解除できません。\n少なくとも1つの連携が必要です。',
+        );
+      }
+
+      // ユーザーに連携解除の確認を求める。
+      final result = await dialogUtilsController.showYesNoDialog(
+        desc: '${signInMethod.displayName}連携を解除しますか？',
+        buttonYesText: '連携解除',
+      );
+      // 回答がNOなら処理終了。
+      if (!result) {
+        return;
+      }
+
       loadingNotifier.startLoading();
       await service.unLinkUserSocialLogin(
         signInMethod: signInMethod,

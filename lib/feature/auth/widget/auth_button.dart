@@ -111,11 +111,6 @@ class AuthButton extends HookConsumerWidget {
       SocialAuthType.unLink => _AuthButtonContent(
           buttonText: '連携済み',
           onPressed: () async {
-            final result =
-                await ref.read(dialogUtilsControllerProvider).showYesNoDialog();
-            if (!result) {
-              return;
-            }
             await ref.read(authControllerProvider).unLinkUserSocialLogin(
                   signInMethod: signInMethod,
                 );
