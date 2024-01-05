@@ -111,8 +111,15 @@ class AuthRepository {
       return;
     }
 
-    // 現在の認証プロバイダを確認する。
-    final signedInProviderId = _getSignedInProviderId(user);
+    // 現在の認証プロバイダリストを確認する。
+    final signedInProviderIdList = _getSignedInProviderIdList(user);
+
+    // プロバイダリストが空なら空文字を、そうでなければ、リストの最初のプロバイダIdを取得する。
+    // これ以降のユーザーデータ削除に際して、何かしらで再認証を取れれば良いため、
+    // 複数の認証を持っている場合は、最初のもので問題ないと判断した。
+    final signedInProviderId =
+        signedInProviderIdList.isEmpty ? '' : signedInProviderIdList.first;
+
     // ソーシャル連携（Google or Apple）済みの場合、セキュリティの観点から再ログインを促す。
     // ログインから一定時間が経過している場合、以下のエラーが発生することへの対応。
     // [firebase_auth/requires-recent-login]
@@ -282,9 +289,9 @@ class AuthRepository {
       SignInMethod.apple => ConstantString.appleProviderId,
     };
 
-    final signedInProviderId = _getSignedInProviderId(user);
+    final signedInProviderIdList = _getSignedInProviderIdList(user);
 
-    if (signedInProviderId == providerIdToUnlink) {
+    if (signedInProviderIdList.contains(providerIdToUnlink)) {
       await user.unlink(providerIdToUnlink);
     }
   }
@@ -295,14 +302,17 @@ class AuthRepository {
   ///
   /// [user] 現在サインインしているFirebase Authユーザー。
   ///
-  /// 返り値: 認証プロバイダIDを表す文字列。プロバイダデータが存在しない場合は空文字列を返す。
-  String _getSignedInProviderId(User user) {
+  /// 返り値: 認証プロバイダIDを表す文字列のリスト。プロバイダデータが存在しない場合は空のリストを返す。
+  List<String> _getSignedInProviderIdList(User user) {
     final providerData = user.providerData;
     // プロバイダデータが存在しない場合（＝匿名認証）は空文字を返す。
     if (providerData.isEmpty) {
-      return '';
+      return [];
     }
-    // TODO: 複数の認証連携を許可する場合は、要改善。現状では Google or Apple どちらか一つのみ連携できるようになっている。
-    return user.providerData.first.providerId;
+    // providerDataからproviderIdのリストを作成
+    final providerIds =
+        providerData.map((userInfo) => userInfo.providerId).toList();
+
+    return providerIds;
   }
 }
