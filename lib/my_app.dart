@@ -15,9 +15,7 @@ import 'feature/loading/loading_notifier.dart';
 import 'feature/pass_code/pass_code_controller.dart';
 
 class MyApp extends HookConsumerWidget {
-  const MyApp({required this.isCompletedFirstLaunch, super.key});
-
-  final bool isCompletedFirstLaunch;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

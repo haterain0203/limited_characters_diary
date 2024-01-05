@@ -14,9 +14,7 @@ void main() {
     // Build our app and trigger a frame.
     //TODO isCompletedFirstLaunchが固定値になっている
     await tester.pumpWidget(
-      const MyApp(
-        isCompletedFirstLaunch: false,
-      ),
+      const MyApp(),
     );
 
     // Verify that our counter starts at 0.

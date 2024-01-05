@@ -55,8 +55,6 @@ Future<void> main() async {
 
   // SharedPreferencesのインスタンス
   final prefs = await SharedPreferences.getInstance();
-  final isCompletedFirstLaunch =
-      prefs.getBool('completed_first_launch') ?? false;
 
   // ローカル通知の初期設定
   final localNotificationRepo = LocalNotificationRepository(prefs: prefs);
@@ -67,7 +65,7 @@ Future<void> main() async {
 
   final appInfo = await PackageInfo.fromPlatform();
   final deviceInfo = await DeviceInfoPlugin().deviceInfo;
-  
+
   runApp(
     Phoenix(
       child: DevicePreview(
@@ -82,9 +80,7 @@ Future<void> main() async {
             appInfoProvider.overrideWithValue(appInfo),
             deviceInfoProvider.overrideWithValue(deviceInfo),
           ],
-          child: MyApp(
-            isCompletedFirstLaunch: isCompletedFirstLaunch,
-          ),
+          child: const MyApp(),
         ),
       ),
     ),
