@@ -305,7 +305,7 @@ class AuthRepository {
   /// 返り値: 認証プロバイダIDを表す文字列のリスト。プロバイダデータが存在しない場合は空のリストを返す。
   List<String> _getSignedInProviderIdList(User user) {
     final providerData = user.providerData;
-    // プロバイダデータが存在しない場合（＝匿名認証）は空文字を返す。
+    // プロバイダデータが存在しない場合（＝匿名認証）は空配列を返す。
     if (providerData.isEmpty) {
       return [];
     }
