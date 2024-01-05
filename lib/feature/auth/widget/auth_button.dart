@@ -7,7 +7,9 @@ import '../../../component/dialog_utils.dart';
 import '../auth_controller.dart';
 import '../auth_service.dart';
 
+/// 認証ボタンを提供するウィジェット。GoogleやAppleのサインイン、連携、連携解除をサポート。
 class AuthButton extends HookConsumerWidget {
+  /// Googleでのログイン用コンストラクタ。
   const AuthButton.googleLogin({
     this.buttonType = Buttons.google,
     this.socialAuthType = SocialAuthType.login,
@@ -15,6 +17,7 @@ class AuthButton extends HookConsumerWidget {
     super.key,
   });
 
+  /// Googleアカウントとの連携用コンストラクタ。
   const AuthButton.googleLink({
     this.buttonType = Buttons.google,
     this.socialAuthType = SocialAuthType.link,
@@ -22,6 +25,7 @@ class AuthButton extends HookConsumerWidget {
     super.key,
   });
 
+  /// Googleアカウントとの連携解除用コンストラクタ。
   const AuthButton.googleUnLink({
     this.buttonType = Buttons.google,
     this.socialAuthType = SocialAuthType.unLink,
@@ -29,6 +33,7 @@ class AuthButton extends HookConsumerWidget {
     super.key,
   });
 
+  /// Appleでのログイン用コンストラクタ。
   const AuthButton.appleLogin({
     this.buttonType = Buttons.appleDark,
     this.socialAuthType = SocialAuthType.login,
@@ -36,6 +41,7 @@ class AuthButton extends HookConsumerWidget {
     super.key,
   });
 
+  /// Appleアカウントとの連携用コンストラクタ。
   const AuthButton.appleLink({
     this.buttonType = Buttons.appleDark,
     this.socialAuthType = SocialAuthType.link,
@@ -43,6 +49,7 @@ class AuthButton extends HookConsumerWidget {
     super.key,
   });
 
+  /// Appleアカウントとの連携解除用コンストラクタ。
   const AuthButton.appleUnLink({
     this.buttonType = Buttons.appleDark,
     this.socialAuthType = SocialAuthType.unLink,
@@ -73,14 +80,16 @@ class AuthButton extends HookConsumerWidget {
     );
   }
 
+  /// ボタンのテキストと押下時の動作を取得する。
   _AuthButtonContent _getAuthButtonContent({
     required WidgetRef ref,
     required SignInMethod signInMethod,
     required SocialAuthType socialAuthType,
   }) {
     return switch (socialAuthType) {
+      // ログイン、連携、連携解除のそれぞれに応じてテキストと押下時の動作を設定する。
       SocialAuthType.login => _AuthButtonContent(
-          buttonText: '${signInMethod.name}でサインイン',
+          buttonText: '${signInMethod.displayName}でサインイン',
           onPressed: () async {
             return switch (signInMethod) {
               SignInMethod.google =>
@@ -91,7 +100,7 @@ class AuthButton extends HookConsumerWidget {
           },
         ),
       SocialAuthType.link => _AuthButtonContent(
-          buttonText: '${signInMethod.name}アカウント連携',
+          buttonText: '${signInMethod.displayName}アカウント連携',
           onPressed: () async {
             await ref.read(authControllerProvider).linkUserSocialLogin(
                   signInMethod: signInMethod,
@@ -117,6 +126,7 @@ class AuthButton extends HookConsumerWidget {
   }
 }
 
+/// 認証ボタンのテキストと押されたときのアクションを格納するクラス。
 class _AuthButtonContent {
   const _AuthButtonContent({
     required this.buttonText,
