@@ -16,26 +16,29 @@ class DialogUtilsController {
   });
   final BuildContext context;
 
-  Future<void> showYesNoDialog({
+  Future<bool> showYesNoDialog({
     String? title,
     String? desc,
     String? buttonYesText = 'はい',
     String? buttonNoText = 'いいえ',
-    required VoidCallback yesButtonOnPress,
-    VoidCallback? noButtonOnPress,
   }) async {
-    return AwesomeDialog(
+    var result = false;
+    await AwesomeDialog(
       context: context,
       dialogType: DialogType.infoReverse,
       title: title,
       desc: desc,
       btnCancelText: buttonNoText,
-      btnCancelOnPress: noButtonOnPress ?? () {},
+      btnCancelOnPress: () {},
       btnCancelColor: Colors.grey,
       btnOkText: buttonYesText,
-      btnOkOnPress: yesButtonOnPress,
+      btnOkOnPress: () {
+        result = true;
+      },
       btnOkColor: Theme.of(context).primaryColor,
     ).show();
+
+    return result;
   }
 
   Future<void> showErrorDialog({
