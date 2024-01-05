@@ -15,12 +15,15 @@ import '../../constant/enum.dart';
 import '../exception/exception.dart';
 import 'confirm_delete_all_data_dialog.dart';
 
-/// ソーシャル認証用のダイアログを表示したか否か
+/// ソーシャル認証用のダイアログを表示したか否かを管理する。
 ///
 /// ソーシャル認証（連携・連携解除）時に、ソーシャル認証のダイアログが表示されるが、
 /// その際、アプリがinactiveになりパスコードロック画面が表示されてしまうため、
 /// ソーシャル認証用のダイアログ表示にはパスコードロック画面を表示しないようにするために使用するもの。
 final isShownSocialAuthDialog = StateProvider((ref) => false);
+
+/// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため
+final isUserDeletedProvider = StateProvider((ref) => false);
 
 final authControllerProvider = Provider.autoDispose(
   (ref) => AuthController(
@@ -320,6 +323,3 @@ class AuthController {
     }
   }
 }
-
-/// ユーザーデータ削除時には日記入力ダイアログを表示しないように制御するため
-final isUserDeletedProvider = StateProvider((ref) => false);
