@@ -252,7 +252,7 @@ class AuthRepository {
     } on SignInWithAppleAuthorizationException catch (e) {
       // サインインダイアログでキャンセルが選択された場合には、AppException をスローし、キャンセルされたことを通知する
       if (e.code == AuthorizationErrorCode.canceled) {
-        throw const AppException(message: 'キャンセルされました');
+        throw const AppException(message: 'キャンセルされました。');
       }
       throw const AppException(message: 'Apple 認証に失敗しました。');
     }

@@ -115,6 +115,10 @@ class AuthController {
         );
       });
     } on AppException catch (e) {
+      if(e.message == 'キャンセルされました。') {
+        scaffoldMessengerController.showSnackBarByException(e);
+        return;
+      }
       WidgetsBinding.instance.addPostFrameCallback((_) {
         dialogUtilsController.showErrorDialog(
           errorDetail: e.message,
