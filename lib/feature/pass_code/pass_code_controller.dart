@@ -60,7 +60,7 @@ class PassCodeController {
     required BuildContext context,
   }) async {
     if (!isPassCodeLock) {
-      await _disablePassCodeLock();
+      await disablePassCodeLock();
       await analyticsController
           .sendLogEvent(ConstantLogEventName.disablePassCodeLock);
     } else {
@@ -71,7 +71,7 @@ class PassCodeController {
   }
 
   /// パスコードロック設定をOFFにし、パスコードには空文字にして登録する
-  Future<void> _disablePassCodeLock() async {
+  Future<void> disablePassCodeLock() async {
     await _savePassCodeAndInvalidate(
       passCode: '',
       isPassCodeLock: false,
