@@ -49,18 +49,6 @@ class LoginPage extends HookConsumerWidget {
                     ),
                   TextButton(
                     onPressed: () async {
-                      final result = await ref
-                          .read(dialogUtilsControllerProvider)
-                          .showYesNoDialog(
-                            title: '注意事項',
-                            desc: '機種変更後にデータを引き続き利用するには、ログインが必要です。'
-                                'ログインは、利用開始後の設定画面から可能です。',
-                            buttonNoText: '戻る',
-                            buttonYesText: '利用開始',
-                          );
-                      if (!result) {
-                        return;
-                      }
                       await ref
                           .read(authControllerProvider)
                           .signInAnonymouslyAndAddUser();

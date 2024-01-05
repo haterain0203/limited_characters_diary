@@ -51,11 +51,21 @@ class AuthController {
 
   /// 匿名ユーザーとしてサインインし、ユーザー情報を追加します。
   ///
-  /// この関数は、Firebaseの匿名認証を使用してサインインし、
+  /// ユーザーに匿名認証における注意事項を示した上で、
+  /// Firebaseの匿名認証を使用してサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
-  ///
-  /// エラーが発生した場合は、エラーダイアログを表示します。
   Future<void> signInAnonymouslyAndAddUser() async {
+    final result =
+        await dialogUtilsController.showYesNoDialog(
+              title: '注意事項',
+              desc: '機種変更後にデータを引き続き利用するには、ログインが必要です。'
+                  'ログインは、利用開始後の設定画面から可能です。',
+              buttonNoText: '戻る',
+              buttonYesText: '利用開始',
+            );
+    if (!result) {
+      return;
+    }
     await _signInAndAddUser(service.signInAnonymouslyAndAddUser);
   }
 
@@ -63,8 +73,6 @@ class AuthController {
   ///
   /// この関数は、Googleアカウントを使用してFirebaseにサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
-  ///
-  /// エラーが発生した場合は、エラーダイアログを表示します。
   Future<void> signInGoogleAndAddUser() async {
     await _signInAndAddUser(service.signInGoogleAndAddUser);
   }
@@ -73,8 +81,6 @@ class AuthController {
   ///
   /// この関数は、Apple IDを使用してFirebaseにサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
-  ///
-  /// エラーが発生した場合は、エラーダイアログを表示します。
   Future<void> signInAppleAndAddUser() async {
     await _signInAndAddUser(service.signInAppleAndAddUser);
   }
@@ -257,7 +263,6 @@ class AuthController {
     required SignInMethod signInMethod,
   }) async {
     try {
-
       // 解除しようとしている連携が唯一のものである場合、解除不可の旨を通知し、処理を終了する。
       if (linkedProviders.length == 1) {
         return dialogUtilsController.showErrorDialog(
