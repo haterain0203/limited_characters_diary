@@ -66,7 +66,7 @@ class AuthService {
   final AuthRepository repo;
 
   /// 匿名認証を行い、認証されたユーザーをデータベースに追加します。
-  Future<void> signInAnonymouslyAndAddUser() async {
+  Future<void> signInAnonymouslyAndCreateUserIfNotExist() async {
     final userCredential = await repo.signInAnonymously();
     final user = _validateUserCredential(userCredential);
 
@@ -74,7 +74,7 @@ class AuthService {
   }
 
   /// Google認証を行い、認証されたユーザーをデータベースに追加します。
-  Future<void> signInGoogleAndAddUser() async {
+  Future<void> signInGoogleAndCreateUserIfNotExist() async {
     final userCredential = await repo.signInWithGoogle();
     final user = _validateUserCredential(userCredential);
 
@@ -82,7 +82,7 @@ class AuthService {
   }
 
   /// Apple認証を行い、認証されたユーザーをデータベースに追加します。
-  Future<void> signInAppleAndAddUser() async {
+  Future<void> signInAppleAndCreateUserIfNotExist() async {
     final userCredential = await repo.signInWithApple();
     final user = _validateUserCredential(userCredential);
 

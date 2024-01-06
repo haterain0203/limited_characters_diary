@@ -86,7 +86,7 @@ class AuthController {
     if (!result) {
       return;
     }
-    await _signInAndAddUser(service.signInAnonymouslyAndAddUser);
+    await _signInAndAddUser(service.signInAnonymouslyAndCreateUserIfNotExist);
   }
 
   /// Googleアカウントを使用してサインインし、ユーザー情報を追加します。
@@ -94,7 +94,7 @@ class AuthController {
   /// この関数は、Googleアカウントを使用してFirebaseにサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
   Future<void> signInGoogleAndAddUser() async {
-    await _signInAndAddUser(service.signInGoogleAndAddUser);
+    await _signInAndAddUser(service.signInGoogleAndCreateUserIfNotExist);
   }
 
   /// Apple IDを使用してサインインし、ユーザー情報を追加します。
@@ -102,7 +102,7 @@ class AuthController {
   /// この関数は、Apple IDを使用してFirebaseにサインインし、
   /// 成功した場合にユーザー情報を追加する処理を行います。
   Future<void> signInAppleAndAddUser() async {
-    await _signInAndAddUser(service.signInAppleAndAddUser);
+    await _signInAndAddUser(service.signInAppleAndCreateUserIfNotExist);
   }
 
   /// 指定されたサインインメソッドを使用してユーザーをサインインし、情報を追加します。
