@@ -129,6 +129,7 @@ class AuthController {
         );
       });
     } on FirebaseException catch (e) {
+      debugPrint(e.toString());
       WidgetsBinding.instance.addPostFrameCallback((_) {
         dialogUtilsController.showErrorDialog(
           errorDetail: e.message,
@@ -139,6 +140,7 @@ class AuthController {
         scaffoldMessengerController.showSnackBarByException(e);
         return;
       }
+      debugPrint(e.toString());
       WidgetsBinding.instance.addPostFrameCallback((_) {
         dialogUtilsController.showErrorDialog(
           errorDetail: e.message,
