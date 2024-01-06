@@ -69,27 +69,32 @@ class AuthService {
   Future<void> signInAnonymouslyAndAddUser() async {
     final userCredential = await repo.signInAnonymously();
     final user = userCredential.user;
-    if (user != null) {
-      await repo.createUserIfNotExist(user);
+    if (user == null) {
+      throw const AppException(message: '何かしらの理由により認証に失敗しました');
     }
+    await repo.createUserIfNotExist(user);
   }
 
   /// Google認証を行い、認証されたユーザーをデータベースに追加します。
   Future<void> signInGoogleAndAddUser() async {
     final userCredential = await repo.signInWithGoogle();
     final user = userCredential.user;
-    if (user != null) {
-      await repo.createUserIfNotExist(user);
+    if (user == null) {
+      throw const AppException(message: '何かしらの理由により認証に失敗しました');
     }
+
+    await repo.createUserIfNotExist(user);
   }
 
   /// Apple認証を行い、認証されたユーザーをデータベースに追加します。
   Future<void> signInAppleAndAddUser() async {
     final userCredential = await repo.signInWithApple();
     final user = userCredential.user;
-    if (user != null) {
-      await repo.createUserIfNotExist(user);
+    if (user == null) {
+      throw const AppException(message: '何かしらの理由により認証に失敗しました');
     }
+
+    await repo.createUserIfNotExist(user);
   }
 
   /// 現在のユーザーをサインアウトします。
