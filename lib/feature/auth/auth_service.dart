@@ -70,7 +70,7 @@ class AuthService {
     final userCredential = await repo.signInAnonymously();
     final user = userCredential.user;
     if (user != null) {
-      await repo.addUser(user);
+      await repo.createUserIfNotExist(user);
     }
   }
 
@@ -79,7 +79,7 @@ class AuthService {
     final userCredential = await repo.signInWithGoogle();
     final user = userCredential.user;
     if (user != null) {
-      await repo.addUser(user);
+      await repo.createUserIfNotExist(user);
     }
   }
 
@@ -88,7 +88,7 @@ class AuthService {
     final userCredential = await repo.signInWithApple();
     final user = userCredential.user;
     if (user != null) {
-      await repo.addUser(user);
+      await repo.createUserIfNotExist(user);
     }
   }
 

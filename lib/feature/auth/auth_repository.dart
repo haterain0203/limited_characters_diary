@@ -80,17 +80,33 @@ class AuthRepository {
     return userCredential;
   }
 
-  Future<void> addUser(User user) async {
+  /// Firebaseのユーザー情報を確認し、存在しない場合に新規ユーザーを作成します。
+  ///
+  /// [User] オブジェクトを受け取り、Firebase Firestoreにそのユーザーが
+  /// 既に存在するかどうかを確認します。存在しない場合、新しいユーザー情報を
+  /// Firestoreに登録します。
+  Future<void> createUserIfNotExist(User user) async {
     // firestoreにUserを登録する
     final fcmToken = await fcm.getToken();
     final uid = user.uid;
-    await userRef.doc(uid).set(
-          AppUser(
-            uid: uid,
-            createdAt: DateTime.now(),
-            fcmToken: fcmToken,
-          ),
-        );
+    final docRef = userRef.doc(uid);
+    final doc = await docRef.get();
+
+    // ドキュメントが存在するか確認
+    if (doc.exists) {
+      // ドキュメントが既に存在する場合は何もしない
+      return;
+    }
+
+    // ドキュメントが存在しない場合、新規ユーザー情報を登録
+    // `uid` を指定してドキュメントIDを設定するため、`set` メソッドを使用
+    await docRef.set(
+      AppUser(
+        uid: uid,
+        createdAt: DateTime.now(),
+        fcmToken: fcmToken,
+      ),
+    );
   }
 
   Future<void> signOut() async {
