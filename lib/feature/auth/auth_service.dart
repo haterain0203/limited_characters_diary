@@ -66,30 +66,45 @@ class AuthService {
   final AuthRepository repo;
 
   /// 匿名認証を行い、認証されたユーザーをデータベースに追加します。
-  Future<void> signInAnonymouslyAndAddUser() async {
+  ///
+  /// このメソッドは、Firebase Authを使用して匿名認証を実行します。
+  /// 認証が成功した場合、ユーザー情報はデータベースに追加されます。
+  /// もし認証が失敗した場合、AppExceptionが投げられます。
+  Future<void> signInAnonymouslyAndCreateUserIfNotExist() async {
     final userCredential = await repo.signInAnonymously();
-    final user = userCredential.user;
-    if (user != null) {
-      await repo.addUser(user);
-    }
+    final user = _validateUserCredential(userCredential);
+    await repo.createUserIfNotExist(user);
   }
 
   /// Google認証を行い、認証されたユーザーをデータベースに追加します。
-  Future<void> signInGoogleAndAddUser() async {
+  ///
+  /// このメソッドは、Firebase Authを介してGoogle認証を実行します。
+  /// ユーザーが正常に認証された場合、その情報はデータベースに追加されます。
+  /// 認証が失敗すると、AppExceptionが投げられます。
+  Future<void> signInGoogleAndCreateUserIfNotExist() async {
     final userCredential = await repo.signInWithGoogle();
-    final user = userCredential.user;
-    if (user != null) {
-      await repo.addUser(user);
-    }
+    final user = _validateUserCredential(userCredential);
+    await repo.createUserIfNotExist(user);
   }
 
   /// Apple認証を行い、認証されたユーザーをデータベースに追加します。
-  Future<void> signInAppleAndAddUser() async {
+  ///
+  /// このメソッドは、Firebase Authを利用してApple認証を行います。
+  /// 認証が成功した場合、ユーザー情報はデータベースに追加されます。
+  /// 認証に失敗した場合は、AppExceptionが投げられます。
+  Future<void> signInAppleAndCreateUserIfNotExist() async {
     final userCredential = await repo.signInWithApple();
+    final user = _validateUserCredential(userCredential);
+    await repo.createUserIfNotExist(user);
+  }
+
+  /// ユーザー認証の結果を確認し、nullの場合は例外を投げる
+  User _validateUserCredential(UserCredential userCredential) {
     final user = userCredential.user;
-    if (user != null) {
-      await repo.addUser(user);
+    if (user == null) {
+      throw const AppException(message: '何かしらの理由により認証に失敗しました');
     }
+    return user;
   }
 
   /// 現在のユーザーをサインアウトします。

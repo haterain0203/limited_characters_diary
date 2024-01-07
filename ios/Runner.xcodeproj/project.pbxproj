@@ -97,8 +97,6 @@
 				BFFD3CCF2A03864700EDAF24 /* Debug.xcconfig */,
 				BFFD3CD02A03867300EDAF24 /* Release.xcconfig */,
 				BFFD3CDA2A0394A100EDAF24 /* Generated.xcconfig */,
-				BFAF8B182B3D3ED1005198E4 /* prod.xcconfig */,
-				BFAF8B1C2B3D3F1C005198E4 /* dev.xcconfig */,
 			);
 			name = Flutter;
 			sourceTree = "<group>";
@@ -204,13 +202,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFAF8B1D2B3D3F1C005198E4 /* dev.xcconfig in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				BF5E098A2B3E2E3000F27A75 /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
-				BFAF8B192B3D3ED1005198E4 /* prod.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
