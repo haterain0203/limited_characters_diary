@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,6 +44,19 @@ Future<void> main() async {
     options: firebaseOptions,
   );
 
+  /// クラッシュハンドラ(Flutterフレームワーク内でスローされたすべてのエラー)
+  /// 以下公式に準拠
+  /// https://firebase.google.com/docs/crashlytics/get-started?platform=flutter&hl=ja
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+
+  // FlutterフレームワークによってキャッチされないエラーをすべてCrashlyticsに渡す。
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+
   // Firebase App Checkの初期化
   await FirebaseAppCheck.instance.activate(
     // Debug用のトークンを取得 & 登録したDebugトークンを使うためには.debugが必要
@@ -69,7 +85,6 @@ Future<void> main() async {
   runApp(
     Phoenix(
       child: DevicePreview(
-        enabled: !kReleaseMode,
         builder: (_) => ProviderScope(
           overrides: [
             localNotificationServiceProvider
