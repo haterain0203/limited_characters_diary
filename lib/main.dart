@@ -25,81 +25,79 @@ import 'my_app.dart';
 const flavor = String.fromEnvironment('flavor');
 
 Future<void> main() async {
-  /// クラッシュハンドラ
-  await runZonedGuarded<Future<void>>(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-      //向き指定
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp, //縦固定
-      ]);
+  //向き指定
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, //縦固定
+  ]);
 
-      debugPrint('flavor = $flavor');
+  debugPrint('flavor = $flavor');
 
-      // Flavor に応じた FirebaseOptions を準備する
-      final firebaseOptions = flavor == 'prod'
-          ? prod.DefaultFirebaseOptions.currentPlatform
-          : dev.DefaultFirebaseOptions.currentPlatform;
+  // Flavor に応じた FirebaseOptions を準備する
+  final firebaseOptions = flavor == 'prod'
+      ? prod.DefaultFirebaseOptions.currentPlatform
+      : dev.DefaultFirebaseOptions.currentPlatform;
 
-      // Firebase の初期化
-      await Firebase.initializeApp(
-        options: firebaseOptions,
-      );
+  // Firebase の初期化
+  await Firebase.initializeApp(
+    options: firebaseOptions,
+  );
 
-      /// クラッシュハンドラ(Flutterフレームワーク内でスローされたすべてのエラー)
-      FlutterError.onError =
-          FirebaseCrashlytics.instance.recordFlutterFatalError;
+  /// クラッシュハンドラ(Flutterフレームワーク内でスローされたすべてのエラー)
+  /// 以下公式に準拠
+  /// https://firebase.google.com/docs/crashlytics/get-started?platform=flutter&hl=ja
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
 
-      // Firebase App Checkの初期化
-      await FirebaseAppCheck.instance.activate(
-        // Debug用のトークンを取得 & 登録したDebugトークンを使うためには.debugが必要
-        androidProvider: kReleaseMode
-            ? AndroidProvider.playIntegrity
-            : AndroidProvider.debug,
-        appleProvider:
-            kReleaseMode ? AppleProvider.deviceCheck : AppleProvider.debug,
-      );
+  // FlutterフレームワークによってキャッチされないエラーをすべてCrashlyticsに渡す。
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
-      // Admobの初期化
-      await MobileAds.instance.initialize();
+  // Firebase App Checkの初期化
+  await FirebaseAppCheck.instance.activate(
+    // Debug用のトークンを取得 & 登録したDebugトークンを使うためには.debugが必要
+    androidProvider:
+        kReleaseMode ? AndroidProvider.playIntegrity : AndroidProvider.debug,
+    appleProvider:
+        kReleaseMode ? AppleProvider.deviceCheck : AppleProvider.debug,
+  );
 
-      // SharedPreferencesのインスタンス
-      final prefs = await SharedPreferences.getInstance();
+  // Admobの初期化
+  await MobileAds.instance.initialize();
 
-      // ローカル通知の初期設定
-      final localNotificationRepo = LocalNotificationRepository(prefs: prefs);
-      final localNotificationService = LocalNotificationService(
-        repo: localNotificationRepo,
-      );
-      await localNotificationService.init();
+  // SharedPreferencesのインスタンス
+  final prefs = await SharedPreferences.getInstance();
 
-      final appInfo = await PackageInfo.fromPlatform();
-      final deviceInfo = await DeviceInfoPlugin().deviceInfo;
+  // ローカル通知の初期設定
+  final localNotificationRepo = LocalNotificationRepository(prefs: prefs);
+  final localNotificationService = LocalNotificationService(
+    repo: localNotificationRepo,
+  );
+  await localNotificationService.init();
 
-      runApp(
-        Phoenix(
-          child: DevicePreview(
-            enabled: !kReleaseMode,
-            builder: (_) => ProviderScope(
-              overrides: [
-                localNotificationServiceProvider
-                    .overrideWithValue(localNotificationService),
-                localNotificationRepoProvider
-                    .overrideWithValue(localNotificationRepo),
-                sharedPreferencesInstanceProvider.overrideWithValue(prefs),
-                appInfoProvider.overrideWithValue(appInfo),
-                deviceInfoProvider.overrideWithValue(deviceInfo),
-              ],
-              child: const MyApp(),
-            ),
-          ),
+  final appInfo = await PackageInfo.fromPlatform();
+  final deviceInfo = await DeviceInfoPlugin().deviceInfo;
+
+  runApp(
+    Phoenix(
+      child: DevicePreview(
+        builder: (_) => ProviderScope(
+          overrides: [
+            localNotificationServiceProvider
+                .overrideWithValue(localNotificationService),
+            localNotificationRepoProvider
+                .overrideWithValue(localNotificationRepo),
+            sharedPreferencesInstanceProvider.overrideWithValue(prefs),
+            appInfoProvider.overrideWithValue(appInfo),
+            deviceInfoProvider.overrideWithValue(deviceInfo),
+          ],
+          child: const MyApp(),
         ),
-      );
-    },
-
-    /// クラッシュハンドラ(Flutterフレームワーク内でキャッチされないエラー)
-    (error, stack) =>
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
+      ),
+    ),
   );
 }
