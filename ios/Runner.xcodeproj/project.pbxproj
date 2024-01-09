@@ -440,6 +440,7 @@
 				GOOGLE_CLIENT_ID = "$(GOOGLE_CLIENT_ID)";
 				GOOGLE_REVERSED_CLIENT_ID = "$(GOOGLE_REVERSED_CLIENT_ID)";
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -578,6 +579,7 @@
 				GOOGLE_CLIENT_ID = "$(GOOGLE_CLIENT_ID)";
 				GOOGLE_REVERSED_CLIENT_ID = "$(GOOGLE_REVERSED_CLIENT_ID)";
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -609,6 +611,7 @@
 				GOOGLE_CLIENT_ID = "$(GOOGLE_CLIENT_ID)";
 				GOOGLE_REVERSED_CLIENT_ID = "$(GOOGLE_REVERSED_CLIENT_ID)";
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
