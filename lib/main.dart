@@ -85,6 +85,7 @@ Future<void> main() async {
   runApp(
     Phoenix(
       child: DevicePreview(
+        enabled: !kReleaseMode,
         builder: (_) => ProviderScope(
           overrides: [
             localNotificationServiceProvider
