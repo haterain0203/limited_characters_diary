@@ -79,7 +79,7 @@ class LocalNotificationService {
           channelDescription: 'your channel description',
         ),
       ),
-      androidAllowWhileIdle: true,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       //同じ時間に毎日通知
