@@ -87,6 +87,7 @@ class MyApp extends HookConsumerWidget {
                 foregroundColor: Colors.white,
               ),
             ),
+            useMaterial3: false,
           ),
           home: const AuthPage(),
         );
