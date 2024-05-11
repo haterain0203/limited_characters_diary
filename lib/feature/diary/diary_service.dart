@@ -50,7 +50,7 @@ final diaryStreamProvider = StreamProvider.autoDispose<List<Diary>>((ref) {
 
 final diaryCountProvider = FutureProvider.autoDispose<int>((ref) async {
   final repo = ref.watch(diaryRepoProvider);
-  final count = await repo.getDiaryCount();
+  final count = await repo.getDiaryCount() ?? 0;
   return count;
 });
 
