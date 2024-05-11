@@ -18,7 +18,9 @@ class ForcedUpdateDialog extends HookConsumerWidget {
 
     // このダイアログは、緊急時以外ユーザーに見せないもの
     // loadingおよびエラーハンドリングは不要と考え、.whenは使っていない
-    if (shouldForceUpdate.value == null || !shouldForceUpdate.value!) {
+    if (shouldForceUpdate.hasError ||
+        shouldForceUpdate.value == null ||
+        !shouldForceUpdate.value!) {
       return const SizedBox.shrink();
     }
 

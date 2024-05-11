@@ -13,7 +13,9 @@ class UnderRepairDialog extends HookConsumerWidget {
 
     // このダイアログは、緊急時以外ユーザーに見せないもの
     // loadingおよびエラーハンドリングは不要と考え、.whenは使っていない
-    if (updateInfo.value == null || !updateInfo.value!.isUnderRepair) {
+    if (updateInfo.hasError ||
+        updateInfo.value == null ||
+        !updateInfo.value!.isUnderRepair) {
       return const SizedBox.shrink();
     }
 
