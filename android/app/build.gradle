@@ -43,7 +43,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdkVersion 34
-    ndkVersion flutter.ndkVersion
+    ndkVersion "25.1.8937393"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -91,6 +91,13 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
+        }
+
+        debug {
+            // 以下の暫定対応
+            // https://github.com/haterain0203/limited_characters_diary/issues/193#issuecomment-2106040598
+            minifyEnabled true
+            signingConfig signingConfigs.debug
         }
     }
 
