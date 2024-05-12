@@ -11,7 +11,7 @@ PODS:
     - GoogleUtilities/Environment (~> 7.13)
     - GoogleUtilities/UserDefaults (~> 7.13)
     - PromisesObjC (~> 2.3)
-  - cloud_firestore (4.13.3):
+  - cloud_firestore (4.15.8):
     - Firebase/Firestore (= 10.22.0)
     - firebase_core
     - Flutter
@@ -37,27 +37,27 @@ PODS:
   - Firebase/Messaging (10.22.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.22.0)
-  - firebase_analytics (10.7.2):
+  - firebase_analytics (10.8.9):
     - Firebase/Analytics (= 10.22.0)
     - firebase_core
     - Flutter
-  - firebase_app_check (0.2.1-6):
+  - firebase_app_check (0.2.1-17):
     - Firebase/CoreOnly (~> 10.22.0)
     - firebase_core
     - FirebaseAppCheck (~> 10.22.0-beta)
     - Flutter
-  - firebase_auth (4.15.0):
+  - firebase_auth (4.17.8):
     - Firebase/Auth (= 10.22.0)
     - firebase_core
     - Flutter
   - firebase_core (2.27.0):
     - Firebase/CoreOnly (= 10.22.0)
     - Flutter
-  - firebase_crashlytics (3.4.9):
+  - firebase_crashlytics (3.4.18):
     - Firebase/Crashlytics (= 10.22.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.7.6):
+  - firebase_messaging (14.7.19):
     - Firebase/Messaging (= 10.22.0)
     - firebase_core
     - Flutter
@@ -168,8 +168,11 @@ PODS:
     - Flutter
     - Google-Mobile-Ads-SDK (~> 9.13)
   - google_sign_in_ios (0.0.1):
+    - AppAuth (>= 1.7.4)
     - Flutter
-    - GoogleSignIn (~> 6.2)
+    - FlutterMacOS
+    - GoogleSignIn (~> 7.1)
+    - GTMSessionFetcher (>= 3.4.0)
   - GoogleAppMeasurement (10.22.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.22.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -194,10 +197,10 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30911.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleSignIn (6.2.4):
-    - AppAuth (~> 1.5)
-    - GTMAppAuth (~> 1.3)
-    - GTMSessionFetcher/Core (< 3.0, >= 1.1)
+  - GoogleSignIn (7.1.0):
+    - AppAuth (< 2.0, >= 1.7.3)
+    - GTMAppAuth (< 5.0, >= 4.1.1)
+    - GTMSessionFetcher/Core (~> 3.3)
   - GoogleUserMessagingPlatform (2.4.0)
   - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
@@ -227,10 +230,14 @@ PODS:
   - GoogleUtilities/UserDefaults (7.13.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GTMAppAuth (1.3.1):
-    - AppAuth/Core (~> 1.6)
-    - GTMSessionFetcher/Core (< 3.0, >= 1.5)
-  - GTMSessionFetcher/Core (2.3.0)
+  - GTMAppAuth (4.1.1):
+    - AppAuth/Core (~> 1.7)
+    - GTMSessionFetcher/Core (< 4.0, >= 3.3)
+  - GTMSessionFetcher (3.4.1):
+    - GTMSessionFetcher/Full (= 3.4.1)
+  - GTMSessionFetcher/Core (3.4.1)
+  - GTMSessionFetcher/Full (3.4.1):
+    - GTMSessionFetcher/Core
   - in_app_review (0.2.0):
     - Flutter
   - leveldb-library (1.22.5)
@@ -245,6 +252,8 @@ PODS:
   - PromisesSwift (2.4.0):
     - PromisesObjC (= 2.4.0)
   - RecaptchaInterop (100.0.0)
+  - rive_common (0.0.1):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -271,9 +280,10 @@ DEPENDENCIES:
   - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
-  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
+  - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - rive_common (from `.symlinks/plugins/rive_common/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -349,11 +359,13 @@ EXTERNAL SOURCES:
   google_mobile_ads:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
   google_sign_in_ios:
-    :path: ".symlinks/plugins/google_sign_in_ios/ios"
+    :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   in_app_review:
     :path: ".symlinks/plugins/in_app_review/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
+  rive_common:
+    :path: ".symlinks/plugins/rive_common/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sign_in_with_apple:
@@ -369,18 +381,18 @@ CHECKOUT OPTIONS:
     :tag: 10.22.0
 
 SPEC CHECKSUMS:
-  app_tracking_transparency: 5b1745ef9ade815f7455cb6a0848349589afb7c5
+  app_tracking_transparency: e169b653478da7bb15a6c61209015378ca73e375
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   AppCheckCore: 58dbd968d93b7c56650c28a1ac404d7a54307c0e
-  cloud_firestore: c97cbc9dea4d986f3b62e5ba195dd536eba06802
+  cloud_firestore: 97e80651e196c32554cedcd31858b9615ac8a704
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Firebase: 797fd7297b7e1be954432743a0b3f90038e45a71
-  firebase_analytics: 1452338eb5ebc97cf9a94903f0022e58d622cd7e
-  firebase_app_check: 50e736312c532a72462324a743c8a9a9f4b3e58a
-  firebase_auth: 1f91cd685b1ea931700bcb30a20703e2ed3b1d7d
+  firebase_analytics: b9ce200bfc2c54629076bb22d6a510f31c296ab8
+  firebase_app_check: dc9e6b62d00214f1337c4378bcddfa2ae5509d1d
+  firebase_auth: 4cf9d126dc9629a77dbcbd23723e903d8277ff5a
   firebase_core: 100945864b4aedce3cfef0c62ab864858bf013cf
-  firebase_crashlytics: c32dbd1b0523cb373a543ba5fff963e11da16238
-  firebase_messaging: d8a90af70f81c85a8c6f3170d2ff40f3d9b6d4b5
+  firebase_crashlytics: 2b9ca6246501a03427eb43280be7615027e32142
+  firebase_messaging: e65050bf9b187511d80ea3a4de7cf5573d2c7543
   FirebaseAnalytics: 8d0ff929c63b7f72260f332b86ccf569776b75d3
   FirebaseAppCheck: 8e85fc837a3f006b7c4ef3f50c0a3474395e76f7
   FirebaseAppCheckInterop: 5da5ce93e8797a215e3f677fb0654b74e736c8b8
@@ -401,19 +413,19 @@ SPEC CHECKSUMS:
   FirebaseSessions: c0939656253a1fa0e94ecc266ccf770cc8b33732
   FirebaseSharedSwift: 48076404e6e52372290d15a07d2ed1d2f1754023
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_timezone: ffb07bdad3c6276af8dada0f11978d8a1f8a20bb
   Google-Mobile-Ads-SDK: 4fe6304b771f8467d29978cb790ec1e56e646946
   google_mobile_ads: 528ab4673c5b5fd36321b7e90fc585064cdbaf2b
-  google_sign_in_ios: 1256ff9d941db546373826966720b0c24804bcdd
+  google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
   GoogleAppMeasurement: ccefe3eac9b0aa27f96066809fb1a7fe4b462626
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
-  GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
+  GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
   GoogleUserMessagingPlatform: f131fa7978d2ba88d7426702b057c2cc318e6595
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
-  GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
-  GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
+  GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
+  GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
   in_app_review: 318597b3a06c22bb46dc454d56828c85f444f99d
   leveldb-library: e8eadf9008a61f9e1dde3978c086d2b6d9b9dc28
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
@@ -421,10 +433,11 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
+  rive_common: cbbac3192af00d7341f19dae2f26298e9e37d99e
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sign_in_with_apple: f3bf75217ea4c2c8b91823f225d70230119b8440
-  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
-  webview_flutter_wkwebview: 2e2d318f21a5e036e2c3f26171342e95908bd60a
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  webview_flutter_wkwebview: be0f0d33777f1bfd0c9fdcb594786704dbf65f36
 
 PODFILE CHECKSUM: bd175c328f876de776aa69499e0c4ac6ea1507ea
 
